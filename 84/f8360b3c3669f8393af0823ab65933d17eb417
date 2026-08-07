@@ -1,0 +1,184 @@
+apps/client-dashboard/src/app/api/analytics/heatmap/route.ts
+  s_33426b1dd7e829::t_cc4abf42791c98 115,133,151,168
+  s_33426b1dd7e829::t_2237c0b7295b3d 22-25,38-41,56-59,74-79,93-94,175-179,185-188
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/[projectId]/page.tsx
+  s_33426b1dd7e829::t_893e37609a380c 84-88,91-92
+  s_33426b1dd7e829::t_b76e4cc1d903cd 10-12,18-22,25-27,30-32,55-57,63-65,74-77,93-95,98-102,105,117,123-125,133,165,172,192-193
+apps/client-dashboard/src/app/api/workspace/export/route.ts
+  s_33426b1dd7e829::t_f6e7573dc7818b 185
+apps/admin-dashboard/src/app/api/admin/health/route.ts
+  s_33426b1dd7e829::t_fd569356cbe7c8 59-66
+  s_33426b1dd7e829::t_4c6526466c75fd 9-12,47,57-58,67-76,78-82,84-94,102-111
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/page.tsx
+  s_33426b1dd7e829::t_8968bde636bcb0 87
+apps/client-dashboard/src/app/api/analytics/utm-matrix/route.ts
+  s_33426b1dd7e829::t_0ca16b12363ccb 91
+  s_33426b1dd7e829::t_abba82399299fb 26-29,41-44,52-64,68-69,104,106,111-114,120-123
+apps/admin-dashboard/src/app/api/admin/audit-logs/export/route.ts
+  s_33426b1dd7e829::t_80adf424d0773f 36
+  s_33426b1dd7e829::t_f7a5abb94d676f 11-15,31-33,35,37-47,55-57
+apps/admin-dashboard/src/app/api/admin/ai/assistant/route.ts
+  s_33426b1dd7e829::t_e1d73f5b7ffe36 184
+  s_33426b1dd7e829::t_3b5ca2d9c62e17 63,66
+  s_33426b1dd7e829::t_97bf5069686c93 154
+apps/client-dashboard/src/app/api/scans/my-recent/route.ts
+  s_33426b1dd7e829::t_68d4ac60a099c4 36
+  s_33426b1dd7e829::t_f115cc4c7573e2 28,57
+apps/client-dashboard/src/lib/ai/export-service.ts
+  s_33426b1dd7e829::t_6c203ccf27eaca 45
+  s_33426b1dd7e829::t_c3c81bb3b3415b 14,19-23,35-41,48,67,71-73,99-101,111,114-116,118-121
+apps/client-dashboard/src/app/api/gates/assigned/route.ts
+  s_33426b1dd7e829::t_76faee7355a2b5 70
+apps/client-dashboard/src/app/api/analytics/visits-over-time/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 68,81,94,106
+  s_33426b1dd7e829::t_ae8a6697e704d9 9-13,22-25,37-40,43-46,49-52,129-132
+apps/client-dashboard/src/app/api/analytics/top-gates/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 69,82,95,107
+  s_33426b1dd7e829::t_7b0510fa1682c1 9-13,24-27,39-42,45-48,51-54,123-126
+apps/admin-dashboard/src/app/api/analytics/overview/route.ts
+  s_33426b1dd7e829::t_e9146a25f45ee3 30,32-35
+apps/client-dashboard/src/lib/integrations/hubspot.ts
+  s_33426b1dd7e829::t_ad6d7de5dd76c1 71
+  s_33426b1dd7e829::t_62bd457e58259d 6,31-33,40-43,57-60,76-79,86,94-99,101,109
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/page.tsx
+  s_33426b1dd7e829::t_742ca32d6a440e 69-71
+apps/admin-dashboard/src/app/api/admin/analytics/route.ts
+  s_33426b1dd7e829::t_82416c4823306c 27
+  s_33426b1dd7e829::t_05f299c0962a91 70
+apps/client-dashboard/src/app/api/analytics/unit-types/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 72,87,102,116
+  s_33426b1dd7e829::t_a2ac208271c971 9-13,24-27,39-42,45-48,51-54,131-134
+apps/admin-dashboard/src/app/api/admin/users/[id]/route.ts
+  s_33426b1dd7e829::t_8e6c0b99026235 41,46,79
+  s_33426b1dd7e829::t_e003efb563b39d 7-10,13-16,33-36,70-73,76-78,86-89,99-102,134-137,141-144,152-159,162-165
+apps/client-dashboard/src/app/api/analytics/campaign-first-scan/route.ts
+  s_33426b1dd7e829::t_29636788aeb710 133
+  s_33426b1dd7e829::t_4e86a2e4fb625a 101
+apps/admin-dashboard/src/app/api/admin/finance/route.ts
+  s_33426b1dd7e829::t_3048b7d253bd5e 59
+packages/db/scripts/retention-cleanup.ts
+  s_33426b1dd7e829::t_6d9fd0c23b1346 19,22
+  s_2fa11826a098b7::t_09e8c3f95a16dd 2,4-7,9,12-18,20-21,23-69
+  s_33426b1dd7e829::t_c3b4181b2466ca 70-110,113-122
+apps/client-dashboard/src/app/api/analytics/export/marketing/route.ts
+  s_33426b1dd7e829::t_467e486d9bade5 90
+  s_33426b1dd7e829::t_c2aebc4c352143 148
+packages/db/src/queries/projects.ts
+  s_33426b1dd7e829::t_5942890782b070 40,46-48,53-54
+  s_33426b1dd7e829::t_718d87bfcc92bf 8-11,22,28,31,35-36,38,55,58-59,75
+apps/client-dashboard/src/app/api/analytics/funnel/route.ts
+  s_33426b1dd7e829::t_15becf5dbdaf89 84
+  s_33426b1dd7e829::t_a0ec16855004af 25-28,41-44,57-60,101-104,109-112,119-122
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/scans/page.tsx
+  s_33426b1dd7e829::t_fa564073acc9e9 132
+  s_33426b1dd7e829::t_3edd2f96826497 111
+apps/client-dashboard/src/app/api/scans/[scanId]/deny/route.ts
+  s_33426b1dd7e829::t_324ac0ee2a758e 77
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/analytics/page.tsx
+  s_33426b1dd7e829::t_13a7466425dcec 136,143-144,146
+  s_33426b1dd7e829::t_cd08e5de5f81ed 68-71,145,147,185
+apps/client-dashboard/src/app/api/gates/route.ts
+  s_33426b1dd7e829::t_723cdb526719c1 56
+apps/client-dashboard/src/app/api/projects/[id]/logs/route.ts
+  s_33426b1dd7e829::t_c592344f0ee7ea 30
+  s_33426b1dd7e829::t_f012dd7be5f960 7-10,14-18,22-25,73-76
+apps/client-dashboard/src/components/dashboard/dashboard-overview.tsx
+  s_33426b1dd7e829::t_e5632ceb9ccc37 90
+  s_33426b1dd7e829::t_7b559e68a15ddb 100
+  s_33426b1dd7e829::t_e93198fe6a91ff 101-103,114-117
+apps/client-dashboard/src/app/api/analytics/summary/route.ts
+  s_33426b1dd7e829::t_e37ec5d3983481 87
+  s_33426b1dd7e829::t_2429a862c8a5a2 102,112,122,131
+  s_33426b1dd7e829::t_41438431e652fa 19-22,35-38,51-54,69-74,93-95,145-152,166-167,169-173,188-191,209-212
+apps/client-dashboard/src/app/api/projects/[id]/logs/route.test.ts
+  s_33426b1dd7e829::t_b4e3b715bd20aa 90,101
+  s_33426b1dd7e829::t_712e3a66133370 11-13,22-24,56-61,75-77,83-85,102-103,112-115,117-119,126-128,135-137,145-147
+apps/client-dashboard/src/app/api/ai/assistant/route.ts
+  s_33426b1dd7e829::t_66039ea54f0cf5 521
+  s_33426b1dd7e829::t_79205928cca06b 370-373
+apps/client-dashboard/src/app/api/incidents/route.ts
+  s_33426b1dd7e829::t_677da0e56417e5 222-226
+  s_33426b1dd7e829::t_3b22c1a53a2371 50-53
+apps/admin-dashboard/src/app/api/admin/organizations/[id]/route.ts
+  s_33426b1dd7e829::t_3a76321c0903ba 47,53
+apps/client-dashboard/src/app/api/analytics/campaigns/route.ts
+  s_33426b1dd7e829::t_b166415ef27e3d 74
+  s_33426b1dd7e829::t_0dfb7014f1b8eb 24-27,39-42,55-58,63-66,80,89-90,97-100
+apps/client-dashboard/src/app/api/analytics/peak-days/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 71,84,97,109
+  s_33426b1dd7e829::t_92b79fae8475a2 9-13,26-29,41-44,47-50,53-56,130-133
+apps/client-dashboard/src/app/api/contacts/route.ts
+  s_33426b1dd7e829::t_58df3fb2410486 394
+apps/client-dashboard/src/app/api/resident/arrived/route.ts
+  s_33426b1dd7e829::t_602834bacf43df 104
+apps/client-dashboard/src/app/api/danger/export/route.ts
+  s_33426b1dd7e829::t_eef46938bc8a00 61
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/gates/page.tsx
+  s_33426b1dd7e829::t_3ab60a3034a8ae 49
+apps/client-dashboard/src/app/api/scans/[scanId]/deny/route.test.ts
+  s_33426b1dd7e829::t_01c187c6712a44 130
+apps/client-dashboard/src/app/api/analytics/top-units/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 72,88,104,119
+  s_33426b1dd7e829::t_cbba2d73fefeb7 9-13,24-27,39-42,45-48,51-54,136-139
+apps/client-dashboard/src/app/api/override/log/route.ts
+  s_33426b1dd7e829::t_45e1a88d74d8c8 53
+  s_33426b1dd7e829::t_9c44b62cabb2f1 23-26,84-86
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/scans/page.tsx
+  s_33426b1dd7e829::t_5b5b50aa6ad538 73
+apps/client-dashboard/src/app/api/artifacts/route.ts
+  s_33426b1dd7e829::t_0a3bf729a704a6 89
+  s_33426b1dd7e829::t_d8d3b812a26312 30-33,36-39,46-49,55-60,68-72,77-81,93-96,105-108,140,144-147
+apps/client-dashboard/src/lib/ai/context-providers.ts
+  s_33426b1dd7e829::t_cb752c0c0555f8 54
+  s_33426b1dd7e829::t_8c3592550cea10 3,25-27,31,40-53,55-76,78-80,82-91,97,99,103-104
+packages/db/scripts/verify-seed-contract.ts
+  s_33426b1dd7e829::t_b7847636b9096b 83
+apps/client-dashboard/src/app/api/analytics/export-pdf/route.ts
+  s_33426b1dd7e829::t_57e57377822f3e 84
+  s_33426b1dd7e829::t_79fc2c968bb453 142,155,168,180
+apps/client-dashboard/src/app/api/analytics/operators/route.ts
+  s_33426b1dd7e829::t_5f6fec1a8fa655 87
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/audit-logs/page.tsx
+  s_33426b1dd7e829::t_c68f6a34f38a99 74
+apps/client-dashboard/src/app/api/scans/export/route.ts
+  s_33426b1dd7e829::t_cc4cb3c55c9fc6 100
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_33426b1dd7e829::t_31df138acbeb74 101-105
+  s_33426b1dd7e829::t_6d60a3d9e35ae9 58
+  s_33426b1dd7e829::t_03588fbe64829b 116-120
+apps/client-dashboard/src/app/api/resident/history/route.ts
+  s_33426b1dd7e829::t_5769ebe8466923 42
+  s_33426b1dd7e829::t_5ced806a99e6ec 13,83
+apps/client-dashboard/src/app/api/analytics/incidents/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 78,93,108,122,149,163,177,190
+  s_33426b1dd7e829::t_45432621c2229b 9-17,28-31,44-47,50-53,56-59,206-209
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/finance/page.tsx
+  s_33426b1dd7e829::t_4a47d9372463f5 61
+apps/client-dashboard/src/app/api/analytics/new-vs-returning/route.ts
+  s_33426b1dd7e829::t_20e23e94852f86 69,82,95,107
+  s_33426b1dd7e829::t_6fdbde2007b1a0 10-14,23-26,38-41,44-47,50-53,136-139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "84f8360b3c3669f8393af0823ab65933d17eb417",
+  "prompts": {},
+  "sessions": {
+    "s_2fa11826a098b7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fcad3-3bdf-7510-94c1-8a41f73ac8aa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_33426b1dd7e829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "28bf6f0c-c208-4a95-89d8-b2b8fadc6ef3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
