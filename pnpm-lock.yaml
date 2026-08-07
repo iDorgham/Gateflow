@@ -18,9 +18,9 @@ overrides:
   path-to-regexp: '>=0.1.13'
   minimatch: '>=10.2.4'
   braces: '>=3.0.3'
-  brace-expansion: '>=5.0.8'
-  js-yaml@^3.0.0: 3.15.0
-  js-yaml@^4.0.0: 4.3.0
+  brace-expansion: '>=5.0.9'
+  js-yaml@^3.0.0: 3.15.1
+  js-yaml@^4.0.0: 4.3.1
   tar: '>=7.5.21'
   glob: '>=10.5.0'
   jsondiffpatch: '>=0.7.2'
@@ -35,14 +35,14 @@ overrides:
   postcss: '>=8.5.10'
   sharp: '>=0.35.0'
   basic-ftp: '>=5.3.0 <6.0.0'
-  fast-uri: '>=3.1.4 <4.0.0'
+  fast-uri: '>=3.1.5 <4.0.0'
   linkify-it: '>=5.0.1 <6.0.0'
   shell-quote: '>=1.8.4 <2.0.0'
   undici: '>=6.27.0 <7.0.0'
   ws: '>=8.21.0 <9.0.0'
   qs: '>=6.15.2'
   uuid: '>=11.1.1'
-  ip-address: '>=10.1.1'
+  ip-address: '>=10.3.1'
   markdown-it: '>=14.2.0'
   '@babel/core': ^7.29.6
   esbuild: '>=0.28.1'
@@ -3060,7 +3060,7 @@ packages:
       }
     dependencies:
       '@changesets/types': 6.1.0
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
     dev: true
 
   /@changesets/pre@2.0.2:
@@ -3855,7 +3855,7 @@ packages:
       globals: 13.24.0
       ignore: 5.3.2
       import-fresh: 3.3.1
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       minimatch: 10.2.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
@@ -4695,7 +4695,7 @@ packages:
     dependencies:
       '@babel/code-frame': 7.29.7
       chalk: 4.1.2
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
     dev: false
 
   /@faker-js/faker@9.9.0:
@@ -5216,7 +5216,7 @@ packages:
       camelcase: 5.3.1
       find-up: 4.1.0
       get-package-type: 0.1.0
-      js-yaml: 3.15.0
+      js-yaml: 3.15.1
       resolve-from: 5.0.0
 
   /@istanbuljs/schema@0.1.3:
@@ -5970,7 +5970,7 @@ packages:
     dependencies:
       debug: 4.4.3
       isomorphic-fetch: 3.0.0
-      js-yaml: 3.15.0
+      js-yaml: 3.15.1
       lighthouse: 12.6.1
       tree-kill: 1.2.2
     transitivePeerDependencies:
@@ -9889,7 +9889,7 @@ packages:
       fs-extra: 10.1.0
       gradient-string: 2.0.2
       inquirer: 8.2.7(@types/node@20.19.37)
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       ora: 4.1.1
       rimraf: 3.0.2
       semver: 7.8.5
@@ -11234,7 +11234,7 @@ packages:
       }
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.4
+      fast-uri: 3.1.5
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
     dev: true
@@ -12199,10 +12199,10 @@ packages:
       big-integer: 1.6.52
     dev: false
 
-  /brace-expansion@5.0.8:
+  /brace-expansion@5.0.9:
     resolution:
       {
-        integrity: sha512-JZyDyq3D4AUifKTPOB7DELf6XsB3WdPuNxCtob1vFXPsSXhdAiHBWJ/tJ8HAc9aH84BK+5JFZLNkJKx3G9kzQg==,
+        integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==,
       }
     engines: { node: 20 || >=22 }
     dependencies:
@@ -13229,7 +13229,7 @@ packages:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       parse-json: 5.2.0
       typescript: 5.9.3
     dev: true
@@ -14778,7 +14778,7 @@ packages:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       is-path-inside: 3.0.3
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.4.1
       lodash.merge: 4.6.2
@@ -15799,10 +15799,10 @@ packages:
       }
     dev: false
 
-  /fast-uri@3.1.4:
+  /fast-uri@3.1.5:
     resolution:
       {
-        integrity: sha512-8JnbkQ4juDyvYs4mgFGQqg4yCYtFDtUtmp2QIQq11ZZe5CFQ5wcqm1rqDgAh/QdMySuBnPzMUiJUNZG5N/AiQw==,
+        integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==,
       }
     dev: true
 
@@ -16513,7 +16513,7 @@ packages:
       }
     engines: { node: '>=6.0' }
     dependencies:
-      js-yaml: 3.15.0
+      js-yaml: 3.15.1
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
@@ -17144,10 +17144,10 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /ip-address@10.2.0:
+  /ip-address@10.3.1:
     resolution:
       {
-        integrity: sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==,
+        integrity: sha512-1e9d3kb97NHJTIJDZW9rKqW2h6+dFa50Dy0fpPSMQp2ADje5gvKsXmdiK6dwY5t76TaTt5+P5N1Y/LoToIxP6g==,
       }
     engines: { node: '>= 12' }
     dev: true
@@ -19002,20 +19002,20 @@ packages:
         integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==,
       }
 
-  /js-yaml@3.15.0:
+  /js-yaml@3.15.1:
     resolution:
       {
-        integrity: sha512-ttBQIIQPDeLjpPOohtUdXuXUVoA2uIB6fEH9HyJ7234s5mBJ5wTx20njxplLZQgLaOfpmPQA7X2t5AX6tIPbog==,
+        integrity: sha512-S99WuO3HlhO3XN41EtYUNl9zzXjoJx7QvmipxsJVxtCBT0YHEFy+iOJhjSvrmV12nYhWpZaM8lPHkJm0yUMbag==,
       }
     hasBin: true
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
 
-  /js-yaml@4.3.0:
+  /js-yaml@4.3.1:
     resolution:
       {
-        integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==,
+        integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==,
       }
     hasBin: true
     dependencies:
@@ -21089,7 +21089,7 @@ packages:
       }
     engines: { node: 18 || 20 || >=22 }
     dependencies:
-      brace-expansion: 5.0.8
+      brace-expansion: 5.0.9
     dev: true
 
   /minimatch@10.2.5:
@@ -21099,7 +21099,7 @@ packages:
       }
     engines: { node: 18 || 20 || >=22 }
     dependencies:
-      brace-expansion: 5.0.8
+      brace-expansion: 5.0.9
 
   /minimist@1.2.8:
     resolution:
@@ -23550,7 +23550,7 @@ packages:
     engines: { node: '>=6' }
     dependencies:
       graceful-fs: 4.2.11
-      js-yaml: 3.15.0
+      js-yaml: 3.15.1
       pify: 4.0.1
       strip-bom: 3.0.0
     dev: true
@@ -24703,7 +24703,7 @@ packages:
       }
     engines: { node: '>= 10.0.0', npm: '>= 3.0.0' }
     dependencies:
-      ip-address: 10.2.0
+      ip-address: 10.3.1
       smart-buffer: 4.2.0
     dev: true
 
