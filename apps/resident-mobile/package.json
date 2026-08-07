@@ -34,7 +34,7 @@
     "react-native-gesture-handler": "^3.1.0",
     "react-native-reanimated": "^4.2.3",
     "react-native-safe-area-context": "~5.8.0",
-    "zod": "3.25.76"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/react": "~19.2.17",

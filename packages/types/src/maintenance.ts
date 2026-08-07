@@ -46,8 +46,8 @@ export const workOrderQuerySchema = z.object({
   locationId: z.string().optional(),
   reporterId: z.string().optional(),
   assigneeId: z.string().optional(),
-  page: z.string().transform(Number).optional().default('1'),
-  limit: z.string().transform(Number).optional().default('20'),
+  page: z.string().transform(Number).optional().default(1),
+  limit: z.string().transform(Number).optional().default(20),
 });
 
 export type WorkOrderQuery = z.infer<typeof workOrderQuerySchema>;

@@ -16,7 +16,7 @@
     "ai": "5.0.52",
     "crypto-js": "^4.2.0",
     "xss": "^1.0.15",
-    "zod": "3.25.76"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
