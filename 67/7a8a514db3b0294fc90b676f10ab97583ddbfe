@@ -1,0 +1,29 @@
+apps/client-dashboard/src/components/dashboard/team/TeamMembersTable.tsx
+  s_8c9a8766c4415c::t_2e168a94acee79 102-104,121-123
+apps/client-dashboard/src/components/crm/UnitTable.tsx
+  s_8c9a8766c4415c::t_2f5a65fd621f53 211-214
+apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx
+  s_8c9a8766c4415c::t_cdab26a1dba143 8
+  s_8c9a8766c4415c::t_655f822e8822c6 776
+apps/client-dashboard/src/components/dashboard/team/TeamSidebarChat.tsx
+  s_8c9a8766c4415c::t_90413214ad5e81 25
+  s_8c9a8766c4415c::t_99ca0005625273 108-110
+apps/client-dashboard/src/components/crm/ContactTable.tsx
+  s_8c9a8766c4415c::t_dbfb0b08c0805f 221-224
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "677a8a514db3b0294fc90b676f10ab97583ddbfe",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
