@@ -1,0 +1,84 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/tabs/billing-tab.tsx
+  s_3b988219fd06f1::t_17675247662130 26
+  s_3b988219fd06f1::t_48665f475a009d 178
+  s_3b988219fd06f1::t_d6a58fb0b88284 152
+apps/client-dashboard/src/components/dashboard/team/TeamSidebarChat.tsx
+  s_3b988219fd06f1::t_522347e4422e02 94
+  s_3b988219fd06f1::t_da4c6f8623f7c4 25
+apps/client-dashboard/src/components/dashboard/gateai/TagSidebar.tsx
+  s_3b988219fd06f1::t_2edfd7c12d0039 74
+  s_3b988219fd06f1::t_ba08f65899a2f2 16
+  s_3b988219fd06f1::t_b4335744813ff5 105
+apps/client-dashboard/src/components/crm/ContactTable.tsx
+  s_3b988219fd06f1::t_2b362f71b33040 202-204
+  s_3b988219fd06f1::t_4a221fced20c9e 183
+  s_3b988219fd06f1::t_8f9c01c335e795 22
+apps/client-dashboard/src/components/dashboard/gateai/AutomationList.tsx
+  s_3b988219fd06f1::t_fefe369a58bda6 15
+  s_3b988219fd06f1::t_440d06cc5d47f5 62
+apps/client-dashboard/src/lib/residents/use-user-preferences.ts
+  s_3b988219fd06f1::t_164643071e4ec2 36
+  s_3b988219fd06f1::t_d353b801eb8ec7 4
+  s_3b988219fd06f1::t_bda6462a31a8aa 13-16,30-31,35,37-38,43-44
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/page.tsx
+  s_3b988219fd06f1::t_301c2e6b884068 176
+  s_3b988219fd06f1::t_a124507e89c376 41
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/incidents/incidents-client.tsx
+  s_3b988219fd06f1::t_c7cd6ac4f10651 49
+  s_3b988219fd06f1::t_e54a19515e7a76 8
+apps/client-dashboard/src/components/crm/UnitTable.tsx
+  s_3b988219fd06f1::t_0118a78bfafdf5 177
+  s_3b988219fd06f1::t_cdd872cfe47a98 196
+  s_3b988219fd06f1::t_23ab0538d3d036 14
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/contacts/page.tsx
+  s_3b988219fd06f1::t_32f3f6067e5f09 1788
+  s_3b988219fd06f1::t_9ec82dde602042 713,717
+  s_3b988219fd06f1::t_bfaeeea79319ea 233
+  s_3b988219fd06f1::t_4dc966b3f3d8b4 69
+  s_3b988219fd06f1::t_b94efb9952d1d1 748
+  s_3b988219fd06f1::t_d0cf1b54fbc997 914
+  s_3b988219fd06f1::t_7ddc3a0739cdde 179
+  s_3b988219fd06f1::t_1ee779b9e9356f 781
+  s_3b988219fd06f1::t_5bf46150c17f98 1735
+  s_3b988219fd06f1::t_f8ea8eba672b52 876
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/units/page.tsx
+  s_3b988219fd06f1::t_aa49cd9ff68ba9 656
+  s_3b988219fd06f1::t_3625555d226ea4 761
+  s_3b988219fd06f1::t_d404a628786e46 625,629
+  s_3b988219fd06f1::t_9291d9fedb3e5b 55
+  s_3b988219fd06f1::t_720792dff26201 684
+  s_3b988219fd06f1::t_1f0206aaff5620 801
+apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx
+  s_3b988219fd06f1::t_19efcf53abf407 11
+  s_3b988219fd06f1::t_0588a758549e93 755
+apps/client-dashboard/src/components/dashboard/ai/ChatPanel.tsx
+  s_3b988219fd06f1::t_05ee833aabfdfe 207,221
+  s_3b988219fd06f1::t_9170ba785b235c 53
+  s_3b988219fd06f1::t_16628a7add26a2 268
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/create-qr-client.tsx
+  s_3b988219fd06f1::t_258887104197b1 19
+  s_3b988219fd06f1::t_3218ee7d0c9b0e 1206
+apps/client-dashboard/src/components/operations/ProjectTeamTable.tsx
+  s_3b988219fd06f1::t_0d4c4d04074408 19
+  s_3b988219fd06f1::t_05ae757ba10fe9 73
+apps/client-dashboard/src/components/dashboard/team/TeamMembersTable.tsx
+  s_3b988219fd06f1::t_7d5b461fad642a 38
+  s_3b988219fd06f1::t_b46be5c25eb56e 89
+  s_3b988219fd06f1::t_83bb85dfb9ed61 103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "7fdd4094a608c41412255fcd56d7eace013bb807",
+  "prompts": {},
+  "sessions": {
+    "s_3b988219fd06f1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56433265-0450-47df-b54e-7f2a5b733174",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
