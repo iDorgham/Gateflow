@@ -1,5 +1,16 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { prisma } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
+
+const AuditLogBodySchema = z.object({
+  organizationId: z.string().min(1),
+  action: z.string().min(1),
+  entityType: z.string().min(1),
+  entityId: z.string().optional(),
+  userId: z.string().optional(),
+  metadata: z.record(z.unknown()).optional(),
+});
 
 export async function POST(req: Request) {
   try {
@@ -7,22 +18,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { action, entityType, entityId, metadata } = await req.json();
+    const parsed = AuditLogBodySchema.safeParse(await req.json());
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Invalid request body', details: parsed.error.flatten() },
+        { status: 400 }
+      );
+    }
 
-    // 1. Mock Audit Logging
-    // In production, this would write to the Prisma auditLog model
-    console.log(
-      '[AUDIT_LOG] Admin performed %s on %s:%s',
-      action,
-      entityType,
-      entityId,
-      metadata
-    );
+    const { organizationId, action, entityType, entityId, userId, metadata } =
+      parsed.data;
+
+    const log = await prisma.auditLog.create({
+      data: {
+        organizationId,
+        action,
+        entityType,
+        entityId,
+        userId,
+        metadata: metadata ?? undefined,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      logId: `log-${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date().toISOString(),
+      logId: log.id,
+      timestamp: log.createdAt.toISOString(),
     });
   } catch (error) {
     console.error('[AUDIT_LOG_API]', error);
