@@ -1,0 +1,32 @@
+packages/ui/src/components/ui/label.tsx
+  s_04ff6482015349::t_86150341c8e1b6 4
+apps/client-dashboard/package.json
+  s_04ff6482015349::t_4d71276966733e 10
+packages/config/package.json
+  s_04ff6482015349::t_a5e8b346b50b7e 17-18
+packages/ui/src/components/ui/textarea.tsx
+  s_04ff6482015349::t_081548d52c02f1 4
+packages/ui/src/components/ui/checkbox.tsx
+  s_04ff6482015349::t_90b0a8d57d312d 4
+packages/db/src/seed-roles.js
+  s_04ff6482015349::t_4342c8b673f15d 1
+  s_04ff6482015349::t_85a6780fd4813b 70,91
+pnpm-lock.yaml
+  s_04ff6482015349::t_e5700ff9d10306 1095-1096,1098-1099,10367,10370,10372,10374,10376,10379-10383,10385,10387,10393,10396,10398,10401,10403-10406,10414-10442,10445,10447-10449,10451,10454,10457,10459,10462,10464-10466,10469,10475,10478,10480,10483,10486,10488,10490,10492-10495,10499-10500,10506,10509,10511,10514,10517-10519,10521,10526,10529,10531,10533-10534,14512-14513,14517,14572,14582,14606,14615,14629,14638,14743-14750,16940-16947,24273,25758,25761,25763
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "2eeef9aa74cc014136d3e566fcdc73d6ad8d4f7f",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
