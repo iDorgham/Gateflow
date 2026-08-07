@@ -1,0 +1,37 @@
+apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx
+  s_8c9a8766c4415c::t_63a6d01ec56742 758-762,764-773
+  s_8c9a8766c4415c::t_4b038562008404 8
+apps/client-dashboard/src/app/api/workspace/export/route.ts
+  s_8c9a8766c4415c::t_8461df5cdb7d83 183-186,189-190,201
+apps/client-dashboard/src/components/dashboard/team/TeamSidebarChat.tsx
+  s_8c9a8766c4415c::t_47f2f485e9304c 25
+  s_8c9a8766c4415c::t_65c0b6a03dabc4 99,106-107
+  s_8c9a8766c4415c::t_bd33bb38631aa1 108
+apps/client-dashboard/src/components/crm/UnitTable.tsx
+  s_8c9a8766c4415c::t_7732f3c49fc38e 195-201,203-208,215-217
+  s_8c9a8766c4415c::t_7eebf97901503e 218
+apps/client-dashboard/src/components/dashboard/team/TeamMembersTable.tsx
+  s_8c9a8766c4415c::t_e488b1ef0de0fe 93,100-102,110,117-119
+apps/client-dashboard/src/components/crm/ContactTable.tsx
+  s_8c9a8766c4415c::t_8bc00ec962ef27 201-207,209-214,223-225
+  s_8c9a8766c4415c::t_eb4a1a9f7c17a5 226
+apps/client-dashboard/src/app/api/workspace/export/route.test.ts
+  s_8c9a8766c4415c::t_0b5465a6a9d237 124-137
+  s_8c9a8766c4415c::t_70006db2ceeca4 11-14,138-141
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "9adef0706b16db1f546739679255e831bd4dad5b",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
