@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/google": "^1.2.0",
+    "@ai-sdk/google": "^4.0.33",
     "@ai-sdk/react": "^3.0.139",
     "@babel/runtime": "^8.0.0",
     "@expo/vector-icons": "^15.1.1",
