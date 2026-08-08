@@ -167,7 +167,6 @@ export function WatchlistClient() {
     return () => {
       if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   // ── Sorted entries ──────────────────────────────────────────────────────────
