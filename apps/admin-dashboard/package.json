@@ -14,8 +14,8 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.53",
-    "@ai-sdk/react": "^3.0.139",
+    "@ai-sdk/google": "^3.0.104",
+    "@ai-sdk/react": "^3.0.248",
     "@formatjs/intl-localematcher": "^0.8.13",
     "@gate-access/db": "^0.1.0",
     "@gate-access/i18n": "workspace:^",
@@ -27,7 +27,7 @@
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.9",
     "@node-rs/argon2": "^2.0.0",
-    "ai": "^6.0.138",
+    "ai": "^6.0.246",
     "@tiptap/core": "^3.20.4",
     "@tiptap/extension-placeholder": "^3.20.4",
     "@tiptap/pm": "^3.20.4",
