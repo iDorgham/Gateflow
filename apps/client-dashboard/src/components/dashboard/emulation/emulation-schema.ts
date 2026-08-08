@@ -103,7 +103,7 @@ export function validateStep0(input: {
 }): string | null {
   const r = emulationStep0Schema.safeParse(input);
   if (!r.success) {
-    return r.error.errors[0]?.message ?? 'Validation failed';
+    return r.error.issues[0]?.message ?? 'Validation failed';
   }
   return null;
 }

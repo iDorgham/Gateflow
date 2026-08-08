@@ -14,7 +14,7 @@ const automationSchema = z.object({
   type: z.enum(['REPORT', 'EXPORT']),
   trigger: z.literal('CRON'),
   schedule: z.string().min(1), // Cron or NLP string
-  action: z.record(z.any()),   // Action metadata
+  action: z.record(z.string(), z.any()), // Action metadata
 });
 
 export async function GET() {
@@ -32,15 +32,18 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
       include: {
         user: {
-          select: { name: true, email: true }
-        }
-      }
+          select: { name: true, email: true },
+        },
+      },
     });
 
     return NextResponse.json({ automations });
   } catch (error) {
     console.error('[Automations GET Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -53,15 +56,21 @@ export async function POST(request: Request) {
   // Security: Only MANAGER or ADMIN can create automations
   const role = claims.role || 'USER';
   if (role !== 'ADMIN' && role !== 'TENANT_ADMIN' && role !== 'MANAGER') {
-    return NextResponse.json({ error: 'Forbidden: Insufficient permissions' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Forbidden: Insufficient permissions' },
+      { status: 403 }
+    );
   }
 
   try {
     const body = await request.json();
     const result = automationSchema.safeParse(body);
-    
+
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid input', details: result.error.format() }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.format() },
+        { status: 400 }
+      );
     }
 
     const automation = await prisma.aiAutomation.create({
@@ -81,7 +90,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ automation }, { status: 201 });
   } catch (error) {
     console.error('[Automations POST Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -94,7 +106,10 @@ export async function DELETE(request: Request) {
   // Security: Only MANAGER or ADMIN can delete
   const role = claims.role || 'USER';
   if (role !== 'ADMIN' && role !== 'TENANT_ADMIN' && role !== 'MANAGER') {
-    return NextResponse.json({ error: 'Forbidden: Insufficient permissions' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Forbidden: Insufficient permissions' },
+      { status: 403 }
+    );
   }
 
   try {
@@ -102,7 +117,10 @@ export async function DELETE(request: Request) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ error: 'Missing automation ID' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing automation ID' },
+        { status: 400 }
+      );
     }
 
     // Soft delete with strict org scoping (Contract §1)
@@ -119,10 +137,21 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2025') {
-      return NextResponse.json({ error: 'Automation not found' }, { status: 404 });
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'P2025'
+    ) {
+      return NextResponse.json(
+        { error: 'Automation not found' },
+        { status: 404 }
+      );
     }
     console.error('[Automations DELETE Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

@@ -25,7 +25,7 @@ const PerimeterWebhookSchema = z.object({
   projectId: z.string().min(1),
   gateId: z.string().min(1),
   type: z.nativeEnum(PerimeterEventType),
-  payload: z.record(z.any()),
+  payload: z.record(z.string(), z.any()),
   timestamp: z.string().min(1),
 });
 

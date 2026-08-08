@@ -53,7 +53,7 @@ export async function acceptInvitation(
   try {
     const validation = JoinSchema.safeParse(data);
     if (!validation.success) {
-      return { success: false, error: validation.error.errors[0].message };
+      return { success: false, error: validation.error.issues[0].message };
     }
 
     const invitation = await prisma.invitation.findUnique({
