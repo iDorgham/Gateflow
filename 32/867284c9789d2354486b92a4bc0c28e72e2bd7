@@ -1,0 +1,20 @@
+scripts/check/check-security.js
+  s_04ff6482015349::t_a1d35477c06dd4 34-59
+  s_04ff6482015349::t_7bde3c0c2fe631 172,177,182-203,206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "32867284c9789d2354486b92a4bc0c28e72e2bd7",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
