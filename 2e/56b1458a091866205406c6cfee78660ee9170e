@@ -1,0 +1,29 @@
+apps/admin-dashboard/package.json
+  s_04ff6482015349::t_8d342b7776a6d4 17-18,30
+apps/client-dashboard/package.json
+  s_04ff6482015349::t_1379d612c59faf 19-20,46
+apps/resident-mobile/package.json
+  s_04ff6482015349::t_f04a89ca52683f 14-15,20
+package.json
+  s_04ff6482015349::t_3219f46a42c787 96
+packages/ai/package.json
+  s_04ff6482015349::t_87110a7b3d405a 54-55
+pnpm-lock.yaml
+  s_04ff6482015349::t_3b6afd8294a1d1 111-112,144-145,147-148,198-199,304-305,307-308,385-386,706-707,709-710,724-725,989-990,1001-1002,1427,1430,1436,1438,1441,1444,1450,1469,1472,1479,1482,1497,1500,1507,11031,11034,11190,11193,11199-11200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "2e56b1458a091866205406c6cfee78660ee9170e",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
