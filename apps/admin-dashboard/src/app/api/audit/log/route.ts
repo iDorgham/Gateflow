@@ -9,7 +9,7 @@ const AuditLogBodySchema = z.object({
   entityType: z.string().min(1),
   entityId: z.string().optional(),
   userId: z.string().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function POST(req: Request) {
