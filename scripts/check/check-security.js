@@ -31,6 +31,32 @@ const SEVERITY_RANK = { low: 0, moderate: 1, high: 2, critical: 3 };
 /** Exit code for registry/network/unavailable — distinct from clean (0) and vulns (1). */
 const EXIT_UNAVAILABLE = 2;
 
+/**
+ * Advisories with no fix currently available upstream, deliberately
+ * risk-accepted rather than left to silently fail every install/push.
+ * Each entry needs a specific reason this repo's exposure is acceptable —
+ * not just "no fix yet". Re-run without --fail periodically to check
+ * whether a fixed version has since been published, and remove the entry
+ * once it has (the bulk advisory query will then just stop matching it,
+ * but a stale entry here is easy to miss otherwise).
+ */
+const ACKNOWLEDGED_RISKS = [
+  {
+    ghsaUrl: 'https://github.com/advisories/GHSA-w3rx-r6r6-pgpr',
+    package: 'image-size',
+    reason:
+      'ICNS parser DoS, no patched version published yet. image-size is pulled in transitively by Metro (the React Native/Expo bundler) — build-time tooling only, never parses user-supplied or untrusted image files at runtime.',
+    addedOn: '2026-08-08',
+  },
+  {
+    ghsaUrl: 'https://github.com/advisories/GHSA-5p2g-fcmc-qvqq',
+    package: 'image-size',
+    reason:
+      'JXL/HEIF parser DoS, same package and no-fix-yet situation as GHSA-w3rx-r6r6-pgpr above — build-time-only exposure via Metro.',
+    addedOn: '2026-08-08',
+  },
+];
+
 const args = process.argv.slice(2);
 const failMode = args.includes('--fail');
 const auditLevel = args.includes('--level')
@@ -143,19 +169,41 @@ async function main() {
     process.exit(EXIT_UNAVAILABLE);
   }
 
-  const relevant = [];
+  const allFound = [];
   for (const [name, advisories] of Object.entries(advisoriesByPackage)) {
     for (const advisory of advisories) {
       const rank = SEVERITY_RANK[advisory.severity] ?? -1;
       if (rank >= SEVERITY_RANK[auditLevel]) {
-        relevant.push({ name, ...advisory });
+        allFound.push({ name, ...advisory });
       }
     }
   }
 
+  const acknowledged = [];
+  const relevant = allFound.filter((advisory) => {
+    const risk = ACKNOWLEDGED_RISKS.find(
+      (r) => r.ghsaUrl === advisory.url && r.package === advisory.name
+    );
+    if (!risk) return true;
+    acknowledged.push({ advisory, risk });
+    return false;
+  });
+
+  if (acknowledged.length > 0) {
+    console.warn('');
+    for (const { advisory, risk } of acknowledged) {
+      console.warn(
+        `  [ACKNOWLEDGED] ${advisory.name}: ${advisory.title} (since ${risk.addedOn})`
+      );
+      console.warn(`    ${advisory.url}`);
+      console.warn(`    Reason: ${risk.reason}`);
+    }
+    console.warn('');
+  }
+
   if (relevant.length === 0) {
     console.log(
-      `\x1b[32m  ✓ No ${auditLevel}+ vulnerabilities found (status=clean packages=${versionsByName.size}).\x1b[0m\n`
+      `\x1b[32m  ✓ No unacknowledged ${auditLevel}+ vulnerabilities found (status=clean packages=${versionsByName.size}).\x1b[0m\n`
     );
     process.exit(0);
   }
