@@ -12,6 +12,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { cn } from '@gateflow/ui';
+import { csrfFetch } from '@/lib/csrf';
 
 type Automation = {
   id: string;
@@ -58,7 +59,7 @@ export function AutomationList() {
       const prev = [...automations];
       setAutomations(automations.filter((a) => a.id !== id));
 
-      const res = await fetch(`/api/gateai/automations?id=${id}`, {
+      const res = await csrfFetch(`/api/gateai/automations?id=${id}`, {
         method: 'DELETE',
       });
       if (!res.ok) {

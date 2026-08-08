@@ -6,7 +6,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   const now = new Date();
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         signal: AbortSignal.timeout(3000),
       });
       redisLatencyMs = Date.now() - start;
-      const json = await res.json() as { result?: string };
+      const json = (await res.json()) as { result?: string };
       redisStatus = json.result === 'PONG' ? 'ok' : 'error';
       if (redisStatus === 'error') redisMessage = 'Unexpected ping response';
     } catch (err) {
@@ -51,19 +54,44 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   // ── Scan metrics ──────────────────────────────────────────────────────────
-  const [scansLastHour, failedScansLastHour, activeScanners, recentScans, totalOrgs, totalUsers] =
-    await Promise.all([
-      prisma.scanLog.count({ where: { scannedAt: { gte: oneHourAgo } } }),
-      prisma.scanLog.count({ where: { scannedAt: { gte: oneHourAgo }, status: { in: ['FAILED', 'EXPIRED'] } } }),
-      prisma.scanLog.groupBy({
+  const [
+    scansLastHour,
+    failedScansLastHour,
+    activeScanners,
+    recentScans,
+    totalOrgs,
+    totalUsers,
+  ] = await Promise.all([
+    prisma.scanLog.count({
+      where: { scannedAt: { gte: oneHourAgo }, deletedAt: null },
+    }),
+    prisma.scanLog.count({
+      where: {
+        scannedAt: { gte: oneHourAgo },
+        status: { in: ['FAILED', 'EXPIRED'] },
+        deletedAt: null,
+      },
+    }),
+    prisma.scanLog
+      .groupBy({
         by: ['userId'],
-        where: { scannedAt: { gte: fifteenMinAgo }, userId: { not: null } },
+        where: {
+          scannedAt: { gte: fifteenMinAgo },
+          userId: { not: null },
+          deletedAt: null,
+        },
         _count: true,
-      }).then((r: unknown[]) => r.length),
-      prisma.scanLog.count({ where: { scannedAt: { gte: new Date(now.getTime() - 5 * 60_000) } } }),
-      prisma.organization.count({ where: { deletedAt: null } }),
-      prisma.user.count({ where: { deletedAt: null } }),
-    ]);
+      })
+      .then((r: unknown[]) => r.length),
+    prisma.scanLog.count({
+      where: {
+        scannedAt: { gte: new Date(now.getTime() - 5 * 60_000) },
+        deletedAt: null,
+      },
+    }),
+    prisma.organization.count({ where: { deletedAt: null } }),
+    prisma.user.count({ where: { deletedAt: null } }),
+  ]);
 
   const errorRate = scansLastHour > 0 ? failedScansLastHour / scansLastHour : 0;
 
@@ -71,8 +99,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     success: true,
     timestamp: now.toISOString(),
     services: {
-      database: { status: dbStatus, latencyMs: dbLatencyMs, message: dbMessage },
-      redis: { status: redisStatus, latencyMs: redisLatencyMs, message: redisMessage },
+      database: {
+        status: dbStatus,
+        latencyMs: dbLatencyMs,
+        message: dbMessage,
+      },
+      redis: {
+        status: redisStatus,
+        latencyMs: redisLatencyMs,
+        message: redisMessage,
+      },
     },
     metrics: {
       scansLastHour,

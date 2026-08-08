@@ -22,6 +22,8 @@ import {
 } from '@gateflow/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Message {
   id: string;
@@ -90,16 +92,22 @@ export function TeamSidebarChat({
 
   const sendMutation = useMutation({
     mutationFn: async (text: string) => {
-      const res = await fetch('/api/team/messages', {
+      const res = await csrfFetch('/api/team/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: text }),
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to send message');
+      }
       return res.json();
     },
     onSuccess: () => {
       setInputText('');
       queryClient.invalidateQueries({ queryKey: ['team-messages'] });
+    },
+    onError: () => {
+      toast.error(t('team.chat.sendFailed', 'Failed to send message'));
     },
   });
 

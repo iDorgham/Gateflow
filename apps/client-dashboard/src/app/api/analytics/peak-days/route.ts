@@ -6,7 +6,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { AnalyticsQuerySchema, validateAnalyticsQuery, type AnalyticsQueryInput } from '@/lib/analytics/analytics-query';
+import {
+  AnalyticsQuerySchema,
+  validateAnalyticsQuery,
+  type AnalyticsQueryInput,
+} from '@/lib/analytics/analytics-query';
 import type { PeakDaysRow } from '@/lib/analytics/types';
 
 export const dynamic = 'force-dynamic';
@@ -19,7 +23,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -31,13 +38,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
-    const validation = await validateAnalyticsQuery(claims.orgId, parsed.data as AnalyticsQueryInput);
+    const validation = await validateAnalyticsQuery(
+      claims.orgId,
+      parsed.data as AnalyticsQueryInput
+    );
     if (!validation.ok) {
       const msg = (validation as { ok: false; message: string }).message;
-      return NextResponse.json({ success: false, message: msg }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: msg },
+        { status: 400 }
+      );
     }
     const { ctx } = validation;
 
@@ -52,7 +68,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         WHERE qr."organizationId" = ${orgId}
           AND qr."projectId" = ${projectId}
           AND sl."gateId" = ${gateId}
-          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${ctx.dateFromDate} AND sl."scannedAt" <= ${ctx.dateToDate}
         GROUP BY dow
         ORDER BY dow
@@ -65,7 +81,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "Gate" g ON sl."gateId" = g.id
         WHERE qr."organizationId" = ${orgId}
           AND qr."projectId" = ${projectId}
-          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${ctx.dateFromDate} AND sl."scannedAt" <= ${ctx.dateToDate}
         GROUP BY dow
         ORDER BY dow
@@ -78,7 +94,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "Gate" g ON sl."gateId" = g.id
         WHERE qr."organizationId" = ${orgId}
           AND sl."gateId" = ${gateId}
-          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${ctx.dateFromDate} AND sl."scannedAt" <= ${ctx.dateToDate}
         GROUP BY dow
         ORDER BY dow
@@ -90,7 +106,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
         JOIN "Gate" g ON sl."gateId" = g.id
         WHERE qr."organizationId" = ${orgId}
-          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${ctx.dateFromDate} AND sl."scannedAt" <= ${ctx.dateToDate}
         GROUP BY dow
         ORDER BY dow
@@ -111,6 +127,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/analytics/peak-days error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -118,6 +118,7 @@ export async function POST(req: NextRequest) {
           // a gateId from another tenant cannot satisfy this check.
           const recentValidScan = await tx.scanLog.findFirst({
             where: {
+              deletedAt: null,
               gateId: body.gateId,
               scannedAt: { gte: fiveSecondsAgo },
               status: 'SUCCESS',
@@ -136,6 +137,7 @@ export async function POST(req: NextRequest) {
             const tenSecondsAgo = new Date(Date.now() - 10_000);
             const existingIncident = await tx.incident.findFirst({
               where: {
+                deletedAt: null,
                 organizationId: body.organizationId,
                 gateId: body.gateId,
                 reason: { startsWith: `${body.type}:` },

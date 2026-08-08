@@ -16,7 +16,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -29,7 +32,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId, gateId } = parsed.data;
@@ -42,7 +48,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
     if (gateId) {
@@ -57,7 +66,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
       if (!gate) {
         return NextResponse.json(
-          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          {
+            success: false,
+            message: projectId
+              ? 'Gate must belong to the selected project'
+              : 'Invalid gate',
+          },
           { status: 400 }
         );
       }
@@ -70,19 +84,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     };
 
     const scanFilter = {
+      deletedAt: null,
       qrCode: qrFilter,
       scannedAt: { gte: dateFromDate, lte: dateToDate },
       ...(gateId ? { gateId } : {}),
     };
 
-    const runHeatmap = async (): Promise<{ dow: number; hour: number; count: bigint }[]> => {
+    const runHeatmap = async (): Promise<
+      { dow: number; hour: number; count: bigint }[]
+    > => {
       type H = { dow: number; hour: number; count: bigint };
       if (projectId && gateId) {
         return prisma.$queryRaw<H[]>`
           SELECT EXTRACT(DOW FROM sl."scannedAt")::int AS dow, EXTRACT(HOUR FROM sl."scannedAt")::int AS hour, COUNT(*)::bigint AS count
           FROM "ScanLog" sl JOIN "QRCode" qr ON sl."qrCodeId" = qr.id JOIN "Gate" g ON sl."gateId" = g.id
           WHERE qr."organizationId" = ${orgId} AND qr."projectId" = ${projectId} AND sl."gateId" = ${gateId}
-            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
             AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
           GROUP BY dow, hour
         `;
@@ -92,7 +109,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           SELECT EXTRACT(DOW FROM sl."scannedAt")::int AS dow, EXTRACT(HOUR FROM sl."scannedAt")::int AS hour, COUNT(*)::bigint AS count
           FROM "ScanLog" sl JOIN "QRCode" qr ON sl."qrCodeId" = qr.id JOIN "Gate" g ON sl."gateId" = g.id
           WHERE qr."organizationId" = ${orgId} AND qr."projectId" = ${projectId}
-            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
             AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
           GROUP BY dow, hour
         `;
@@ -102,7 +119,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           SELECT EXTRACT(DOW FROM sl."scannedAt")::int AS dow, EXTRACT(HOUR FROM sl."scannedAt")::int AS hour, COUNT(*)::bigint AS count
           FROM "ScanLog" sl JOIN "QRCode" qr ON sl."qrCodeId" = qr.id JOIN "Gate" g ON sl."gateId" = g.id
           WHERE qr."organizationId" = ${orgId} AND sl."gateId" = ${gateId}
-            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+            AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
             AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
           GROUP BY dow, hour
         `;
@@ -111,7 +128,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         SELECT EXTRACT(DOW FROM sl."scannedAt")::int AS dow, EXTRACT(HOUR FROM sl."scannedAt")::int AS hour, COUNT(*)::bigint AS count
         FROM "ScanLog" sl JOIN "QRCode" qr ON sl."qrCodeId" = qr.id JOIN "Gate" g ON sl."gateId" = g.id
         WHERE qr."organizationId" = ${orgId}
-          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
         GROUP BY dow, hour
       `;
@@ -125,7 +142,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       qrCode: { ...scanFilter.qrCode, utmCampaign: { not: null } },
     };
 
-    const [totalVisits, successCount, deniedCount, heatmapRaw, lastHourCount, attributedScans] = await Promise.all([
+    const [
+      totalVisits,
+      successCount,
+      deniedCount,
+      heatmapRaw,
+      lastHourCount,
+      attributedScans,
+    ] = await Promise.all([
       prisma.scanLog.count({ where: scanFilter }),
       prisma.scanLog.count({ where: { ...scanFilter, status: 'SUCCESS' } }),
       prisma.scanLog.count({ where: { ...scanFilter, status: 'DENIED' } }),
@@ -139,9 +163,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       prisma.scanLog.count({ where: attributedFilter }),
     ]);
 
-    const passRate = totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
+    const passRate =
+      totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
 
-    const heatmapRows = heatmapRaw as { dow: number; hour: number; count: bigint }[];
+    const heatmapRows = heatmapRaw as {
+      dow: number;
+      hour: number;
+      count: bigint;
+    }[];
     const hourCounts = new Map<number, number>();
     for (const r of heatmapRows) {
       const c = typeof r.count === 'bigint' ? Number(r.count) : r.count;
@@ -156,7 +185,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    const totalDays = Math.ceil((dateToDate.getTime() - dateFromDate.getTime()) / (24 * 60 * 60 * 1000)) || 1;
+    const totalDays =
+      Math.ceil(
+        (dateToDate.getTime() - dateFromDate.getTime()) / (24 * 60 * 60 * 1000)
+      ) || 1;
     const totalHourBuckets = totalDays * 24;
     const hourlyAvg = totalVisits / totalHourBuckets;
 
@@ -174,6 +206,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/analytics/summary error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

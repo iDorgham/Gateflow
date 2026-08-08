@@ -2,20 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 
-export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
-    if (!claims?.sub) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    if (!claims?.sub || !claims?.orgId) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { id } = params;
 
     const visitorQR = await prisma.visitorQR.findFirst({
+      // ignore-security-guard — scoped via qrCode.organizationId (VisitorQR has no direct orgId field)
       where: {
         id,
         createdBy: claims.sub,
+        qrCode: {
+          organizationId: claims.orgId,
+        },
       },
       include: {
         qrCode: true,
@@ -30,7 +40,10 @@ export async function GET(_request: NextRequest, props: { params: Promise<{ id: 
     });
 
     if (!visitorQR) {
-      return NextResponse.json({ success: false, message: 'Visitor QR not found or unauthorized' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Visitor QR not found or unauthorized' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({
@@ -39,25 +52,38 @@ export async function GET(_request: NextRequest, props: { params: Promise<{ id: 
     });
   } catch (error) {
     console.error('GET /api/resident/visitors/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
-    if (!claims?.sub) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    if (!claims?.sub || !claims?.orgId) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { id } = params;
 
     // Find visitor QR and verify ownership
     const visitorQR = await prisma.visitorQR.findFirst({
+      // ignore-security-guard — scoped via qrCode.organizationId (VisitorQR has no direct orgId field)
       where: {
         id,
         createdBy: claims.sub,
+        qrCode: {
+          organizationId: claims.orgId,
+        },
       },
       include: {
         qrCode: true,
@@ -65,7 +91,10 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     });
 
     if (!visitorQR) {
-      return NextResponse.json({ success: false, message: 'Visitor QR not found or unauthorized' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Visitor QR not found or unauthorized' },
+        { status: 404 }
+      );
     }
 
     // Soft-delete the QRCode
@@ -83,6 +112,9 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     });
   } catch (error) {
     console.error('DELETE /api/resident/visitors/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

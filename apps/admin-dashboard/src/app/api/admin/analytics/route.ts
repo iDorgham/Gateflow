@@ -24,7 +24,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       const dayEnd = new Date(day);
       dayEnd.setHours(23, 59, 59, 999);
       const count = await prisma.scanLog.count({
-        where: { scannedAt: { gte: day, lte: dayEnd } },
+        where: { scannedAt: { gte: day, lte: dayEnd }, deletedAt: null },
       });
       return {
         label: day.toLocaleDateString('en', { month: 'short', day: 'numeric' }),
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // Top orgs by scan volume (7d)
   const recentGateScans = (await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: sevenDaysAgo } },
+    where: { scannedAt: { gte: sevenDaysAgo }, deletedAt: null },
     _count: { id: true },
     orderBy: { _count: { id: 'desc' } },
     take: 50,

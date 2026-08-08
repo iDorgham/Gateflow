@@ -19,7 +19,6 @@ const DEFAULT_LOCALE = 'en';
 const PUBLIC_ROUTES = [
   '/login',
   '/api/admin/login',
-  '/api/auth/login',
   '/api/auth/refresh',
   '/api/auth/logout',
 ];
@@ -79,7 +78,6 @@ function loginPathForRequest(request: NextRequest, pathname: string): string {
 /** API paths that must remain reachable without an admin session. */
 const PUBLIC_API_PREFIXES = [
   '/api/admin/login',
-  '/api/auth/login',
   '/api/auth/refresh',
   '/api/auth/logout',
   '/api/cms/pages/public/',

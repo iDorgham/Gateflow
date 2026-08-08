@@ -64,10 +64,14 @@ export async function POST(request: NextRequest) {
     const projectFilter = projectId ? { projectId } : {};
 
     const stats = await prisma.$transaction([
-      prisma.scanLog.deleteMany({
+      // ScanLog and Incident are security/audit records — always soft-delete,
+      // never deleteMany(). Rows remain in the database for forensic purposes.
+      prisma.scanLog.updateMany({
         where: {
           gate: { organizationId, ...projectFilter },
+          deletedAt: null,
         },
+        data: { deletedAt },
       }),
       prisma.qRCode.updateMany({
         where: { organizationId, ...projectFilter, deletedAt: null },
@@ -81,10 +85,9 @@ export async function POST(request: NextRequest) {
         where: { organizationId, deletedAt: null },
         data: { deletedAt },
       }),
-      // Incident has no soft-delete column — hard-delete, consistent with
-      // the ScanLog handling above for this destructive reset utility.
-      prisma.incident.deleteMany({
-        where: { organizationId },
+      prisma.incident.updateMany({
+        where: { organizationId, deletedAt: null },
+        data: { deletedAt },
       }),
     ]);
 
@@ -140,11 +143,11 @@ export async function POST(request: NextRequest) {
         result: 'wash_and_reset_ok',
         metadata: {
           stats: {
-            scansRemoved: stats[0].count,
+            scansSoftDeleted: stats[0].count,
             qrCodesSoftDeleted: stats[1].count,
             unitsSoftDeleted: stats[2].count,
             contactsSoftDeleted: stats[3].count,
-            incidentsRemoved: stats[4].count,
+            incidentsSoftDeleted: stats[4].count,
             reSeeded: seededResults ? seededResults.unitsCreated : 0,
           },
         },

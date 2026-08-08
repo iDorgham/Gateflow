@@ -44,12 +44,13 @@ export async function GET(
 
   const [scansTotal, scansThisMonth] = await Promise.all([
     prisma.scanLog.count({
-      where: { qrCode: { organizationId: org.id } },
+      where: { qrCode: { organizationId: org.id }, deletedAt: null },
     }),
     prisma.scanLog.count({
       where: {
         qrCode: { organizationId: org.id },
         scannedAt: { gte: monthStart },
+        deletedAt: null,
       },
     }),
   ]);

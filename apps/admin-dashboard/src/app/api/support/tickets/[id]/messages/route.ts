@@ -11,6 +11,10 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  if (!(await isAdminAuthorized(request))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
   try {
     const messages = await prisma.supportMessage.findMany({
       where: { ticketId: params.id },
@@ -40,6 +44,10 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  if (!(await isAdminAuthorized(request))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
   const body = await request.json();
   const { content, senderId, senderType } = body;
 

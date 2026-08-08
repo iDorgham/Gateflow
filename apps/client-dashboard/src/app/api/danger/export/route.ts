@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       take: 10000,
     }),
     prisma.scanLog.findMany({
-      where: { gate: { organizationId: orgId } },
+      where: { deletedAt: null, gate: { organizationId: orgId } },
       select: { id: true, status: true, scannedAt: true, gateId: true },
       take: 50000,
       orderBy: { scannedAt: 'desc' },

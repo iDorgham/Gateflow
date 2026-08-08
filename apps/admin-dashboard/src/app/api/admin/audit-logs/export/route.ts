@@ -8,7 +8,11 @@ function escapeCSV(value: unknown): string {
   // Prefix formula-injection trigger characters so spreadsheet apps don't execute them.
   // See OWASP: https://owasp.org/www-community/attacks/CSV_Injection
   const sanitized = /^[=+\-@\t\r]/.test(str) ? `'${str}` : str;
-  if (sanitized.includes(',') || sanitized.includes('"') || sanitized.includes('\n')) {
+  if (
+    sanitized.includes(',') ||
+    sanitized.includes('"') ||
+    sanitized.includes('\n')
+  ) {
     return `"${sanitized.replace(/"/g, '""')}"`;
   }
   return sanitized;
@@ -24,12 +28,23 @@ export async function GET(request: NextRequest) {
   const statusFilter = sp.get('status') ?? '';
   const uuidFilter = sp.get('q')?.trim() ?? '';
   const fromDate = sp.get('from') ? new Date(sp.get('from')!) : undefined;
-  const toDate = sp.get('to') ? new Date(sp.get('to')! + 'T23:59:59') : undefined;
+  const toDate = sp.get('to')
+    ? new Date(sp.get('to')! + 'T23:59:59')
+    : undefined;
 
-  const VALID_STATUSES = new Set(['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE']);
-  const where: Record<string, unknown> = {};
-  if (statusFilter && VALID_STATUSES.has(statusFilter)) where.status = statusFilter;
-  if (uuidFilter) where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };
+  const VALID_STATUSES = new Set([
+    'SUCCESS',
+    'DENIED',
+    'FAILED',
+    'EXPIRED',
+    'MAX_USES_REACHED',
+    'INACTIVE',
+  ]);
+  const where: Record<string, unknown> = { deletedAt: null };
+  if (statusFilter && VALID_STATUSES.has(statusFilter))
+    where.status = statusFilter;
+  if (uuidFilter)
+    where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };
   if (fromDate || toDate) {
     where.scannedAt = {
       ...(fromDate ? { gte: fromDate } : {}),
@@ -37,7 +52,9 @@ export async function GET(request: NextRequest) {
     };
   }
   if (orgFilter) {
-    where.qrCode = { organization: { name: { contains: orgFilter, mode: 'insensitive' } } };
+    where.qrCode = {
+      organization: { name: { contains: orgFilter, mode: 'insensitive' } },
+    };
   }
 
   const logs = await prisma.scanLog.findMany({

@@ -18,37 +18,87 @@ const UpdateUnitSchema = z.object({
   lng: z.number().min(-180).max(180).optional().nullable(),
 });
 
-export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const existing = await prisma.unit.findFirst({
       where: { id: params.id, organizationId: claims.orgId, deletedAt: null },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Unit not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Unit not found' },
+        { status: 404 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = UpdateUnitSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
     const { contactIds, userId, lat, lng, ...fields } = validation.data;
+
+    if (fields.projectId) {
+      const project = await prisma.project.findFirst({
+        where: {
+          id: fields.projectId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+      if (!project) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid projectId' },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (contactIds?.length) {
+      const validContacts = await prisma.contact.findMany({
+        where: {
+          id: { in: contactIds },
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+      if (validContacts.length !== new Set(contactIds).size) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid contactIds' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Validate userId when linking: user must exist, have RESIDENT role, belong to org, and not be linked to another unit
     if (userId !== undefined && userId !== null) {
@@ -63,7 +113,11 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
       });
       if (!resident) {
         return NextResponse.json(
-          { success: false, message: 'User not found or does not have RESIDENT role in this organization' },
+          {
+            success: false,
+            message:
+              'User not found or does not have RESIDENT role in this organization',
+          },
           { status: 400 }
         );
       }
@@ -78,7 +132,10 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
       });
       if (otherUnit) {
         return NextResponse.json(
-          { success: false, message: 'This resident is already linked to another unit' },
+          {
+            success: false,
+            message: 'This resident is already linked to another unit',
+          },
           { status: 400 }
         );
       }
@@ -89,7 +146,10 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
         await tx.contactUnit.deleteMany({ where: { unitId: params.id } });
         if (contactIds.length > 0) {
           await tx.contactUnit.createMany({
-            data: contactIds.map((contactId) => ({ contactId, unitId: params.id })),
+            data: contactIds.map((contactId) => ({
+              contactId,
+              unitId: params.id,
+            })),
           });
         }
       }
@@ -99,9 +159,13 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
         data: {
           ...(fields.name !== undefined ? { name: fields.name.trim() } : {}),
           ...(fields.type !== undefined ? { type: fields.type } : {}),
-          ...(fields.sizeSqm !== undefined ? { sizeSqm: fields.sizeSqm ?? null } : {}),
+          ...(fields.sizeSqm !== undefined
+            ? { sizeSqm: fields.sizeSqm ?? null }
+            : {}),
           ...(fields.qrQuota !== undefined ? { qrQuota: fields.qrQuota } : {}),
-          ...(fields.projectId !== undefined ? { projectId: fields.projectId ?? null } : {}),
+          ...(fields.projectId !== undefined
+            ? { projectId: fields.projectId ?? null }
+            : {}),
           ...(userId !== undefined ? { userId: userId ?? null } : {}),
           ...(lat !== undefined ? { lat: lat ?? null } : {}),
           ...(lng !== undefined ? { lng: lng ?? null } : {}),
@@ -109,7 +173,9 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
         include: {
           contacts: {
             include: {
-              contact: { select: { id: true, firstName: true, lastName: true } },
+              contact: {
+                select: { id: true, firstName: true, lastName: true },
+              },
             },
           },
           project: { select: { id: true, name: true } },
@@ -130,7 +196,11 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
         projectName: updated.project?.name ?? null,
         userId: updated.user?.id ?? null,
         user: updated.user
-          ? { id: updated.user.id, name: updated.user.name, email: updated.user.email }
+          ? {
+              id: updated.user.id,
+              name: updated.user.name,
+              email: updated.user.email,
+            }
           : null,
         contacts: updated.contacts.map((cu) => ({
           id: cu.contact.id,
@@ -141,25 +211,37 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     });
   } catch (error) {
     console.error('PATCH /api/units/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
 // ─── DELETE /api/units/[id] ───────────────────────────────────────────────────
 
-export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function DELETE(
+  _request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const existing = await prisma.unit.findFirst({
       where: { id: params.id, organizationId: claims.orgId, deletedAt: null },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Unit not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Unit not found' },
+        { status: 404 }
+      );
     }
 
     await prisma.unit.update({
@@ -170,6 +252,9 @@ export async function DELETE(_request: NextRequest, props: { params: Promise<{ i
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('DELETE /api/units/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

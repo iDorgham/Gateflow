@@ -71,7 +71,7 @@ export default async function AuditLogsPage(props: {
   const fromDate = fromRaw && !isNaN(fromRaw.getTime()) ? fromRaw : undefined;
   const toDate = toRaw && !isNaN(toRaw.getTime()) ? toRaw : undefined;
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = { deletedAt: null };
   if (statusFilter) where.status = statusFilter;
   if (uuidFilter)
     where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };

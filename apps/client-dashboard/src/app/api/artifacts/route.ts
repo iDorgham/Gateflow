@@ -27,24 +27,37 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, ARTIFACT_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const validation = AttachSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request', error: validation.error.flatten() },
-        { status: 400 },
+        {
+          success: false,
+          message: 'Invalid request',
+          error: validation.error.flatten(),
+        },
+        { status: 400 }
       );
     }
 
@@ -52,14 +65,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!scanLogId && !incidentId) {
       return NextResponse.json(
-        { success: false, message: 'Either scanLogId or incidentId is required' },
-        { status: 400 },
+        {
+          success: false,
+          message: 'Either scanLogId or incidentId is required',
+        },
+        { status: 400 }
       );
     }
     if (scanLogId && incidentId) {
       return NextResponse.json(
-        { success: false, message: 'Provide only one of scanLogId or incidentId' },
-        { status: 400 },
+        {
+          success: false,
+          message: 'Provide only one of scanLogId or incidentId',
+        },
+        { status: 400 }
       );
     }
 
@@ -67,11 +86,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (scanLogId) {
       const scan = await prisma.scanLog.findFirst({
-        where: { id: scanLogId },
+        where: { id: scanLogId, deletedAt: null },
         include: { gate: true },
       });
       if (!scan || scan.gate.organizationId !== orgId) {
-        return NextResponse.json({ success: false, message: 'Scan not found' }, { status: 404 });
+        return NextResponse.json(
+          { success: false, message: 'Scan not found' },
+          { status: 404 }
+        );
       }
     }
 
@@ -80,7 +102,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         where: { id: incidentId, organizationId: orgId },
       });
       if (!incident) {
-        return NextResponse.json({ success: false, message: 'Incident not found' }, { status: 404 });
+        return NextResponse.json(
+          { success: false, message: 'Incident not found' },
+          { status: 404 }
+        );
       }
     }
 
@@ -112,10 +137,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           createdAt: attachment.createdAt.toISOString(),
         },
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     console.error('POST /api/artifacts error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

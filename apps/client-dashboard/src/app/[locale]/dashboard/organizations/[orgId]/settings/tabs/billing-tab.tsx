@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { csrfFetch } from '@/lib/csrf';
 import { PlanCards } from '../../workspace/billing/plan-cards';
 
 interface BillingTabProps {
@@ -148,9 +149,8 @@ export function BillingTab({
   const handleUpgrade = async (pName: string) => {
     setLoadingPlan(pName);
     try {
-      const res = await fetch('/api/workspace/billing/checkout', {
+      const res = await csrfFetch('/api/workspace/billing/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan: pName }),
       });
 
@@ -175,7 +175,7 @@ export function BillingTab({
 
     setIsPortalLoading(true);
     try {
-      const res = await fetch('/api/workspace/billing/portal', {
+      const res = await csrfFetch('/api/workspace/billing/portal', {
         method: 'POST',
       });
 

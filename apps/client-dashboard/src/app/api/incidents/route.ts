@@ -47,7 +47,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const from = searchParams.get('from') ?? undefined;
     const to = searchParams.get('to') ?? undefined;
 
-    const where: Record<string, unknown> = { organizationId: claims.orgId };
+    const where: Record<string, unknown> = {
+      organizationId: claims.orgId,
+      deletedAt: null,
+    };
     if (gateId) where.gateId = gateId;
     if (status) where.status = status;
     if (from || to) {
@@ -216,7 +219,11 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     }
 
     const existing = await prisma.incident.findFirst({
-      where: { id: parsed.data.id, organizationId: claims.orgId },
+      where: {
+        id: parsed.data.id,
+        organizationId: claims.orgId,
+        deletedAt: null,
+      },
     });
     if (!existing) {
       return NextResponse.json(

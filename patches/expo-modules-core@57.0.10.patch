@@ -1,0 +1,35 @@
+diff --git a/ios/Core/Events/EventEmitter.swift b/ios/Core/Events/EventEmitter.swift
+index 3046568451ed58bdc7076d6d739dea37f2285859..410b894705034a9cd3cfd6267ac95fb44210e241 100644
+--- a/ios/Core/Events/EventEmitter.swift
++++ b/ios/Core/Events/EventEmitter.swift
+@@ -46,7 +46,7 @@ public extension EventEmitter {
+     // safe here because the scheduled closure only calls `withEventTarget`, which touches `@JavaScriptActor`-
+     // isolated or `Sendable` state (the JS object, the registry, `appContext`) and the emitter's identity -
+     // never the module's own mutable state.
+-    nonisolated(unsafe) weak let emitter = self
++    nonisolated(unsafe) weak var emitter = self
+ 
+     runtime.schedule {
+       guard let emitter else {
+@@ -73,7 +73,7 @@ public extension EventEmitter {
+     // See the note in `emit(event:payload:)` above - the emitter is captured as `nonisolated(unsafe)`
+     // because it isn't necessarily `Sendable`, and the scheduled closure only reaches `@JavaScriptActor`-
+     // isolated or `Sendable` state through it.
+-    nonisolated(unsafe) weak let emitter = self
++    nonisolated(unsafe) weak var emitter = self
+ 
+     runtime.schedule { [weak appContext] in
+       guard let emitter, let appContext else {
+diff --git a/ios/Core/SharedObjects/SharedObjectRegistry.swift b/ios/Core/SharedObjects/SharedObjectRegistry.swift
+index 00ed4071302aa46caa72c6f72efd89f9ffbfd13c..68f0fefbf1721b33b7d45f087791ba559ac57948 100644
+--- a/ios/Core/SharedObjects/SharedObjectRegistry.swift
++++ b/ios/Core/SharedObjects/SharedObjectRegistry.swift
+@@ -19,7 +19,7 @@ public final class SharedObjectRegistry: Sendable {
+   /**
+    Weak reference to the app context for the registry.
+    */
+-  private weak let appContext: AppContext?
++  private nonisolated(unsafe) weak var appContext: AppContext?
+ 
+   // `@unchecked` because `SharedObjectNativeState` isn't `Sendable` (its JSI base class isn't), yet a
+   // value escapes `withLock` whenever `get`/the lookups return it. Access is always serialized through
