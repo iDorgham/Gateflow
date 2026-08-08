@@ -89,6 +89,15 @@ export {
   scanLogWhereForOrganization,
 } from './lib/relational-chain-seed';
 export type { BuildVisitorSignedCodeInput } from './lib/relational-chain-seed';
+export { executeRetention, RETENTION_ORDER } from './lib/retention-executor';
+export type {
+  RetentionAdapter,
+  RetentionBatchResult,
+  RetentionCategory,
+  RetentionExecutionOptions,
+  RetentionExecutionResult,
+  RetentionGuard,
+} from './lib/retention-executor';
 export {
   assertPlannedHierarchyIntegrity,
   buildPlannedUnitHierarchy,
