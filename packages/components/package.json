@@ -41,7 +41,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^12.43.0",
     "@gateflow/tokens": "workspace:*",
     "@gateflow/theme": "workspace:*",
     "@gateflow/ui": "workspace:*"
@@ -50,7 +50,7 @@
     "@gate-access/config": "workspace:*",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "lucide-react": "^1.25.0",
+    "lucide-react": "^1.28.0",
     "next": "^16.2.12",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
