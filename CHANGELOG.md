@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** update z.record() to zod 4 two-argument form
+
 - **[Ci]** regenerate lockfile against committed package.json, not local WIP
 
 - **[Ci]** commit missing pnpm patch files blocking CI Setup
