@@ -92,7 +92,7 @@
     "@lhci/cli": "^0.15.1",
     "@turbo/gen": "^1.13.4",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.19.33",
+    "@types/node": "^26.1.2",
     "ai": "6.0.138",
     "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.4.24",
