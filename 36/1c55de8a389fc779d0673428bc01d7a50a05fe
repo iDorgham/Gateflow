@@ -1,0 +1,24 @@
+package.json
+  s_04ff6482015349::t_a4e4f5fb83fb7e 143-144
+scripts/check/check-security.js
+  s_04ff6482015349::t_68dbb9e6326bc7 34-59
+  s_04ff6482015349::t_e2aed33017774c 172,177,182-203,206
+pnpm-lock.yaml
+  s_04ff6482015349::t_d0d31305debd21 24-25,1148-1149,8494,8563,8575,15467,21248,21251,21256,21259,22526
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "361c55de8a389fc779d0673428bc01d7a50a05fe",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
