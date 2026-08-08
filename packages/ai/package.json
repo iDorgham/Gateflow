@@ -34,30 +34,30 @@
     "build": "tsup src/index.ts src/components --format cjs,esm --dts --clean --external react,react-dom,ai,@ai-sdk/react"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
+    "@ai-sdk/react": ">=2.0.0",
     "ai": ">=5.0.0",
-    "@ai-sdk/react": ">=2.0.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0",
-    "lucide-react": "^1.28.0",
-    "@gateflow/tokens": "workspace:*",
     "@gateflow/theme": "workspace:*",
-    "@gateflow/ui": "workspace:*"
+    "@gateflow/tokens": "workspace:*",
+    "@gateflow/ui": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.28.0",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@ai-sdk/react": "^3.0.139",
     "@gate-access/config": "workspace:*",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "ai": "^6.0.138",
-    "@ai-sdk/react": "^3.0.139",
-    "next": "^16.2.12",
+    "next": "^16.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3",
-    "tsup": "^8.3.6"
+    "tsup": "^8.3.6",
+    "typescript": "^5.9.3"
   }
 }
