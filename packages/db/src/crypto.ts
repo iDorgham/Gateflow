@@ -11,7 +11,9 @@ function getMasterKey(): Buffer {
   }
   const key = Buffer.from(raw, 'hex');
   if (key.length !== 32) {
-    throw new Error('ENCRYPTION_MASTER_KEY must be 64 hex characters (32 bytes)');
+    throw new Error(
+      'ENCRYPTION_MASTER_KEY must be 64 hex characters (32 bytes)'
+    );
   }
   return key;
 }
@@ -45,7 +47,9 @@ export function encrypt(plaintext: string): string {
     );
   } catch (err) {
     console.error('Encryption failed:', err);
-    throw new Error('Failed to encrypt data');
+    // `Error(message, { cause })` needs ES2022 lib typings; this repo
+    // targets ES2020, so attach cause via Object.assign instead.
+    throw Object.assign(new Error('Failed to encrypt data'), { cause: err });
   }
 }
 
@@ -84,7 +88,14 @@ export function decrypt(value: string): string {
     ]).toString('utf8');
   } catch (err) {
     console.error('Decryption failed:', err);
-    throw new Error('Failed to decrypt data — possibly wrong master key or corrupted data');
+    // `Error(message, { cause })` needs ES2022 lib typings; this repo
+    // targets ES2020, so attach cause via Object.assign instead.
+    throw Object.assign(
+      new Error(
+        'Failed to decrypt data — possibly wrong master key or corrupted data'
+      ),
+      { cause: err }
+    );
   }
 }
 

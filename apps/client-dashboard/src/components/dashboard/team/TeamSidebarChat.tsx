@@ -22,6 +22,7 @@ import {
 } from '@gateflow/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 
 interface Message {
@@ -104,6 +105,9 @@ export function TeamSidebarChat({
     onSuccess: () => {
       setInputText('');
       queryClient.invalidateQueries({ queryKey: ['team-messages'] });
+    },
+    onError: () => {
+      toast.error(t('team.chat.sendFailed', 'Failed to send message'));
     },
   });
 

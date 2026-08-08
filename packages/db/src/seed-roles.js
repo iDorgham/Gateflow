@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -67,7 +67,7 @@ const DEFAULT_PERMISSIONS = {
     'units:manage': false,
     'contacts:manage': false,
   },
-  'Resident': {
+  Resident: {
     'gates:manage': false,
     'qr:create': true,
     'qr:manage': true,
@@ -88,7 +88,7 @@ async function seedRoles() {
 
   for (const [key, name] of Object.entries(BUILT_IN_ROLES)) {
     const permissions = DEFAULT_PERMISSIONS[name];
-    
+
     await prisma.role.upsert({
       where: { id: `builtin-${key.toLowerCase().replace(/_/g, '-')}` },
       update: {

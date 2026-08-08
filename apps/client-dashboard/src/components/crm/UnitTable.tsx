@@ -207,6 +207,10 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
       toast.success(t('crm.units.batchDeleted', 'Units deleted successfully'));
       setSelectedIds([]);
     },
+    onError: (error: Error) => {
+      queryClient.invalidateQueries({ queryKey: ['crm', 'units'] });
+      toast.error(error.message);
+    },
   });
 
   const handleCreate = () => {

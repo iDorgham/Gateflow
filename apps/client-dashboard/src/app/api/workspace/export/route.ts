@@ -180,10 +180,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const qrIds = qrCodes.map((q) => q.id);
 
-    // Scan logs (scoped via QR codes and date range)
+    // Scan logs (scoped via QR codes and date range). qrCodeId is always
+    // constrained — an empty qrIds list must produce zero rows, not every
+    // organization's scan logs — and the qrCode relation re-asserts org
+    // ownership as defense-in-depth.
     const scanWhere: any = {
       deletedAt: null,
-      ...(qrIds.length > 0 ? { qrCodeId: { in: qrIds } } : {}),
+      qrCodeId: { in: qrIds },
+      qrCode: { organizationId: orgId, deletedAt: null },
     };
 
     if (fromDate || toDate) {
@@ -194,7 +198,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const scanLogs = await prisma.scanLog.findMany({
-      // ignore-security-guard — scanWhere scoped via qrIds from org-filtered qrCodes above
+      // ignore-security-guard — scanWhere scoped via qrCode.organizationId (line above)
       where: scanWhere,
     });
 

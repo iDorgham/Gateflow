@@ -6,6 +6,7 @@
   "exports": {
     ".": "./eslintrc.cjs",
     "./eslint": "./eslintrc.cjs",
+    "./eslint-flat": "./eslint.config.cjs",
     "./tsconfig": "./tsconfig.json",
     "./tsconfig.base.json": "./tsconfig.json",
     "./tailwind": "./tailwind.config.ts"
@@ -14,13 +15,17 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.20",
-    "eslint-config-prettier": "^9.1.2",
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.65.0",
+    "@typescript-eslint/parser": "^8.65.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
     "prettier": "^3.9.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.65.0"
   },
   "dependencies": {
     "ai": "5.0.52"

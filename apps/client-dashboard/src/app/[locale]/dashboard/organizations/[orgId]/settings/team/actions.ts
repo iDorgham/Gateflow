@@ -105,7 +105,7 @@ export async function inviteTeamMember(
 
     const validation = InviteSchema.safeParse({ email, roleId });
     if (!validation.success) {
-      return { success: false, error: validation.error.errors[0].message };
+      return { success: false, error: validation.error.issues[0].message };
     }
 
     // Check if user already exists
@@ -395,7 +395,7 @@ const RoleSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2, 'Name must be at least 2 characters'),
   description: z.string().optional(),
-  permissions: z.record(z.boolean()),
+  permissions: z.record(z.string(), z.boolean()),
 });
 
 export async function createRole(
@@ -409,7 +409,7 @@ export async function createRole(
 
     const validation = RoleSchema.safeParse(data);
     if (!validation.success) {
-      return { success: false, error: validation.error.errors[0].message };
+      return { success: false, error: validation.error.issues[0].message };
     }
 
     const role = await prisma.role.create({
@@ -453,7 +453,7 @@ export async function updateRole(
 
     const validation = RoleSchema.safeParse(data);
     if (!validation.success) {
-      return { success: false, error: validation.error.errors[0].message };
+      return { success: false, error: validation.error.issues[0].message };
     }
 
     const existing = await prisma.role.findFirst({
@@ -570,7 +570,9 @@ export async function getGateAssignments(): Promise<Result<GateAssignment[]>> {
     const assignments = await prisma.gateAssignment.findMany({
       where: { organizationId: claims.orgId, deletedAt: null },
       include: {
-        user: { select: { id: true, name: true, email: true, avatarUrl: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatarUrl: true },
+        },
         gate: { select: { id: true, name: true, location: true } },
       },
       orderBy: { createdAt: 'desc' },
