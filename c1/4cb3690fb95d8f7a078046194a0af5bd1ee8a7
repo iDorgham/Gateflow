@@ -1,0 +1,19 @@
+.github/workflows/publish-gateflow.yml
+  s_a93eaf8be018dc::t_995ca5de716216 65,72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "c14cb3690fb95d8f7a078046194a0af5bd1ee8a7",
+  "prompts": {},
+  "sessions": {
+    "s_a93eaf8be018dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc6b87e9-825f-4228-966a-6a0b5fbb4321",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
