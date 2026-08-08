@@ -760,9 +760,6 @@ export function DashboardLayout({
         if (!res.ok) {
           throw new Error('Failed to switch project');
         }
-        return res;
-      })
-      .then(() => {
         startTransition(() => {
           if (val === 'all') {
             router.push(`/${locale}`);
@@ -771,8 +768,8 @@ export function DashboardLayout({
           }
         });
       })
-      .catch((error) => {
-        console.error('Project switch failed:', error);
+      .catch((err) => {
+        console.error('Project switch failed:', err);
         toast.error('Failed to switch project. Please try again.');
       });
   };

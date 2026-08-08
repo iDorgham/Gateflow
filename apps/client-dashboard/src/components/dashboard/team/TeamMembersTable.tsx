@@ -91,7 +91,8 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
         body: JSON.stringify({ id: memberId, roleId }),
       });
       if (!res.ok) {
-        throw new Error('Failed to update role');
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to update member role');
       }
       return res.json();
     },
@@ -110,7 +111,8 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
         method: 'DELETE',
       });
       if (!res.ok) {
-        throw new Error('Failed to remove member');
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to remove member');
       }
       return res.json();
     },
