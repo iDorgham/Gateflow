@@ -1,0 +1,33 @@
+apps/marketing/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 29,44
+packages/components/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 37,39,42-44,47,54,58-59
+apps/admin-dashboard/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 35,42,55
+apps/design-system/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 13-14,16,18,20-25,29
+apps/client-dashboard/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 57,75
+packages/ai/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 37,39-40,43-45,48,51,56,60-61
+apps/resident-portal/package.json
+  s_04ff6482015349::t_be0a8251a1fad0 26
+package.json
+  s_04ff6482015349::t_be0a8251a1fad0 159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "bde49a418c03215f500b66dfa1a2bf82683e641e",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
