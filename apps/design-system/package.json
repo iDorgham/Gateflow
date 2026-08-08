@@ -10,22 +10,23 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "^16.2.12",
+    "@gateflow/ai": "workspace:*",
+    "@gateflow/components": "workspace:*",
+    "@gateflow/theme": "workspace:*",
+    "@gateflow/tokens": "workspace:*",
+    "@gateflow/ui": "workspace:*",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "lucide-react": "^1.25.0",
+    "next": "^16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "lucide-react": "^1.25.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0",
-    "@gateflow/tokens": "workspace:*",
-    "@gateflow/theme": "workspace:*",
-    "@gateflow/ui": "workspace:*",
-    "@gateflow/components": "workspace:*",
-    "@gateflow/ai": "workspace:*",
-    "framer-motion": "^12.42.2",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
+    "@tailwindcss/postcss": "4.3.3",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
@@ -33,7 +34,6 @@
     "eslint": "9.39.5",
     "postcss": "^8.5.12",
     "tailwindcss": "4.3.3",
-    "@tailwindcss/postcss": "4.3.3",
     "typescript": "^5.9.3"
   }
 }
