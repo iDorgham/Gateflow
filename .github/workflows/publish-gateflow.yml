@@ -53,8 +53,21 @@ jobs:
       - name: Build packages
         run: pnpm turbo run build --filter="@gateflow/*"
 
+      - name: Check for npm publish credentials
+        id: npm-auth
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "has_token=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_token=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::NPM_TOKEN secret is not configured, skipping npm publish. Add an npm automation token as the NPM_TOKEN repo secret (or configure npm trusted publishing) to enable @gateflow/* releases."
+          fi
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
+        if: steps.npm-auth.outputs.has_token == 'true'
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
