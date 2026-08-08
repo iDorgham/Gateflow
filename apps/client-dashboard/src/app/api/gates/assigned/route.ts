@@ -67,6 +67,7 @@ export async function GET(): Promise<NextResponse> {
       prisma.scanLog.groupBy({
         by: ['gateId'],
         where: {
+          deletedAt: null,
           gate: { organizationId: orgId },
           scannedAt: { gte: todayStart },
         },

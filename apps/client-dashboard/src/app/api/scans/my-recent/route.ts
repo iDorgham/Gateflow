@@ -25,7 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!userId || !orgId) {
     return NextResponse.json(
       { success: false, message: 'Unauthorized' },
-      { status: 401 },
+      { status: 401 }
     );
   }
 
@@ -33,6 +33,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const scans = await prisma.scanLog.findMany({
       where: {
         userId,
+        deletedAt: null,
         qrCode: { organizationId: orgId },
       },
       orderBy: { scannedAt: 'desc' },
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     console.error('my-recent scans error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

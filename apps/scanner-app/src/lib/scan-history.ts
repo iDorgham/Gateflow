@@ -6,11 +6,12 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Crypto from 'expo-crypto';
 
 export type ScanOutcome =
-  | 'pass'      // operator pressed Pass after server SUCCESS
-  | 'deny'      // operator pressed Deny (DENIED)
-  | 'offline'   // accepted offline, queued for sync
+  | 'pass' // operator pressed Pass after server SUCCESS
+  | 'deny' // operator pressed Deny (DENIED)
+  | 'offline' // accepted offline, queued for sync
   | 'rejected'; // server or local rejected
 
 export interface HistoryEntry {
@@ -34,7 +35,7 @@ const STORAGE_KEY = 'scan_history_v1';
 const MAX_ENTRIES = 100;
 
 function makeId(): string {
-  return `h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  return `h_${Date.now()}_${Crypto.randomUUID()}`;
 }
 
 async function readEntries(): Promise<HistoryEntry[]> {
@@ -51,7 +52,7 @@ async function readEntries(): Promise<HistoryEntry[]> {
  * Oldest entries are dropped when the list exceeds MAX_ENTRIES.
  */
 export async function addHistoryEntry(
-  entry: Omit<HistoryEntry, 'id' | 'scannedAt'>,
+  entry: Omit<HistoryEntry, 'id' | 'scannedAt'>
 ): Promise<void> {
   try {
     const existing = await readEntries();

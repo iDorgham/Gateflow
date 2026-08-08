@@ -4,19 +4,30 @@ import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
-    if (!claims?.orgId) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    if (!claims?.orgId)
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
 
     const projectId = params.id;
     const { searchParams } = new URL(request.url);
-    const limit = Math.min(100, parseInt(searchParams.get('limit') || '50', 10));
+    const limit = Math.min(
+      100,
+      parseInt(searchParams.get('limit') || '50', 10)
+    );
     const cursor = searchParams.get('cursor');
 
     const logs = await prisma.scanLog.findMany({
       where: {
+        deletedAt: null,
         gate: {
           projectId,
           organizationId: claims.orgId,
@@ -59,6 +70,9 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
     });
   } catch (error) {
     console.error('PROJECT LOGS GET error:', error);
-    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

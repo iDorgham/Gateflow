@@ -101,6 +101,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const scanFreshnessCutoff = new Date(Date.now() - SCAN_FRESHNESS_MS);
     const latestScan = await prisma.scanLog.findFirst({
       where: {
+        deletedAt: null,
         qrCodeId: visitorQR.qrCode.id,
         status: 'SUCCESS',
         scannedAt: { gte: scanFreshnessCutoff },

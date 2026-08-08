@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { SecurityNotifier } from './realtime/SecurityNotifier';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
-import { getCsrfToken } from '@/lib/csrf';
+import { csrfFetch } from '@/lib/csrf';
 import type { Locale } from '@/lib/i18n-config';
 import {
   ShieldCheck,
@@ -751,24 +751,30 @@ export function DashboardLayout({
 
   const handleProjectSwitch = (projectId: string) => {
     const val = projectId === 'all' ? 'all' : projectId;
-    const csrfToken = getCsrfToken() || '';
 
-    fetch('/api/project/switch', {
+    csrfFetch('/api/project/switch', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-csrf-token': csrfToken,
-      },
       body: JSON.stringify({ projectId: val }),
-    }).then(() => {
-      startTransition(() => {
-        if (val === 'all') {
-          router.push(`/${locale}`);
-        } else {
-          router.push(`/${locale}/dashboard/projects/${projectId}`);
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to switch project');
         }
+        return res;
+      })
+      .then(() => {
+        startTransition(() => {
+          if (val === 'all') {
+            router.push(`/${locale}`);
+          } else {
+            router.push(`/${locale}/dashboard/projects/${projectId}`);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error('Project switch failed:', error);
+        toast.error('Failed to switch project. Please try again.');
       });
-    });
   };
 
   const isRtl = locale === 'ar-EG';

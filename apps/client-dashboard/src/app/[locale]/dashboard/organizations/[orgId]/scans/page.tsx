@@ -108,6 +108,7 @@ export default async function ScansPage(props: {
   const currentProjectDropdownValue = effectiveProjectId ?? 'all';
 
   const where = {
+    deletedAt: null,
     qrCode: {
       organizationId: orgId,
       ...(effectiveProjectId ? { projectId: effectiveProjectId } : {}),
@@ -128,6 +129,7 @@ export default async function ScansPage(props: {
   };
 
   const totalWhere = {
+    deletedAt: null,
     qrCode: {
       organizationId: orgId,
       ...(effectiveProjectId ? { projectId: effectiveProjectId } : {}),

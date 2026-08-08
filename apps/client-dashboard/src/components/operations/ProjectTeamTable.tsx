@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { EditPanel } from '../dashboard/EditPanel';
 import { cn } from '@/lib/utils';
 import { GateAssignmentForm } from './GateAssignmentForm';
+import { csrfFetch } from '@/lib/csrf';
 
 interface ProjectTeamTableProps {
   projectId: string;
@@ -69,7 +70,7 @@ export function ProjectTeamTable({
     mutationFn: async (
       values: Partial<TeamAssignment>
     ): Promise<{ success: boolean; data: TeamAssignment }> => {
-      const res = await fetch(`/api/projects/${projectId}/team`, {
+      const res = await csrfFetch(`/api/projects/${projectId}/team`, {
         method: 'POST',
         body: JSON.stringify(values),
       });

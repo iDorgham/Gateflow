@@ -24,11 +24,16 @@ jest.mock('next/server', () => {
   class MockNextResponse {
     status: number;
     private _body: unknown;
-    constructor(body: unknown, init?: { status?: number; headers?: Record<string, string> }) {
+    constructor(
+      body: unknown,
+      init?: { status?: number; headers?: Record<string, string> }
+    ) {
       this._body = body;
       this.status = init?.status ?? 200;
     }
-    async json() { return this._body; }
+    async json() {
+      return this._body;
+    }
     static json(body: unknown, init?: { status?: number }) {
       return new MockNextResponse(body, { status: init?.status ?? 200 });
     }
@@ -111,7 +116,9 @@ const UNIT_ROW = {
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('GET /api/units?format=csv — audit logging', () => {
-  let GET: (req: unknown) => Promise<{ status: number; json?: () => Promise<unknown> }>;
+  let GET: (
+    req: unknown
+  ) => Promise<{ status: number; json?: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -130,7 +137,11 @@ describe('GET /api/units?format=csv — audit logging', () => {
 
   it('creates UNITS_EXPORT audit log on CSV export', async () => {
     const orgId = 'org_units_csv_1';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u_1',
+      email: 'a@b.com',
+    });
 
     const res = await GET(makeGetRequest('?format=csv'));
 
@@ -145,7 +156,11 @@ describe('GET /api/units?format=csv — audit logging', () => {
   });
 
   it('does NOT create audit log for JSON requests', async () => {
-    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_units_json', sub: 'u_2', email: 'b@c.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_units_json',
+      sub: 'u_2',
+      email: 'b@c.com',
+    });
 
     await GET(makeGetRequest('?format=json'));
 
@@ -163,7 +178,11 @@ describe('GET /api/units?format=csv — audit logging', () => {
 
   it('metadata contains rowCount and filter scalars only', async () => {
     const orgId = 'org_units_csv_2';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_3', email: 'c@d.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u_3',
+      email: 'c@d.com',
+    });
 
     await GET(makeGetRequest('?format=csv&unitType=STUDIO'));
 
@@ -177,7 +196,9 @@ describe('GET /api/units?format=csv — audit logging', () => {
 });
 
 describe('POST /api/units — CRM fields', () => {
-  let POST: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+  let POST: (
+    req: unknown
+  ) => Promise<{ status: number; json: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -198,7 +219,12 @@ describe('POST /api/units — CRM fields', () => {
 
   it('persists name, type, and new location fields', async () => {
     const orgId = 'org_units_post_1';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u_1',
+      email: 'a@b.com',
+    });
+    mockProjectFindFirst.mockResolvedValue({ id: 'p_1' });
 
     const mockUnitCreate = jest.fn().mockResolvedValue({
       id: 'u_new',
@@ -216,14 +242,16 @@ describe('POST /api/units — CRM fields', () => {
     const { prisma: mockPrisma } = jest.requireMock('@gate-access/db');
     mockPrisma.unit.create = mockUnitCreate;
 
-    const res = await POST(makePostRequest({
-      name: 'Villa 55',
-      type: 'VILLA',
-      sizeSqm: 500,
-      projectId: 'p_1',
-      lat: 25.1,
-      lng: 55.2,
-    }));
+    const res = await POST(
+      makePostRequest({
+        name: 'Villa 55',
+        type: 'VILLA',
+        sizeSqm: 500,
+        projectId: 'p_1',
+        lat: 25.1,
+        lng: 55.2,
+      })
+    );
 
     expect(res.status).toBe(201);
     const body: any = await res.json();

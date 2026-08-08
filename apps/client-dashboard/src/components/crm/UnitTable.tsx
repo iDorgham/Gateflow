@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { EditPanel } from '../dashboard/EditPanel';
 import { UnitForm } from './UnitForm';
 import { SavedViewManager } from './SavedViewManager';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Unit {
   id: string;
@@ -173,7 +174,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
       const url = selectedUnit
         ? `/api/crm/units/${selectedUnit.id}`
         : '/api/crm/units';
-      const res = await fetch(url, {
+      const res = await csrfFetch(url, {
         method: selectedUnit ? 'PATCH' : 'POST',
         body: JSON.stringify({ ...values, projectId }),
       });
@@ -191,14 +192,25 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      await Promise.all(
-        ids.map((id) => fetch(`/api/crm/units/${id}`, { method: 'DELETE' }))
+      const results = await Promise.all(
+        ids.map((id) => csrfFetch(`/api/crm/units/${id}`, { method: 'DELETE' }))
       );
+
+      const failures = results.filter((res) => !res.ok);
+      if (failures.length > 0) {
+        throw new Error(
+          `Failed to delete ${failures.length} of ${ids.length} units`
+        );
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm', 'units'] });
       toast.success(t('crm.units.batchDeleted', 'Units deleted successfully'));
       setSelectedIds([]);
+    },
+    onError: (error: Error) => {
+      queryClient.invalidateQueries({ queryKey: ['crm', 'units'] });
+      toast.error(error.message);
     },
   });
 

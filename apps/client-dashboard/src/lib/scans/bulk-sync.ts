@@ -149,13 +149,20 @@ export async function processBulkScans(
     [
       scanUuids.length > 0
         ? tx.scanLog.findMany({
+            // Deliberately NOT filtering deletedAt: null — scanUuid is a unique DB
+            // constraint that soft-delete does not release, so this idempotency
+            // check must see soft-deleted rows too or a re-sync would attempt to
+            // recreate a row with a scanUuid that's still taken and fail.
             where: { scanUuid: { in: scanUuids } },
             select: { id: true, scanUuid: true },
           })
         : Promise.resolve([]),
       qrCodes.length > 0
         ? tx.qRCode.findMany({
-            where: { code: { in: qrCodes } },
+            where: {
+              code: { in: qrCodes },
+              ...(context ? { organizationId: context.organizationId } : {}),
+            },
             include: {
               scanLogs: {
                 orderBy: { scannedAt: 'desc' },

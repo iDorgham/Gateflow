@@ -23,7 +23,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -35,7 +38,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId } = parsed.data;
@@ -43,15 +49,24 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const dateToDate = new Date(dateTo + 'T23:59:59.999Z');
 
     // 1. Get clicks and scans count per source/medium via raw SQL
-    const projectCondClick = projectId ? Prisma.sql`AND qr."projectId" = ${projectId}` : Prisma.empty;
-    const projectCondScan = projectId ? Prisma.sql`AND qr."projectId" = ${projectId}` : Prisma.empty;
+    const projectCondClick = projectId
+      ? Prisma.sql`AND qr."projectId" = ${projectId}`
+      : Prisma.empty;
+    const projectCondScan = projectId
+      ? Prisma.sql`AND qr."projectId" = ${projectId}`
+      : Prisma.empty;
 
-    type RawRow = { source: string; medium: string; clicks: bigint; scans: bigint };
-    
+    type RawRow = {
+      source: string;
+      medium: string;
+      clicks: bigint;
+      scans: bigint;
+    };
+
     // We'll use a UNION or JOIN to get both in one go.
     // Actually, let's just use raw SQL to grouping by source/medium across both tables.
-    
-    const matrix = await prisma.$queryRaw<RawRow[]>(Prisma.sql`
+
+    const matrix = (await prisma.$queryRaw<RawRow[]>(Prisma.sql`
       WITH clicks AS (
         SELECT 
           COALESCE("utmSource", '(direct)') as source,
@@ -73,6 +88,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         FROM "ScanLog" sl
         JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
         WHERE qr."organizationId" = ${orgId}
+          AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
           ${projectCondScan}
         GROUP BY qr."utmSource", qr."utmMedium"
@@ -85,19 +101,25 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       FROM clicks c
       FULL OUTER JOIN scans s ON c.source = s.source AND c.medium = s.medium
       ORDER BY clicks DESC, scans DESC
-    `) as RawRow[];
+    `)) as RawRow[];
 
-    const rows: UTMMatrixRow[] = matrix.map(r => ({
+    const rows: UTMMatrixRow[] = matrix.map((r) => ({
       source: r.source,
       medium: r.medium,
       clicks: Number(r.clicks),
       scans: Number(r.scans),
-      conversionRate: r.clicks > 0 ? Math.round((Number(r.scans) / Number(r.clicks)) * 100) : 0
+      conversionRate:
+        r.clicks > 0
+          ? Math.round((Number(r.scans) / Number(r.clicks)) * 100)
+          : 0,
     }));
 
     return NextResponse.json({ success: true, data: { matrix: rows } });
   } catch (error) {
     console.error('GET /api/analytics/utm-matrix error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

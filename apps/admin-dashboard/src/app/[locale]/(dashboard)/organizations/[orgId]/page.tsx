@@ -66,7 +66,9 @@ export default async function AdminOverviewPage(props: {
       },
     }),
     // skip-organization-check (Global Admin Overview)
-    prisma.scanLog.count({ where: { scannedAt: { gte: todayStart } } }),
+    prisma.scanLog.count({
+      where: { scannedAt: { gte: todayStart }, deletedAt: null },
+    }),
     // skip-organization-check (Global Admin Overview)
     prisma.organization.findMany({
       where: { deletedAt: null },

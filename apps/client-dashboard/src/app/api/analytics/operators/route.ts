@@ -84,6 +84,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     };
 
     const scanFilter = {
+      deletedAt: null,
       qrCode: qrFilter,
       scannedAt: { gte: dateFromDate, lte: dateToDate },
       userId: { not: null },

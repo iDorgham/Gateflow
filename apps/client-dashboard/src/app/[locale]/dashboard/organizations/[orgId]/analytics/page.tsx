@@ -65,12 +65,10 @@ import AnalyticsLoading from './loading';
 
 // ... (keep parseDateRange)
 
-export default async function AnalyticsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-    searchParams: Promise<SearchParams>;
-  }
-) {
+export default async function AnalyticsPage(props: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<SearchParams>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
   const claims = await getSessionClaims();
@@ -135,13 +133,18 @@ async function AnalyticsContent({
     // 30d success rate
     prisma.scanLog.count({
       where: {
+        deletedAt: null,
         qrCode: qrFilter,
         status: 'SUCCESS',
         scannedAt: { gte: thirtyDaysAgo },
       },
     }),
     prisma.scanLog.count({
-      where: { qrCode: qrFilter, scannedAt: { gte: thirtyDaysAgo } },
+      where: {
+        deletedAt: null,
+        qrCode: qrFilter,
+        scannedAt: { gte: thirtyDaysAgo },
+      },
     }),
 
     // Heatmap via raw SQL
@@ -179,6 +182,7 @@ async function AnalyticsContent({
     // Denied scans (30d)
     prisma.scanLog.count({
       where: {
+        deletedAt: null,
         qrCode: qrFilter,
         status: 'DENIED',
         scannedAt: { gte: thirtyDaysAgo },

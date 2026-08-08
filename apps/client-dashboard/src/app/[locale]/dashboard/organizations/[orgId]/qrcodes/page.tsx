@@ -38,6 +38,7 @@ import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
 import { FilterBar } from '@/components/dashboard/filter-bar';
 import { toast } from 'sonner';
+import { csrfFetch } from '@/lib/csrf';
 
 type SortBy =
   | 'createdAt'
@@ -172,9 +173,8 @@ export default function QRCodesPage() {
 
     startTransition(async () => {
       try {
-        const res = await fetch('/api/qrcodes/bulk-delete', {
+        const res = await csrfFetch('/api/qrcodes/bulk-delete', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ids: selectedIds }),
         });
         const json = await res.json();

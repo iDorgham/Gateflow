@@ -84,7 +84,7 @@ export default async function OrganizationsPage(props: {
   // skip-organization-check (Global Admin Aggregation)
   const scansByGate = (await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: thirtyDaysAgo } },
+    where: { scannedAt: { gte: thirtyDaysAgo }, deletedAt: null },
     _count: true,
   })) as { gateId: string; _count: number }[];
   const gateIds = scansByGate.map((s: { gateId: string }) => s.gateId);

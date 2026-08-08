@@ -11,12 +11,16 @@ import { sendEmail } from '@/lib/email';
 export async function generateAndDeliverReport(automationId: string) {
   const automation = await prisma.aiAutomation.findUnique({
     where: { id: automationId },
-    include: { organization: true }
+    include: { organization: true },
   });
 
   if (!automation || automation.deletedAt) return;
 
-  const action = automation.action as { reportType: string; format: string; recipients?: string[] };
+  const action = automation.action as {
+    reportType: string;
+    format: string;
+    recipients?: string[];
+  };
   const { reportType, format, recipients } = action;
   const orgId = automation.organizationId;
 
@@ -28,14 +32,20 @@ export async function generateAndDeliverReport(automationId: string) {
         where: { organizationId: orgId, deletedAt: null },
         take: 100,
         orderBy: { createdAt: 'desc' },
-        select: { firstName: true, lastName: true, phone: true, email: true, createdAt: true }
+        select: {
+          firstName: true,
+          lastName: true,
+          phone: true,
+          email: true,
+          createdAt: true,
+        },
       });
     } else {
       data = await prisma.scanLog.findMany({
-        where: { gate: { organizationId: orgId } },
+        where: { deletedAt: null, gate: { organizationId: orgId } },
         take: 100,
         orderBy: { scannedAt: 'desc' },
-        select: { status: true, scannedAt: true }
+        select: { status: true, scannedAt: true },
       });
     }
 
@@ -54,11 +64,13 @@ export async function generateAndDeliverReport(automationId: string) {
       buffer = await new Promise((resolve, reject) => {
         const doc = new PDFDocument();
         const chunks: Buffer[] = [];
-        doc.on('data', chunk => chunks.push(chunk));
+        doc.on('data', (chunk) => chunks.push(chunk));
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
 
-        doc.fontSize(20).text(`Operational Report: ${automation.name}`, { align: 'center' });
+        doc
+          .fontSize(20)
+          .text(`Operational Report: ${automation.name}`, { align: 'center' });
         doc.moveDown();
         doc.fontSize(12).text(`Organization: ${automation.organization.name}`);
         doc.text(`Date: ${new Date().toLocaleString()}`);
@@ -84,9 +96,9 @@ export async function generateAndDeliverReport(automationId: string) {
           {
             filename: fileName,
             content: buffer,
-            contentType
-          }
-        ]
+            contentType,
+          },
+        ],
       });
     }
 
@@ -96,12 +108,17 @@ export async function generateAndDeliverReport(automationId: string) {
       data: {
         lastRunAt: new Date(),
         // nextRunAt would be calculated here based on the cron/frequency
-      }
+      },
     });
 
-    console.log(`[ExportService] Successfully delivered report for automation ${automationId}`);
+    console.log(
+      `[ExportService] Successfully delivered report for automation ${automationId}`
+    );
   } catch (error: unknown) {
-    console.error(`[ExportService] Failed to generate/deliver report for ${automationId}:`, error);
+    console.error(
+      `[ExportService] Failed to generate/deliver report for ${automationId}:`,
+      error
+    );
     throw error;
   }
 }

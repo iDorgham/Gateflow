@@ -52,6 +52,7 @@ import {
   type ResidentsFilters,
 } from '@/lib/residents/residents-filters';
 import { useUnits, type UnitRow } from '@/lib/residents/use-units';
+import { csrfFetch } from '@/lib/csrf';
 import { ResidentsFilterBar } from '@/components/dashboard/residents/ResidentsFilterBar';
 import { TableCustomizerModal } from '@/components/dashboard/residents/TableCustomizerModal';
 import { ViewContactsModal } from '@/components/dashboard/residents/ViewContactsModal';
@@ -621,14 +622,12 @@ export default function UnitsPage() {
           lng: form.lng ?? null,
         };
         const res = editing
-          ? await fetch(`/api/units/${editing.id}`, {
+          ? await csrfFetch(`/api/units/${editing.id}`, {
               method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
             })
-          : await fetch('/api/units', {
+          : await csrfFetch('/api/units', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
             });
         const json = await res.json();
@@ -654,9 +653,8 @@ export default function UnitsPage() {
     if (!linkTarget) return;
     startTransition(async () => {
       try {
-        const res = await fetch(`/api/units/${linkTarget.id}`, {
+        const res = await csrfFetch(`/api/units/${linkTarget.id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: linkUserId || null }),
         });
         const json = await res.json();
@@ -683,7 +681,7 @@ export default function UnitsPage() {
     if (!deleteTarget) return;
     startTransition(async () => {
       try {
-        const res = await fetch(`/api/units/${deleteTarget.id}`, {
+        const res = await csrfFetch(`/api/units/${deleteTarget.id}`, {
           method: 'DELETE',
         });
         const json = await res.json();
@@ -760,9 +758,8 @@ export default function UnitsPage() {
     if (selectedUnitIds.length === 0) return;
     startTransition(async () => {
       try {
-        const res = await fetch('/api/units/bulk-delete', {
+        const res = await csrfFetch('/api/units/bulk-delete', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ids: selectedUnitIds }),
         });
         const json = await res.json();
@@ -801,9 +798,8 @@ export default function UnitsPage() {
         const unitType = type.toUpperCase().replace(' ', '_') as UnitType;
         if (!Object.keys(UNIT_QUOTA_DEFAULTS).includes(unitType)) continue;
         try {
-          const res = await fetch('/api/units', {
+          const res = await csrfFetch('/api/units', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               name,
               type: unitType,

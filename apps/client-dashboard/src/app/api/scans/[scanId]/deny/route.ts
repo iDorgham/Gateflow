@@ -74,6 +74,7 @@ export async function POST(
   const scanLog = await prisma.scanLog.findFirst({
     where: {
       id: scanId,
+      deletedAt: null,
       qrCode: { organizationId: claims.orgId },
     },
     include: { qrCode: { select: { organizationId: true } } },

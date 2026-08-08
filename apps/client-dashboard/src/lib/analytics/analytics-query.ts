@@ -39,6 +39,7 @@ export function buildScanLogWhere(
   };
 
   return {
+    deletedAt: null,
     qrCode: qrFilter,
     scannedAt: { gte: ctx.dateFromDate, lte: ctx.dateToDate },
     ...(ctx.gateId ? { gateId: ctx.gateId } : {}),
@@ -52,8 +53,16 @@ export type AnalyticsQueryInput = AnalyticsQuery;
 export async function validateAnalyticsQuery(
   orgId: string,
   parsed: AnalyticsQueryInput
-): Promise<{ ok: true; ctx: ValidatedAnalyticsContext } | { ok: false; message: string }> {
-  const { dateFrom, dateTo, projectId = '', gateId = '', unitType = '' } = parsed;
+): Promise<
+  { ok: true; ctx: ValidatedAnalyticsContext } | { ok: false; message: string }
+> {
+  const {
+    dateFrom,
+    dateTo,
+    projectId = '',
+    gateId = '',
+    unitType = '',
+  } = parsed;
   const dateFromDate = new Date(dateFrom + 'T00:00:00.000Z');
   const dateToDate = new Date(dateTo + 'T23:59:59.999Z');
 
@@ -78,7 +87,9 @@ export async function validateAnalyticsQuery(
     if (!gate) {
       return {
         ok: false,
-        message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate',
+        message: projectId
+          ? 'Gate must belong to the selected project'
+          : 'Invalid gate',
       };
     }
   }
