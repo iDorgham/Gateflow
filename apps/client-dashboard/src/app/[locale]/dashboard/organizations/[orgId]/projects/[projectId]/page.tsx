@@ -7,27 +7,29 @@ import { ProjectDetailContent } from '@/components/dashboard/project-detail/Proj
 import { ProjectHero } from '@/components/projects/ProjectHero';
 import { ProjectKpiCards } from '@/components/projects/ProjectKpiCards';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: Locale; projectId: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale; projectId: string }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) return { title: 'Project | GateFlow' };
 
   const project = await prisma.project.findFirst({
-    where: { id: params.projectId, organizationId: claims.orgId, deletedAt: null },
+    where: {
+      id: params.projectId,
+      organizationId: claims.orgId,
+      deletedAt: null,
+    },
     select: { name: true },
   });
-  return { title: project ? `${project.name} | GateFlow` : 'Project | GateFlow' };
+  return {
+    title: project ? `${project.name} | GateFlow` : 'Project | GateFlow',
+  };
 }
 
-export default async function ProjectDetailPage(
-  props: {
-    params: Promise<{ locale: Locale; projectId: string }>;
-  }
-) {
+export default async function ProjectDetailPage(props: {
+  params: Promise<{ locale: Locale; projectId: string }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
@@ -50,15 +52,17 @@ export default async function ProjectDetailPage(
             _count: { select: { scanLogs: true, qrCodes: true } },
             gateAssignments: {
               where: { deletedAt: null },
-              include: { user: { select: { id: true, name: true, email: true } } },
+              include: {
+                user: { select: { id: true, name: true, email: true } },
+              },
             },
           },
         },
         units: {
           where: { deletedAt: null },
-          include: { 
-            contacts: { 
-              include: { 
+          include: {
+            contacts: {
+              include: {
                 contact: {
                   select: {
                     id: true,
@@ -67,26 +71,38 @@ export default async function ProjectDetailPage(
                     email: true,
                     phone: true,
                     avatarUrl: true,
-                  }
-                }
-              }
-            } 
+                  },
+                },
+              },
+            },
           },
         },
         qrCodes: { where: { deletedAt: null }, select: { id: true } },
       },
     }),
     prisma.scanLog.count({
-      where: { gate: { projectId, organizationId: orgId }, scannedAt: { gte: oneDayAgo } },
+      where: {
+        deletedAt: null,
+        gate: { projectId, organizationId: orgId },
+        scannedAt: { gte: oneDayAgo },
+      },
     }),
     prisma.scanLog.count({
-      where: { gate: { projectId, organizationId: orgId }, scannedAt: { gte: sevenDaysAgo } },
+      where: {
+        deletedAt: null,
+        gate: { projectId, organizationId: orgId },
+        scannedAt: { gte: sevenDaysAgo },
+      },
     }),
     prisma.scanLog.count({
-      where: { gate: { projectId, organizationId: orgId }, scannedAt: { gte: thirtyDaysAgo } },
+      where: {
+        deletedAt: null,
+        gate: { projectId, organizationId: orgId },
+        scannedAt: { gte: thirtyDaysAgo },
+      },
     }),
     prisma.scanLog.findMany({
-      where: { gate: { projectId, organizationId: orgId } },
+      where: { deletedAt: null, gate: { projectId, organizationId: orgId } },
       orderBy: { scannedAt: 'desc' },
       take: 20,
       include: {
@@ -98,13 +114,15 @@ export default async function ProjectDetailPage(
 
   if (!project) notFound();
 
-  const allContacts = project.units.flatMap((u) => 
+  const allContacts = project.units.flatMap((u) =>
     u.contacts.map((c) => ({
       ...c.contact,
       name: `${c.contact.firstName} ${c.contact.lastName}`,
     }))
   );
-  const contacts = Array.from(new Map(allContacts.map((c) => [c.id, c])).values()) as {
+  const contacts = Array.from(
+    new Map(allContacts.map((c) => [c.id, c])).values()
+  ) as {
     id: string;
     name: string;
     email: string | null;
@@ -112,7 +130,7 @@ export default async function ProjectDetailPage(
     avatarUrl: string | null;
   }[];
 
-  const units = project.units.map(u => ({
+  const units = project.units.map((u) => ({
     id: u.id,
     name: u.name,
     type: u.type,
@@ -144,14 +162,14 @@ export default async function ProjectDetailPage(
       <ProjectHero project={project} />
 
       {/* Primary KPI Metrics */}
-      <ProjectKpiCards 
+      <ProjectKpiCards
         metrics={{
           contactsCount: contacts.length,
           unitsCount: units.length,
           activeQrs: project.qrCodes.length,
           scanVolume: scans7d,
           scanGrowth: 0, // Fallback for now, can be calculated or fetched from new helper
-        }} 
+        }}
       />
 
       <ProjectDetailContent
@@ -171,8 +189,8 @@ export default async function ProjectDetailPage(
         units={units}
         contacts={contacts}
         aggregates={{
-            ...aggregates,
-            unitTypes: Array.from(new Set(units.map(u => u.type))),
+          ...aggregates,
+          unitTypes: Array.from(new Set(units.map((u) => u.type))),
         }}
         teamUsers={teamUsers}
         recentLogs={recentLogs}

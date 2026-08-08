@@ -66,6 +66,7 @@ import {
   type ResidentsFilters,
 } from '@/lib/residents/residents-filters';
 import { useContacts, type ContactRow } from '@/lib/residents/use-contacts';
+import { csrfFetch } from '@/lib/csrf';
 import { ResidentsFilterBar } from '@/components/dashboard/residents/ResidentsFilterBar';
 import { TableCustomizerModal } from '@/components/dashboard/residents/TableCustomizerModal';
 import { ViewUnitsModal } from '@/components/dashboard/residents/ViewUnitsModal';
@@ -175,9 +176,8 @@ export default function ContactsPage() {
       contactId: string;
       tagId: string;
     }) => {
-      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+      const res = await csrfFetch(`/api/contacts/${contactId}/tags`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tagIds: [tagId] }),
       });
       const json = await res.json();
@@ -230,9 +230,8 @@ export default function ContactsPage() {
       contactId: string;
       tagId: string;
     }) => {
-      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+      const res = await csrfFetch(`/api/contacts/${contactId}/tags`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tagId }),
       });
       const json = await res.json();
@@ -711,14 +710,12 @@ export default function ContactsPage() {
           unitIds: form.unitIds,
         };
         const res = editing
-          ? await fetch(`/api/contacts/${editing.id}`, {
+          ? await csrfFetch(`/api/contacts/${editing.id}`, {
               method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
             })
-          : await fetch('/api/contacts', {
+          : await csrfFetch('/api/contacts', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
             });
         const json = await res.json();
@@ -748,7 +745,7 @@ export default function ContactsPage() {
     if (!deleteTarget) return;
     startTransition(async () => {
       try {
-        const res = await fetch(`/api/contacts/${deleteTarget.id}`, {
+        const res = await csrfFetch(`/api/contacts/${deleteTarget.id}`, {
           method: 'DELETE',
         });
         const json = await res.json();
@@ -781,9 +778,8 @@ export default function ContactsPage() {
   async function applyBulkTagAction(action: 'add' | 'remove') {
     if (!bulkTagId || selectedContactIds.length === 0) return;
     try {
-      const res = await fetch('/api/contacts/tags/bulk', {
+      const res = await csrfFetch('/api/contacts/tags/bulk', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contactIds: selectedContactIds,
           tagIds: [bulkTagId],
@@ -877,9 +873,8 @@ export default function ContactsPage() {
     if (selectedContactIds.length === 0) return;
     startTransition(async () => {
       try {
-        const res = await fetch('/api/contacts/bulk-delete', {
+        const res = await csrfFetch('/api/contacts/bulk-delete', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ids: selectedContactIds }),
         });
         const json = await res.json();
@@ -916,9 +911,8 @@ export default function ContactsPage() {
         const [firstName, lastName, birthday, company, phone, email] = cols;
         if (!firstName || !lastName) continue;
         try {
-          const res = await fetch('/api/contacts', {
+          const res = await csrfFetch('/api/contacts', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               firstName,
               lastName,
@@ -1738,11 +1732,10 @@ export default function ContactsPage() {
                   onClick={async () => {
                     startTransition(async () => {
                       try {
-                        const res = await fetch(
+                        const res = await csrfFetch(
                           `/api/contacts/${inviteTarget.id}/invite`,
                           {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                               provider: 'WHATSAPP',
                               locale,
@@ -1792,11 +1785,10 @@ export default function ContactsPage() {
                   onClick={async () => {
                     startTransition(async () => {
                       try {
-                        const res = await fetch(
+                        const res = await csrfFetch(
                           `/api/contacts/${inviteTarget.id}/invite`,
                           {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ provider: 'SMS', locale }),
                           }
                         );

@@ -38,49 +38,52 @@ export async function GET(
       activeQrs,
       currentScans,
       prevScans,
-      gatesCount
+      gatesCount,
     ] = await Promise.all([
       // 1. Units in project
       prisma.unit.count({
-        where: { projectId: id, deletedAt: null },
+        where: { projectId: id, organizationId: claims.orgId, deletedAt: null },
       }),
       // 2. Contacts linked to units in this project
       prisma.contact.count({
-        where: { 
-          units: { some: { unit: { projectId: id } } },
-          deletedAt: null 
+        where: {
+          organizationId: claims.orgId,
+          units: {
+            some: { unit: { projectId: id, organizationId: claims.orgId } },
+          },
+          deletedAt: null,
         },
       }),
       // 3. Active QRs scoped to project
       prisma.qRCode.count({
-        where: { 
-          projectId: id, 
-          isActive: true, 
+        where: {
+          projectId: id,
+          organizationId: claims.orgId,
+          isActive: true,
           deletedAt: null,
-          OR: [
-            { expiresAt: null },
-            { expiresAt: { gt: now } }
-          ]
+          OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
         },
       }),
       // 4. Current period scans (last 7 days)
       prisma.scanLog.count({
         where: {
-          gate: { projectId: id },
-          scannedAt: { gte: periodStart }
-        }
+          deletedAt: null,
+          gate: { projectId: id, organizationId: claims.orgId },
+          scannedAt: { gte: periodStart },
+        },
       }),
       // 5. Previous period scans (7-14 days ago)
       prisma.scanLog.count({
         where: {
-          gate: { projectId: id },
-          scannedAt: { gte: prevPeriodStart, lt: periodStart }
-        }
+          deletedAt: null,
+          gate: { projectId: id, organizationId: claims.orgId },
+          scannedAt: { gte: prevPeriodStart, lt: periodStart },
+        },
       }),
       // 6. Project gates
       prisma.gate.count({
-        where: { projectId: id, deletedAt: null }
-      })
+        where: { projectId: id, organizationId: claims.orgId, deletedAt: null },
+      }),
     ]);
 
     // Calculate growth percentage
@@ -99,14 +102,13 @@ export async function GET(
         activeQrs,
         scanVolume: currentScans,
         scanGrowth,
-        gatesCount
+        gatesCount,
       },
       period: {
         start: periodStart,
-        end: now
-      }
+        end: now,
+      },
     });
-
   } catch (error) {
     console.error('[Project Aggregates GET error]', error);
     return NextResponse.json({ error: String(error) }, { status: 500 });

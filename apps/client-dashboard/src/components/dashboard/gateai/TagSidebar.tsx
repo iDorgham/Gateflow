@@ -13,6 +13,7 @@ import { cn, Button } from '@gateflow/ui';
 import { token } from '@atlaskit/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gaSpring } from './GateAITokens';
+import { csrfFetch } from '@/lib/csrf';
 
 // Shared GateFlow real-estate palette presets
 const PRESET_COLORS = [
@@ -70,9 +71,8 @@ export function TagSidebar() {
     try {
       setIsCreating(true);
       setError('');
-      const res = await fetch('/api/gateai/tags', {
+      const res = await csrfFetch('/api/gateai/tags', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newName.trim(), color: newColor }),
       });
       const data = await res.json();
@@ -102,7 +102,7 @@ export function TagSidebar() {
       const prev = [...tags];
       setTags(tags.filter((t) => t.id !== id));
 
-      const res = await fetch(`/api/gateai/tags?id=${id}`, {
+      const res = await csrfFetch(`/api/gateai/tags?id=${id}`, {
         method: 'DELETE',
       });
       if (!res.ok) {

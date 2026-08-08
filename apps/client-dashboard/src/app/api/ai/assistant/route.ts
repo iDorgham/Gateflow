@@ -367,7 +367,10 @@ Rules:
                   where: { organizationId: claims.orgId, deletedAt: null },
                 }),
                 prisma.scanLog.count({
-                  where: { gate: { organizationId: claims.orgId } },
+                  where: {
+                    deletedAt: null,
+                    gate: { organizationId: claims.orgId },
+                  },
                 }),
               ]);
             return {
@@ -515,6 +518,7 @@ Rules:
             log('listRecentScans', { gateId });
             const scans = await prisma.scanLog.findMany({
               where: {
+                deletedAt: null,
                 gate: { organizationId: claims.orgId },
                 ...(gateId ? { gateId } : {}),
               },

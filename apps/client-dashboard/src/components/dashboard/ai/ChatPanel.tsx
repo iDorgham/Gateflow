@@ -50,6 +50,7 @@ import {
   type ActionDataBlock,
 } from './AIConfirmationRenderer';
 import { toast } from 'sonner';
+import { csrfFetch } from '@/lib/csrf';
 
 // Helper to parse potential chart/report/schedule data from message content
 function parseMessageContent(content: string) {
@@ -203,9 +204,8 @@ export function ChatPanel({
 
     try {
       // 1. Create the action log on the server first
-      const logRes = await fetch('/api/ai/actions/log', {
+      const logRes = await csrfFetch('/api/ai/actions/log', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           actionType: data.actionType,
           title: data.title,
@@ -218,9 +218,8 @@ export function ChatPanel({
       const { actionId } = await logRes.json();
 
       // 2. Execute the action
-      const execRes = await fetch('/api/ai/actions/execute', {
+      const execRes = await csrfFetch('/api/ai/actions/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ actionId }),
       });
 
@@ -266,9 +265,8 @@ export function ChatPanel({
     }
 
     try {
-      const res = await fetch(`/api/ai/actions/${interactionId}/feedback`, {
+      const res = await csrfFetch(`/api/ai/actions/${interactionId}/feedback`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feedback: type }),
       });
 

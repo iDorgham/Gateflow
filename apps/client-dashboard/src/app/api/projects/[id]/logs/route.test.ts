@@ -8,7 +8,9 @@ export {};
 jest.mock('next/server', () => {
   class MockNextRequest {
     url: string;
-    constructor(url: string) { this.url = url; }
+    constructor(url: string) {
+      this.url = url;
+    }
   }
   class MockNextResponse {
     status: number;
@@ -17,7 +19,9 @@ jest.mock('next/server', () => {
       this._body = body;
       this.status = init?.status ?? 200;
     }
-    async json() { return this._body; }
+    async json() {
+      return this._body;
+    }
     static json(body: unknown, init?: { status?: number }) {
       return new MockNextResponse(body, init);
     }
@@ -49,7 +53,12 @@ const mockLog = {
   scannedAt: new Date('2026-01-01T12:00:00Z'),
   status: 'SUCCESS',
   gate: { id: 'gate_1', name: 'Main Gate' },
-  qrCode: { id: 'qr_1', code: 'abc123', guestName: 'John Doe', guestEmail: null },
+  qrCode: {
+    id: 'qr_1',
+    code: 'abc123',
+    guestName: 'John Doe',
+    guestEmail: null,
+  },
   user: { id: 'user_1', name: 'Guard A' },
 };
 
@@ -63,17 +72,22 @@ describe('GET /api/projects/[id]/logs', () => {
 
   it('returns 401 when unauthenticated', async () => {
     (getSessionClaims as jest.Mock).mockResolvedValue(null);
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs'
+    ) as any;
     const res = await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     expect((res as any).status).toBe(401);
   });
 
   it('scopes logs to project and org (no cross-org leaks)', async () => {
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs'
+    ) as any;
     await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     expect(prisma.scanLog.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
+          deletedAt: null,
           gate: {
             projectId: 'proj_1',
             organizationId: 'org_1',
@@ -84,7 +98,9 @@ describe('GET /api/projects/[id]/logs', () => {
   });
 
   it('returns paginated logs with success response', async () => {
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs?limit=20') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs?limit=20'
+    ) as any;
     const res = await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     const body = await (res as any).json();
     expect(body.success).toBe(true);
@@ -93,23 +109,32 @@ describe('GET /api/projects/[id]/logs', () => {
   });
 
   it('includes nextCursor when result equals limit', async () => {
-    const logs = Array.from({ length: 50 }, (_, i) => ({ ...mockLog, id: `log_${i}` }));
+    const logs = Array.from({ length: 50 }, (_, i) => ({
+      ...mockLog,
+      id: `log_${i}`,
+    }));
     (prisma.scanLog.findMany as jest.Mock).mockResolvedValue(logs);
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs?limit=50') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs?limit=50'
+    ) as any;
     const res = await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     const body = await (res as any).json();
     expect(body.nextCursor).toBe('log_49');
   });
 
   it('returns null nextCursor when result is fewer than limit', async () => {
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs?limit=50') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs?limit=50'
+    ) as any;
     const res = await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     const body = await (res as any).json();
     expect(body.nextCursor).toBeNull();
   });
 
   it('respects custom limit parameter (max 100)', async () => {
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs?limit=200') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs?limit=200'
+    ) as any;
     await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     expect(prisma.scanLog.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ take: 100 }) // capped at 100
@@ -117,7 +142,9 @@ describe('GET /api/projects/[id]/logs', () => {
   });
 
   it('orders logs by scannedAt descending (most recent first)', async () => {
-    const req = new NextRequest('http://localhost/api/projects/proj_1/logs') as any;
+    const req = new NextRequest(
+      'http://localhost/api/projects/proj_1/logs'
+    ) as any;
     await GET(req, { params: Promise.resolve({ id: 'proj_1' }) });
     expect(prisma.scanLog.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ orderBy: { scannedAt: 'desc' } })

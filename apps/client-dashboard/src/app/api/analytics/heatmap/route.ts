@@ -19,7 +19,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -32,7 +35,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId, gateId } = parsed.data;
@@ -47,7 +53,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
     if (gateId) {
@@ -62,7 +71,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
       if (!gate) {
         return NextResponse.json(
-          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          {
+            success: false,
+            message: projectId
+              ? 'Gate must belong to the selected project'
+              : 'Invalid gate',
+          },
           { status: 400 }
         );
       }
@@ -76,7 +90,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       gateId: gateId ?? '',
     });
 
-    const cached = await getCached<{ dow: number; hour: number; count: number }[]>(key);
+    const cached =
+      await getCached<{ dow: number; hour: number; count: number }[]>(key);
     if (cached) {
       return NextResponse.json({ success: true, data: cached });
     }
@@ -97,6 +112,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           AND sl."gateId" = ${gateId}
           AND g."deletedAt" IS NULL
           AND qr."deletedAt" IS NULL
+          AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate}
           AND sl."scannedAt" <= ${dateToDate}
         GROUP BY dow, hour
@@ -114,6 +130,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           AND qr."projectId" = ${projectId}
           AND g."deletedAt" IS NULL
           AND qr."deletedAt" IS NULL
+          AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate}
           AND sl."scannedAt" <= ${dateToDate}
         GROUP BY dow, hour
@@ -131,6 +148,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           AND sl."gateId" = ${gateId}
           AND g."deletedAt" IS NULL
           AND qr."deletedAt" IS NULL
+          AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate}
           AND sl."scannedAt" <= ${dateToDate}
         GROUP BY dow, hour
@@ -147,18 +165,26 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         WHERE qr."organizationId" = ${orgId}
           AND g."deletedAt" IS NULL
           AND qr."deletedAt" IS NULL
+          AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate}
           AND sl."scannedAt" <= ${dateToDate}
         GROUP BY dow, hour
       `;
     }
 
-    const data = rows.map((r) => ({ dow: r.dow, hour: r.hour, count: Number(r.count) }));
+    const data = rows.map((r) => ({
+      dow: r.dow,
+      hour: r.hour,
+      count: Number(r.count),
+    }));
     await setCached(key, data);
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/analytics/heatmap error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

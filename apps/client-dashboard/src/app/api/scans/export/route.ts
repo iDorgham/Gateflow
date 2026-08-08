@@ -97,6 +97,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const where = {
+      deletedAt: null,
       qrCode: {
         organizationId: orgId,
         deletedAt: null,

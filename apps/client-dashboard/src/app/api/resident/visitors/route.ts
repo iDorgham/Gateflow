@@ -129,7 +129,12 @@ export async function POST(request: NextRequest) {
 
     // 1. Verify unit belongs to resident
     const unit = await prisma.unit.findFirst({
-      where: { id: unitId, userId: claims.sub, deletedAt: null },
+      where: {
+        id: unitId,
+        userId: claims.sub,
+        organizationId: claims.orgId,
+        deletedAt: null,
+      },
     });
     if (!unit) {
       return NextResponse.json(

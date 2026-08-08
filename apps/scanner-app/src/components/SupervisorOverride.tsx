@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Haptics from 'expo-haptics';
+import * as Crypto from 'expo-crypto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
@@ -86,7 +87,7 @@ export function SupervisorOverride({
         ? (JSON.parse(raw) as OverrideEvent[])
         : [];
       log.push({
-        id: `ovr_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        id: `ovr_${Date.now()}_${Crypto.randomUUID()}`,
         timestamp: new Date().toISOString(),
         reason: reason.trim() || 'No reason provided',
         supervisorAuth,

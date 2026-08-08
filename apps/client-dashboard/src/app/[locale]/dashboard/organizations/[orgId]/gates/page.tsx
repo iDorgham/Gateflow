@@ -46,6 +46,7 @@ export default async function GatesPage(props: {
     prisma.scanLog.groupBy({
       by: ['gateId'],
       where: {
+        deletedAt: null,
         gate: { organizationId: orgId },
         scannedAt: { gte: todayStart },
       },

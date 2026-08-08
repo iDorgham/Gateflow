@@ -5,7 +5,10 @@ import { subDays } from 'date-fns';
  * Higher-order aggregates for project-level reporting & CRM.
  * Scoped by organization for security.
  */
-export async function getProjectMetrics(projectId: string, organizationId: string) {
+export async function getProjectMetrics(
+  projectId: string,
+  organizationId: string
+) {
   const now = new Date();
   const periodStart = subDays(now, 7);
   const prevPeriodStart = subDays(periodStart, 7);
@@ -16,42 +19,44 @@ export async function getProjectMetrics(projectId: string, organizationId: strin
     activeQrs,
     currentScans,
     prevScans,
-    gatesCount
+    gatesCount,
   ] = await Promise.all([
     prisma.unit.count({
       where: { projectId, organizationId, deletedAt: null },
     }),
     prisma.contact.count({
-      where: { 
+      where: {
         organizationId,
         units: { some: { unit: { projectId } } },
-        deletedAt: null 
+        deletedAt: null,
       },
     }),
     prisma.qRCode.count({
-      where: { 
-        projectId, 
+      where: {
+        projectId,
         organizationId,
-        isActive: true, 
+        isActive: true,
         deletedAt: null,
-        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }]
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
       },
     }),
     prisma.scanLog.count({
       where: {
         gate: { projectId, organizationId },
-        scannedAt: { gte: periodStart }
-      }
+        scannedAt: { gte: periodStart },
+        deletedAt: null,
+      },
     }),
     prisma.scanLog.count({
       where: {
         gate: { projectId, organizationId },
-        scannedAt: { gte: prevPeriodStart, lt: periodStart }
-      }
+        scannedAt: { gte: prevPeriodStart, lt: periodStart },
+        deletedAt: null,
+      },
     }),
     prisma.gate.count({
-      where: { projectId, organizationId, deletedAt: null }
-    })
+      where: { projectId, organizationId, deletedAt: null },
+    }),
   ]);
 
   let scanGrowth = 0;
@@ -67,6 +72,6 @@ export async function getProjectMetrics(projectId: string, organizationId: strin
     activeQrs,
     scanVolume: currentScans,
     scanGrowth,
-    gatesCount
+    gatesCount,
   };
 }

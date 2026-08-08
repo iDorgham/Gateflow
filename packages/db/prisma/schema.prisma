@@ -28,6 +28,9 @@ model Organization {
   visitorHistoryRetentionMonths Int?
   idArtifactRetentionMonths     Int?
   incidentRetentionMonths       Int?
+  /// Blocks all automated retention mutation for this organization until explicitly released.
+  retentionLegalHold            Boolean                 @default(false)
+  retentionPolicyUpdatedAt      DateTime?
   maskResidentNameOnLandingPage Boolean                 @default(false)
   showUnitOnLandingPage         Boolean                 @default(true)
   planExpiresAt                 DateTime?
@@ -381,6 +384,7 @@ model Incident {
   notes          String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
   gate           Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   scanLog        ScanLog?         @relation(fields: [scanLogId], references: [id])
@@ -391,6 +395,7 @@ model Incident {
   @@index([gateId])
   @@index([status])
   @@index([createdAt])
+  @@index([deletedAt])
 }
 
 model ScanAttachment {
@@ -469,6 +474,7 @@ model ScanLog {
   utmMedium         String?
   utmSource         String?
   utmTerm           String?
+  deletedAt         DateTime?
   incidents         Incident[]
   attachments       ScanAttachment[]
   gate              Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)
@@ -480,6 +486,7 @@ model ScanLog {
   @@index([userId])
   @@index([scannedAt])
   @@index([qrCodeId, scannedAt])
+  @@index([deletedAt])
 }
 
 model AuditLog {
@@ -1707,4 +1714,3 @@ enum BlogPostStatus {
   PUBLISHED
   ARCHIVED
 }
-

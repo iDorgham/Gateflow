@@ -90,11 +90,11 @@
     "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
     "@lhci/cli": "^0.15.1",
+    "@tailwindcss/postcss": "^4.3.3",
     "@turbo/gen": "^1.13.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
     "ai": "6.0.138",
-    "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.4.24",
     "eslint": "9.39.5",
     "globals": "^16.4.0",
@@ -127,7 +127,10 @@
       "prisma"
     ],
     "patchedDependencies": {
-      "expo-router@6.0.23": "patches/expo-router@6.0.23.patch"
+      "expo-router@6.0.23": "patches/expo-router@6.0.23.patch",
+      "react-native-screens@4.26.2": "patches/react-native-screens@4.26.2.patch",
+      "expo-modules-jsi@57.0.4": "patches/expo-modules-jsi@57.0.4.patch",
+      "expo-modules-core@57.0.10": "patches/expo-modules-core@57.0.10.patch"
     },
     "overrides": {
       "eslint": "9.39.5",
@@ -154,7 +157,7 @@
       "react": "^19.2.4",
       "react-dom": "^19.2.4",
       "next": "^16.3.0",
-      "postcss": ">=8.5.10",
+      "postcss": ">=8.5.23",
       "sharp": ">=0.35.0",
       "basic-ftp": ">=5.3.0 <6.0.0",
       "fast-uri": ">=3.1.5 <4.0.0",
@@ -164,11 +167,13 @@
       "ws": ">=8.21.0 <9.0.0",
       "qs": ">=6.15.2",
       "uuid": ">=11.1.1",
-      "ip-address": ">=10.3.1",
+      "ip-address": ">=10.4.0",
       "markdown-it": ">=14.2.0",
       "@babel/core": "^7.29.6",
       "esbuild": ">=0.28.1",
-      "@ai-sdk/provider-utils": ">=4.0.21"
+      "@ai-sdk/provider-utils": ">=4.0.21",
+      "react-native-reanimated": "4.5.3",
+      "react-native-worklets": "0.11.3"
     }
   },
   "dependencies": {

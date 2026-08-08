@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { EditPanel } from '../dashboard/EditPanel';
 import { ContactForm } from './ContactForm';
 import { SavedViewManager } from './SavedViewManager';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Contact {
   id: string;
@@ -179,7 +180,7 @@ export function ContactTable({
       const url = selectedContact
         ? `/api/crm/contacts/${selectedContact.id}`
         : '/api/crm/contacts';
-      const res = await fetch(url, {
+      const res = await csrfFetch(url, {
         method: selectedContact ? 'PATCH' : 'POST',
         body: JSON.stringify(values),
       });
@@ -197,9 +198,17 @@ export function ContactTable({
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      await Promise.all(
-        ids.map((id) => fetch(`/api/crm/contacts/${id}`, { method: 'DELETE' }))
+      const results = await Promise.all(
+        ids.map((id) =>
+          csrfFetch(`/api/crm/contacts/${id}`, { method: 'DELETE' })
+        )
       );
+      const failures = results.filter((res) => !res.ok);
+      if (failures.length > 0) {
+        throw new Error(
+          `Failed to delete ${failures.length} of ${ids.length} contact(s)`
+        );
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm', 'contacts'] });
@@ -207,6 +216,10 @@ export function ContactTable({
         t('crm.contacts.batchDeleted', 'Contacts deleted successfully')
       );
       setSelectedIds([]);
+    },
+    onError: (error: Error) => {
+      queryClient.invalidateQueries({ queryKey: ['crm', 'contacts'] });
+      toast.error(error.message);
     },
   });
 

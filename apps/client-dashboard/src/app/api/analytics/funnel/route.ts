@@ -22,7 +22,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -35,7 +38,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId, utmCampaign } = parsed.data;
@@ -48,7 +54,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
 
@@ -72,6 +81,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }),
       prisma.scanLog.count({
         where: {
+          deletedAt: null,
           qrCode: {
             organizationId: orgId,
             deletedAt: null,
@@ -88,18 +98,27 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       {
         name: 'Landing Page Opens',
         count: qrOpened,
-        dropoffRate: qrCreated > 0 ? Math.round(((qrCreated - qrOpened) / qrCreated) * 100) : 0,
+        dropoffRate:
+          qrCreated > 0
+            ? Math.round(((qrCreated - qrOpened) / qrCreated) * 100)
+            : 0,
       },
       {
         name: 'QR Scanned',
         count: qrScanned,
-        dropoffRate: qrOpened > 0 ? Math.round(((qrOpened - qrScanned) / qrOpened) * 100) : 0,
+        dropoffRate:
+          qrOpened > 0
+            ? Math.round(((qrOpened - qrScanned) / qrOpened) * 100)
+            : 0,
       },
     ];
 
     return NextResponse.json({ success: true, data: { stages } });
   } catch (error) {
     console.error('GET /api/analytics/funnel error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

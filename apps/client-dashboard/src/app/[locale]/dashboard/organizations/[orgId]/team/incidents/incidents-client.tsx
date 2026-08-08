@@ -5,6 +5,7 @@ import { Button, EmptyState } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { ShieldAlert } from 'lucide-react';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Incident {
   id: string;
@@ -45,9 +46,8 @@ export function IncidentsClient() {
 
   function updateStatus(id: string, status: string) {
     setIsPending(id);
-    fetch('/api/incidents', {
+    csrfFetch('/api/incidents', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, status }),
     })
       .then((r) => r.json())

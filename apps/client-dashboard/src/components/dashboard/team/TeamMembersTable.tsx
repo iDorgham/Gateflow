@@ -35,6 +35,7 @@ import {
 } from '@gateflow/ui';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Member {
   id: string;
@@ -85,29 +86,42 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
       memberId: string;
       roleId: string;
     }) => {
-      const res = await fetch('/api/team/members', {
+      const res = await csrfFetch('/api/team/members', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: memberId, roleId }),
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to update member role');
+      }
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['team-members-list'] });
       toast.success(t('team.members.roleUpdated', 'Role updated successfully'));
     },
+    onError: () => {
+      toast.error(t('team.members.roleUpdateFailed', 'Failed to update role'));
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/team/members?id=${id}`, {
+      const res = await csrfFetch(`/api/team/members?id=${id}`, {
         method: 'DELETE',
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to remove member');
+      }
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['team-members-list'] });
       toast.success(t('team.members.removed', 'Member removed from team'));
+    },
+    onError: () => {
+      toast.error(t('team.members.removeFailed', 'Failed to remove member'));
     },
   });
 

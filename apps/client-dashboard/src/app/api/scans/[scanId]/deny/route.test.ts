@@ -127,6 +127,7 @@ describe('POST /api/scans/[scanId]/deny tenant isolation', () => {
     expect(response.status).toBe(200);
     expect(mockScanLogFindFirst).toHaveBeenCalledWith({
       where: {
+        deletedAt: null,
         id: 'scan_1',
         qrCode: { organizationId: 'org_1' },
       },
