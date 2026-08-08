@@ -1,0 +1,19 @@
+apps/admin-dashboard/src/app/api/audit/log/route.ts
+  s_8c9a8766c4415c::t_480fc58f9c4759 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "fcf4290a23a0fb4c2aab23bf8a5b14528b2f9bd2",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
