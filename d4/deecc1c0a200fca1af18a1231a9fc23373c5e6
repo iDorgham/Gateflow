@@ -1,0 +1,45 @@
+packages/db/src/lib/retention-policy.test.ts
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-40
+  s_4bf52075e62fb2::t_75e8dbba37b9ff 41-58
+packages/db/tsconfig.json
+  s_4bf52075e62fb2::t_07e996b03b0e2b 7
+packages/db/src/index.ts
+  s_8c9a8766c4415c::t_e013cc79062f7c 92-100
+packages/db/src/lib/retention-policy.ts
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-50
+  s_4bf52075e62fb2::t_db815cd94dd3a7 51-69
+packages/db/src/lib/retention-executor.ts
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-85
+  s_4bf52075e62fb2::t_3873160b039492 86-148
+packages/db/prisma/migrations/20260804090000_add_retention_legal_hold/migration.sql
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-4
+packages/db/src/lib/retention-executor.test.ts
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-103
+  s_4bf52075e62fb2::t_37abd0c8664ea7 104-213
+docs/development/RETENTION_EXECUTION_SAFETY.md
+  s_8c9a8766c4415c::t_d1290b2348d312 1-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "d4deecc1c0a200fca1af18a1231a9fc23373c5e6",
+  "prompts": {},
+  "sessions": {
+    "s_4bf52075e62fb2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ddc7269d-1579-4063-bba7-6a3f0b6a076c",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
