@@ -16,8 +16,8 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.53",
-    "@ai-sdk/react": "^3.0.139",
+    "@ai-sdk/google": "^3.0.104",
+    "@ai-sdk/react": "^3.0.248",
     "@atlaskit/tokens": "^16.3.0",
     "@formatjs/intl-localematcher": "^0.8.13",
     "@gate-access/api-client": "workspace:*",
@@ -43,7 +43,7 @@
     "@types/crypto-js": "^4.2.2",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.38.0",
-    "ai": "^6.0.138",
+    "ai": "^6.0.246",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
