@@ -12,7 +12,9 @@ export const uiTools = {
     inputSchema: z.object({
       chartType: z.enum(['bar', 'line', 'pie']),
       title: z.string().describe('Descriptive title for the chart'),
-      data: z.array(z.record(z.any())).describe('The data points to visualize'),
+      data: z
+        .array(z.record(z.string(), z.any()))
+        .describe('The data points to visualize'),
       xAxisKey: z
         .string()
         .describe('Key to use for the X axis (e.g., "label", "date")'),
@@ -61,7 +63,7 @@ export const uiTools = {
       title: z.string().describe('Short title for the action'),
       description: z.string().describe('Clear explanation of what will happen'),
       intentJson: z
-        .record(z.any())
+        .record(z.string(), z.any())
         .describe('The parameters that will be used if confirmed'),
     }),
     execute: async () => ({ status: 'pending', component: 'confirm' }),

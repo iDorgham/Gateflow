@@ -222,7 +222,7 @@ export async function proxy(request: NextRequest) {
     // Compatibility bridge for existing raw same-origin fetch calls. Explicit
     // invalid tokens never fall back to Origin validation.
     const origin = request.headers.get('origin');
-    let sameOrigin = false;
+    let sameOrigin: boolean;
     try {
       sameOrigin = Boolean(
         origin && new URL(origin).origin === request.nextUrl.origin

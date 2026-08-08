@@ -251,7 +251,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
     const safe = EmulateTrafficBodySchema.safeParse(body);
     if (!safe.success) {
       toast.error(
-        safe.error.errors[0]?.message ??
+        safe.error.issues[0]?.message ??
           t('emulation.error.invalid_payload', {
             defaultValue: 'Invalid inputs.',
           })
