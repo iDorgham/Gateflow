@@ -94,7 +94,7 @@
     "@turbo/gen": "^1.13.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
-    "ai": "6.0.138",
+    "ai": "6.0.246",
     "autoprefixer": "^10.4.24",
     "eslint": "9.39.5",
     "globals": "^16.4.0",
