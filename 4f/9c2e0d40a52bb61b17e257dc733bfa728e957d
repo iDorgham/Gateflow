@@ -1,0 +1,43 @@
+apps/marketing/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 25,27,45
+.github/workflows/codeql-analysis.yml
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 49,59,68
+apps/resident-portal/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 23,25,37
+apps/admin-dashboard/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 38,40,57
+package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 96,101
+apps/client-dashboard/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 50,55,78
+packages/ai/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 45
+packages/components/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 44,53
+packages/db/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 48
+apps/design-system/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 16,24,29
+apps/resident-mobile/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 21
+apps/scanner-app/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 23
+packages/ui/package.json
+  s_8c9a8766c4415c::t_19cd6ca98e65f3 77,86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "4f9c2e0d40a52bb61b17e257dc733bfa728e957d",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
