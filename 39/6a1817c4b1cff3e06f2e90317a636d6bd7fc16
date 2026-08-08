@@ -1,0 +1,19 @@
+pnpm-lock.yaml
+  s_8c9a8766c4415c::t_4792d7bdb8dfd0 36,233-234,432-433,550-551,624,627,647-648,847-848,1036-1037,1104-1105,6293,6296,6311,6314,6321,6324,6331,6334,6342,6345,6353,6356,6364,6367,6375,6378,6385,6388,11298,11306,11330,11341,11348,11370,21530,21533,21554,21563-21570
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "396a1817c4b1cff3e06f2e90317a636d6bd7fc16",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
