@@ -10,6 +10,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** validate retention mode and clamp month-end retention cutoffs
+- **[Db]** commit missing retention-policy module and migration for PR #224
+- **[Ci]** regenerate pnpm-lock.yaml with correct patch hashes
+- **[Security]** scope ScanLog export to org when zero QR codes match
+- **[Security]** remove dead mock admin login route
+- **[Security]** attach CSRF token to all client-dashboard mutation requests
+- **[Deps]** patch 5 high-severity vulnerabilities, install pending patches
+- **[Security]** close cross-tenant data leak/injection gaps
+- **[Security]** filter deletedAt on all ScanLog/Incident reads
+- **[Security]** make ScanLog/Incident append-only, wire real audit logging
+
 - **[Deps]** update z.record() to zod 4 two-argument form
 
 - **[Ci]** regenerate lockfile against committed package.json, not local WIP
@@ -43,6 +54,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### AI Tools
 
 ### Apps
+
+- **[Scanner]** align Expo SDK 57 native modules, monorepo Metro cache
+- **[Client]** surface error toasts on failed csrfFetch mutations
+- **[Scanner]** run resident-portal tests on Node 20
+- **[Scanner]** use crypto-secure IDs instead of Math.random()
 
 - **[Scanner]** BiometricGuard inactivity lock, motion polish, error boundaries
 
