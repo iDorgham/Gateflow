@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** regenerate pnpm-lock.yaml for scanner-app Expo SDK 57 bump
+
 - **[Db]** validate retention mode and clamp month-end retention cutoffs
 - **[Db]** commit missing retention-policy module and migration for PR #224
 - **[Ci]** regenerate pnpm-lock.yaml with correct patch hashes
