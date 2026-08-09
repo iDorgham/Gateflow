@@ -1,0 +1,25 @@
+packages/db/src/lib/retention-policy.test.ts
+  s_1ada9a75b8070d::t_a530b5f961f7a5 58-75
+packages/db/src/lib/retention-executor.ts
+  s_1ada9a75b8070d::t_4d7a7a7cf5adfd 60-62
+packages/db/src/lib/retention-policy.ts
+  s_1ada9a75b8070d::t_d3febd1cbf6771 30-31,33-36
+packages/db/src/lib/retention-executor.test.ts
+  s_1ada9a75b8070d::t_8d90b52b0503ce 156-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "28b1097bc180451c0080d99ec67dca8992edd4a7",
+  "prompts": {},
+  "sessions": {
+    "s_1ada9a75b8070d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07dfda39-ae88-485d-a8cd-6c4045790ac4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
