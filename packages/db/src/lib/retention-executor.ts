@@ -23,6 +23,27 @@ export type RetentionAdapter = {
     category: RetentionCategory;
     limit: number;
   }): Promise<string[]>;
+  /**
+   * Atomically delete a batch of retention candidates.
+   *
+   * CRITICAL SAFETY REQUIREMENTS:
+   * 1. MUST execute all operations within a single database transaction
+   * 2. MUST re-read and validate current legal hold status inside the transaction
+   *    immediately before deletion; if legalHold=true, MUST abort/roll back
+   * 3. MUST re-read and validate current policy version inside the transaction
+   *    immediately before deletion; if it differs from input.policyVersion,
+   *    MUST abort/roll back (fail closed)
+   * 4. MUST validate relationship safety (protected relations detached) inside
+   *    the transaction BEFORE deleting records; if validation fails, MUST
+   *    abort/roll back
+   * 5. Only after all validations pass should records be deleted
+   * 6. MUST return protectedRelationsDetached=true only if the check was
+   *    performed successfully within the transaction
+   *
+   * Implementations MUST NOT rely on pre-transaction validation or post-commit
+   * validation for safety - all validation must occur inside the transaction
+   * with rollback-on-failure to prevent race conditions.
+   */
   applyAtomicBatch(input: {
     organizationId: string;
     category: RetentionCategory;
