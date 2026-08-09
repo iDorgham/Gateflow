@@ -27,7 +27,13 @@ export function validateRetentionMonths(value: number | null): void {
 
 export function subtractUtcMonths(now: Date, months: number): Date {
   const cutoff = new Date(now);
+  const originalDay = cutoff.getUTCDate();
+  cutoff.setUTCDate(1);
   cutoff.setUTCMonth(cutoff.getUTCMonth() - months);
+  const daysInTargetMonth = new Date(
+    Date.UTC(cutoff.getUTCFullYear(), cutoff.getUTCMonth() + 1, 0)
+  ).getUTCDate();
+  cutoff.setUTCDate(Math.min(originalDay, daysInTargetMonth));
   return cutoff;
 }
 

@@ -57,6 +57,9 @@ function assertOptions(options: RetentionExecutionOptions): void {
     throw new Error('organizationId is required.');
   if (!options.policyVersion.trim())
     throw new Error('policyVersion is required.');
+  if (options.mode !== 'dry-run' && options.mode !== 'apply') {
+    throw new Error('mode must be "dry-run" or "apply".');
+  }
   if (
     !Number.isInteger(options.batchSize) ||
     options.batchSize < 1 ||
