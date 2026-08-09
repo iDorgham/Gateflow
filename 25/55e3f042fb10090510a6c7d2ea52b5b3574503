@@ -1,0 +1,60 @@
+docs/developer-setup.md
+  s_8c9a8766c4415c::t_e013cc79062f7c 1-213
+  s_d5e38794ababb9::t_6b52e29e1027ba 214-219
+CHANGELOG.md
+  s_d5e38794ababb9::t_fb0c037346e1a2 13-23,58-62
+README.md
+  s_d5e38794ababb9::t_8f770653f10c50 1-5,17-19,26-30,34,36-60,62,64,66,68,70-76,78,80-88,92,96,98-129,133,135,139-142,146-149,153-156,160-163,165,172,174-175,177,184,186,188-205,208,210,212,214,216,218,220-221,223,225,227,229,231,233,236,239-240,243,245-252,254-256,260,262,264-268,272,274,276-278,284-286,290,292,294-297,299,305-307,309-311,313-315,319,321-330,344
+docs/INDEX.md
+  s_d5e38794ababb9::t_c69ed9e2356532 3,74-76
+docs/NOTEBOOKLM_01_SYSTEM_OVERVIEW_AND_PRD.md
+  s_d5e38794ababb9::t_df14c49866c930 1-68
+docs/NOTEBOOKLM_02_DATABASE_SCHEMA_AND_MODELS.md
+  s_d5e38794ababb9::t_bd413f742359e6 1-57
+docs/NOTEBOOKLM_03_AUDITS_GATES_AND_PILOT.md
+  s_d5e38794ababb9::t_5c15f30149abe0 1-150
+docs/NOTEBOOKLM_04_PLANS_AND_DEVELOPMENT.md
+  s_d5e38794ababb9::t_030d4529de3594 1-34
+docs/NOTEBOOKLM_05_STRUCTURE_AND_CONTEXT_MAP.md
+  s_d5e38794ababb9::t_315a8a68ff0e8c 1-44
+docs/NOTEBOOKLM_06_APPLICATIONS_DEEP_DIVE.md
+  s_d5e38794ababb9::t_b5528bbe605fb9 1-289
+docs/NOTEBOOKLM_07_SECURITY_AND_COMPLIANCE.md
+  s_d5e38794ababb9::t_098b34da28714a 1-203
+docs/NOTEBOOKLM_08_DESIGN_SYSTEM_AND_UI_UX.md
+  s_d5e38794ababb9::t_303a6aecde8820 1-203
+docs/NOTEBOOKLM_09_DEVELOPMENT_STATUS_AND_PROBLEMS.md
+  s_d5e38794ababb9::t_60dece03e2994e 1-165
+docs/NOTEBOOKLM_README.md
+  s_d5e38794ababb9::t_d5af96512d3c7a 1-47
+docs/README.md
+  s_d5e38794ababb9::t_16625d147873f8 21-29
+docs/reference/product/FEATURE_LOG.md
+  s_d5e38794ababb9::t_491be08c940326 7-15
+docs/workspace/CHANGELOG.md
+  s_d5e38794ababb9::t_c7d324212881be 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "2555e3f042fb10090510a6c7d2ea52b5b3574503",
+  "prompts": {},
+  "sessions": {
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d5e38794ababb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f3658dd-de85-4889-8116-b3bec4f4cc71",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
