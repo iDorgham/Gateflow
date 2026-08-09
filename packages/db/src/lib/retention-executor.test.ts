@@ -24,7 +24,25 @@ function adapterFixture(
     countCandidates: async ({ category }) => queues.get(category)!.length,
     listCandidateIds: async ({ category, limit }) =>
       queues.get(category)!.slice(0, limit),
-    applyAtomicBatch: async ({ category, ids }) => {
+    applyAtomicBatch: async ({
+      category,
+      ids,
+      expectedPolicyVersion,
+      expectedLegalHold,
+    }) => {
+      // Simulate the required in-transaction validation
+      const currentGuard = await adapter.getGuard({ organizationId: 'unused' });
+      if (currentGuard.legalHold !== expectedLegalHold) {
+        throw new Error(
+          'Legal hold status changed between planning and execution.'
+        );
+      }
+      if (currentGuard.policyVersion !== expectedPolicyVersion) {
+        throw new Error(
+          'Policy version changed between planning and execution.'
+        );
+      }
+
       applied.push({ category, ids });
       queues.set(
         category,

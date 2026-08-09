@@ -23,11 +23,23 @@ export type RetentionAdapter = {
     category: RetentionCategory;
     limit: number;
   }): Promise<string[]>;
+  /**
+   * Atomically delete the specified records in a database transaction.
+   *
+   * CRITICAL: Implementations MUST, inside the same transaction before deletion:
+   * 1. Re-read the current legal hold and policy version for this organization
+   * 2. Verify legalHold matches expectedLegalHold (must be false) and policyVersion matches expectedPolicyVersion
+   * 3. Perform relationship-safety validation to ensure no dependent records would be orphaned
+   * 4. If any validation fails, abort/rollback the transaction (throw an error) before any deletions occur
+   *
+   * This prevents TOCTOU races between the pre-flight guard check and actual deletion.
+   */
   applyAtomicBatch(input: {
     organizationId: string;
     category: RetentionCategory;
     ids: string[];
-    policyVersion: string;
+    expectedPolicyVersion: string;
+    expectedLegalHold: boolean;
   }): Promise<RetentionBatchResult>;
 };
 
@@ -126,7 +138,8 @@ export async function executeRetention(
         organizationId: options.organizationId,
         category,
         ids,
-        policyVersion: options.policyVersion,
+        expectedPolicyVersion: options.policyVersion,
+        expectedLegalHold: false,
       });
       if (!result.protectedRelationsDetached)
         throw new Error('Adapter could not prove relationship safety.');
