@@ -55,4 +55,22 @@ describe('retention policy', () => {
       subtractUtcMonths(new Date('2026-01-15T00:00:00.000Z'), 2).toISOString()
     ).toBe('2025-11-15T00:00:00.000Z');
   });
+
+  test('clamps month-end dates to the shorter target month instead of rolling over', () => {
+    expect(
+      subtractUtcMonths(new Date('2026-03-31T00:00:00.000Z'), 1).toISOString()
+    ).toBe('2026-02-28T00:00:00.000Z');
+  });
+
+  test('clamps into February of a leap year at day 29', () => {
+    expect(
+      subtractUtcMonths(new Date('2024-03-31T00:00:00.000Z'), 1).toISOString()
+    ).toBe('2024-02-29T00:00:00.000Z');
+  });
+
+  test('preserves the day when the target month is long enough', () => {
+    expect(
+      subtractUtcMonths(new Date('2026-05-31T00:00:00.000Z'), 1).toISOString()
+    ).toBe('2026-04-30T00:00:00.000Z');
+  });
 });

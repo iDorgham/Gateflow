@@ -153,6 +153,22 @@ describe('retention executor', () => {
     ).rejects.toThrow('batchSize');
   });
 
+  test('rejects an unsupported mode without mutating anything', async () => {
+    const fixture = adapterFixture({ scanLogs: ['s1'] });
+    await expect(
+      executeRetention(fixture.adapter, {
+        organizationId: 'org-a',
+        policyVersion: 'v1',
+        // Intentionally bypasses the RetentionExecutionOptions['mode'] union
+        // to simulate an untyped caller (e.g. parsed JSON/CLI input).
+        mode: 'apply-now' as unknown as 'apply',
+        batchSize: 10,
+        confirm: 'APPLY_RETENTION',
+      })
+    ).rejects.toThrow('mode must be');
+    expect(fixture.applied).toEqual([]);
+  });
+
   test('rejects an adapter batch that cannot prove relationship safety', async () => {
     const fixture = adapterFixture({ scanLogs: ['s1'] });
     fixture.adapter.applyAtomicBatch = async () => ({
