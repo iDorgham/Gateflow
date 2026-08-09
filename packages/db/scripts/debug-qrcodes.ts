@@ -24,11 +24,11 @@ async function main() {
         orderBy: [{ createdAt: 'desc' }, { code: 'asc' }],
         take: 5,
         include: {
+          // contactId/unitId have no enforced Prisma relation on QRCode (see
+          // schema.prisma) — `contact`/`unit` are not includable keys here.
           _count: { select: { scanLogs: true } },
           gate: { select: { id: true, name: true } },
           project: { select: { id: true, name: true } },
-          contact: { select: { id: true, firstName: true, lastName: true } },
-          unit: { select: { id: true, name: true } },
           scanLogs: {
             orderBy: { scannedAt: 'desc' },
             take: 1,

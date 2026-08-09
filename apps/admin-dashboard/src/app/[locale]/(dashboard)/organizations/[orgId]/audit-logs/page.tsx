@@ -71,7 +71,10 @@ export default async function AuditLogsPage(props: {
   const fromDate = fromRaw && !isNaN(fromRaw.getTime()) ? fromRaw : undefined;
   const toDate = toRaw && !isNaN(toRaw.getTime()) ? toRaw : undefined;
 
-  const where: Record<string, unknown> = { deletedAt: null };
+  // Intentionally no deletedAt filter — this is the global-admin forensic
+  // view (reset-tenant soft-deletes ScanLog/Incident "for forensic purposes";
+  // this is the one place that purpose requires them to stay visible).
+  const where: Record<string, unknown> = {};
   if (statusFilter) where.status = statusFilter;
   if (uuidFilter)
     where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };

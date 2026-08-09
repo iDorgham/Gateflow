@@ -125,8 +125,17 @@ async function resolveVerifiedShiftLogId(
 export async function processBulkScans(
   scans: ScanInput[],
   tx: Prisma.TransactionClient | PrismaClient,
-  context?: BulkSyncContext
+  context: BulkSyncContext
 ): Promise<SyncResult> {
+  // Required at the type level, but non-TS/`as any` callers can still bypass
+  // that — this is the runtime backstop so a missing context fails closed
+  // instead of silently dropping organizationId scoping on the qrCode lookup.
+  if (!context?.organizationId) {
+    throw new Error(
+      'processBulkScans requires an authenticated organization context'
+    );
+  }
+
   const synced: string[] = [];
   const conflicted: ConflictResult[] = [];
   const failed: Array<{ id: string; error: string }> = [];
@@ -161,17 +170,18 @@ export async function processBulkScans(
         ? tx.qRCode.findMany({
             where: {
               code: { in: qrCodes },
-              ...(context ? { organizationId: context.organizationId } : {}),
+              organizationId: context.organizationId,
             },
             include: {
               scanLogs: {
+                where: { deletedAt: null },
                 orderBy: { scannedAt: 'desc' },
                 take: 1,
               },
             },
           })
         : Promise.resolve([]),
-      context && shiftLogIds.length > 0
+      shiftLogIds.length > 0
         ? tx.shiftLog.findMany({
             where: {
               id: { in: shiftLogIds },

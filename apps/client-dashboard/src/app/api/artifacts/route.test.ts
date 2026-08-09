@@ -8,7 +8,10 @@ jest.mock('next/server', () => {
     url: string;
     init: { body?: string };
 
-    constructor(url: string, init?: { body?: string; headers?: Record<string, string> }) {
+    constructor(
+      url: string,
+      init?: { body?: string; headers?: Record<string, string> }
+    ) {
       this.url = url;
       this.init = init ?? {};
     }
@@ -74,7 +77,13 @@ describe('POST /api/artifacts', () => {
   it('returns 401 when unauthenticated', async () => {
     mockGetSessionClaims.mockResolvedValue(null);
 
-    const res = await POST(mockRequest({ scanLogId: VALID_CUID, type: 'id_front', contentBase64: 'base64data' }));
+    const res = await POST(
+      mockRequest({
+        scanLogId: VALID_CUID,
+        type: 'id_front',
+        contentBase64: 'base64data',
+      })
+    );
     expect(res.status).toBe(401);
     expect(prisma.scanAttachment.create).not.toHaveBeenCalled();
   });
@@ -82,12 +91,20 @@ describe('POST /api/artifacts', () => {
   it('returns 403 when user lacks gates:manage', async () => {
     mockHasPermission.mockReturnValue(false);
 
-    const res = await POST(mockRequest({ scanLogId: VALID_CUID, type: 'id_front', contentBase64: 'base64data' }));
+    const res = await POST(
+      mockRequest({
+        scanLogId: VALID_CUID,
+        type: 'id_front',
+        contentBase64: 'base64data',
+      })
+    );
     expect(res.status).toBe(403);
   });
 
   it('returns 400 when neither scanLogId nor incidentId provided', async () => {
-    const res = await POST(mockRequest({ type: 'id_front', contentBase64: 'data' }));
+    const res = await POST(
+      mockRequest({ type: 'id_front', contentBase64: 'data' })
+    );
     expect(res.status).toBe(400);
   });
 
@@ -97,7 +114,31 @@ describe('POST /api/artifacts', () => {
       gate: { organizationId: 'other-org' },
     });
 
-    const res = await POST(mockRequest({ scanLogId: VALID_CUID, type: 'id_front', contentBase64: 'data' }));
+    const res = await POST(
+      mockRequest({
+        scanLogId: VALID_CUID,
+        type: 'id_front',
+        contentBase64: 'data',
+      })
+    );
+    expect(res.status).toBe(404);
+    expect(prisma.scanAttachment.create).not.toHaveBeenCalled();
+  });
+
+  it('scopes the incident lookup to the caller org and excludes soft-deleted incidents', async () => {
+    (prisma.incident.findFirst as jest.Mock).mockResolvedValue(null);
+
+    const res = await POST(
+      mockRequest({
+        incidentId: VALID_CUID,
+        type: 'id_front',
+        contentBase64: 'data',
+      })
+    );
+
+    expect(prisma.incident.findFirst).toHaveBeenCalledWith({
+      where: { id: VALID_CUID, organizationId: 'org-1', deletedAt: null },
+    });
     expect(res.status).toBe(404);
     expect(prisma.scanAttachment.create).not.toHaveBeenCalled();
   });
@@ -115,7 +156,13 @@ describe('POST /api/artifacts', () => {
       createdAt: new Date(),
     });
 
-    const res = await POST(mockRequest({ scanLogId: VALID_CUID, type: 'id_front', contentBase64: 'data' }));
+    const res = await POST(
+      mockRequest({
+        scanLogId: VALID_CUID,
+        type: 'id_front',
+        contentBase64: 'data',
+      })
+    );
     expect(res.status).toBe(201);
     expect(prisma.scanAttachment.create).toHaveBeenCalledWith({
       data: {

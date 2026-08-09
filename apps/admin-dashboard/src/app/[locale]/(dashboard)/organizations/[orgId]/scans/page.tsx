@@ -70,7 +70,10 @@ export default async function AdminScansPage(props: {
     'MAX_USES_REACHED',
     'INACTIVE',
   ]);
-  const where: Record<string, unknown> = { deletedAt: null };
+  // Intentionally no deletedAt filter — this is the global-admin forensic
+  // view (reset-tenant soft-deletes ScanLog "for forensic purposes"; this
+  // is the one place that purpose requires it to stay visible).
+  const where: Record<string, unknown> = {};
   if (statusFilter && VALID_STATUSES.has(statusFilter))
     where.status = statusFilter;
   if (fromDate || toDate) {

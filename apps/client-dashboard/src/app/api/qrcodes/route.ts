@@ -179,6 +179,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ? {
             scanLogs: {
               some: {
+                deletedAt: null,
                 scannedAt: {
                   ...(lastScanFromValue ? { gte: lastScanFromValue } : {}),
                   ...(lastScanToValue ? { lte: lastScanToValue } : {}),
@@ -245,7 +246,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         case 'projectName':
           return [{ project: { name: dir } }, { createdAt: 'desc' as const }];
         case 'scansCount':
-          // Prisma relation-aggregate orderBy: scanLogs _count
+          // Prisma relation-aggregate orderBy: scanLogs _count. Prisma does not
+          // support a `where` filter on a relation count used in orderBy, so
+          // this sort key includes soft-deleted scans in the count — the
+          // displayed _count and list filtering below are correctly scoped,
+          // only the sort order can drift slightly after a tenant reset.
           return [
             { scanLogs: { _count: dir } },
             { createdAt: 'desc' as const },
@@ -264,10 +269,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
-          _count: { select: { scanLogs: true } },
+          _count: { select: { scanLogs: { where: { deletedAt: null } } } },
           gate: { select: { id: true, name: true } },
           project: { select: { id: true, name: true } },
           scanLogs: {
+            where: { deletedAt: null },
             orderBy: { scannedAt: 'desc' },
             take: 1,
             select: { scannedAt: true },

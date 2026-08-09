@@ -47,14 +47,26 @@ describe('processBulkScans', () => {
         scannedAt: new Date().toISOString(),
         status: 'SUCCESS',
         gateId: 'gate-1',
+        shiftLogId: 'shift-1',
       },
     ];
 
     mockTx.qRCode.findMany.mockResolvedValue([
       { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
     ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
 
-    const result = await processBulkScans(scans, mockTx as any);
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(result.synced).toContain('scan-1');
     expect(result.failed).toHaveLength(0);
@@ -78,14 +90,26 @@ describe('processBulkScans', () => {
         scannedAt: new Date().toISOString(),
         status: 'SUCCESS',
         gateId: 'gate-1',
+        shiftLogId: 'shift-1',
       },
     ];
 
     mockTx.scanLog.findMany.mockResolvedValue([
       { id: 'db-scan-1', scanUuid: 'uuid-existing' },
     ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
 
-    const result = await processBulkScans(scans, mockTx as any);
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(result.synced).toContain('scan-1');
     expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
@@ -101,12 +125,24 @@ describe('processBulkScans', () => {
         scannedAt: new Date().toISOString(),
         status: 'SUCCESS',
         gateId: 'gate-1',
+        shiftLogId: 'shift-1',
       },
     ];
 
     mockTx.qRCode.findMany.mockResolvedValue([]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
 
-    const result = await processBulkScans(scans, mockTx as any);
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(result.failed).toHaveLength(1);
     expect(result.failed[0].error).toBe('QR code not found');
@@ -125,6 +161,7 @@ describe('processBulkScans', () => {
         scannedAt: incomingTime,
         status: 'SUCCESS',
         gateId: 'gate-1',
+        shiftLogId: 'shift-1',
       },
     ];
 
@@ -141,8 +178,19 @@ describe('processBulkScans', () => {
         ],
       },
     ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date('2023-01-01T00:00:00Z'),
+        endTime: null,
+      },
+    ]);
 
-    const result = await processBulkScans(scans, mockTx as any);
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(result.synced).toContain('scan-new');
     expect(result.conflicted).toHaveLength(1);
@@ -171,6 +219,7 @@ describe('processBulkScans', () => {
         scannedAt: incomingTime,
         status: 'SUCCESS',
         gateId: 'gate-1',
+        shiftLogId: 'shift-1',
       },
     ];
 
@@ -187,8 +236,19 @@ describe('processBulkScans', () => {
         ],
       },
     ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date('2023-01-01T00:00:00Z'),
+        endTime: null,
+      },
+    ]);
 
-    const result = await processBulkScans(scans, mockTx as any);
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(result.conflicted).toHaveLength(1);
     expect(result.conflicted[0].reason).toContain('existing record newer');
@@ -209,6 +269,7 @@ describe('processBulkScans', () => {
         scannedAt: new Date().toISOString(),
         status: 'SUCCESS',
         gateId: 'g1',
+        shiftLogId: 'shift-1',
       },
       {
         id: 's2',
@@ -217,6 +278,7 @@ describe('processBulkScans', () => {
         scannedAt: new Date().toISOString(),
         status: 'SUCCESS',
         gateId: 'g1',
+        shiftLogId: 'shift-1',
       },
     ];
 
@@ -224,8 +286,19 @@ describe('processBulkScans', () => {
       { id: 'qid1', code: 'q1', scanLogs: [] },
       { id: 'qid2', code: 'q2', scanLogs: [] },
     ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'g1',
+        startTime: new Date(Date.now() - 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
 
-    await processBulkScans(scans, mockTx as any);
+    await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
 
     expect(mockTx.scanLog.createMany).toHaveBeenCalledTimes(1);
     expect(mockTx.scanLog.createMany.mock.calls[0][0].data).toHaveLength(2);
@@ -401,7 +474,7 @@ describe('processBulkScans', () => {
     expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
   });
 
-  it('rejects client shift attribution when auth context is absent', async () => {
+  it('throws if called without an authenticated organization context (defense in depth)', async () => {
     const scans: ScanInput[] = [
       {
         id: 'scan-forged',
@@ -413,11 +486,48 @@ describe('processBulkScans', () => {
       },
     ];
 
-    const result = await processBulkScans(scans, mockTx as any);
-
-    expect(result.failed[0]?.error).toMatch(/organization context is required/);
+    // context is a required parameter at the type level, but this guards
+    // non-TS/`as any` callers from silently losing organizationId scoping
+    // on the qrCode lookup instead of failing closed.
+    await expect(
+      processBulkScans(scans, mockTx as any, undefined as any)
+    ).rejects.toThrow(/authenticated organization context/i);
+    expect(mockTx.qRCode.findMany).not.toHaveBeenCalled();
     expect(mockTx.shiftLog.findMany).not.toHaveBeenCalled();
     expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('scopes the qrCode lookup to the authenticated organization and excludes soft-deleted scan logs', async () => {
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-1',
+        scanUuid: 'uuid-1',
+        qrCode: 'qr-1',
+        scannedAt: new Date().toISOString(),
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+
+    await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(mockTx.qRCode.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { code: { in: ['qr-1'] }, organizationId: 'org_1' },
+        include: {
+          scanLogs: expect.objectContaining({
+            where: { deletedAt: null },
+          }),
+        },
+      })
+    );
   });
 
   it('allows modest device clock skew for an open shift', async () => {
