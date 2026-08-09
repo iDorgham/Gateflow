@@ -1,0 +1,86 @@
+apps/client-dashboard/src/lib/scans/bulk-sync.test.ts
+  s_4bf52075e62fb2::t_2180c2470b1bd4 50,57-63
+  s_4bf52075e62fb2::t_2ea99cc32fd752 298-301
+  s_4bf52075e62fb2::t_56fb896b45efe6 128,133-140
+  s_4bf52075e62fb2::t_48a35eebca2fda 66-69,109-112,142-145,190-193,248-251
+  s_4bf52075e62fb2::t_ad13eab243033a 272,281,289-295
+  s_4bf52075e62fb2::t_c84fcc09e526e7 64,107,187-188,245-246,296,477,489-495,500-530
+  s_4bf52075e62fb2::t_a82697404e44c0 164,181-186
+  s_4bf52075e62fb2::t_52dfbbc20fb715 93,100-106
+  s_4bf52075e62fb2::t_1927476c78f4fe 222,239-244
+  s_d5e38794ababb9::t_c82f63bd50edb8 531-532
+apps/admin-dashboard/src/app/api/admin/audit-logs/export/route.ts
+  s_4bf52075e62fb2::t_1b06030b6e6cf9 43-46
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/audit-logs/page.tsx
+  s_4bf52075e62fb2::t_3ec40ddb57aaf1 74-77
+apps/client-dashboard/src/app/api/qrcodes/route.ts
+  s_4bf52075e62fb2::t_ec606845ee9bd5 182
+  s_4bf52075e62fb2::t_325e82d33700ea 249-253
+  s_4bf52075e62fb2::t_fa9a185119e9e0 272,276
+apps/client-dashboard/src/app/api/artifacts/route.ts
+  s_4bf52075e62fb2::t_5a71bcf5ee9391 102
+packages/db/src/tenant.test.ts
+  s_4bf52075e62fb2::t_cba66cf60b124e 40-43
+  s_4bf52075e62fb2::t_9e70c37f1d17c0 221-230
+  s_d5e38794ababb9::t_6f8086dee409ad 231-232
+apps/client-dashboard/src/app/api/qrcodes/export/route.ts
+  s_4bf52075e62fb2::t_84f462f9f3d833 224
+  s_4bf52075e62fb2::t_94145fa2c0fa03 271,275
+  s_4bf52075e62fb2::t_b6028f01c29300 168-171
+apps/client-dashboard/src/app/api/artifacts/route.test.ts
+  s_d5e38794ababb9::t_407fc371f7cebc 162-165
+  s_4bf52075e62fb2::t_bdf5776ca7deee 98,100,123,128-141
+  s_d5e38794ababb9::t_8e0c77ec2f0723 11-14,80-86,94-97,99,105-107,117-122,124-127,159-161
+packages/db/scripts/debug-qrcodes.ts
+  s_4bf52075e62fb2::t_d6624014664197 27-28
+apps/client-dashboard/src/app/api/qrcodes/export/route.test.ts
+  s_d5e38794ababb9::t_407fc371f7cebc 137-138
+  s_4bf52075e62fb2::t_2815adbd764325 126-136
+  s_d5e38794ababb9::t_6e7a2174088b19 23-26,113-120
+packages/db/tsconfig.json
+  s_4bf52075e62fb2::t_80c51827db9869 7
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/scans/page.tsx
+  s_4bf52075e62fb2::t_09171ae07d0e5b 73-76
+packages/db/prisma/migrations/20260807120000_add_scanlog_incident_soft_delete/migration.sql
+  s_4bf52075e62fb2::t_10f6f489dc3d98 8-14
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/scans/page.tsx
+  s_4bf52075e62fb2::t_d56081aa67fb4e 170-174
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_4bf52075e62fb2::t_58dad1f94106a4 173,177,184
+  s_4bf52075e62fb2::t_49e7ff48cbee45 128
+  s_4bf52075e62fb2::t_7ae0a92a6109b2 130-138
+apps/client-dashboard/src/app/api/qrcodes/route.test.ts
+  s_4bf52075e62fb2::t_01adb37b2877a5 114-120,133-135
+  s_d5e38794ababb9::t_82cb8f308494a7 65-67,136-137
+apps/client-dashboard/src/app/api/workspace/restore/route.test.ts
+  s_4bf52075e62fb2::t_54ab15c7ca9008 181-265
+  s_4bf52075e62fb2::t_5bfe9030af4131 47-61,67-93
+  s_d5e38794ababb9::t_407fc371f7cebc 266
+  s_d5e38794ababb9::t_3f567227b30741 10-13,96-98,267
+packages/db/src/tenant.ts
+  s_4bf52075e62fb2::t_a4b50340dccc1c 94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "f54a97d1a7eb3d9b86f12bc25aa0151450729d5b",
+  "prompts": {},
+  "sessions": {
+    "s_4bf52075e62fb2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ddc7269d-1579-4063-bba7-6a3f0b6a076c",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d5e38794ababb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f3658dd-de85-4889-8116-b3bec4f4cc71",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
