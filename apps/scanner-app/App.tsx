@@ -287,14 +287,19 @@ export default function App() {
   // First-run devices enter onboarding; otherwise the unlock gate.
   useEffect(() => {
     let active = true;
+    let completed = false;
     const fallbackTimer = setTimeout(() => {
-      if (active) setAppPhase('login');
+      if (active && !completed) {
+        completed = true;
+        setAppPhase('login');
+      }
     }, 2000);
 
     getValidAccessToken()
       .then(async (token) => {
-        if (!active) return;
+        if (!active || completed) return;
         clearTimeout(fallbackTimer);
+        completed = true;
         if (!token) {
           setAppPhase('login');
           return;
@@ -302,8 +307,9 @@ export default function App() {
         setAppPhase(await nextPhaseAfterAuth());
       })
       .catch(() => {
-        if (!active) return;
+        if (!active || completed) return;
         clearTimeout(fallbackTimer);
+        completed = true;
         setAppPhase('login');
       });
 

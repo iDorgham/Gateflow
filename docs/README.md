@@ -24,7 +24,7 @@ _Enterprise-grade architecture with 6 interconnected applications_
 | **Guides**                    | [`guides/`](guides/)                           | Security, env vars, UI, automation, performance, marketing creative, design drafts        |
 | **Development & AI workflow** | [`development/`](development/README.md)        | Plan templates, guidelines, learning logs, `initiatives/` (`IDEA_*.md`), brainstorming    |
 | **Plans**                     | [`plan/`](plan/README.md)                      | **Draft / Ready / Active / Complete** + `backlog/` only                                   |
-| **NotebookLM Sources**        | [`NOTEBOOKLM_README.md`](NOTEBOOKLM_README.md) | Dedicated structured sources for Google NotebookLM AI ingestion (`NOTEBOOKLM_01` to `05`) |
+| **NotebookLM Sources**        | [`NOTEBOOKLM_README.md`](NOTEBOOKLM_README.md) | Dedicated structured sources for Google NotebookLM AI ingestion (`NOTEBOOKLM_01` to `09` + README) |
 | **Archive**                   | [`archive/`](archive/)                         | Legacy PRDs, old plans, logs                                                              |
 | **Tools**                     | [`tools/`](tools/)                             | Antigravity / tooling notes                                                               |
 

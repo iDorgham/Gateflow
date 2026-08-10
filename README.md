@@ -82,7 +82,7 @@
 | **Product**     | Multi-tenant physical-access, visitor-management, and growth platform                |
 | **Surfaces**    | Six product applications plus an internal design-system application                  |
 | **Web Tech**    | Next.js 16, React 19, TypeScript, and Tailwind CSS                                   |
-| **Mobile Tech** | Expo SDK 54 and React Native for residents and gate security                         |
+| **Mobile Tech** | Expo SDK 57 and React Native for residents and gate security                         |
 | **Data Layer**  | PostgreSQL 16, Prisma ORM, and tenant-scoped domain isolation                        |
 | **Security**    | Cryptographically signed QR credentials, RBAC, AES-256 encrypted offline queue       |
 | **Markets**     | Built for Middle Eastern & international operations (Arabic & English, full RTL/LTR) |
@@ -191,7 +191,7 @@ GateFlow follows an enterprise monorepo structure managed by **Turborepo** and *
 │   ├── admin-dashboard            # Platform Admin Operations (Next.js 16)
 │   ├── client-dashboard           # B2B Property Manager Control Tower (Next.js 16)
 │   ├── marketing                  # Public Landing & Growth Funnels (Next.js 16)
-│   ├── resident-mobile            # Native Resident Mobile App (Expo SDK 54)
+│   ├── resident-mobile            # Native Resident Mobile App (Expo SDK 57)
 │   ├── resident-portal            # Web Resident Self-Service (Next.js 16)
 │   └── scanner-app               # Offline-First Gate Verification (React Native)
 ├── /packages                      # Shared Infrastructure Packages

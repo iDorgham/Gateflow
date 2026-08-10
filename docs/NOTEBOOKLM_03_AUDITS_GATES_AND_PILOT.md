@@ -63,11 +63,12 @@ Residual follow-up: credential-rotation receipt for Phase 1 secrets (non-blockin
 
 ### Included Checks
 
-1. **Lint** — ESLint across all workspaces.
-2. **Typecheck** — Full TypeScript type-checking including all dashboards (restored in audit remediation Phase 3).
-3. **Tests** — Jest test suites with skipped-test and `--forceExit` budgets.
-4. **Security scanners** — Repo secret scanner, dependency audit; scanners fail on zero-file / unavailable advisory results.
-5. **Build readiness** — Turborepo build chain validation.
+1. **Changelog** — Validates workspace changelog entries (`docs:changelog:check`).
+2. **ADS Design** — Enforces Atlassian Design System token usage (`check:ads`).
+3. **Bootstrap Routes** — Verifies admin bootstrap route is disabled in deployable builds (`check:bootstrap-routes`).
+4. **Lint** — ESLint across all workspaces.
+5. **Typecheck** — Full TypeScript type-checking including all dashboards (restored in audit remediation Phase 3).
+6. **Tests** — Jest test suites with skipped-test and `--forceExit` budgets.
 
 ### Important Usage Rules
 
@@ -142,7 +143,7 @@ GateFlow Workflow v2 uses an evidence-based, zero-manual-checkbox certification 
 - **QR signing pipeline** — HMAC-SHA256 sign/verify end-to-end.
 - **JWT auth** — Argon2id + 15-min access / 30-day refresh with rotation.
 - **Multi-tenancy isolation** — `organizationId` scoping consistent across API routes.
-- **Soft deletes** — `deletedAt: null` applied uniformly.
+- **Soft deletes** — `deletedAt: null` filtering applied to tenant-facing reads on soft-deletable models; global-admin forensic queries explicitly retain visibility of soft-deleted records for audit purposes.
 - **CSRF protection** — Double-submit cookie pattern.
 - **Rate limiting** — Upstash Redis wired to sensitive endpoints.
 - **Offline-first scanner** — AES-256 + PBKDF2 encryption; LWW sync.

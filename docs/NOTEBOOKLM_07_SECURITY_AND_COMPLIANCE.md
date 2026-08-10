@@ -15,7 +15,7 @@ GateFlow is a **zero-trust digital gate infrastructure**. Security is enforced a
 | #   | Invariant                                                                                     | Where Enforced                         |
 | --- | --------------------------------------------------------------------------------------------- | -------------------------------------- |
 | 1   | Every tenant query **must** include `organizationId` scope.                                   | Contracts, core rules, tenant DB guard |
-| 2   | Soft deletes only — filter `deletedAt: null`; never hard-delete tenant data.                  | Contracts, schema, Prisma queries      |
+| 2   | Soft deletes only — filter `deletedAt: null` on tenant-facing reads for models with `deletedAt`; never hard-delete tenant data. (Exception: global-admin forensic queries explicitly include soft-deleted records for audit trail visibility.) | Contracts, schema, Prisma queries      |
 | 3   | QR payloads **must** be HMAC-SHA256 signed with `QR_SIGNING_SECRET`.                          | QR create/validate routes              |
 | 4   | Tokens stored in **secure cookies** (web) or **SecureStore** (mobile) — never `localStorage`. | Auth helpers, scanner/resident apps    |
 | 5   | `scanUuid` is the deduplication key for scan sync — contract must not change.                 | Offline queue, bulk sync API           |

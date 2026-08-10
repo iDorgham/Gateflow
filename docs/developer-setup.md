@@ -89,7 +89,7 @@ Create a `.env.local` file at the root of the repository.
 | `ENCRYPTION_MASTER_KEY` | AES-256 field encryption key        | 32-byte secret key                                                   |
 | `ADMIN_ACCESS_KEY`      | Platform administrative key         | Used for platform admin operations                                   |
 
-> For the complete matrix including per-app configuration and optional services (Redis, AI, Meta CAPI, Stripe), refer to [docs/guides/ENVIRONMENT_VARIABLES.md](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/guides/ENVIRONMENT_VARIABLES.md) and the root `.env.example` file.
+> For the complete matrix including per-app configuration and optional services (Redis, AI, Meta CAPI, Stripe), refer to [docs/guides/ENVIRONMENT_VARIABLES.md](guides/ENVIRONMENT_VARIABLES.md) and the root `.env.example` file.
 
 ---
 

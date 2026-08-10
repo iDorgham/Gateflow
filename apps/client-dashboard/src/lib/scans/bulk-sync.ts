@@ -162,7 +162,12 @@ export async function processBulkScans(
             // constraint that soft-delete does not release, so this idempotency
             // check must see soft-deleted rows too or a re-sync would attempt to
             // recreate a row with a scanUuid that's still taken and fail.
-            where: { scanUuid: { in: scanUuids } },
+            // Tenant-scoped: only check scanUuid collisions within this org to prevent
+            // cross-tenant UUID from blocking legitimate scans.
+            where: {
+              scanUuid: { in: scanUuids },
+              qrCode: { organizationId: context.organizationId },
+            },
             select: { id: true, scanUuid: true },
           })
         : Promise.resolve([]),

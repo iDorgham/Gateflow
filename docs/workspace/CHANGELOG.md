@@ -4,7 +4,7 @@
 
 ### Added
 
-- NotebookLM Knowledge Base Source Suite (`NOTEBOOKLM_01` through `NOTEBOOKLM_05` + `NOTEBOOKLM_README.md`) under `docs/` providing comprehensive AI-ready architecture, database, PRD, and audit sources.
+- NotebookLM Knowledge Base Source Suite (`NOTEBOOKLM_01` through `NOTEBOOKLM_09` + `NOTEBOOKLM_README.md`) under `docs/` providing comprehensive AI-ready architecture, database, PRD, and audit sources.
 - Data Retention & Legal Hold system (`retention-executor.ts`, schema migration `add_retention_legal_hold`, soft-deletes for `ScanLog` & `Incident`).
 - Workflow v2 state, fixed pilot sequence, atomic transitions, evidence-bound
   certification receipts, app registry, route inventory, page scoring,

@@ -2,16 +2,16 @@
 
 ## 1. Top-Level Repository Directory Layout
 
-```
+```text
 Gate-Access/
 ├── apps/                        # Application sub-projects
 │   ├── admin-dashboard/         # Super-admin control plane (Next.js 15)
 │   ├── client-dashboard/        # Tenant/property management console (Next.js 15)
 │   ├── design-system/           # Storybook / component catalog
 │   ├── marketing/               # Public landing pages & marketing site (Next.js 15)
-│   ├── resident-mobile/         # Native resident app (React Native / Expo SDK 54)
+│   ├── resident-mobile/         # Native resident app (React Native / Expo SDK 57)
 │   ├── resident-portal/         # Resident web/PWA app (Next.js 15)
-│   └── scanner-app/             # Gate guard scanner app (React Native / Expo SDK 54)
+│   └── scanner-app/             # Gate guard scanner app (React Native / Expo SDK 57)
 ├── packages/                    # Shared workspace libraries & code
 │   ├── api-client/              # Typed API HTTP wrappers
 │   ├── config/                  # Shared tsconfig, tailwind, eslint configs

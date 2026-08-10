@@ -102,7 +102,7 @@ High-speed, one-handed mobile field application for security guards at compound 
 
 ### Architecture
 
-- Expo SDK 54 / React Native
+- Expo SDK 57 / React Native
 - Tab-driven UX (not Next.js App Router)
 - Jest unit tests for critical paths
 
@@ -254,7 +254,7 @@ Public acquisition and conversion surface. SEO, localized pricing, lead ingestio
 
 ### Purpose
 
-Interactive Storybook/documentation catalog for shared UI components (`@gate-access/ui`).
+Interactive Storybook/documentation catalog for shared UI components (`@gateflow/ui`).
 
 ### Current Reality
 
@@ -282,7 +282,7 @@ Standalone app is a future revival candidate.
 | ------------------------- | --------------------- | -------------------------------------------------- |
 | `@gate-access/db`         | `packages/db`         | Prisma schema, client, migrations, seed utilities  |
 | `@gate-access/types`      | `packages/types`      | Shared TypeScript contracts and enums              |
-| `@gate-access/ui`         | `packages/ui`         | Shared UI component library and design tokens      |
+| `@gateflow/ui`         | `packages/ui`         | Shared UI component library and design tokens      |
 | `@gate-access/i18n`       | `packages/i18n`       | Arabic/English dictionaries and locale hooks       |
 | `@gate-access/api-client` | `packages/api-client` | Typed HTTP client wrappers                         |
 | `@gate-access/config`     | `packages/config`     | Shared ESLint, TypeScript, Tailwind configurations |

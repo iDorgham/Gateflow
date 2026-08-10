@@ -7,7 +7,7 @@
 | **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                 |
 | **Status**     | Production MVP · Workflow v2 Client Dashboard pilot focus                  |
 | **Phase**      | Phase 1 & 2 Complete; Phase 3 (Marketing Suite) future                     |
-| **Tech Stack** | Next.js 16 · Expo SDK 54 · PostgreSQL 15 · Prisma 5 · pnpm 8 · Turborepo 2 |
+| **Tech Stack** | Next.js 16 · Expo SDK 57 · PostgreSQL 16 · Prisma 6.19.3 · pnpm 8 · Turborepo 2 |
 
 ### MVP Completion Status
 
