@@ -31,4 +31,4 @@ Each implementation phase follows a standardized execution loop:
 ## 3. Backlog & Initiative Tracking
 
 All active, upcoming, and completed tasks are tracked centrally in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
-Changes to plan locations or completion status are automatically synced to the backlog index to maintain alignment across human developers and AI assistants (`/guide` and `/man` workflows).
+This is a required manual step, not automatic: after moving a plan between `Draft/`, `Ready/`, `Active/`, and `Complete/`, update `ALL_TASKS_BACKLOG.md` (paths and status) so it — and the `/guide` and `/man` workflows that read it — stay aligned with the filesystem layout.

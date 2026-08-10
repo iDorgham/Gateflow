@@ -26,7 +26,7 @@
   <a href="#-what-is-gateflow">Product</a> •
   <a href="#-choose-your-path">Choose Your Path</a> •
   <a href="#-application-ecosystem">Applications</a> •
-  <a href="#-master-architecture">Architecture</a> •
+  <a href="#master-architecture">Architecture</a> •
   <a href="#-getting-started">Quick Start</a> •
   <a href="docs/INDEX.md">Documentation</a>
 </p>
@@ -46,8 +46,8 @@
   - [Gate operations and growth](#gate-operations-and-growth)
   - [Product foundation](#product-foundation)
   - [How the applications connect](#how-the-applications-connect)
-- [🏛️ Master Architecture](#-master-architecture)
-- [🛡️ Strategic Core Pillars](#-strategic-core-pillars)
+- [🏛️ Master Architecture](#master-architecture)
+- [🛡️ Strategic Core Pillars](#strategic-core-pillars)
 - [⚡ Getting Started](#-getting-started)
   - [Quick Start (2 Commands)](#quick-start-2-commands)
   - [Monorepo Dev Server Commands](#monorepo-dev-server-commands)
@@ -106,7 +106,7 @@ Whether you are evaluating GateFlow for property operations or building on the p
 Evaluate GateFlow's operational value, visitor workflows, physical-to-digital ROI, and multi-tenant security control towers.
 
 - 📱 **[Application Ecosystem](#-application-ecosystem)** — Explore dashboards, portals, and mobile apps.
-- 🛡️ **[Strategic Core Pillars](#-strategic-core-pillars)** — Learn about zero-trust security & marketing attribution.
+- 🛡️ **[Strategic Core Pillars](#strategic-core-pillars)** — Learn about zero-trust security & marketing attribution.
 - 🔒 **[Security & Compliance](#-security--compliance)** — Understand data privacy, audit trails, and RBAC.
 - 📈 **[Marketing Suite & Attribution](docs/reference/product/MARKETING_SUITE.md)** — Deep dive into physical ad attribution.
 - 📋 **[PRD Specification](docs/reference/product/PRD.md)** — Review full product requirements and feature matrices.
@@ -118,7 +118,7 @@ Evaluate GateFlow's operational value, visitor workflows, physical-to-digital RO
 
 Explore monorepo architecture, technology stack, zero-trust QR cryptography, local setup, and automation tooling.
 
-- 🏛️ **[Master Architecture](#-master-architecture)** — Monorepo structure, apps, and shared packages.
+- 🏛️ **[Master Architecture](#master-architecture)** — Monorepo structure, apps, and shared packages.
 - ⚡ **[Getting Started](#-getting-started)** — Lightweight quick start to launch local servers.
 - 📖 **[Full Developer Setup Guide](docs/developer-setup.md)** — Detailed step-by-step environment & DB setup.
 - 🤖 **[Automation Tooling Guide](docs/guides/AUTOMATION_GUIDE.md)** — CLI scripts, hooks, and execution workflows.

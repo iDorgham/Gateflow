@@ -81,6 +81,37 @@ describe('processBulkScans', () => {
     expect(createdData[0].auditTrail[0].action).toBe('sync_create');
   });
 
+  it('scopes the scanUuid idempotency lookup to the calling organization', async () => {
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-1',
+        scanUuid: 'uuid-1',
+        qrCode: 'qr-1',
+        scannedAt: new Date().toISOString(),
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+
+    await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(mockTx.scanLog.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          scanUuid: { in: ['uuid-1'] },
+          qrCode: { organizationId: 'org_1' },
+        }),
+      })
+    );
+  });
+
   it('should handle idempotent duplicates (same scanUuid)', async () => {
     const scans: ScanInput[] = [
       {

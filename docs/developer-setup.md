@@ -213,7 +213,7 @@ Individual app production start commands are defined in each app's `package.json
 
 ## 📚 Related Documentation
 
-- [Environment Variables Reference](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/guides/ENVIRONMENT_VARIABLES.md)
-- [Automation & Tooling Guide (Ralph Loop)](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/guides/AUTOMATION_GUIDE.md)
-- [Infrastructure & Deployment Guide](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/infra/README.md)
-- [Master Architecture Reference](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/reference/architecture/ARCHITECTURE.md)
+- [Environment Variables Reference](guides/ENVIRONMENT_VARIABLES.md)
+- [Automation & Tooling Guide (Ralph Loop)](guides/AUTOMATION_GUIDE.md)
+- [Infrastructure & Deployment Guide](../infra/README.md)
+- [Master Architecture Reference](reference/architecture/ARCHITECTURE.md)
