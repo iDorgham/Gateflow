@@ -1,0 +1,25 @@
+docs/developer-setup.md
+  s_d5e38794ababb9::t_41f9a6e63be77f 216-219
+docs/NOTEBOOKLM_04_PLANS_AND_DEVELOPMENT.md
+  s_d5e38794ababb9::t_5d6fdc7061f824 34
+apps/client-dashboard/src/lib/scans/bulk-sync.test.ts
+  s_d5e38794ababb9::t_1d52a1e27a6674 84-114
+README.md
+  s_d5e38794ababb9::t_fce4adc8e14dcf 29,49-50,109,121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "bf0f3c7d1bb4813300a3af3ba9d21934bac16a08",
+  "prompts": {},
+  "sessions": {
+    "s_d5e38794ababb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f3658dd-de85-4889-8116-b3bec4f4cc71",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
