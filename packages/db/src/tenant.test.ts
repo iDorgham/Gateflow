@@ -37,6 +37,10 @@ const mockPrisma = {
     findMany: jest.fn(async (_args?: unknown) => []),
     create: jest.fn(async (_args?: unknown) => ({ id: 'p1' })),
   },
+  incident: {
+    findFirst: jest.fn(async (_args?: unknown) => null),
+    findMany: jest.fn(async (_args?: unknown) => []),
+  },
 };
 
 import {
@@ -212,6 +216,18 @@ describe('Organization Context Isolation (ALS)', () => {
           }),
         })
       );
+    });
+
+    it('filters incident.findMany by organizationId and soft-delete', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.incident.findMany();
+
+      expect(mockPrisma.incident.findMany).toHaveBeenCalledWith({
+        where: {
+          organizationId: 'org-123',
+          deletedAt: null,
+        },
+      });
     });
 
     it('filters scanLog via gate.organizationId', async () => {

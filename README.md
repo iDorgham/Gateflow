@@ -1,4 +1,8 @@
-<h1 align="center">GateFlow</h1>
+<h1 align="center">
+  <br>
+  <b>GateFlow</b>
+  <br>
+</h1>
 
 <p align="center">
   <img src="assets/Images/gateflow-compound-access-cover-v10.png" alt="A young driver and happy golden-brown dog presenting a mobile access pass at a Red Sea residential compound" width="100%">
@@ -10,444 +14,320 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square" alt="CI status"></a>
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square" alt="CodeQL status"></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/release-0.3.0-6366f1?style=flat-square" alt="Release 0.3.0"></a>
+  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square&color=22c55e" alt="CI status"></a>
+  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square&color=3b82f6" alt="CodeQL status"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/release-v0.3.0-6366f1?style=flat-square" alt="Release 0.3.0"></a>
   <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 20 or later">
   <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm 8.15">
   <img src="https://img.shields.io/badge/license-proprietary-lightgrey?style=flat-square" alt="Proprietary license">
 </p>
 
 <p align="center">
-  <a href="#what-is-gateflow">Product</a> ·
-  <a href="#-application-ecosystem">Applications</a> ·
-  <a href="#-quick-start--local-development">Quick start</a> ·
-  <a href="#-master-architecture">Architecture</a> ·
+  <a href="#-what-is-gateflow">Product</a> •
+  <a href="#-choose-your-path">Choose Your Path</a> •
+  <a href="#-application-ecosystem">Applications</a> •
+  <a href="#master-architecture">Architecture</a> •
+  <a href="#-getting-started">Quick Start</a> •
   <a href="docs/INDEX.md">Documentation</a>
 </p>
 
----
-
-## What is GateFlow?
-
-**GateFlow is a multi-tenant access-management platform for gated compounds, residential communities, resorts, and other controlled properties.** It replaces phone calls, handwritten visitor lists, and disconnected gate tools with one secure flow shared by residents, visitors, security teams, and property operators.
-
-A resident creates a guest pass from the mobile app or web portal. The visitor receives a signed QR credential. At arrival, security validates that credential with the scanner app—even during an internet outage. The property team sees the result immediately in its operational dashboard, with a complete audit trail.
-
-| At a glance  | GateFlow                                                                     |
-| :----------- | :--------------------------------------------------------------------------- |
-| **Product**  | Multi-tenant physical-access and visitor-management platform                 |
-| **Surfaces** | Six product applications plus an internal design-system application          |
-| **Web**      | Next.js, React, TypeScript, and Tailwind CSS                                 |
-| **Mobile**   | Expo and React Native for residents and gate security                        |
-| **Data**     | PostgreSQL, Prisma, and a tenant-scoped domain model                         |
-| **Security** | Signed QR credentials, RBAC, encrypted offline queues, and audited overrides |
-| **Markets**  | Arabic and English, LTR and RTL, designed for MENA operations                |
-
-### Who it serves
-
-| User                   | What GateFlow gives them                                                                               |
-| :--------------------- | :----------------------------------------------------------------------------------------------------- |
-| **Residents**          | Fast guest invitations, reusable passes, arrival alerts, and visibility into visitor quotas.           |
-| **Visitors**           | A simple digital credential that removes calls, paper lists, and uncertainty at the gate.              |
-| **Security teams**     | Fast QR verification, offline operation, shift tools, incident workflows, and auditable overrides.     |
-| **Property teams**     | Live gate activity, resident and unit management, access policies, reporting, and operational control. |
-| **Platform operators** | Tenant onboarding, subscription oversight, cross-organization governance, and infrastructure health.   |
-
-### From invitation to verified entry
-
-1. **Create** — A resident or property operator creates a time-bound or recurring visitor pass.
-2. **Share** — GateFlow delivers a cryptographically signed QR credential through the resident's preferred channel.
-3. **Verify** — The guard scans the credential and validates its signature, access window, gate, and status.
-4. **Admit or deny** — The scanner returns a clear decision and records any supervised override or incident.
-5. **Sync and monitor** — Offline scans synchronize when connectivity returns, while dashboards surface activity in real time.
-
-### What this repository contains
-
-This repository is the GateFlow product monorepo. It contains six customer- and operator-facing applications, an internal design-system application, shared TypeScript packages, the Prisma data layer, localization resources, security primitives, tests, documentation, and deployment automation.
-
-The apps do not operate as separate products. They share the same organizations, properties, units, residents, passes, gates, scan events, permissions, and design language.
-
----
+<br>
 
 <details>
-<summary><b>Table of contents</b></summary>
+<summary><b>📖 Table of Contents</b></summary>
 
-- [Application Ecosystem](#-application-ecosystem)
-- [Upcoming features](#-upcoming-features)
-- [Quick Start & Local Development](#-quick-start--local-development)
-- [Master Architecture](#-master-architecture)
-- [Strategic Core Pillars](#-strategic-core-pillars)
-- [Security & Compliance](#-security--compliance)
-- [Recent Engineering Activity](#-recent-engineering-activity)
-- [Analytics & Intelligence](#-analytics--intelligence)
-- [Localization & i18n](#-localization--i18n)
-- [The Ralph Loop Automation](#-the-ralph-loop-automation)
-- [Performance & Governance](#-performance--governance)
-- [Documentation & Support](#-documentation--support)
+- [✨ What is GateFlow?](#-what-is-gateflow)
+  - [At a glance](#at-a-glance)
+  - [What this repository contains](#what-this-repository-contains)
+- [🎯 Choose Your Path](#-choose-your-path)
+- [📱 Application Ecosystem](#-application-ecosystem)
+  - [Property and platform operations](#property-and-platform-operations)
+  - [Resident and visitor experience](#resident-and-visitor-experience)
+  - [Gate operations and growth](#gate-operations-and-growth)
+  - [Product foundation](#product-foundation)
+  - [How the applications connect](#how-the-applications-connect)
+- [🏛️ Master Architecture](#master-architecture)
+- [🛡️ Strategic Core Pillars](#strategic-core-pillars)
+- [⚡ Getting Started](#-getting-started)
+  - [Quick Start (2 Commands)](#quick-start-2-commands)
+  - [Monorepo Dev Server Commands](#monorepo-dev-server-commands)
+- [🔒 Security & Compliance](#-security--compliance)
+- [🌐 Localization & i18n](#-localization--i18n)
+- [🧠 Analytics & Intelligence](#-analytics--intelligence)
+- [🤖 Custom Automation Tooling (internally called Ralph)](#-custom-automation-tooling-internally-called-ralph)
+- [📊 Performance & Governance](#-performance--governance)
+- [🔮 Upcoming Features & Activity](#-upcoming-features--activity)
+- [📚 Documentation Index](#-documentation-index)
 
 </details>
 
 ---
 
-## 🏗️ Application Ecosystem
+## ✨ What is GateFlow?
 
-GateFlow separates each audience into a focused application while keeping data, permissions, security rules, and UI foundations shared across the platform.
+**GateFlow is a multi-tenant access-management platform for gated compounds, residential communities, resorts, and controlled properties.** It replaces phone calls, paper visitor logs, and fragmented access control systems with one unified digital workflow shared by residents, visitors, security guards, and property operators.
+
+> [!IMPORTANT]
+>
+> ### 💡 Core Competitive Advantage
+>
+> **The first platform that closes the gap between digital advertising spend and physical gate access — tracking a visitor from ad click all the way to the actual residential gate and recording it as a real conversion.**
+>
+> By persisting UTM parameters and campaign metadata from initial ad engagement through pass creation to offline physical scanner validation, GateFlow triggers server-side conversion events (via Meta CAPI and GA4) upon physical entry—giving property developers and operators true end-to-end attribution on marketing campaigns.
+
+### At a glance
+
+| Dimension       | Details                                                                              |
+| :-------------- | :----------------------------------------------------------------------------------- |
+| **Product**     | Multi-tenant physical-access, visitor-management, and growth platform                |
+| **Surfaces**    | Six product applications plus an internal design-system application                  |
+| **Web Tech**    | Next.js 16, React 19, TypeScript, and Tailwind CSS                                   |
+| **Mobile Tech** | Expo SDK 57 and React Native for residents and gate security                         |
+| **Data Layer**  | PostgreSQL 16, Prisma ORM, and tenant-scoped domain isolation                        |
+| **Security**    | Cryptographically signed QR credentials, RBAC, AES-256 encrypted offline queue       |
+| **Markets**     | Built for Middle Eastern & international operations (Arabic & English, full RTL/LTR) |
+
+### What this repository contains
+
+This repository is the GateFlow product monorepo. It houses the complete source code for customer- and operator-facing applications, shared core packages, database schemas, local setup scripts, security primitives, unit/integration test suites, and deployment workflows.
+
+---
+
+## 🎯 Choose Your Path
+
+Whether you are evaluating GateFlow for property operations or building on the platform as a developer, jump directly to the section tailored to your role:
+
+<table width="100%">
+<tr>
+<td width="50%" valign="top">
+
+### 🏢 Property Managers & Decision Makers
+
+Evaluate GateFlow's operational value, visitor workflows, physical-to-digital ROI, and multi-tenant security control towers.
+
+- 📱 **[Application Ecosystem](#-application-ecosystem)** — Explore dashboards, portals, and mobile apps.
+- 🛡️ **[Strategic Core Pillars](#strategic-core-pillars)** — Learn about zero-trust security & marketing attribution.
+- 🔒 **[Security & Compliance](#-security--compliance)** — Understand data privacy, audit trails, and RBAC.
+- 📈 **[Marketing Suite & Attribution](docs/reference/product/MARKETING_SUITE.md)** — Deep dive into physical ad attribution.
+- 📋 **[PRD Specification](docs/reference/product/PRD.md)** — Review full product requirements and feature matrices.
+
+</td>
+<td width="50%" valign="top">
+
+### 💻 Developers & Technical Contributors
+
+Explore monorepo architecture, technology stack, zero-trust QR cryptography, local setup, and automation tooling.
+
+- 🏛️ **[Master Architecture](#master-architecture)** — Monorepo structure, apps, and shared packages.
+- ⚡ **[Getting Started](#-getting-started)** — Lightweight quick start to launch local servers.
+- 📖 **[Full Developer Setup Guide](docs/developer-setup.md)** — Detailed step-by-step environment & DB setup.
+- 🤖 **[Automation Tooling Guide](docs/guides/AUTOMATION_GUIDE.md)** — CLI scripts, hooks, and execution workflows.
+- 📚 **[Documentation Index](docs/INDEX.md)** — Complete index of technical specifications.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📱 Application Ecosystem
+
+GateFlow separates each user role into a dedicated, optimized application while sharing database models, security invariants, authorization rules, and UI design foundations.
 
 ### Property and platform operations
 
-| Application                                   | Primary users                                   | Responsibility                                                                                                                                            |
-| :-------------------------------------------- | :---------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[Client Dashboard](apps/client-dashboard)** | Property managers, community teams, supervisors | The operational control tower for properties, projects, units, residents, gates, teams, passes, live scan activity, incidents, watchlists, and reporting. |
-| **[Admin Dashboard](apps/admin-dashboard)**   | GateFlow platform administrators                | Platform-wide tenant onboarding, organization lifecycle management, subscriptions, global analytics, administrative access, and infrastructure health.    |
+| Application                                   | Primary users                             | Responsibility                                                                                                               |
+| :-------------------------------------------- | :---------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| **[Client Dashboard](apps/client-dashboard)** | Property managers, supervisors, operators | Operational control tower for properties, units, residents, gates, live scan activity, incidents, watchlists, and reporting. |
+| **[Admin Dashboard](apps/admin-dashboard)**   | Platform administrators                   | Global tenant onboarding, organization lifecycle management, subscriptions, cross-tenant analytics, and system health.       |
 
 ### Resident and visitor experience
 
-| Application                                 | Primary users                  | Responsibility                                                                                                                                            |
-| :------------------------------------------ | :----------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[Resident Mobile](apps/resident-mobile)** | Residents using iOS or Android | The native everyday experience for creating and sharing guest passes, managing recurring access, tracking quotas, and receiving arrival notifications.    |
-| **[Resident Portal](apps/resident-portal)** | Residents using a browser      | Web self-service for visitor and pass management, multi-unit access, detailed history, revocation, and account settings without requiring the mobile app. |
+| Application                                 | Primary users                  | Responsibility                                                                                                                 |
+| :------------------------------------------ | :----------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **[Resident Mobile](apps/resident-mobile)** | Residents using iOS or Android | Native mobile experience for instant guest invitations, recurring passes, quota tracking, and real-time arrival notifications. |
+| **[Resident Portal](apps/resident-portal)** | Residents using a web browser  | Web self-service portal for pass management, multi-unit access, pass revocation, and account management.                       |
 
 ### Gate operations and growth
 
-| Application                          | Primary users                      | Responsibility                                                                                                                                                         |
-| :----------------------------------- | :--------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[Scanner App](apps/scanner-app)**  | Guards and gate supervisors        | The frontline iOS/Android tool for rapid QR scanning, offline signature validation, encrypted scan queues, shift activity, supervisor overrides, and incident capture. |
-| **[Marketing Site](apps/marketing)** | Prospective customers and partners | The public bilingual website for product education, industry solutions, pricing, lead capture, SEO content, and conversion tracking.                                   |
+| Application                          | Primary users                      | Responsibility                                                                                                                          |
+| :----------------------------------- | :--------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Scanner App](apps/scanner-app)**  | Guards and gate supervisors        | Frontline mobile app for rapid QR scanning, offline signature validation, encrypted scan queues, shift tools, and supervised overrides. |
+| **[Marketing Site](apps/marketing)** | Prospective customers and partners | Public bilingual website for product showcases, industry solutions, lead capture, SEO content, and marketing funnels.                   |
 
 ### Product foundation
 
-| Workspace                               | Primary users           | Responsibility                                                                                                                              |
-| :-------------------------------------- | :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
-| **[Design System](apps/design-system)** | Designers and engineers | Interactive documentation for GateFlow tokens, UI primitives, product patterns, accessibility behavior, and Arabic/English RTL conventions. |
-| **[Shared Packages](packages)**         | All applications        | Database access, schemas, API clients, reusable UI, types, configuration, security helpers, and localization dictionaries.                  |
+| Workspace                               | Primary users           | Responsibility                                                                                                               |
+| :-------------------------------------- | :---------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| **[Design System](apps/design-system)** | Designers and engineers | Interactive documentation for Atlassian Design System (ADS) tokens, UI primitives, accessibility rules, and RTL conventions. |
+| **[Shared Packages](packages)**         | All applications        | Shared database access, Zod schemas, API clients, UI components, TypeScript types, and localization dictionaries.            |
 
-### How the apps connect
+### How the applications connect
 
 ```text
 Resident Mobile / Portal
           │ creates and shares a signed pass
           ▼
      Visitor QR credential
-          │ presented at the compound entrance
+          │ presented at the compound gate
           ▼
-       Scanner App ────── offline queue and sync
-          │ records verification and entry
+        Scanner App ────── offline queue & background sync
+          │ validates signature & records entry
           ▼
-      Client Dashboard ── live operations and reporting
+       Client Dashboard ── live operations & real-time analytics
           │
           └────────────── Admin Dashboard for platform governance
 ```
 
 ---
 
-## 🔮 Upcoming features
+## 🏛️ Master Architecture
 
-**Single source of truth:** [`docs/reference/product/UPCOMING.md`](docs/reference/product/UPCOMING.md) — active initiatives (with plan links), planning backlog, recently shipped highlights, and Q3 strategic goals.
-
-The README does **not** duplicate that document. Open **UPCOMING.md** for tables, sprint status, and initiative detail; refresh this section only when you want a new high-level teaser line here.
-
-> **Snapshot (see UPCOMING.md for live status):** Audit remediation 2026 phases 1–4 shipped · Design System + Admin Evolution complete · next Ready: resident-portal responsive · scanner onboarding.
-
----
-
-## 🚀 Quick Start & Local Development
-
-End state: **monorepo root** with Node 20+, **pnpm**, **PostgreSQL**, root **`.env.local`**, generated Prisma Client, schema applied (`db push` or migrations), and one or more **Next.js** or **Expo** dev servers running.
-
-### Prerequisites
-
-| Requirement        | Notes                                                                           |
-| :----------------- | :------------------------------------------------------------------------------ |
-| **Node.js ≥ 20**   | Matches `engines` in root `package.json`.                                       |
-| **pnpm 8.15**      | Repo pins `packageManager`; use **Corepack** (recommended) or a global install. |
-| **PostgreSQL 16+** | Local, Docker, or managed (Neon, Supabase, RDS, etc.).                          |
-| **Git**            | Clone, hooks (Husky), and CI-aligned workflows.                                 |
-
-**pnpm via Corepack (recommended):**
-
-```bash
-corepack enable
-corepack prepare pnpm@8.15.0 --activate
-```
-
-Optional: **Bun** (used for `@gate-access/db` tests), **Expo Go** or simulators for mobile apps.
-
-### 1. Clone the monorepo
-
-**HTTPS**
-
-```bash
-git clone https://github.com/iDorgham/Gateflow.git
-cd Gateflow
-```
-
-**SSH**
-
-```bash
-git clone git@github.com:iDorgham/Gateflow.git
-cd Gateflow
-```
-
-Your folder name may be `Gateflow`, `Gate-Access`, or another checkout name—what matters is that **`package.json`** and **`pnpm-workspace.yaml`** are at the current directory for all commands below.
-
-### 2. Create a PostgreSQL database
-
-Pick one approach:
-
-| Approach      | Example                                                                                                            |
-| :------------ | :----------------------------------------------------------------------------------------------------------------- |
-| **Local CLI** | `createdb gate_access` then build a URL like `postgresql://USER:PASSWORD@localhost:5432/gate_access?schema=public` |
-| **Docker**    | `docker run --name gateflow-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=gate_access -p 5432:5432 -d postgres:16`    |
-| **Hosted**    | Create a database in your provider’s UI and copy the connection string                                             |
-
-**Prisma** (`packages/db/prisma/schema.prisma`) uses **`DATABASE_URL`** and a **`directUrl`** from **`DIRECT_DATABASE_URL`**.
-
-- **Local Postgres (no Accelerate):** set **`DATABASE_URL`** and **`DIRECT_DATABASE_URL`** to the **same** direct connection string in **root** `.env.local`.
-- **Prisma Accelerate / pooled URL for runtime:** keep **`DATABASE_URL`** as the pooled/accelerate URL if your deployment requires it, but set **`DIRECT_DATABASE_URL`** to the **direct** Postgres URL for migrations, `db push`, and CLI.
-
-See also `packages/db/.env.example` and **[Environment variables](docs/guides/ENVIRONMENT_VARIABLES.md)**.
-
-### 3. Install dependencies
-
-```bash
-pnpm install
-```
-
-### 4. Environment variables (minimal mental model)
-
-| Variable                                  | Role                                                                   |
-| :---------------------------------------- | :--------------------------------------------------------------------- |
-| **`DATABASE_URL`**                        | App/runtime database access                                            |
-| **`DIRECT_DATABASE_URL`**                 | Prisma migrations & direct CLI (often same as `DATABASE_URL` locally)  |
-| **`NEXTAUTH_SECRET`**, **`NEXTAUTH_URL`** | Auth for Next.js apps                                                  |
-| **`QR_SIGNING_SECRET`**                   | HMAC for QR payloads (must align with scanner `EXPO_PUBLIC_QR_SECRET`) |
-| **`ENCRYPTION_MASTER_KEY`**               | Sensitive field encryption                                             |
-
-Full matrix, per-app keys, and optional services (Redis, AI, Stripe): **[ENVIRONMENT_VARIABLES.md](docs/guides/ENVIRONMENT_VARIABLES.md)** and root **`.env.example`**.
-
-### 5. Bootstrap the database (choose one path)
-
-#### Path A — Automated (recommended)
-
-```bash
-pnpm setup:dev
-```
-
-`scripts/dev/setup-dev.js` will, among other steps:
-
-1. Ensure dependencies (`pnpm install --frozen-lockfile`).
-2. Seed **root** `.env.local` from `.env.example` and prompt for critical secrets.
-3. Run **`pnpm db:generate`** (Prisma Client).
-4. Run **`prisma db push`** (good for a fresh dev database).
-5. Run **`pnpm check:env --app client`** (warnings are OK for optional keys).
-6. Install **Husky** hooks.
-
-If **`DIRECT_DATABASE_URL`** is missing from `.env.local`, add it (usually **identical** to `DATABASE_URL` for local Postgres).
-
-#### Path B — Manual
-
-```bash
-cp .env.example .env.local
-# Edit .env.local: DATABASE_URL, DIRECT_DATABASE_URL, NEXTAUTH_*, QR_SIGNING_SECRET, ENCRYPTION_MASTER_KEY, ADMIN_ACCESS_KEY, …
-pnpm db:generate
-pnpm --filter @gate-access/db exec prisma db push
-```
-
-**Versioned migrations** (instead of `db push`):
-
-```bash
-pnpm --filter @gate-access/db exec prisma migrate dev
-```
-
-**Inspect data:**
-
-```bash
-pnpm db:studio
-```
-
-**Env layering:** root `.env` / `.env.local` plus `apps/<app>/.env.local` (later wins). See `scripts/check/check-env.js` for how checks resolve files.
-
-**App-specific examples:** `apps/marketing/.env.example`, `apps/resident-mobile/.env.example`.
-
-### 6. Validate before you run UI
-
-```bash
-pnpm check:env              # all configured apps
-pnpm check:env:client       # client dashboard only
-pnpm preflight              # changelog + lint + typecheck + tests (slower CI-like gate)
-pnpm workflow:v2:guide      # Workflow v2 status / next command (state: `.ai/workflow-v2/state.json`)
-```
-
-### 7. Run development servers
-
-Commands are **Turborepo** wrappers from root `package.json` (`turbo dev` with a **filter**). **`pnpm dev`** runs **every** workspace that exposes a `dev` script—heavy on a laptop; prefer **filtered** commands for day-to-day work.
-
-| Command                  | Turbo / package    | What you get                          | Default URL / notes                        |
-| :----------------------- | :----------------- | :------------------------------------ | :----------------------------------------- |
-| **`pnpm dev`**           | all `dev` tasks    | Parallel dev for the whole monorepo   | High CPU/RAM; use when you need everything |
-| **`pnpm dev:client`**    | `client-dashboard` | Property / B2B dashboard + API routes | **http://localhost:3001**                  |
-| **`pnpm dev:admin`**     | `admin-dashboard`  | Platform admin                        | **http://localhost:3002**                  |
-| **`pnpm dev:marketing`** | `marketing`        | Public marketing site                 | **http://localhost:3000**                  |
-| **`pnpm dev:resident`**  | `resident-portal`  | Resident web portal                   | **http://localhost:3004**                  |
-| **`pnpm dev:scanner`**   | `scanner-app`      | Expo dev server (scanner)             | Terminal QR / Expo Go                      |
-| **`pnpm dev:mobile`**    | `resident-mobile`  | Expo dev server (resident)            | Terminal QR / Expo Go                      |
-
-**Custom filter (advanced):** same as scripts, e.g. `pnpm turbo dev --filter=client-dashboard`.
-
-Ports change if a port is already in use—always trust the terminal output.
-
-**Typical first session:** one terminal with **`pnpm dev:client`**. Add **`pnpm dev:admin`** when you need platform ops UI.
-
-**Production build (all packages that define `build`):**
-
-```bash
-pnpm build
-```
-
-Per-app production **start** scripts live in each app’s `package.json` (e.g. `next start` after `next build`).
-
-### 8. Mobile (Expo)
-
-1. Install **Expo Go** (device) or use **iOS Simulator** / **Android Emulator**.
-2. Run **`pnpm dev:scanner`** or **`pnpm dev:mobile`**.
-3. Open the URL or scan the QR from the CLI.
-
-**Scanner:** set **`EXPO_PUBLIC_API_URL`** (e.g. `http://localhost:3001/api` or your LAN IP for a physical device) and **`EXPO_PUBLIC_QR_SECRET`** to match **`QR_SIGNING_SECRET`**. Configure under `apps/scanner-app/.env` / `.env.local` or inherited env; use **`pnpm check:env`** if QR or auth fails.
-
-### 9. Optional: `setup.sh`
-
-Legacy bash helper (may create `apps/client-dashboard/.env.local`). Prefer **`pnpm setup:dev`** for one **root** `.env.local` aligned with `setup-dev.js`.
-
----
-
-## 🏗️ Master Architecture
-
-GateFlow follows a modern, enterprise-grade, scalable monorepo structure powered by **Turborepo** and **pnpm**, ensuring consistent versioning and
-high-speed delivery paths.
+GateFlow follows an enterprise monorepo structure managed by **Turborepo** and **pnpm**, delivering strict workspace boundaries and cached incremental builds.
 
 ```text
-/GateFlow (Root)
+/Gateflow (Monorepo Root)
 ├── /apps                          # Mission-Critical Applications
-│   ├── admin-dashboard            # Internal Platform Operations (Next.js 16)
-│   ├── client-dashboard           # B2B Property Manager Portal (Next.js 16)
-│   ├── marketing                  # Public Landing & SEO Funnels (Next.js 16)
-│   ├── resident-mobile            # Native iOS/Android Apps (Expo 54)
-│   ├── resident-portal            # Web-based Resident Utility (Next.js 16)
-│   └── scanner-app               # Field Verification (React Native, Offline-First)
-├── /packages                      # Shared Core Infrastructure
-│   ├── db                         # Prisma + Multi-tenant middleware + Seeding
-│   ├── ui                         # Atlassian Design System (ADS) Component Library
-│   ├── types                      # Universal TS Types & Zod Cross-App Schemas
-│   ├── i18n                       # Localized AR/EN Dictionaries
-│   ├── api-client                 # Shared Type-safe Fetch Utilities
-│   └── config                    # Shared ESLint + Tailwind + TSConfig Presets
-└── /scripts                       # The Ralph Loop Automation Backbone
+│   ├── admin-dashboard            # Platform Admin Operations (Next.js 16)
+│   ├── client-dashboard           # B2B Property Manager Control Tower (Next.js 16)
+│   ├── marketing                  # Public Landing & Growth Funnels (Next.js 16)
+│   ├── resident-mobile            # Native Resident Mobile App (Expo SDK 57)
+│   ├── resident-portal            # Web Resident Self-Service (Next.js 16)
+│   └── scanner-app               # Offline-First Gate Verification (React Native)
+├── /packages                      # Shared Infrastructure Packages
+│   ├── db                         # Prisma ORM, PostgreSQL schema & tenant isolation
+│   ├── ui                         # Atlassian Design System (ADS) UI library
+│   ├── types                      # Universal TypeScript types & Zod schemas
+│   ├── i18n                       # Localized AR/EN translation dictionaries
+│   ├── api-client                 # Type-safe API client wrappers
+│   └── config                    # Shared ESLint, Tailwind, & TSConfig presets
+├── /scripts                       # Engineering Automation Scripts (Ralph Tooling)
+└── /docs                          # Workspace & Product Documentation
 ```
 
 ---
 
 ## 🛡️ Strategic Core Pillars
 
-### 1. Cryptographic Access (Zero-Trust)
+### 1. Cryptographic Zero-Trust Access
 
-Verification happens exclusively on the edge. Every QR code contains a cryptographic proof of origin, ensuring gate operations continue even with zero connectivity. All sensitive field data is encrypted at rest using **AES-256**.
+Verification happens exclusively at the edge. Every visitor QR code contains a cryptographically signed HMAC payload. Security guards can scan and validate access passes instantly even during complete cellular or internet outages. All offline scan events are buffered in an AES-256 encrypted local storage queue and synchronized automatically when connectivity resumes.
 
 ### 2. Physical-to-Digital Marketing ROI
 
-The first platform to bridge the gap between digital spend and physical arrivals.
+GateFlow bridges the gap between online advertising campaigns and physical property arrivals:
 
-- **UTM Lifecycle Persistence**: Track visitors from ad-click (Meta/Google/SMS) to the physical scanner.
-- **Conversion APIs**: Automated server-side firing to Meta Pixel and GA4 upon gate entry.
+- **UTM Lifecycle Persistence**: Preserves campaign tracking metadata (`utm_source`, `utm_campaign`, ad IDs) from initial ad click through digital pass generation to physical gate arrival.
+- **Server-Side Conversion APIs**: Automatically triggers Meta Conversions API (CAPI) and Google Analytics 4 events when a visitor scans their pass at the physical gate.
 
 ### 3. Atlassian Design System (ADS) Foundation
 
-A global design token architecture ensures that brand identity, typography, and spacing are 100% consistent across web and native mobile interfaces.
+Built on global design tokens for color, typography, spacing, and elevation. Ensures 100% visual and behavioral consistency across Next.js web dashboards and React Native / Expo mobile surfaces.
+
+---
+
+## ⚡ Getting Started
+
+Launch your local development environment in minutes.
+
+### Quick Start (2 Commands)
+
+```bash
+# 1. Automated environment setup & database initialization
+pnpm setup:dev
+
+# 2. Launch the Client Dashboard (http://localhost:3001)
+pnpm dev:client
+```
+
+### Monorepo Dev Server Commands
+
+| Target Application      | Command              | Local Address           |
+| :---------------------- | :------------------- | :---------------------- |
+| **Client Dashboard**    | `pnpm dev:client`    | `http://localhost:3001` |
+| **Admin Dashboard**     | `pnpm dev:admin`     | `http://localhost:3002` |
+| **Marketing Site**      | `pnpm dev:marketing` | `http://localhost:3000` |
+| **Resident Portal**     | `pnpm dev:resident`  | `http://localhost:3004` |
+| **Scanner Mobile App**  | `pnpm dev:scanner`   | Expo CLI / Simulator    |
+| **Resident Mobile App** | `pnpm dev:mobile`    | Expo CLI / Simulator    |
+
+> [!TIP]
+> **Need detailed step-by-step instructions?**
+> Read the complete **[Developer Setup & Local Environment Guide](docs/developer-setup.md)** for PostgreSQL configuration, environment variable matrices, database seeding, mobile simulators, and troubleshooting.
 
 ---
 
 ## 🔒 Security & Compliance
 
-GateFlow is built with a "Security-by-Design" philosophy.
+GateFlow adheres to strict security-by-design standards across all applications:
 
-- **HMAC-SHA256 Signing**: Every QR pass is cryptographically signed and immutable.
-- **Fail-closed Tenant Isolation**: Request-local Prisma tenant context (`AsyncLocalStorage`) scopes `organizationId` and fails closed when context is missing.
-- **AES-256 Encryption**: Native encryption for sensitive offline scan queues.
-- **RBAC + API Guards**: Granular Role-Based Access Control; high-risk admin APIs use auth, validation, and rate limits.
-- **Shared Security Headers**: HSTS + CSP applied across Next.js apps; CMS HTML/CSS sanitized at trust boundaries.
-- **Trustworthy CI**: Repo scanners fail on zero-file or unavailable advisory results; full dashboard typecheck in preflight.
-
-See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)** for the 2026 audit remediation outcomes.
-
----
-## 📅 Recent Engineering Activity
-- **[Scanner]:** Phase 03 shift start/end and scan gate
-- **[Resident-Portal]:** CHECK_ALL 2026-07-29 focused check evidence (pilot blocked)
-- **[Resident-Portal]:** Phase 10 pilot gate and certification packet
-- **[Resident-Portal]:** Phase 09 i18n interim, logical CSS, and evidence
-- **[Resident-Portal]:** Phase 08 pilot UX revoke, share, and sign-out
-- **[Resident-Portal]:** Phase 07 API upstream, scannable QR, offline read
-
----
-
-## 🧠 Analytics & Intelligence
-
-Transforming physical arrivals into actionable data intelligence.
-
-- **Real-time Monitoring**: Server-Sent Events (SSE) push scan logs directly to administrative panels.
-- **GateAI Co-pilot**: An agentic intelligence layer to manage infrastructure via natural language.
-- **Advanced Charts**: High-density Recharts data visualization integrated into the "Resident CRM".
+- **HMAC-SHA256 QR Signing**: Every access credential is cryptographically signed and tamper-proof.
+- **Fail-Closed Tenant Isolation**: Request-local Prisma context (`AsyncLocalStorage`) automatically scopes queries by `organizationId` and fails closed if context is absent.
+- **AES-256 Encryption**: Native encryption applied to sensitive offline scan queues and database credentials.
+- **Granular RBAC**: Role-Based Access Control enforced at both API route and UI component levels.
+- **Security Headers**: HSTS, CSP, and CORS policies configured across Next.js applications; CMS content sanitized at trust boundaries.
 
 ---
 
 ## 🌐 Localization & i18n
 
-Engineered specifically for the Middle Eastern market.
+Engineered specifically for Middle Eastern and global operations:
 
-- **Arabic-First Design**: Full RTL (Right-to-Left) layout support for Arabic speakers.
-- **Zero-Friction Switching**: Clean, localized typography (Cairo font) for bi-directional support.
-- **Dynamic LTRS/RTL**: UI components automatically adjust dimensions based on the active locale.
+- **Arabic-First Design**: Native Right-to-Left (RTL) layout support across all web and mobile interfaces.
+- **Bi-Directional Typography**: Dynamic font rendering utilizing Cairo for Arabic and Inter for English.
+- **Zero-Friction Locale Switching**: Dynamic translation loading with zero layout shift (CLS).
 
 ---
 
-## 🚀 The Ralph Loop Automation
+## 🧠 Analytics & Intelligence
 
-Every routine engineering task is managed by **Ralph**, the GateFlow autonomous engineering backbone.
+- **Real-Time Scan Streaming**: Server-Sent Events (SSE) deliver live gate scan logs directly to control panels.
+- **GateAI Co-Pilot**: Operational assistant layer for infrastructure management via natural language.
+- **High-Density Dashboards**: Integrated Recharts data visualizations for visitor volume, peak hours, and resident CRM metrics.
 
-- **19+ Automation Scripts**: From hierarchical seeding to automated traffic emulation.
-- **5 Husky Git Hooks**: Enforcing committed secrets scanning, linting, and AI-tool sync.
-- **Phase Runner**: Plan-to-dev automation with explicit gates (lint, tests, docs checks per phase).
-- **Type-Safe Sync**: Cross-package synchronization for universal types and schemas.
+---
+
+## 🤖 Custom Automation Tooling (internally called Ralph)
+
+GateFlow's engineering lifecycle is accelerated by **custom automation tooling (internally called Ralph / Ralph Loop)**—a set of Node.js/Bash scripts, Husky git hooks, and phase verification tools located in `/scripts` and `.agents/`:
+
+- **Automated Seeding & Emulation**: CLI utilities to seed test data and emulate live gate traffic.
+- **Husky Git Hooks**: Enforces pre-commit secret scanning, code formatting, and pre-push verification.
+- **Phase Validation Runner**: Automates phased feature implementation with strict lint, test, and documentation checkpoints.
+- **Cross-Package Sync**: Keeps TypeScript schemas and localized dictionaries synchronized across all monorepo workspaces.
+
+For details, view the [Automation Tooling Guide](docs/guides/AUTOMATION_GUIDE.md).
 
 ---
 
 ## 📊 Performance & Governance
 
-Quality is enforced in **CI** (lint, typecheck, tests) and optional **Lighthouse** workflows; dependency alignment is tracked across workspaces.
-
-<p align="left">
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/lighthouse.yml"><img src="https://img.shields.io/badge/Lighthouse-workflow-FF6B35?style=for-the-badge&logo=lighthouse&logoColor=white" alt="Lighthouse workflow"></a>
-  <img src="https://img.shields.io/badge/Deps-pnpm_overrides-7C3AED?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm overrides">
-</p>
-
-- **Lighthouse initiative**: Goal is consistent **100/100** where applicable; track progress in **[UPCOMING.md](docs/reference/product/UPCOMING.md)** and the `lighthouse.yml` workflow—not a hard guarantee on every page at every commit.
-- **pnpm overrides**: Root `package.json` `pnpm.overrides` pins shared transitive versions across workspaces.
-- **CI/CD**: GitHub Actions for verification; web apps target **Vercel**, mobile via **Expo EAS** (see [`infra/README.md`](infra/README.md)).
+- **Lighthouse Strategy**: Targeting consistent 100/100 performance scores across marketing and portal surfaces (tracked in [UPCOMING.md](docs/reference/product/UPCOMING.md)).
+- **pnpm Dependency Pinning**: Root `pnpm.overrides` ensures unified transitive dependencies across all workspaces.
+- **Automated CI/CD**: GitHub Actions workflows validate builds, linting, and type checking. Web apps deploy to **Vercel**, mobile apps via **Expo EAS** (see [infra/README.md](infra/README.md)).
 
 ---
 
-## 📚 Documentation & Support
+## 🔮 Upcoming Features & Activity
 
-| Resource                                                          | Purpose                                                          |
-| :---------------------------------------------------------------- | :--------------------------------------------------------------- |
-| **[PRD (product reference)](docs/reference/product/PRD.md)**      | Technical product specification                                  |
-| **[UPCOMING.md](docs/reference/product/UPCOMING.md)**             | **Roadmap SSOT** — initiatives, shipped work, strategic goals    |
-| **[Environment variables](docs/guides/ENVIRONMENT_VARIABLES.md)** | Required and optional keys per app                               |
-| **[Marketing Suite](docs/reference/product/MARKETING_SUITE.md)**  | Physical attribution and growth                                  |
-| **[Automation guide](docs/guides/AUTOMATION_GUIDE.md)**           | Ralph Loop scripts and hooks                                     |
-| **[Infrastructure](infra/README.md)**                             | Vercel, EAS, and related deployment notes                        |
-| **[CHANGELOG](CHANGELOG.md)**                                     | Release history                                                  |
-| **[Docs index](docs/INDEX.md)**                                   | Generated map of `docs/` (run `pnpm docs:index` after doc moves) |
+> [!NOTE]
+> **Strategic Roadmap Single Source of Truth:**
+> For active feature initiatives, sprint plans, shipped features, and strategic goals, visit **[UPCOMING.md — Strategic Roadmap & Initiatives](docs/reference/product/UPCOMING.md)**.
+
+---
+
+## 📚 Documentation Index
+
+| Category           | Reference Document                                                | Purpose                                                  |
+| :----------------- | :---------------------------------------------------------------- | :------------------------------------------------------- |
+| **Product**        | **[PRD Specification](docs/reference/product/PRD.md)**            | Technical product requirements & feature matrix          |
+| **Setup**          | **[Developer Setup Guide](docs/developer-setup.md)**              | Step-by-step local environment & database setup          |
+| **Environment**    | **[Environment Variables](docs/guides/ENVIRONMENT_VARIABLES.md)** | Complete environment variable matrix per application     |
+| **Attribution**    | **[Marketing Suite](docs/reference/product/MARKETING_SUITE.md)**  | Physical attribution, CAPI integration, & growth funnels |
+| **Automation**     | **[Automation Guide](docs/guides/AUTOMATION_GUIDE.md)**           | Ralph Loop automation scripts, hooks, & CLI tooling      |
+| **Infrastructure** | **[Infrastructure Guide](infra/README.md)**                       | Vercel, Expo EAS, and deployment workflows               |
+| **History**        | **[CHANGELOG](CHANGELOG.md)**                                     | Version history and audit remediation outcomes           |
+| **Full Index**     | **[Docs Index](docs/INDEX.md)**                                   | Complete map of all repository documentation             |
 
 ---
 
@@ -461,6 +341,6 @@ Quality is enforced in **CI** (lint, typecheck, tests) and optional **Lighthouse
 </p>
 
 <div align="center">
-  <sub>Managed by the <b>Ralph Loop</b> Autonomous Engineering Infrastructure.</sub><br>
+  <sub>Accelerated by <b>Custom Automation Tooling</b> (internally called Ralph).</sub><br>
   <sub>&copy; 2026 GateFlow. All rights reserved.</sub>
 </div>

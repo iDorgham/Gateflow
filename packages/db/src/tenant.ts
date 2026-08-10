@@ -91,6 +91,7 @@ const SOFT_DELETE_MODELS = new Set([
   'gateAssignment',
   'gate',
   'watchlistEntry',
+  'incident',
   'qRCode',
   'webhook',
   'tag',

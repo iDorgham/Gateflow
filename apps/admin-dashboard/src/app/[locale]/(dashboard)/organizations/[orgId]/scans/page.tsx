@@ -1,5 +1,8 @@
 import React from 'react';
-import { requireAdmin } from '@/lib/admin-auth';
+import {
+  requireAdmin,
+  FORENSIC_VIEW_NO_DELETED_AT_FILTER,
+} from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
@@ -70,7 +73,8 @@ export default async function AdminScansPage(props: {
     'MAX_USES_REACHED',
     'INACTIVE',
   ]);
-  const where: Record<string, unknown> = { deletedAt: null };
+  // Intentionally no deletedAt filter — see FORENSIC_VIEW_NO_DELETED_AT_FILTER.
+  const where: Record<string, unknown> = {};
   if (statusFilter && VALID_STATUSES.has(statusFilter))
     where.status = statusFilter;
   if (fromDate || toDate) {

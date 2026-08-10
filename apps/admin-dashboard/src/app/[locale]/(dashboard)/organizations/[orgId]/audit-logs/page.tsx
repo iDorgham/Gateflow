@@ -1,4 +1,7 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import {
+  requireAdmin,
+  FORENSIC_VIEW_NO_DELETED_AT_FILTER,
+} from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
@@ -71,7 +74,8 @@ export default async function AuditLogsPage(props: {
   const fromDate = fromRaw && !isNaN(fromRaw.getTime()) ? fromRaw : undefined;
   const toDate = toRaw && !isNaN(toRaw.getTime()) ? toRaw : undefined;
 
-  const where: Record<string, unknown> = { deletedAt: null };
+  // Intentionally no deletedAt filter — see FORENSIC_VIEW_NO_DELETED_AT_FILTER.
+  const where: Record<string, unknown> = {};
   if (statusFilter) where.status = statusFilter;
   if (uuidFilter)
     where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };

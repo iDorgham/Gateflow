@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
-import { isAdminAuthorized } from '@/lib/admin-auth';
+import {
+  isAdminAuthorized,
+  FORENSIC_VIEW_NO_DELETED_AT_FILTER,
+} from '@/lib/admin-auth';
 
 function escapeCSV(value: unknown): string {
   if (value === null || value === undefined) return '';
@@ -40,7 +43,8 @@ export async function GET(request: NextRequest) {
     'MAX_USES_REACHED',
     'INACTIVE',
   ]);
-  const where: Record<string, unknown> = { deletedAt: null };
+  // Intentionally no deletedAt filter — see FORENSIC_VIEW_NO_DELETED_AT_FILTER.
+  const where: Record<string, unknown> = {};
   if (statusFilter && VALID_STATUSES.has(statusFilter))
     where.status = statusFilter;
   if (uuidFilter)

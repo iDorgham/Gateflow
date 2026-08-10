@@ -135,3 +135,23 @@ export async function clearAdminSession(): Promise<void> {
   const jar = await cookies();
   jar.delete(COOKIE_NAME);
 }
+
+/**
+ * Global-admin forensic query marker.
+ *
+ * Admin dashboard views (audit logs, scan logs, incidents) intentionally omit
+ * `deletedAt` filtering to preserve forensic visibility of soft-deleted records.
+ *
+ * Context: reset-tenant soft-deletes ScanLog/Incident "for forensic purposes";
+ * these admin forensic views are the place where that purpose requires them to
+ * stay visible.
+ *
+ * Usage: Import this constant and reference it in a comment where you would
+ * otherwise add a `deletedAt: null` filter, documenting that the omission is
+ * intentional and centrally justified here.
+ *
+ * Callers MUST have already performed admin authorization (requireAdmin or
+ * isAdminAuthorized) before building queries that reference this marker.
+ */
+export const FORENSIC_VIEW_NO_DELETED_AT_FILTER =
+  'Global-admin forensic view — soft-deleted records intentionally visible' as const;

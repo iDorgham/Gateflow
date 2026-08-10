@@ -20,7 +20,10 @@ jest.mock('next/server', () => {
     headers: Headers;
     body: unknown;
 
-    constructor(body: unknown, init?: { status?: number; headers?: Record<string, string> }) {
+    constructor(
+      body: unknown,
+      init?: { status?: number; headers?: Record<string, string> }
+    ) {
       this.body = body;
       this.status = init?.status ?? 200;
       this.headers = new Headers(init?.headers ?? {});
@@ -107,13 +110,31 @@ describe('GET /api/qrcodes/export', () => {
       },
     ]);
 
-    const resUnknown = await GET(makeGetRequest('?search=ABC&sortBy=code&sortOrder=asc'));
-    const res = resUnknown as { status: number; headers: Headers; body: unknown };
+    const resUnknown = await GET(
+      makeGetRequest('?search=ABC&sortBy=code&sortOrder=asc')
+    );
+    const res = resUnknown as {
+      status: number;
+      headers: Headers;
+      body: unknown;
+    };
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toContain('text/csv');
     expect(res.headers.get('Content-Disposition')).toContain('qrcodes-');
     expect(mockAuditCreate).toHaveBeenCalled();
     expect(mockQRCodeFindMany).toHaveBeenCalled();
+
+    const call = mockQRCodeFindMany.mock.calls[0]?.[0] as {
+      include: {
+        _count?: {
+          select?: { scanLogs?: { where?: { deletedAt?: unknown } } };
+        };
+        scanLogs?: { where?: { deletedAt?: unknown } };
+      };
+    };
+    // Soft-deleted scan logs must not count toward the exported scans-count
+    // or last-scan-timestamp columns.
+    expect(call.include._count?.select?.scanLogs?.where?.deletedAt).toBeNull();
+    expect(call.include.scanLogs?.where?.deletedAt).toBeNull();
   });
 });
-

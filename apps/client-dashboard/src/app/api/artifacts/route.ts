@@ -99,7 +99,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (incidentId) {
       const incident = await prisma.incident.findFirst({
-        where: { id: incidentId, organizationId: orgId },
+        where: { id: incidentId, organizationId: orgId, deletedAt: null },
       });
       if (!incident) {
         return NextResponse.json(

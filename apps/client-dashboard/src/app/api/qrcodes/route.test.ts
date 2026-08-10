@@ -62,7 +62,9 @@ function makeGetRequest(qs = '') {
 }
 
 describe('GET /api/qrcodes — filtering & org scope', () => {
-  let GET: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+  let GET: (
+    req: unknown
+  ) => Promise<{ status: number; json: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -109,7 +111,13 @@ describe('GET /api/qrcodes — filtering & org scope', () => {
         OR?: unknown[];
         createdAt?: unknown;
         expiresAt?: unknown;
-        scanLogs?: { some?: { scannedAt?: unknown } };
+        scanLogs?: { some?: { deletedAt?: unknown; scannedAt?: unknown } };
+      };
+      include: {
+        _count?: {
+          select?: { scanLogs?: { where?: { deletedAt?: unknown } } };
+        };
+        scanLogs?: { where?: { deletedAt?: unknown } };
       };
     };
     expect(call.where.organizationId).toBe(orgId);
@@ -122,6 +130,11 @@ describe('GET /api/qrcodes — filtering & org scope', () => {
     expect(call.where.createdAt).toBeDefined();
     expect(call.where.expiresAt).toBeDefined();
     expect(call.where.scanLogs?.some?.scannedAt).toBeDefined();
+    // Soft-deleted scan logs must not count toward the lastScan filter, the
+    // scans-count column, or the last-scan-timestamp column.
+    expect(call.where.scanLogs?.some?.deletedAt).toBeNull();
+    expect(call.include._count?.select?.scanLogs?.where?.deletedAt).toBeNull();
+    expect(call.include.scanLogs?.where?.deletedAt).toBeNull();
 
     const body = (await res.json()) as { success: boolean; data: unknown[] };
     expect(body.success).toBe(true);
@@ -153,4 +166,3 @@ describe('GET /api/qrcodes — filtering & org scope', () => {
     expect(call.where.deletedAt).toBeNull();
   });
 });
-

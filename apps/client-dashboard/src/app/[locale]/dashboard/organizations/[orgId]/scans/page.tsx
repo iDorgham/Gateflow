@@ -167,7 +167,11 @@ export default async function ScansPage(props: {
       orderBy: { name: 'asc' },
     }),
     prisma.user.findMany({
-      where: { organizationId: orgId, deletedAt: null, scanLogs: { some: {} } },
+      where: {
+        organizationId: orgId,
+        deletedAt: null,
+        scanLogs: { some: { deletedAt: null } },
+      },
       select: { id: true, name: true, email: true },
       orderBy: { name: 'asc' },
     }),

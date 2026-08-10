@@ -4,5 +4,5 @@
     "noEmit": true,
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*", "scripts/retention-cleanup.ts"]
+  "include": ["src/**/*", "scripts/**/*"]
 }

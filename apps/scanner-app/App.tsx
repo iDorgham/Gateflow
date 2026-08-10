@@ -286,21 +286,44 @@ export default function App() {
   // On mount: check SecureStore for a valid (or refreshable) token.
   // First-run devices enter onboarding; otherwise the unlock gate.
   useEffect(() => {
+    let active = true;
+    let completed = false;
+    const fallbackTimer = setTimeout(() => {
+      if (active && !completed) {
+        completed = true;
+        setAppPhase('login');
+      }
+    }, 2000);
+
     getValidAccessToken()
       .then(async (token) => {
+        if (!active || completed) return;
+        clearTimeout(fallbackTimer);
+        completed = true;
         if (!token) {
           setAppPhase('login');
           return;
         }
         setAppPhase(await nextPhaseAfterAuth());
       })
-      .catch(() => setAppPhase('login'));
+      .catch(() => {
+        if (!active || completed) return;
+        clearTimeout(fallbackTimer);
+        completed = true;
+        setAppPhase('login');
+      });
+
+    return () => {
+      active = false;
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const handleInactivityLock = useCallback(() => setAppPhase('locked'), []);
 
-  if (!fontsLoaded) {
-    return null;
+  // Allow app to proceed even if Google Font network fetch is delayed
+  if (!fontsLoaded && appPhase === 'initializing') {
+    // Show initializing splash screen while loading
   }
 
   const handleLoginSuccess = async () => {
