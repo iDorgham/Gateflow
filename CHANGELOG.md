@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Docs]** add GateFlow situation audit packet 2026-08-10
+
 - **[Deps]** update z.record() to zod 4 two-argument form
 
 - **[Ci]** regenerate lockfile against committed package.json, not local WIP
