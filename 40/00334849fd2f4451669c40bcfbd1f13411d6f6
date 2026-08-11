@@ -1,0 +1,58 @@
+apps/scanner-app/src/components/scanner/viewfinder.tsx
+  s_cef81273de09cb::t_24c68723b76b61 1-154
+apps/scanner-app/src/screens/login/login-screen.tsx
+  s_cef81273de09cb::t_c1f9225caf3654 1-258
+apps/scanner-app/src/lib/haptics.ts
+  s_cef81273de09cb::t_9922594e89a563 1-11
+apps/scanner-app/App.tsx
+  s_cef81273de09cb::t_6e92553fbcf31e 1,10
+  s_cef81273de09cb::t_6029705c3ea00c 16-17
+apps/scanner-app/src/components/scanner/feedback-styles.ts
+  s_cef81273de09cb::t_1ef5a761e8ce0a 1-33
+CHANGELOG.md
+  s_cef81273de09cb::t_9ce8cb7f767104 13
+apps/scanner-app/README.md
+  s_cef81273de09cb::t_9ab73fdf0dbcc3 47,49-60
+  s_cef81273de09cb::t_4695524545213d 99
+  s_cef81273de09cb::t_79a1f3c575a03a 66-74
+  s_cef81273de09cb::t_3c32a08c82e789 81,84-90,93-94,97-98
+  s_cef81273de09cb::t_21539336d552cc 12
+  s_cef81273de09cb::t_ad492f8592115e 100
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_cef81273de09cb::t_11cd6f738279c1 60-61,63
+apps/scanner-app/src/screens/scanner/scanner-screen.tsx
+  s_cef81273de09cb::t_7fc244c3c186ca 1-1258
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_cef81273de09cb::t_6000da2e9d82f7 116
+  s_cef81273de09cb::t_668c5c4f441a60 143-219
+docs/audits/scanner-app/AUDIT_2026-08-10.md
+  s_0a8350cd2d8894::t_1a7b2817538ffa 1-224
+apps/scanner-app/src/components/scanner/result-overlay.tsx
+  s_cef81273de09cb::t_6529b1c78d3a64 1-115
+apps/scanner-app/src/components/scanner/decision-dialog.tsx
+  s_cef81273de09cb::t_21a778ad5bfc5d 1-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4000334849fd2f4451669c40bcfbd1f13411d6f6",
+  "prompts": {},
+  "sessions": {
+    "s_0a8350cd2d8894": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "92c757d3-e0e3-42c8-b17d-15ad0bc6ad04",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_cef81273de09cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ca832d8-b02a-41d3-9d80-dc2b20447c71",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
