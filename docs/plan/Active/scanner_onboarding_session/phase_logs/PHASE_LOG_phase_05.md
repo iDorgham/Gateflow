@@ -217,3 +217,24 @@ Since P0 was blocked, this session instead cleared two P1 gaps from
   warnings only, zero in any new file), and
   `pnpm --filter scanner-app test` (12 suites / 136 tests — identical
   count to pre-split).
+- Added `accessibilityLabel` (and `accessibilityRole`/`accessibilityState`
+  where relevant) to the 19 interactive controls across login, the scan
+  decision/result overlays, top-bar shift/gate/queue buttons, and the
+  6-tab bottom nav — 1 of 49 source files had any before this. Verified
+  the same way: `tsc` (0 new errors), `lint` (0 errors), `jest` (136/136).
+
+Also **closed a P2 gap** that turned out not to need the blocked Xcode
+build at all: `AUDIT_2026-08-10.md` P2 item 6 flagged `expo export`
+failing on `Cannot find module 'hermes-compiler/package.json'` during
+Hermes bytecode compilation. Re-ran both `pnpm build` (the project's own
+`--no-bytecode` script) and plain `npx expo export` (full Hermes bytecode
+path) fresh — **both now succeed**, producing real `.hbc` bytecode
+bundles (4.3MB each, iOS + Android, 2656/2652 modules). `expo export` is
+pure Metro/Node.js bundling, unrelated to the Xcode/CocoaPods toolchain
+that blocks the native P0 build — the missing `hermes-compiler` module
+was most likely a `node_modules` gap that got fixed as a side effect of
+today's repeated `pod install` runs (which install the `hermes-engine`
+pod and its supporting scripts) during the P0 attempt, even though that
+attempt's actual iOS build still failed. Not something to re-verify by
+assumption next time — just run `pnpm --filter scanner-app build` and
+check for `.hbc` output.
