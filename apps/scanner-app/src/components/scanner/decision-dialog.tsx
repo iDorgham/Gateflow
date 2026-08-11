@@ -42,6 +42,8 @@ export function DecisionDialog({
           style={[styles.btn, styles.passBtn]}
           onPress={onPass}
           android_ripple={{ color: nativeTokens.colors.primarySubtle }}
+          accessibilityRole="button"
+          accessibilityLabel="Pass — approve entry"
         >
           <Text style={styles.passIcon}>✓</Text>
           <Text style={styles.btnLabel}>Pass</Text>
@@ -51,6 +53,8 @@ export function DecisionDialog({
           style={[styles.btn, styles.denyBtn]}
           onPress={onDeny}
           android_ripple={{ color: nativeTokens.colors.surfaceGlass }}
+          accessibilityRole="button"
+          accessibilityLabel="Deny — reject entry"
         >
           <Text style={styles.denyIcon}>✗</Text>
           <Text style={styles.btnLabel}>Deny</Text>

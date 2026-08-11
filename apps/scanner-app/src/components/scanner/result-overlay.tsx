@@ -40,17 +40,32 @@ export function ResultOverlay({
 
       {/* Override button — only for non-offline rejections */}
       {!!onRequestOverride && (
-        <Pressable style={styles.overrideButton} onPress={onRequestOverride}>
+        <Pressable
+          style={styles.overrideButton}
+          onPress={onRequestOverride}
+          accessibilityRole="button"
+          accessibilityLabel="Request supervisor override"
+        >
           <Text style={styles.overrideButtonText}>Request Override</Text>
         </Pressable>
       )}
 
       {/* Report Issue button */}
-      <Pressable style={styles.maintenanceButton} onPress={onReportIssue}>
+      <Pressable
+        style={styles.maintenanceButton}
+        onPress={onReportIssue}
+        accessibilityRole="button"
+        accessibilityLabel="Report an issue with this gate"
+      >
         <Text style={styles.maintenanceButtonText}>⚐ Report Issue</Text>
       </Pressable>
 
-      <Pressable style={styles.scanAgainButton} onPress={onScanAgain}>
+      <Pressable
+        style={styles.scanAgainButton}
+        onPress={onScanAgain}
+        accessibilityRole="button"
+        accessibilityLabel="Scan again"
+      >
         <Text style={styles.scanAgainText}>Scan Again</Text>
       </Pressable>
     </View>

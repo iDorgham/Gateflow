@@ -82,6 +82,7 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
               keyboardType="email-address"
               returnKeyType="next"
               editable={!isLoading}
+              accessibilityLabel="Email"
             />
 
             <Text style={[styles.fieldLabel, { marginTop: 16 }]}>Password</Text>
@@ -98,6 +99,7 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
               returnKeyType="done"
               onSubmitEditing={handleLogin}
               editable={!isLoading}
+              accessibilityLabel="Password"
             />
 
             {!!error && (
@@ -111,6 +113,9 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
               style={[styles.loginButton, isLoading && styles.loginButtonBusy]}
               onPress={handleLogin}
               disabled={isLoading}
+              accessibilityRole="button"
+              accessibilityLabel="Sign in"
+              accessibilityState={{ disabled: isLoading, busy: isLoading }}
             >
               {isLoading ? (
                 <ActivityIndicator
@@ -123,7 +128,11 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
             </Pressable>
 
             {/* Stub — no forgot-password flow yet */}
-            <Pressable style={styles.forgotWrap}>
+            <Pressable
+              style={styles.forgotWrap}
+              accessibilityRole="button"
+              accessibilityLabel="Forgot password"
+            >
               <Text style={styles.forgotText}>Forgot password?</Text>
             </Pressable>
           </View>

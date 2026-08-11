@@ -585,7 +585,12 @@ export function ScannerScreen({
         <Text style={styles.permSub}>
           GateFlow needs your camera to scan QR codes.
         </Text>
-        <Pressable style={styles.permButton} onPress={requestPermission}>
+        <Pressable
+          style={styles.permButton}
+          onPress={requestPermission}
+          accessibilityRole="button"
+          accessibilityLabel="Grant camera permission"
+        >
           <Text style={styles.permButtonText}>Grant Permission</Text>
         </Pressable>
       </View>
@@ -666,6 +671,12 @@ export function ScannerScreen({
             <Pressable
               style={styles.topBarBtn}
               onPress={() => setShowGateSelector(true)}
+              accessibilityRole="button"
+              accessibilityLabel={
+                selectedGate
+                  ? `Gate: ${selectedGate.name}. Change gate`
+                  : 'Select gate'
+              }
             >
               <Text style={styles.topBarBtnText} numberOfLines={1}>
                 {selectedGate ? `⬡  ${selectedGate.name}` : '⬡  Select Gate'}
@@ -687,6 +698,11 @@ export function ScannerScreen({
                 }
                 void startShift(selectedGate.id, selectedGate.name);
               }}
+              accessibilityRole="button"
+              accessibilityLabel={
+                canScan(selectedGate?.id) ? 'End shift' : 'Start shift'
+              }
+              accessibilityState={{ disabled: shiftLoading || shiftBusy }}
             >
               <Text style={styles.topBarBtnText} numberOfLines={1}>
                 {shiftLoading || shiftBusy
@@ -701,6 +717,8 @@ export function ScannerScreen({
             <Pressable
               style={styles.topBarBtn}
               onPress={() => setShowQueueStatus(true)}
+              accessibilityRole="button"
+              accessibilityLabel="Offline sync queue status"
             >
               <Text style={styles.topBarBtnText}>⇅ Queue</Text>
             </Pressable>
@@ -718,6 +736,12 @@ export function ScannerScreen({
               style={styles.logoutButton}
               onPress={handleLogout}
               disabled={isLoggingOut || shiftBusy}
+              accessibilityRole="button"
+              accessibilityLabel="Sign out"
+              accessibilityState={{
+                disabled: isLoggingOut || shiftBusy,
+                busy: isLoggingOut,
+              }}
             >
               {isLoggingOut ? (
                 <ActivityIndicator
@@ -912,6 +936,9 @@ export function ScannerScreen({
         <Pressable
           style={[styles.navTab, activeTab === 'home' && styles.navTabActive]}
           onPress={() => setActiveTab('home')}
+          accessibilityRole="tab"
+          accessibilityLabel="Home"
+          accessibilityState={{ selected: activeTab === 'home' }}
         >
           <Text
             style={[
@@ -938,6 +965,9 @@ export function ScannerScreen({
             activeTab === 'scanner' && styles.navTabActive,
           ]}
           onPress={() => setActiveTab('scanner')}
+          accessibilityRole="tab"
+          accessibilityLabel="Scan"
+          accessibilityState={{ selected: activeTab === 'scanner' }}
         >
           <Text
             style={[
@@ -961,6 +991,9 @@ export function ScannerScreen({
         <Pressable
           style={[styles.navTab, activeTab === 'today' && styles.navTabActive]}
           onPress={() => setActiveTab('today')}
+          accessibilityRole="tab"
+          accessibilityLabel="Today's visitors"
+          accessibilityState={{ selected: activeTab === 'today' }}
         >
           <Text
             style={[
@@ -984,6 +1017,9 @@ export function ScannerScreen({
         <Pressable
           style={[styles.navTab, activeTab === 'log' && styles.navTabActive]}
           onPress={() => setActiveTab('log')}
+          accessibilityRole="tab"
+          accessibilityLabel="Activity log"
+          accessibilityState={{ selected: activeTab === 'log' }}
         >
           <Text
             style={[
@@ -1007,6 +1043,9 @@ export function ScannerScreen({
         <Pressable
           style={[styles.navTab, activeTab === 'chat' && styles.navTabActive]}
           onPress={() => setActiveTab('chat')}
+          accessibilityRole="tab"
+          accessibilityLabel="Chat"
+          accessibilityState={{ selected: activeTab === 'chat' }}
         >
           <Text
             style={[
@@ -1028,6 +1067,9 @@ export function ScannerScreen({
 
         {/* Settings */}
         <Pressable
+          accessibilityRole="tab"
+          accessibilityLabel="Settings"
+          accessibilityState={{ selected: activeTab === 'settings' }}
           style={[
             styles.navTab,
             activeTab === 'settings' && styles.navTabActive,
