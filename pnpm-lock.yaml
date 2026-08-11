@@ -253,8 +253,8 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1(@types/react@19.2.18)(react-dom@19.2.7)(react-is@19.2.8)(react@19.2.8)(redux@5.0.1)
       sonner:
-        specifier: ^1.7.4
-        version: 1.7.4(react-dom@19.2.7)(react@19.2.8)
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.7)(react@19.2.8)
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -464,8 +464,8 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1(@types/react@19.2.18)(react-dom@19.2.7)(react-is@19.2.8)(react@19.2.8)(redux@5.0.1)
       sonner:
-        specifier: ^1.7.4
-        version: 1.7.4(react-dom@19.2.7)(react@19.2.8)
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.7)(react@19.2.8)
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -864,8 +864,8 @@ importers:
         specifier: ^2.0.18
         version: 2.0.18(react@19.2.8)
       sonner:
-        specifier: ^1.7.4
-        version: 1.7.4(react-dom@19.2.7)(react@19.2.8)
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.7)(react@19.2.8)
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -19916,8 +19916,8 @@ packages:
       smart-buffer: 4.2.0
     dev: true
 
-  /sonner@1.7.4(react-dom@19.2.7)(react@19.2.8):
-    resolution: {integrity: sha512-DIS8z4PfJRbIyfVFDVnK9rO3eYDtse4Omcm6bt0oEr5/jtLgysmjuBl1frJ9E/EQZrFmKx2A8m/s5s9CRXIzhw==}
+  /sonner@2.0.7(react-dom@19.2.7)(react@19.2.8):
+    resolution: {integrity: sha512-W6ZN4p58k8aDKA4XPcx2hpIQXBRAgyiWVkYhT7CvK6D3iAu7xjvVyhQHg2/iaKJZ1XVJ4r7XuwGL+WGEK37i9w==}
     peerDependencies:
       react: ^19.2.4
       react-dom: ^19.2.4
