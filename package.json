@@ -101,7 +101,7 @@
     "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
-    "tsx": "^4.7.0",
+    "tsx": "^4.23.11",
     "turbo": "^2.10.7",
     "typescript": "5.9.3",
     "yaml": "^2.9.0"
