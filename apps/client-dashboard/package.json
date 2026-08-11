@@ -47,7 +47,7 @@
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
-    "framer-motion": "^12.43.0",
+    "framer-motion": "^13.0.0",
     "html2canvas": "^1.4.1",
     "i18next": "^23.16.8",
     "jose": "4.15.9",
