@@ -113,6 +113,7 @@ pnpm --filter scanner-app test
   — move `Active/scanner_onboarding_session/` → `Complete/` and the user can
   run `/check` → `/pilot` → `/certify` (not run automatically per this
   phase's own stop condition).
+
 - Committed and pushed on PR #210. A CodeRabbit review (triggered manually
   after an initial rate-limit) flagged a real critical bug — `onLock`'s
   identity churned every `App` render, so any unrelated re-render silently
@@ -139,3 +140,80 @@ pnpm --filter scanner-app test
   separate pre-existing environment gap this fix simply unblocked the
   path to. Two documentation nits in this file and `SESSION_MEMORY.md`
   were also fixed.
+
+## 2026-08-10 device-evidence attempt (still blocked, new root cause found)
+
+A live session attempted the two device-evidence items on the iOS Simulator
+with Mac-camera passthrough (this session had simulator tooling the earlier
+headless-CLI sessions didn't). Got as far as: local Postgres seeded org
+(`Gateway Academy`, `gate-school-1`), `client-dashboard` dev server up,
+`admin@school.demo`/`password123` confirmed (argon2, `scans:view`, no gate
+assignment restriction), and a real HMAC-signed test QR generated via
+`/qr/create-test`. Never reached the actual scan — **`scanner-app` cannot
+currently be built on this Mac at all**, unrelated to camera/device
+availability:
+
+- This Mac has only **Xcode 26.1.1** installed (no older fallback).
+  `expo-modules-core@57.0.10` (part of the Expo SDK 57 bump merged to
+  `master` via PR #245) declares `swift_version '6.0'`, and Xcode 26.1.1's
+  Swift 6 strict-concurrency checker rejects the library's own
+  `EventEmitter.swift` despite its `nonisolated(unsafe)` workaround.
+- Tried a scoped `Podfile` `post_install` patch forcing `SWIFT_VERSION=5.9`
+  on any pod target requesting 6.0 (~13 min `pod install` + ~1hr build to
+  fail). That surfaced a second, unrelated error: `AppDelegate.swift`'s
+  plain `import Expo` became ambiguous against the generated
+  `ExpoModulesProvider.swift`'s `internal import Expo`. Fixed that
+  (`internal import Expo`), which surfaced a third: `public class
+AppDelegate: ExpoAppDelegate` — can't subclass an now-internal type as
+  `public`. Fixed that (dropped `public`), which surfaced a fourth:
+  `bindReactNativeFactory` (from the prebuilt React-Core binary framework)
+  became unresolvable — likely an ABI-visibility break from changing the
+  app target's own access level against a prebuilt binary framework built
+  under different assumptions.
+- Four builds, four different Swift 6 errors, none of them fabricatable or
+  quick-fixable. Per user decision, all patches were **reverted**
+  (`Podfile` and `AppDelegate.swift` are back to their pre-session state,
+  confirmed via `git diff` — clean) rather than continuing to drill through
+  an unknown-depth chain of toolchain-compatibility errors.
+- **Root cause is now specific, not generic**: this isn't "no physical
+  device" anymore, it's "Expo SDK 57 + Xcode 26.1.1 don't compile together
+  on this machine yet." Unblocking needs one of: an older Xcode installed
+  alongside 26.1.1 (this Mac has none), an upstream `expo-modules-core`
+  patch targeting Xcode 26's Swift compiler, or running this on a machine
+  with a Cocoapods/Expo-SDK-57-compatible Xcode already installed. Retrying
+  the exact same patch path without one of those changing is not expected
+  to succeed differently.
+- Also worth knowing for the next attempt: this Mac's disk filled to
+  **1.2GB free mid-session** (CocoaPods needs several GB scratch space) —
+  clear `~/Library/Developer/Xcode/DerivedData` and
+  `~/Library/Caches/CocoaPods` first. The Mac also went to sleep mid-build
+  once, silently pausing an in-progress `xcodebuild` for hours and killing
+  the session's simulator boot / dev server / MCP connections — run
+  `caffeinate -dis` for the duration of any future attempt.
+
+Since P0 was blocked, this session instead cleared two P1 gaps from
+`AUDIT_2026-08-10.md`:
+
+- Rewrote `apps/scanner-app/README.md` — was describing a stack this app
+  never had (SQLite/Prisma, `expo-barcode-scanner`, Nativewind, Expo SDK
+  54, only 5 tabs). Now reflects the real stack (SecureStore, HMAC
+  verified server-side via `expo-camera`, `nativeTokens`/StyleSheet, Expo
+  SDK 57, the 6-tab shell including Home, and the `expo run:ios`/`android`
+  native-prebuild workflow instead of Expo Go commands).
+- Deleted 5 dead components that were never imported anywhere
+  (`DiagnosticsOverlay`, `PassCancelDialog`, `ScanResultOverlay`,
+  `QueueStatusBadge`, `SupervisorOverrideModal` — 722 lines, no tests
+  referenced them).
+- Split `App.tsx` (2118 lines → 198) into
+  `src/screens/login/login-screen.tsx`, `src/screens/scanner/scanner-screen.tsx`
+  (1258 lines — the state machine + camera/scan logic + bottom nav, still
+  the largest single screen but now an isolated, coherent unit),
+  `src/components/scanner/{viewfinder,decision-dialog,result-overlay,feedback-styles}`,
+  and `src/lib/haptics.ts`. Pure extraction, no behavior changes — verified
+  via `tsc --noEmit` (same pre-existing error count as before the split,
+  all in files this session didn't touch or in a Swift-6-adjacent
+  `@types/react-native` `absoluteFillObject` gap that predates this
+  session), `pnpm --filter scanner-app lint` (0 errors, same pre-existing
+  warnings only, zero in any new file), and
+  `pnpm --filter scanner-app test` (12 suites / 136 tests — identical
+  count to pre-split).

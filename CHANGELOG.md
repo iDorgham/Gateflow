@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Scanner-App]** split 2118-line `App.tsx` into screen/component modules, remove 5 dead components, fix README stack description
 - **[Deps]** regenerate pnpm-lock.yaml for scanner-app Expo SDK 57 bump
 
 - **[Db]** validate retention mode and clamp month-end retention cutoffs

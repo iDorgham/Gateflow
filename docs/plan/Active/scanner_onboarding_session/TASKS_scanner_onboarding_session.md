@@ -57,9 +57,10 @@
       hardcoded left/right found; visual on-device confirmation still pending
 - [x] Error boundaries + loading states for duty widgets
 - [ ] Device evidence: Security scans the QR → update pilot gate to `passed`
-      **(blocked — needs a physical device; see phase log)**
+      **(blocked — see 2026-08-10 attempt in phase log: Xcode 26.1.1 on this
+      Mac cannot build `scanner-app` at all right now, not just "no device")**
 - [ ] Device evidence: offline enqueue + sync → update pilot gate to `passed`
-      **(blocked — needs a physical device; see phase log)**
+      **(blocked — same Xcode 26.1.1 build gap; see phase log)**
 - [ ] Refresh `docs/audits/scanner-app/` packet artifacts as needed (depends
       on the two device-evidence items above)
 - [x] `phase_logs/PHASE_LOG_phase_05.md` updated

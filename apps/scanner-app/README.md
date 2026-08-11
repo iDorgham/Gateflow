@@ -9,7 +9,7 @@
 _Offline-capable security scanning with encrypted sync queue_
 
 [![Status: Production](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](#)
-[![Expo](https://img.shields.io/badge/Expo-SDK_54-4630EB?style=for-the-badge&logo=expo)](https://expo.dev)
+[![Expo](https://img.shields.io/badge/Expo-SDK_57-4630EB?style=for-the-badge&logo=expo)](https://expo.dev)
 [![Platform](https://img.shields.io/badge/Platform-iOS_%2B_Android-blue?style=for-the-badge)](#)
 [![Security](https://img.shields.io/badge/Security-HMAC--SHA256-red?style=for-the-badge)](#)
 
@@ -44,44 +44,59 @@ The **GateFlow Scanner App** is the frontline tool for gate operators. It provid
 | **Identity Capture**     | Level 1/2 identity photo at the gate                 |
 | **Shift Management**     | Tracking scans per operator shift                    |
 
-### User Interface (5-Tab System)
+### User Interface (6-Tab System)
 
-| Tab          | Description                                      |
-| :----------- | :----------------------------------------------- |
-| **Scanner**  | Primary viewfinder for rapid entry               |
-| **Today**    | Feed of expected visitors for current shift      |
-| **Log**      | Local and synced history of gate activity        |
-| **Chat**     | Real-time communication with property management |
-| **Settings** | Gate selection, offline queue, logout            |
+| Tab          | Description                                                    |
+| :----------- | :------------------------------------------------------------- |
+| **Home**     | Default post-unlock tab — shift widget, Master Scan FAB, stats |
+| **Scanner**  | Primary viewfinder for rapid entry                             |
+| **Today**    | Feed of expected visitors for current shift                    |
+| **Log**      | Local and synced history of gate activity                      |
+| **Chat**     | Real-time communication with property management               |
+| **Settings** | Gate selection, offline queue, logout                          |
+
+Outside the tab shell: a device unlock gate (PIN/biometric, re-locks after 5
+minutes idle), a first-run onboarding wizard, and a shift-active gate that
+blocks scanning until the operator clocks in.
 
 ---
 
 ## Tech Stack
 
-| Layer         | Technology                                   |
-| :------------ | :------------------------------------------- |
-| **Framework** | React Native (Expo SDK 54)                   |
-| **Security**  | HMAC-SHA256 for signing, AES-256 for storage |
-| **Hardware**  | iOS/Android Camera, Haptics, Geofencing      |
-| **Sync**      | Intelligent queue with exponential backoff   |
+| Layer           | Technology                                                                                                                   |
+| :-------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| **Framework**   | React Native (Expo SDK 57) — hand-rolled `AppPhase` state machine in `App.tsx`, not Expo Router                              |
+| **Auth**        | Tokens in `expo-secure-store`; device unlock via `expo-local-authentication` (PIN/biometric), auto re-lock after 5 min idle  |
+| **QR Security** | HMAC-SHA256, verified **server-side** — captured via `expo-camera`, no local JWT decoding                                    |
+| **Offline**     | AES-encrypted (PBKDF2-derived key in SecureStore) `AsyncStorage` queue, deduplicated by `scanUuid`                           |
+| **Styling**     | `nativeTokens`/`StyleSheet` (Atlassian Design System tokens) — no Nativewind/Tailwind                                        |
+| **Motion**      | React Native's built-in `Animated` API (`useNativeDriver: true`) — `react-native-reanimated` is not a dependency of this app |
+| **Hardware**    | `expo-camera`, `expo-local-authentication`, `expo-haptics`, `expo-location`                                                  |
 
 ---
 
 ## Getting Started
 
 ```bash
-# Navigate to scanner directory (from root)
-cd apps/scanner-app
-
-# Install native dependencies
+# From the repo root
 pnpm install
 
-# Start Metro Bundler
+# From apps/scanner-app — build & launch the native iOS app (installs pods)
+pnpm ios
+
+# Or Android
+pnpm android
+
+# Metro only (LAN, for an already-installed dev client / physical device)
 pnpm dev
 
-# Run on device
-npx expo start --dev-client
+# Metro only, bound to localhost (for the iOS Simulator)
+pnpm dev:sim
 ```
+
+This app ships a checked-in native `ios/`/`android/` project (via `expo
+prebuild`), not a managed Expo Go workflow — `expo run:ios` / `expo
+run:android` are what `pnpm ios` / `pnpm android` call under the hood.
 
 ---
 
