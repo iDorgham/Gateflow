@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
-    "@types/react": "^19.2.17",
+    "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.3",
     "ai": "^6.0.246",
     "@ai-sdk/react": "^3.0.248",

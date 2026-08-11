@@ -28,7 +28,7 @@
     "@gate-access/config": "workspace:*",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "^26.1.2",
-    "@types/react": "^19.2.17",
+    "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.20",
     "eslint": "9.39.5",
