@@ -90,6 +90,30 @@ jobs:
           ORDER BY started_at;
           SQL
 
+      # TEMP DIAGNOSTIC — remove after confirming/fixing the ScanLog.deletedAt
+      # drift (prod P2022: column missing despite migrate status "up to date").
+      - name: 'TEMP: verify ScanLog/Incident deletedAt drift'
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          echo "---- actual columns on ScanLog / Incident ----"
+          pnpm exec prisma db execute --stdin <<'SQL' || true
+          SELECT table_name, column_name, data_type
+          FROM information_schema.columns
+          WHERE table_name IN ('ScanLog', 'Incident')
+            AND column_name = 'deletedAt';
+          SQL
+          echo "---- _prisma_migrations row for the soft-delete migration ----"
+          pnpm exec prisma db execute --stdin <<'SQL' || true
+          SELECT migration_name, started_at, finished_at, applied_steps_count,
+                 rolled_back_at, logs
+          FROM "_prisma_migrations"
+          WHERE migration_name = '20260807120000_add_scanlog_incident_soft_delete';
+          SQL
+
       - name: Resolve failed migration
         if: ${{ github.event.inputs.resolve_migration != '' }}
         working-directory: packages/db
