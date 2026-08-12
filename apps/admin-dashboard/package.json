@@ -35,7 +35,7 @@
     "ai": "^6.0.246",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "framer-motion": "^12.43.0",
+    "framer-motion": "^13.0.0",
     "i18next": "^23.16.8",
     "lucide-react": "^1.28.0",
     "negotiator": "^1.0.0",
