@@ -12,6 +12,9 @@ apps/client-dashboard/src/components/settings/workspace-form.tsx
   s_6682473c884b1e::t_6b8ed638239093 177
   s_6682473c884b1e::t_c5ee5af1956778 115
   s_6682473c884b1e::t_4bf4d7a25372df 307-310,314-319,323-326
+  s_6682473c884b1e::t_60a6be0347ac4c 229
+  s_6682473c884b1e::t_e66853ce5323f3 44-45
+  s_6682473c884b1e::t_ebbc830d4134d8 132
 apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/layout.tsx
   s_6682473c884b1e::t_61f754f15f9fd0 6-9
   s_6682473c884b1e::t_5385bd6f43ba2a 5,10,13,15
