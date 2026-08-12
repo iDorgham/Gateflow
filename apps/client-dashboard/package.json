@@ -43,6 +43,7 @@
     "@types/crypto-js": "^4.2.2",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.38.0",
+    "@vercel/blob": "^2.8.0",
     "ai": "^6.0.246",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
