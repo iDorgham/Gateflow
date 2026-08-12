@@ -90,38 +90,6 @@ jobs:
           ORDER BY started_at;
           SQL
 
-      # TEMP DIAGNOSTIC — remove after confirming/fixing the ScanLog.deletedAt
-      # drift (prod P2022: column missing despite migrate status "up to date").
-      # `prisma db execute` never prints SELECT results (it's DDL/DML-only,
-      # always reports "Script executed successfully" regardless of rows) —
-      # use the generated Prisma Client directly so we can actually see data.
-      - name: 'TEMP: verify ScanLog/Incident deletedAt drift'
-        working-directory: packages/db
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
-        run: |
-          set -euo pipefail
-          cat > ./check-drift.cjs <<'JS'
-          const { PrismaClient } = require('@prisma/client');
-          const prisma = new PrismaClient();
-          const j = (v) => JSON.stringify(v, (_k, x) => (typeof x === 'bigint' ? x.toString() : x), 2);
-          (async () => {
-            const cols = await prisma.$queryRawUnsafe(
-              "SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_name IN ('ScanLog','Incident') AND column_name = 'deletedAt'"
-            );
-            console.log('COLUMNS:', j(cols));
-            const mig = await prisma.$queryRawUnsafe(
-              'SELECT migration_name, started_at, finished_at, applied_steps_count, rolled_back_at, logs FROM "_prisma_migrations" WHERE migration_name = $1',
-              '20260807120000_add_scanlog_incident_soft_delete'
-            );
-            console.log('MIGRATION:', j(mig));
-            await prisma.$disconnect();
-          })().catch((e) => { console.error(e); process.exit(1); });
-          JS
-          node ./check-drift.cjs
-          rm -f ./check-drift.cjs
-
       - name: Resolve failed migration
         if: ${{ github.event.inputs.resolve_migration != '' }}
         working-directory: packages/db
