@@ -27,7 +27,7 @@ const SettingsSchema = z.object({
 export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
-    if (!claims?.orgId) {
+    if (!claims?.orgId || !claims.permissions?.['workspace:manage']) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
         { status: 401 }
@@ -70,11 +70,11 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     } = validation.data;
 
     const organizationId = claims.orgId;
-    const org = await prisma.organization.findUnique({
-      where: { id: organizationId },
+    const org = await prisma.organization.findFirst({
+      where: { id: organizationId, deletedAt: null },
     });
 
-    if (!org || org.deletedAt) {
+    if (!org) {
       return NextResponse.json(
         { success: false, message: 'Organization not found' },
         { status: 404 }
@@ -89,12 +89,13 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       retentionLegalHold,
     ].some((value) => value !== undefined);
 
-    const updated = await prisma.organization.update({
-      where: { id: claims.orgId },
+    // First, attempt the conditional update
+    const updateResult = await prisma.organization.updateMany({
+      where: { id: claims.orgId, deletedAt: null },
       data: {
         name,
         email,
-        domain: domain || null,
+        ...(domain !== undefined && { domain: domain || null }),
         ...(accentColor !== undefined && { accentColor: accentColor || null }),
         ...(logoUrl !== undefined && { logoUrl: logoUrl || null }),
         ...(scanLogRetentionMonths !== undefined && { scanLogRetentionMonths }),
@@ -110,6 +111,18 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
         ...(retentionLegalHold !== undefined && { retentionLegalHold }),
         ...(retentionFieldsTouched && { retentionPolicyUpdatedAt: new Date() }),
       },
+    });
+
+    if (updateResult.count === 0) {
+      return NextResponse.json(
+        { success: false, message: 'Organization not found' },
+        { status: 404 }
+      );
+    }
+
+    // Fetch the updated organization for the response
+    const updated = await prisma.organization.findUniqueOrThrow({
+      where: { id: claims.orgId },
       select: {
         id: true,
         name: true,

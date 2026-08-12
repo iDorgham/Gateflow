@@ -113,8 +113,7 @@ export function WorkspaceSettingsForm({
     defaultValues: {
       name: initialData?.name || '',
       adminEmail: initialData?.adminEmail || '',
-      accentColor:
-        initialData?.accentColor || token('color.background.brand.bold'),
+      accentColor: initialData?.accentColor || '#0052CC',
       logoUrl: initialData?.logoUrl ?? null,
       scanLogRetentionMonths: initialData?.scanLogRetentionMonths ?? null,
       visitorHistoryRetentionMonths:

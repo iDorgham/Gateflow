@@ -6,8 +6,8 @@ export default async function WorkspaceSettings() {
   const { org } = await requireAuth();
 
   const settings = org
-    ? await prisma.organization.findUnique({
-        where: { id: org.id },
+    ? await prisma.organization.findFirst({
+        where: { id: org.id, deletedAt: null },
         select: {
           logoUrl: true,
           accentColor: true,
