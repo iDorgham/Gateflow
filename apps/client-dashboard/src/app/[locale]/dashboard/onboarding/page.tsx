@@ -46,7 +46,7 @@ export default function OnboardingPage() {
     } else if (step === 2) {
       if (!orgName.trim())
         return setError('Please enter an organization name.');
-      if (!orgEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(orgEmail))
+      if (!orgEmail.trim() || !/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(orgEmail))
         return setError('Please enter a valid organization email.');
       setStep(3);
     } else {
