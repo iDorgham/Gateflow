@@ -21,6 +21,8 @@ model Organization {
   updatedAt                     DateTime                @updatedAt
   deletedAt                     DateTime?
   logoUrl                       String?
+  /// Per-org brand accent color, hex (#RRGGBB). Null = use default brand color.
+  accentColor                   String?
   /// Visitor identity level: 0=name/phone only, 1=ID photo capture, 2=ID OCR (stub)
   requiredIdentityLevel         Int                     @default(0)
   /// null = keep indefinitely

@@ -94,9 +94,11 @@ const SETTINGS_TABS_DEFS: SettingsTabDef[] = [
 export function SettingsLayout({
   children,
   permissions = {},
+  orgName,
 }: {
   children: React.ReactNode;
   permissions?: Record<string, boolean>;
+  orgName?: string;
 }) {
   const pathname = usePathname();
   const [search, setSearch] = useState('');
@@ -169,10 +171,11 @@ export function SettingsLayout({
             {t('settings.titleSuffix', 'Settings')}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {t(
-              'settings.description',
-              'Manage your workspace preferences, team, and security.'
-            )}
+            {t('settings.description', {
+              defaultValue:
+                'Global configuration and administrative nodes for {{orgName}}.',
+              orgName: orgName || t('settings.titleSuffix', 'Settings'),
+            })}
           </p>
         </div>
         <div className="relative w-full max-w-sm sm:w-72">

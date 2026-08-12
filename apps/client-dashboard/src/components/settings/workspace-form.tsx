@@ -20,12 +20,13 @@ import {
   CardHeader,
   CardTitle,
   Separator,
+  Switch,
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
-import { token } from '@atlaskit/tokens';
+import { csrfFetch, getCsrfToken } from '@/lib/csrf';
 import {
   Building2,
   Mail,
@@ -35,13 +36,27 @@ import {
   History,
   Info,
 } from 'lucide-react';
-import { apiClient } from '@gate-access/api-client';
+
+// GateFlow brand accent (Kimchi) — used when an org hasn't picked its own color yet.
+const DEFAULT_ACCENT_COLOR = '#ED4B00';
+
+const MAX_LOGO_BYTES = 5 * 1024 * 1024;
+// SVG intentionally excluded — the upload API rejects it (XML-based security risk).
+const ALLOWED_LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+
+// Nullable = keep data indefinitely, matching Organization.*RetentionMonths
+const retentionMonthsField = z.number().int().min(1).max(120).nullable();
 
 const workspaceSchema = z.object({
   name: z.string().min(2, 'Workspace name must be at least 2 characters'),
   adminEmail: z.string().email('Invalid administrative email'),
   accentColor: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color'),
-  retentionDays: z.number().min(1).max(3650),
+  logoUrl: z.string().url().nullable(),
+  scanLogRetentionMonths: retentionMonthsField,
+  visitorHistoryRetentionMonths: retentionMonthsField,
+  idArtifactRetentionMonths: retentionMonthsField,
+  incidentRetentionMonths: retentionMonthsField,
+  retentionLegalHold: z.boolean(),
 });
 
 type WorkspaceFormValues = z.infer<typeof workspaceSchema>;
@@ -51,11 +66,38 @@ interface WorkspaceSettingsFormProps {
     id: string;
     name: string;
     adminEmail?: string;
-    logoUrl?: string;
-    accentColor?: string;
-    retentionDays?: number;
+    logoUrl?: string | null;
+    accentColor?: string | null;
+    scanLogRetentionMonths?: number | null;
+    visitorHistoryRetentionMonths?: number | null;
+    idArtifactRetentionMonths?: number | null;
+    incidentRetentionMonths?: number | null;
+    retentionLegalHold?: boolean;
   };
 }
+
+const RETENTION_CATEGORIES = [
+  {
+    field: 'scanLogRetentionMonths',
+    label: 'Scan Logs',
+    description: 'Gate scan events and access decisions.',
+  },
+  {
+    field: 'visitorHistoryRetentionMonths',
+    label: 'Visitor History',
+    description: 'Visitor check-in/out records.',
+  },
+  {
+    field: 'idArtifactRetentionMonths',
+    label: 'ID Artifacts',
+    description: 'Captured ID photos and OCR data.',
+  },
+  {
+    field: 'incidentRetentionMonths',
+    label: 'Incidents',
+    description: 'Reported incidents and their resolution records.',
+  },
+] as const;
 
 export function WorkspaceSettingsForm({
   initialData,
@@ -63,40 +105,93 @@ export function WorkspaceSettingsForm({
   const [logoPreview, setLogoPreview] = useState<string | null>(
     initialData?.logoUrl || null
   );
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
 
   const form = useForm<WorkspaceFormValues>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
       name: initialData?.name || '',
       adminEmail: initialData?.adminEmail || '',
-      accentColor:
-        initialData?.accentColor || token('color.background.brand.bold'),
-      retentionDays: initialData?.retentionDays || 365,
+      accentColor: initialData?.accentColor || DEFAULT_ACCENT_COLOR,
+      logoUrl: initialData?.logoUrl ?? null,
+      scanLogRetentionMonths: initialData?.scanLogRetentionMonths ?? null,
+      visitorHistoryRetentionMonths:
+        initialData?.visitorHistoryRetentionMonths ?? null,
+      idArtifactRetentionMonths: initialData?.idArtifactRetentionMonths ?? null,
+      incidentRetentionMonths: initialData?.incidentRetentionMonths ?? null,
+      retentionLegalHold: initialData?.retentionLegalHold ?? false,
     },
   });
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    e.target.value = '';
+    if (!file) return;
+
+    if (!ALLOWED_LOGO_TYPES.includes(file.type)) {
+      toast.error('Logo must be a PNG, JPEG, or WebP image');
+      return;
+    }
+    if (file.size > MAX_LOGO_BYTES) {
+      toast.error('Logo must be 5MB or smaller');
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    setLogoPreview(objectUrl);
+    setIsUploadingLogo(true);
+
+    try {
+      const body = new FormData();
+      body.append('file', file);
+      const csrfToken = getCsrfToken();
+      const response = await fetch('/api/workspace/logo', {
+        method: 'POST',
+        body,
+        credentials: 'include',
+        // Not csrfFetch: it forces Content-Type: application/json, which breaks
+        // multipart FormData (browser needs to set its own boundary).
+        headers: csrfToken ? { 'x-csrf-token': csrfToken } : undefined,
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Upload failed');
+      }
+      setLogoPreview(result.data.logoUrl);
+      form.setValue('logoUrl', result.data.logoUrl, { shouldDirty: true });
+      toast.success('Logo uploaded');
+    } catch (error) {
+      toast.error('Failed to upload logo');
+      console.error(error);
+      setLogoPreview(initialData?.logoUrl || null);
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+      setIsUploadingLogo(false);
     }
   };
 
   async function onSubmit(data: WorkspaceFormValues) {
     try {
-      // PATCH /api/workspace/settings derives the org from the session and
-      // only persists name/email/domain today — accentColor, retentionDays,
-      // and logoUrl aren't backed by that route yet (see workspace/settings
-      // route.ts), so they're intentionally left out of this request rather
-      // than sent and silently dropped.
-      await apiClient.patch('/workspace/settings', {
-        name: data.name,
-        email: data.adminEmail,
+      if (!initialData?.id) return;
+
+      const response = await csrfFetch('/api/workspace/settings', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          name: data.name,
+          email: data.adminEmail,
+          accentColor: data.accentColor,
+          logoUrl: data.logoUrl,
+          scanLogRetentionMonths: data.scanLogRetentionMonths,
+          visitorHistoryRetentionMonths: data.visitorHistoryRetentionMonths,
+          idArtifactRetentionMonths: data.idArtifactRetentionMonths,
+          incidentRetentionMonths: data.incidentRetentionMonths,
+          retentionLegalHold: data.retentionLegalHold,
+        }),
       });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Update failed');
+      }
       toast.success('Workspace settings updated successfully');
     } catch (error) {
       toast.error('Failed to update workspace settings');
@@ -131,7 +226,8 @@ export function WorkspaceSettingsForm({
                     type="file"
                     className="hidden"
                     id="logo-upload"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/webp"
+                    disabled={isUploadingLogo}
                     onChange={handleLogoChange}
                   />
                   <Button
@@ -139,12 +235,13 @@ export function WorkspaceSettingsForm({
                     variant="outline"
                     size="sm"
                     className="rounded-lg text-[10px] h-8"
+                    disabled={isUploadingLogo}
                     onClick={() =>
                       document.getElementById('logo-upload')?.click()
                     }
                   >
                     <Upload className="h-3 w-3 mr-1" />
-                    Change Logo
+                    {isUploadingLogo ? 'Uploading...' : 'Change Logo'}
                   </Button>
                 </div>
               </div>
@@ -207,14 +304,26 @@ export function WorkspaceSettingsForm({
                   <div className="flex items-center gap-4">
                     <FormControl>
                       <div className="flex items-center gap-3 w-full">
+                        {/* input[type=color] requires a lowercase 6-digit hex or the
+                            browser silently substitutes its own value — feed it a
+                            normalized value instead of the raw (possibly uppercase)
+                            field value, so it can't clobber what the user typed. */}
                         <Input
                           type="color"
                           className="h-10 w-10 p-0 border-none bg-transparent cursor-pointer rounded-lg overflow-hidden shrink-0"
-                          {...field}
+                          value={
+                            /^#[0-9a-f]{6}$/i.test(field.value)
+                              ? field.value.toLowerCase()
+                              : '#000000'
+                          }
+                          onChange={(e) => field.onChange(e.target.value)}
                         />
                         <Input
                           className="font-mono bg-background/50 border-border/50"
-                          {...field}
+                          name={field.name}
+                          value={field.value}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
                           onChange={(e) => field.onChange(e.target.value)}
                         />
                       </div>
@@ -240,53 +349,98 @@ export function WorkspaceSettingsForm({
               Control how long GateFlow stores your access data.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-6 space-y-6">
+          <CardContent className="pt-6 space-y-5">
+            <div className="flex items-center gap-2 text-base font-medium">
+              <History className="h-4 w-4 text-muted-foreground" />
+              Data Retention Periods
+            </div>
+
+            {RETENTION_CATEGORIES.map((category) => (
+              <FormField
+                key={category.field}
+                control={form.control}
+                name={category.field}
+                render={({ field }) => {
+                  const indefinite = field.value === null;
+                  return (
+                    <FormItem className="space-y-2">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <FormLabel>{category.label}</FormLabel>
+                          <FormDescription>
+                            {category.description}
+                          </FormDescription>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={1}
+                              max={120}
+                              disabled={indefinite}
+                              className="w-20 bg-background/50 border-border/50 text-right"
+                              value={field.value ?? ''}
+                              onChange={(e) =>
+                                field.onChange(
+                                  e.target.value === ''
+                                    ? null
+                                    : parseInt(e.target.value, 10)
+                                )
+                              }
+                            />
+                          </FormControl>
+                          <span className="text-xs text-muted-foreground w-12">
+                            months
+                          </span>
+                          <label className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
+                            <Switch
+                              checked={indefinite}
+                              onCheckedChange={(checked: boolean) =>
+                                field.onChange(checked ? null : 12)
+                              }
+                            />
+                            Keep indefinitely
+                          </label>
+                        </div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            ))}
+
+            <Separator className="bg-border/30" />
+
             <FormField
               control={form.control}
-              name="retentionDays"
+              name="retentionLegalHold"
               render={({ field }) => (
-                <FormItem className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <FormLabel className="flex items-center gap-2 text-base">
-                      <History className="h-4 w-4 text-muted-foreground" />
-                      Data Retention Period
-                    </FormLabel>
-                    <span className="font-bold text-primary bg-primary/10 px-3 py-1 rounded-full text-xs">
-                      {field.value} Days
-                    </span>
+                <FormItem className="flex items-center justify-between rounded-xl border border-warning/20 bg-warning/5 p-4">
+                  <div className="space-y-0.5 pr-4">
+                    <FormLabel className="text-sm">Legal Hold</FormLabel>
+                    <FormDescription>
+                      Blocks all automated retention purges for this workspace
+                      until released.
+                    </FormDescription>
                   </div>
                   <FormControl>
-                    <div className="space-y-2">
-                      <input
-                        type="range"
-                        min="30"
-                        max="3650"
-                        step="30"
-                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                        value={field.value}
-                        onChange={(e) =>
-                          field.onChange(parseInt(e.target.value))
-                        }
-                      />
-                      <div className="flex justify-between text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
-                        <span>30 Days</span>
-                        <span>1 Year</span>
-                        <span>5 Years</span>
-                        <span>10 Years</span>
-                      </div>
-                    </div>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <div className="rounded-xl border border-info/20 bg-info/5 p-4 flex gap-3">
-                    <Info className="h-5 w-5 text-info shrink-0 mt-0.5" />
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      Logs older than this period will be automatically purged
-                      daily (v6.0 compliance engine).
-                    </p>
-                  </div>
-                  <FormMessage />
                 </FormItem>
               )}
             />
+
+            <div className="rounded-xl border border-info/20 bg-info/5 p-4 flex gap-3">
+              <Info className="h-5 w-5 text-info shrink-0 mt-0.5" />
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Data older than each period is automatically purged daily,
+                unless Legal Hold is active.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
