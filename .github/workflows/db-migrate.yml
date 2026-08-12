@@ -68,7 +68,7 @@ jobs:
           set -euo pipefail
           pnpm exec prisma migrate status || true
           echo "---- join / blog tables (if any) ----"
-          pnpm exec prisma db execute --stdin <<'SQL' || true
+          pnpm exec prisma db execute --schema=prisma/schema.prisma --stdin <<'SQL' || true
           SELECT tablename FROM pg_tables
           WHERE schemaname = 'public'
             AND tablename IN (
@@ -81,7 +81,7 @@ jobs:
           ORDER BY 1;
           SQL
           echo "---- failed rows in _prisma_migrations ----"
-          pnpm exec prisma db execute --stdin <<'SQL' || true
+          pnpm exec prisma db execute --schema=prisma/schema.prisma --stdin <<'SQL' || true
           SELECT migration_name, finished_at, rolled_back_at, logs
           FROM "_prisma_migrations"
           WHERE rolled_back_at IS NOT NULL
@@ -100,14 +100,14 @@ jobs:
         run: |
           set -euo pipefail
           echo "---- actual columns on ScanLog / Incident ----"
-          pnpm exec prisma db execute --stdin <<'SQL' || true
+          pnpm exec prisma db execute --schema=prisma/schema.prisma --stdin <<'SQL' || true
           SELECT table_name, column_name, data_type
           FROM information_schema.columns
           WHERE table_name IN ('ScanLog', 'Incident')
             AND column_name = 'deletedAt';
           SQL
           echo "---- _prisma_migrations row for the soft-delete migration ----"
-          pnpm exec prisma db execute --stdin <<'SQL' || true
+          pnpm exec prisma db execute --schema=prisma/schema.prisma --stdin <<'SQL' || true
           SELECT migration_name, started_at, finished_at, applied_steps_count,
                  rolled_back_at, logs
           FROM "_prisma_migrations"
