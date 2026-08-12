@@ -1,0 +1,34 @@
+packages/i18n/src/locales/en.json
+  s_6682473c884b1e::t_6630e1d50a69f4 830-831
+apps/client-dashboard/src/components/settings/settings-layout.tsx
+  s_6682473c884b1e::t_fed23c428c0a66 112,116,123-129,150-152,154,156-160
+  s_6682473c884b1e::t_127858504fc19f 34-41,45,51,57,63,69,75,81,86,92,98,104
+  s_6682473c884b1e::t_e066c9dbe9a77d 183
+  s_6682473c884b1e::t_de7b029ce6ebbe 161-162,184-187
+apps/client-dashboard/src/components/settings/workspace-form.tsx
+  s_6682473c884b1e::t_0aa109277e8b10 40-42
+  s_6682473c884b1e::t_2370939a075b5d 147,152-154
+  s_6682473c884b1e::t_8309cb800ee205 29
+  s_6682473c884b1e::t_6b8ed638239093 177
+  s_6682473c884b1e::t_c5ee5af1956778 115
+  s_6682473c884b1e::t_4bf4d7a25372df 307-310,314-319,323-326
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/layout.tsx
+  s_6682473c884b1e::t_61f754f15f9fd0 6-9
+  s_6682473c884b1e::t_5385bd6f43ba2a 5,10,13,15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c03f7bb4fa7b04f329c6d56f301b83c992d44a99",
+  "prompts": {},
+  "sessions": {
+    "s_6682473c884b1e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "37b2cfa0-b7b9-4fdc-a384-5ea62276714a",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
