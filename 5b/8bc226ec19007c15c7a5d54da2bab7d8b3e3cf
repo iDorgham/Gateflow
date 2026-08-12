@@ -1,0 +1,19 @@
+.github/workflows/db-migrate.yml
+  s_cdb54bcad29104::t_8c739fd7ae1386 93-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5b8bc226ec19007c15c7a5d54da2bab7d8b3e3cf",
+  "prompts": {},
+  "sessions": {
+    "s_cdb54bcad29104": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47042bb2-4ab2-4c50-9b24-daf05ba94dd0",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
