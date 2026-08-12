@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 
@@ -126,12 +126,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     );
 
-    const updateResult = await prisma.organization.updateMany({
-      where: { id: organizationId, deletedAt: null },
-      data: { logoUrl: blob.url },
-    });
+    let updateResult;
+    try {
+      updateResult = await prisma.organization.updateMany({
+        where: { id: organizationId, deletedAt: null },
+        data: { logoUrl: blob.url },
+      });
+    } catch (error) {
+      await del(blob.url);
+      throw error;
+    }
 
     if (updateResult.count === 0) {
+      await del(blob.url);
       return NextResponse.json(
         { success: false, message: 'Organization not found' },
         { status: 404 }
