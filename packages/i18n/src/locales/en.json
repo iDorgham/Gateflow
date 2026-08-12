@@ -827,8 +827,8 @@
     },
     "settings": {
       "title": "System Control",
-      "description": "Global configuration and administrative nodes for <1>{{orgName}}</1>.",
-      "gateflowDescription": "Core operational parameters and administrative nodes for <1>{{orgName}}</1>.",
+      "description": "Global configuration and administrative nodes for {{orgName}}.",
+      "gateflowDescription": "Core operational parameters and administrative nodes for {{orgName}}.",
       "tabs": {
         "general": "General",
         "profile": "Profile",

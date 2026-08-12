@@ -26,7 +26,7 @@ import {
   AvatarImage,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
-import { token } from '@atlaskit/tokens';
+import { csrfFetch, getCsrfToken } from '@/lib/csrf';
 import {
   Building2,
   Mail,
@@ -37,13 +37,12 @@ import {
   Info,
 } from 'lucide-react';
 
+// GateFlow brand accent (Kimchi) — used when an org hasn't picked its own color yet.
+const DEFAULT_ACCENT_COLOR = '#ED4B00';
+
 const MAX_LOGO_BYTES = 5 * 1024 * 1024;
-const ALLOWED_LOGO_TYPES = [
-  'image/png',
-  'image/jpeg',
-  'image/webp',
-  'image/svg+xml',
-];
+// SVG intentionally excluded — the upload API rejects it (XML-based security risk).
+const ALLOWED_LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 
 // Nullable = keep data indefinitely, matching Organization.*RetentionMonths
 const retentionMonthsField = z.number().int().min(1).max(120).nullable();
@@ -113,7 +112,7 @@ export function WorkspaceSettingsForm({
     defaultValues: {
       name: initialData?.name || '',
       adminEmail: initialData?.adminEmail || '',
-      accentColor: initialData?.accentColor || '#0052CC',
+      accentColor: initialData?.accentColor || DEFAULT_ACCENT_COLOR,
       logoUrl: initialData?.logoUrl ?? null,
       scanLogRetentionMonths: initialData?.scanLogRetentionMonths ?? null,
       visitorHistoryRetentionMonths:
@@ -130,7 +129,7 @@ export function WorkspaceSettingsForm({
     if (!file) return;
 
     if (!ALLOWED_LOGO_TYPES.includes(file.type)) {
-      toast.error('Logo must be a PNG, JPEG, WebP, or SVG image');
+      toast.error('Logo must be a PNG, JPEG, or WebP image');
       return;
     }
     if (file.size > MAX_LOGO_BYTES) {
@@ -145,10 +144,14 @@ export function WorkspaceSettingsForm({
     try {
       const body = new FormData();
       body.append('file', file);
+      const csrfToken = getCsrfToken();
       const response = await fetch('/api/workspace/logo', {
         method: 'POST',
         body,
         credentials: 'include',
+        // Not csrfFetch: it forces Content-Type: application/json, which breaks
+        // multipart FormData (browser needs to set its own boundary).
+        headers: csrfToken ? { 'x-csrf-token': csrfToken } : undefined,
       });
       const result = await response.json();
       if (!response.ok || !result.success) {
@@ -171,10 +174,8 @@ export function WorkspaceSettingsForm({
     try {
       if (!initialData?.id) return;
 
-      const response = await fetch('/api/workspace/settings', {
+      const response = await csrfFetch('/api/workspace/settings', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           name: data.name,
           email: data.adminEmail,
@@ -225,7 +226,7 @@ export function WorkspaceSettingsForm({
                     type="file"
                     className="hidden"
                     id="logo-upload"
-                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    accept="image/png,image/jpeg,image/webp"
                     disabled={isUploadingLogo}
                     onChange={handleLogoChange}
                   />
@@ -303,14 +304,26 @@ export function WorkspaceSettingsForm({
                   <div className="flex items-center gap-4">
                     <FormControl>
                       <div className="flex items-center gap-3 w-full">
+                        {/* input[type=color] requires a lowercase 6-digit hex or the
+                            browser silently substitutes its own value — feed it a
+                            normalized value instead of the raw (possibly uppercase)
+                            field value, so it can't clobber what the user typed. */}
                         <Input
                           type="color"
                           className="h-10 w-10 p-0 border-none bg-transparent cursor-pointer rounded-lg overflow-hidden shrink-0"
-                          {...field}
+                          value={
+                            /^#[0-9a-f]{6}$/i.test(field.value)
+                              ? field.value.toLowerCase()
+                              : '#000000'
+                          }
+                          onChange={(e) => field.onChange(e.target.value)}
                         />
                         <Input
                           className="font-mono bg-background/50 border-border/50"
-                          {...field}
+                          name={field.name}
+                          value={field.value}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
                           onChange={(e) => field.onChange(e.target.value)}
                         />
                       </div>
