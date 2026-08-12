@@ -88,13 +88,16 @@ export function WorkspaceSettingsForm({
 
   async function onSubmit(data: WorkspaceFormValues) {
     try {
-      if (initialData?.id) {
-        await apiClient.patch(`/organizations/${initialData.id}`, {
-          ...data,
-          logoUrl: logoPreview, // Simplified for v6.0 Phase 2
-        });
-        toast.success('Workspace settings updated successfully');
-      }
+      // PATCH /api/workspace/settings derives the org from the session and
+      // only persists name/email/domain today — accentColor, retentionDays,
+      // and logoUrl aren't backed by that route yet (see workspace/settings
+      // route.ts), so they're intentionally left out of this request rather
+      // than sent and silently dropped.
+      await apiClient.patch('/workspace/settings', {
+        name: data.name,
+        email: data.adminEmail,
+      });
+      toast.success('Workspace settings updated successfully');
     } catch (error) {
       toast.error('Failed to update workspace settings');
       console.error(error);

@@ -28,74 +28,65 @@ interface SettingsTab {
   label: string;
   icon: React.ElementType;
   href: string;
+  slug: string;
   permission?: string;
 }
 
-const SETTINGS_TABS_DEFS: Omit<SettingsTab, 'label'>[] = [
-  { id: 'general', icon: User, href: '/dashboard/settings' },
+interface SettingsTabDef {
+  id: string;
+  icon: React.ElementType;
+  slug: string;
+  permission?: string;
+}
+
+// `slug` is appended to whatever `/settings` root the layout is currently
+// mounted under (e.g. `/en/dashboard/organizations/{orgId}/settings`) — see
+// SettingsLayout's `settingsRoot`. Do not hardcode an absolute href here:
+// the flat `/dashboard/settings/*` routes are legacy redirect shims (see
+// dashboard/settings/[...slug]/page.tsx) that forward to the org-scoped
+// path, so a hardcoded href never matches `usePathname()` and the active
+// tab silently stops updating.
+const SETTINGS_TABS_DEFS: SettingsTabDef[] = [
+  { id: 'general', icon: User, slug: '' },
   {
     id: 'workspace',
     icon: Building,
-    href: '/dashboard/settings/workspace',
+    slug: 'workspace',
     permission: 'workspace:manage',
   },
   {
     id: 'projects',
     icon: Layers,
-    href: '/dashboard/settings/projects',
+    slug: 'projects',
     permission: 'projects:view',
   },
   {
     id: 'residents',
     icon: LayoutGrid,
-    href: '/dashboard/settings/residents',
+    slug: 'residents',
     permission: 'units:view',
   },
-  {
-    id: 'team',
-    icon: Users,
-    href: '/dashboard/settings/team',
-    permission: 'users:view',
-  },
-  {
-    id: 'rbac',
-    icon: ShieldCheck,
-    href: '/dashboard/settings/rbac',
-    permission: 'roles:manage',
-  },
-  {
-    id: 'gates',
-    icon: DoorOpen,
-    href: '/dashboard/settings/gates',
-    permission: 'gates:view',
-  },
-  {
-    id: 'notifications',
-    icon: Bell,
-    href: '/dashboard/settings/notifications',
-  },
-  {
-    id: 'api',
-    icon: Code,
-    href: '/dashboard/settings/api',
-    permission: 'api_keys:manage',
-  },
+  { id: 'team', icon: Users, slug: 'team', permission: 'users:view' },
+  { id: 'rbac', icon: ShieldCheck, slug: 'rbac', permission: 'roles:manage' },
+  { id: 'gates', icon: DoorOpen, slug: 'gates', permission: 'gates:view' },
+  { id: 'notifications', icon: Bell, slug: 'notifications' },
+  { id: 'api', icon: Code, slug: 'api', permission: 'api_keys:manage' },
   {
     id: 'integrations',
     icon: Globe,
-    href: '/dashboard/settings/integrations',
+    slug: 'integrations',
     permission: 'workspace:manage',
   },
   {
     id: 'billing',
     icon: CreditCard,
-    href: '/dashboard/settings/billing',
+    slug: 'billing',
     permission: 'billing:view',
   },
   {
     id: 'danger',
     icon: Trash2,
-    href: '/dashboard/settings/danger',
+    slug: 'danger',
     permission: 'workspace:manage',
   },
 ];
@@ -111,6 +102,15 @@ export function SettingsLayout({
   const [search, setSearch] = useState('');
   const { t } = useTranslation('dashboard');
   const features = useOrganizationFeatures();
+
+  // The layout is mounted under different roots (org-scoped
+  // `/dashboard/organizations/{orgId}/settings`, and the legacy
+  // `/dashboard/settings` redirect shim) — derive the root from the live
+  // pathname rather than hardcoding one, so tab hrefs always match.
+  const settingsRoot = useMemo(() => {
+    const idx = pathname.indexOf('/settings');
+    return idx === -1 ? pathname : pathname.slice(0, idx + '/settings'.length);
+  }, [pathname]);
 
   const tabs: SettingsTab[] = useMemo(() => {
     return SETTINGS_TABS_DEFS.filter((def) => {
@@ -132,14 +132,24 @@ export function SettingsLayout({
         label = t(features.terminology.projectLabel);
       }
 
-      return { ...def, label };
-    });
-  }, [features, permissions, t]);
+      const href = def.slug ? `${settingsRoot}/${def.slug}` : settingsRoot;
 
-  const activeTab = tabs.find(
-    (tab) => pathname === tab.href || pathname.startsWith(tab.href + '/')
+      return { ...def, label, href };
+    });
+  }, [features, permissions, t, settingsRoot]);
+
+  const activeTab = tabs.find((tab) =>
+    tab.slug === ''
+      ? pathname === tab.href
+      : pathname === tab.href || pathname.startsWith(tab.href + '/')
   ) ||
-    tabs[0] || { id: 'none', label: 'Settings', href: '#', icon: User };
+    tabs[0] || {
+      id: 'none',
+      label: 'Settings',
+      href: '#',
+      icon: User,
+      slug: '',
+    };
 
   const visibleTabs = useMemo(() => {
     if (!search.trim()) return tabs;
