@@ -2,7 +2,7 @@
  * .lighthouserc.js — GateFlow Lighthouse CI Configuration
  *
  * CI installs @lhci/cli globally (see .github/workflows/lighthouse.yml).
- * Local runs: `npx --yes @lhci/cli autorun --config=.lighthouserc.js`
+ * Local runs: `npx --yes @lhci/cli@0.14.0 autorun --config=.lighthouserc.js`
  */
 
 /** @type {{ ci: { collect: object, assert: object, upload: object } }} */
