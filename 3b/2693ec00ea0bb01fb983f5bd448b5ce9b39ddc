@@ -1,0 +1,19 @@
+.lighthouserc.js
+  s_089dc91671bc41::t_b2faec733cc3f2 8-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3b2693ec00ea0bb01fb983f5bd448b5ce9b39ddc",
+  "prompts": {},
+  "sessions": {
+    "s_089dc91671bc41": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "be14b036-a799-41a3-b72a-c4ef95cb3c70",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
