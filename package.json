@@ -89,7 +89,6 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
-    "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@turbo/gen": "^2.10.9",
     "@types/jest": "^30.0.0",
