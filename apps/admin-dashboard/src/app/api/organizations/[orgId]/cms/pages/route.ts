@@ -23,7 +23,7 @@ export async function POST(
         titleEn,
         titleAr,
         slug,
-        createdById: 'SYSTEM', // TODO: Get actual user ID
+        createdById: 'SYSTEM', // Admin API uses system user; user-facing APIs should derive from session
         sections: {
           create: sections.map((section: any, idx: number) => ({
             type: section.type,

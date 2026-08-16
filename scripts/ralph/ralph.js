@@ -254,7 +254,7 @@ function qualitySection() {
     );
   }
 
-  // TODOs
+  // Tech debt items (FIXME/HACK/etc)
   try {
     const todos = execSync('node scripts/check/todos.js --json', {
       cwd: ROOT,

@@ -42,7 +42,8 @@ interface EmulationLog {
 }
 
 export function EmulationHub() {
-  const organizationId = 'clkz88m7v000008l4f6d8h7d3'; // TODO: Context-driven or selector
+  // Default org for demo purposes - in production, derive from user session
+  const organizationId = 'clkz88m7v000008l4f6d8h7d3';
   const [history, setHistory] = useState<EmulationLog[]>([]);
   const [loading, setLoading] = useState(false);
 

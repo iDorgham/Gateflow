@@ -1,4 +1,4 @@
-import { buildSidebarNav, NAV_REGISTRY } from './navigation-builder';
+import { buildSidebarNav } from './navigation-builder';
 import { OrganizationType, ORGANIZATION_FEATURES } from '@gate-access/types';
 
 const t = (key: string, fallback: string) => fallback;

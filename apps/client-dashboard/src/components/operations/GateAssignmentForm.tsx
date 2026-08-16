@@ -17,7 +17,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Button,
 } from '@gateflow/ui';
 import { useQuery } from '@tanstack/react-query';
 
@@ -34,7 +33,7 @@ type GateAssignmentValues = z.infer<typeof GateAssignmentSchema>;
 
 interface GateAssignmentFormProps {
   projectId: string;
-  initialData?: any;
+  initialData?: Partial<GateAssignmentValues>;
   onSubmit: (values: GateAssignmentValues) => Promise<void>;
 }
 
@@ -104,7 +103,7 @@ export function GateAssignmentForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {users.map((u: any) => (
+                  {users.map((u: { id: string; name: string; email: string }) => (
                     <SelectItem key={u.id} value={u.id}>
                       {u.name} ({u.email})
                     </SelectItem>
@@ -133,7 +132,7 @@ export function GateAssignmentForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {gates.map((g: any) => (
+                  {gates.map((g: { id: string; name: string }) => (
                     <SelectItem key={g.id} value={g.id}>
                       {g.name}
                     </SelectItem>
