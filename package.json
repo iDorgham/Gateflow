@@ -1,6 +1,6 @@
 {
   "name": "gate-access",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -14,6 +14,7 @@
     "typecheck": "pnpm turbo typecheck",
     "typecheck:all": "pnpm turbo typecheck",
     "preflight": "pnpm docs:changelog:check && pnpm check:ads && pnpm check:bootstrap-routes && pnpm turbo lint && pnpm turbo typecheck && pnpm turbo test",
+    "health": "pnpm workflow:v2:check && pnpm docs:changelog:check && pnpm preflight",
     "test:check-scripts": "node --test scripts/check/__tests__/*.test.js",
     "check:test-budgets": "node scripts/check/check-test-budgets.js",
     "check:secrets:history": "node scripts/check/scan-secrets.js --history 100",

@@ -49,6 +49,12 @@ describe('seed-cli-args', () => {
       expect(p.emulate.totalScans).toBe(500);
     });
 
+    test('parses --demo-full', () => {
+      const p = parseSeedCliArgv(['--demo-full']);
+      expect(p.demoFull).toBe(true);
+      expect(p.dryRun).toBe(false);
+    });
+
     test('help flag', () => {
       expect(parseSeedCliArgv(['--help']).help).toBe(true);
     });
