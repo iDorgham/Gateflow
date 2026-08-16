@@ -53,4 +53,35 @@ describe('seed-cli-run / executeSeedCli', () => {
     });
     expect(runLegacy).not.toHaveBeenCalled();
   });
+
+  test('--demo-full runs legacy then demo seed', async () => {
+    const runLegacy = jest.fn();
+    const runDemo = jest.fn().mockResolvedValue({
+      orgsProcessed: 5,
+      usersUpserted: 16,
+      contactsCreated: 0,
+      unitsCreated: 0,
+      emulationsRun: 0,
+      emulationsSkipped: 5,
+    });
+    await executeSeedCli(['--demo-full'], {
+      prisma: mockDb(),
+      runLegacyDevSeed: runLegacy,
+      runDemoRedSeaSeed: runDemo,
+    });
+    expect(runLegacy).toHaveBeenCalledTimes(1);
+    expect(runDemo).toHaveBeenCalledTimes(1);
+  });
+
+  test('--demo-full --dry-run skips writes', async () => {
+    const runLegacy = jest.fn();
+    const runDemo = jest.fn();
+    await executeSeedCli(['--demo-full', '--dry-run'], {
+      prisma: mockDb(),
+      runLegacyDevSeed: runLegacy,
+      runDemoRedSeaSeed: runDemo,
+    });
+    expect(runLegacy).not.toHaveBeenCalled();
+    expect(runDemo).not.toHaveBeenCalled();
+  });
 });

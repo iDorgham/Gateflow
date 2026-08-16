@@ -4,6 +4,9 @@
 
 ### Added
 
+- Red Sea `--demo-full` / `pnpm --filter=@gate-access/db seed:demo` fills all demo orgs with 6-month contacts, units/classrooms, role logins, and optional scan history.
+- Root `pnpm health` runs workflow v2 contract tests, changelog check, and preflight.
+
 - NotebookLM Knowledge Base Source Suite (`NOTEBOOKLM_01` through `NOTEBOOKLM_09` + `NOTEBOOKLM_README.md`) under `docs/` providing comprehensive AI-ready architecture, database, PRD, and audit sources.
 - Data Retention & Legal Hold system (`retention-executor.ts`, schema migration `add_retention_legal_hold`, soft-deletes for `ScanLog` & `Incident`).
 - Workflow v2 state, fixed pilot sequence, atomic transitions, evidence-bound

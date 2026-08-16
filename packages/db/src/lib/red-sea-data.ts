@@ -25,6 +25,96 @@ export const HURGHADA_AREA_LABELS = [
   'Giftun View',
 ] as const;
 
+/** Red Sea resort areas used by the demo seed (Hurghada metro + nearby compounds). */
+export const RED_SEA_AREAS = [
+  'HURGHADA',
+  'SAHL_HASHEESH',
+  'EL_GOUNA',
+  'SOMA_BAY',
+] as const;
+
+export type RedSeaArea = (typeof RED_SEA_AREAS)[number];
+
+/**
+ * Integer nationality weights keyed by `ContactNationality` (see rich-contact.ts).
+ * Each map lists all 14 nationalities so `normalizeNationalityWeights` does not
+ * fall back to the global default mix.
+ *
+ * Hurghada: Egyptian-heavy + Russian/German holiday-home mix.
+ * Sahl Hasheesh: more even Egyptian / Northern European / Russian mix.
+ * El Gouna: German/British/Dutch expats with a large Egyptian workforce.
+ * Soma Bay: golf/kitesurf crowd — German/British/Dutch + Egyptian.
+ */
+export const AREA_NATIONALITY_WEIGHT_INTS: Record<
+  RedSeaArea,
+  Record<string, number>
+> = {
+  HURGHADA: {
+    EGYPTIAN: 600,
+    RUSSIAN: 160,
+    GERMAN: 120,
+    BRITISH: 30,
+    ITALIAN: 20,
+    POLISH: 20,
+    UKRAINIAN: 20,
+    FRENCH: 10,
+    DUTCH: 10,
+    SAUDI: 5,
+    EMIRATI: 3,
+    AMERICAN: 1,
+    CANADIAN: 1,
+    GREEK: 1,
+  },
+  SAHL_HASHEESH: {
+    EGYPTIAN: 500,
+    GERMAN: 140,
+    BRITISH: 90,
+    RUSSIAN: 90,
+    ITALIAN: 50,
+    POLISH: 30,
+    UKRAINIAN: 25,
+    FRENCH: 20,
+    DUTCH: 20,
+    SAUDI: 15,
+    EMIRATI: 10,
+    AMERICAN: 5,
+    CANADIAN: 3,
+    GREEK: 2,
+  },
+  EL_GOUNA: {
+    EGYPTIAN: 340,
+    GERMAN: 250,
+    BRITISH: 140,
+    DUTCH: 80,
+    FRENCH: 50,
+    ITALIAN: 40,
+    RUSSIAN: 30,
+    POLISH: 20,
+    UKRAINIAN: 15,
+    AMERICAN: 10,
+    CANADIAN: 8,
+    GREEK: 8,
+    SAUDI: 5,
+    EMIRATI: 4,
+  },
+  SOMA_BAY: {
+    EGYPTIAN: 360,
+    GERMAN: 240,
+    BRITISH: 160,
+    DUTCH: 90,
+    FRENCH: 40,
+    ITALIAN: 30,
+    RUSSIAN: 25,
+    POLISH: 15,
+    UKRAINIAN: 12,
+    AMERICAN: 10,
+    CANADIAN: 8,
+    GREEK: 5,
+    SAUDI: 3,
+    EMIRATI: 2,
+  },
+};
+
 /** Common Egyptian given names for synthetic residents (public labels only). */
 export const EGYPTIAN_FIRST_NAMES = [
   'Ahmed',

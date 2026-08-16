@@ -16,6 +16,7 @@ import {
 } from './seed-cli-args';
 import { RUSH_SCENARIOS, type RushScenario } from './rush-hour';
 import { runEmulation } from '../advanced-seed-service';
+import type { DemoSeedOptions, DemoSeedSummary } from './seed-demo-red-sea';
 
 function assertRushScenario(s: string): RushScenario {
   if (!(RUSH_SCENARIOS as readonly string[]).includes(s)) {
@@ -200,6 +201,10 @@ export async function runCliEmulation(
 export type ExecuteSeedCliDeps = {
   prisma: PrismaClient;
   runLegacyDevSeed: () => Promise<void>;
+  runDemoRedSeaSeed?: (
+    db: PrismaClient,
+    options?: DemoSeedOptions
+  ) => Promise<DemoSeedSummary>;
 };
 
 /**
@@ -246,6 +251,19 @@ export async function executeSeedCli(
       parsed.organizationsMin,
       parsed.organizationsMax
     );
+  }
+
+  if (parsed.demoFull) {
+    if (parsed.dryRun) {
+      console.log('[seed-cli] dry-run: skipping demo-full writes.');
+      return;
+    }
+    await runLegacyDevSeed();
+    const runDemo =
+      deps.runDemoRedSeaSeed ??
+      (await import('./seed-demo-red-sea')).runDemoRedSeaSeed;
+    await runDemo(db, { emulate: true, dryRun: false });
+    return;
   }
 
   if (wantsEmu) {
