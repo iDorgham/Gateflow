@@ -6,7 +6,12 @@ const { resolveResidentRewriteDestination } = require('./api-upstream.cjs');
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
-  transpilePackages: ['@gateflow/ui', '@gate-access/db', '@gate-access/types'],
+  transpilePackages: [
+    '@gateflow/ui',
+    '@gateflow/theme',
+    '@gate-access/db',
+    '@gate-access/types',
+  ],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

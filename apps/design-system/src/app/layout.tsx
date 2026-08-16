@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@gateflow/theme';
+import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import { ToastProvider } from '@gateflow/ui';
 import { cn } from '@gateflow/ui/utils';
 
@@ -52,6 +52,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={cn(
           'min-h-screen font-sans antialiased bg-background text-foreground',

@@ -1,16 +1,7 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@gateflow/theme';
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <ThemeProvider
-      attribute="data-color-mode"
-      defaultTheme="light"
-      enableSystem={true}
-      disableTransitionOnChange={true}
-    >
-      {children}
-    </ThemeProvider>
-  );
+  return <ThemeProvider>{children}</ThemeProvider>;
 }

@@ -22,6 +22,7 @@ const cairo = Cairo({
 
 import { OrganizationJsonLd, WebSiteJsonLd } from '../../components/json-ld';
 import { MarketingScripts } from '../../src/components/MarketingScripts';
+import { ThemeScript } from '@gateflow/theme';
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ locale }));
@@ -133,6 +134,7 @@ export default async function RootLayout(props: {
   return (
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />

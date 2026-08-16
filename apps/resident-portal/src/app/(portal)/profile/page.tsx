@@ -6,6 +6,7 @@ import { prisma } from '@gate-access/db';
 import { Input } from '@gateflow/ui';
 import { PageHeader } from '@/components/layout/page-header';
 import { SignOutButton } from '@/components/profile/sign-out-button';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default async function ProfilePage() {
   const claims = await getSessionClaims();
@@ -119,6 +120,9 @@ export default async function ProfilePage() {
               </div>
               <ChevronRight className="h-4 w-4 text-slate-400" />
             </Link>
+            <div className="px-5 py-3">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
