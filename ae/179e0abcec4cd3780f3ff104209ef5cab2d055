@@ -1,0 +1,352 @@
+apps/client-dashboard/src/components/settings/api/webhook-table.tsx
+  s_9c8d659f566424::t_6fd1ecea2343d7 21,65-69
+apps/scanner-app/src/components/SettingsTab.tsx
+  s_9c8d659f566424::t_4054ff3633fff0 121-129
+  s_9c8d659f566424::t_f2022e36d2d2af 17
+  s_9c8d659f566424::t_a5e62c9f0849c1 165
+  s_9c8d659f566424::t_2a22bfecd6ca42 495
+  s_9c8d659f566424::t_ebcc0356ddab72 15-16
+  s_9c8d659f566424::t_7c8de1d5d48785 496
+  s_9c8d659f566424::t_7f405342a485ba 682-686
+  s_9c8d659f566424::t_e49712f78412a9 283,291
+  s_9c8d659f566424::t_4c9ad4e2b1fa5a 439-455,457-458,460-462
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/api/page.tsx
+  s_9c8d659f566424::t_e7a601284fc010 7-10,56-58,61,66-67,70
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/actions.ts
+  s_9c8d659f566424::t_aa2b6f46bca4d6 7-10
+  s_9c8d659f566424::t_100cc4f0e2e69a 11
+  s_63e05894fe1137::t_55e88806a5c990 41
+  s_9c8d659f566424::t_779937df3600fb 87
+  s_9c8d659f566424::t_c14689c3fb1391 28
+  s_9c8d659f566424::t_4716c3445798b0 29
+  s_63e05894fe1137::t_985dc5be3d133c 30,42
+  s_9c8d659f566424::t_7aba004ccde98f 12
+  s_9c8d659f566424::t_86df367e513bad 61-64,93
+apps/client-dashboard/src/components/settings/settings-section-header.tsx
+  s_9c8d659f566424::t_559cd4802f1060 1-36
+apps/client-dashboard/src/components/settings/settings-layout.tsx
+  s_9c8d659f566424::t_14f2a40ab7a098 218,238,240-241,243,269-270,273-277
+  s_9c8d659f566424::t_9b70201bbcbe2d 169,173
+  s_9c8d659f566424::t_6173e7938d5e4e 220-221,267
+  s_9c8d659f566424::t_6d828d8ea36429 227
+apps/scanner-app/src/components/ChatTab.tsx
+  s_9c8d659f566424::t_44d8568967d957 86-90
+  s_9c8d659f566424::t_c9dcaeaaf58929 16
+apps/scanner-app/src/components/HistoryTab.tsx
+  s_9c8d659f566424::t_d35fcda45bbc62 195
+  s_9c8d659f566424::t_2c6e779adef96c 19
+  s_9c8d659f566424::t_fd80a322e9908a 18
+  s_9c8d659f566424::t_afa5f75734aeea 28,34,40,46,52,90
+  s_9c8d659f566424::t_c2b4ab15746aee 191-194
+apps/client-dashboard/src/app/api/team/members/route.ts
+  s_9c8d659f566424::t_ff419e7ccf986e 5
+  s_9c8d659f566424::t_bf7204b7744542 45-51
+  s_9c8d659f566424::t_5873f951ba23d8 71-74,80-87,98-101,111-114,117-120,128-131,137-140,149-152,156-159,167-170,173-176
+apps/client-dashboard/src/app/api/team/roles/route.ts
+  s_9c8d659f566424::t_17757c646b05fb 12-15,36-37,50-53
+  s_9c8d659f566424::t_6c107c7f7984f4 4,40-42
+  s_9c8d659f566424::t_50b5f223035d5f 18-23,26,31-33,46
+  s_9c8d659f566424::t_2abe7b3fc17e49 43
+packages/types/src/roles.ts
+  s_9c8d659f566424::t_597da9299d5301 7-14,44-45,56,59-61,67,75,78-79
+  s_9c8d659f566424::t_b9ca05af470aa7 282-287
+  s_9c8d659f566424::t_60c760c540e530 5-6,15-37,43,46-55,57-58,62-66,68-74,76-77,93,101-102,107-108,113-114,119-120,125-126,131-132,137-138,143-144,149-150,155-156,161-162,167-168,173-174,179-180,185-186,191-194,272-274,276
+  s_9c8d659f566424::t_581b09297214f6 1-4,38-42,80-92,94-100,103-106,109-112,115-118,121-124,127-130,133-136,139-142,145-148,151-154,157-160,163-166,169-172,175-178,181-184,187-190,195-271,275,277-278
+  s_9c8d659f566424::t_7f36dac1721f9f 279-281
+packages/db/prisma/migrations/20260815120000_add_role_slug/migration.sql
+  s_9c8d659f566424::t_8e683f8bd4bf75 1-20
+apps/client-dashboard/src/components/settings/team/role-dashboard.tsx
+  s_9c8d659f566424::t_1dfc04f54bb1ce 210-212
+  s_9c8d659f566424::t_7597154539fe4f 55
+  s_9c8d659f566424::t_8e31c24d6ebe47 171,180,203-209
+  s_9c8d659f566424::t_96aaf4e80dfca3 173-175
+  s_9c8d659f566424::t_8c404e45ad8d33 176-179
+  s_9c8d659f566424::t_d7e03b9bb0202e 32-33,38,67,115,121,123,126,131,134,142,145,147,156-157,164,166,184-199,218,254-255,283-287,304-308,334-337,339-341
+  s_9c8d659f566424::t_80d6f7a0dce65b 172
+  s_9c8d659f566424::t_1e974ebda243de 181,368-371
+  s_9c8d659f566424::t_42f78e8a3bd0ef 289-291
+  s_9c8d659f566424::t_f5c38a344d83dc 301-303
+  s_9c8d659f566424::t_9e17d0c5e530e5 200-202
+  s_9c8d659f566424::t_fee03aa1ae9069 372
+  s_9c8d659f566424::t_f4cc5fe3845d41 292-300
+apps/scanner-app/src/components/GateSelector.tsx
+  s_9c8d659f566424::t_8e8dc01b4f7662 14
+  s_9c8d659f566424::t_654b7e95ce22ec 182-188
+  s_9c8d659f566424::t_c8692edd0a0e97 245-251
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/tabs/roles-tab.tsx
+  s_9c8d659f566424::t_2ca731dacc9182 38,76-81,83-84,174-176,245-275,277-280,282-283
+  s_9c8d659f566424::t_d56e50caf59ba0 161
+  s_9c8d659f566424::t_d7dc1fa4b24d83 162-163
+  s_9c8d659f566424::t_b1929ff355ef39 160
+  s_9c8d659f566424::t_224c457534b515 33
+packages/db/src/seed-roles.js
+  s_9c8d659f566424::t_b65af665ccf761 2-5,10-14,17-60,63-86,90,102,104-108,110-113,121,124-138,140-159
+  s_9c8d659f566424::t_a89ad098a94b1c 88-89,92-101,103,109,114-116
+  s_9c8d659f566424::t_3788d0c2ad2df9 118,139,160
+apps/client-dashboard/src/components/settings/team/invitation-list.tsx
+  s_9c8d659f566424::t_3e2ab0a7a5d5fe 121
+  s_9c8d659f566424::t_7f26de0318f82b 18
+  s_9c8d659f566424::t_2622565889b462 71-78
+  s_9c8d659f566424::t_f934cb87c696e7 19
+apps/client-dashboard/src/lib/email.ts
+  s_9c8d659f566424::t_fd11b854a55a8c 230
+  s_9c8d659f566424::t_1aac0d2b2271ba 166-229
+apps/client-dashboard/src/components/settings/projects/project-table.tsx
+  s_9c8d659f566424::t_e28941da6d0857 74-88
+  s_9c8d659f566424::t_2c9d0efa322c52 30
+apps/client-dashboard/src/components/settings/team/activity-log-list.tsx
+  s_9c8d659f566424::t_b83b15e479eb2d 27,81-119,121-124,126-171,173-180
+apps/client-dashboard/src/components/settings/integrations/integration-cards.tsx
+  s_9c8d659f566424::t_77ef1be86dfee5 25,77,88,178-181,185,187-188,190-192
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions.ts
+  s_9c8d659f566424::t_9f45563618691b 10-14,16
+  s_9c8d659f566424::t_5ef65bb74d600e 15
+  s_9c8d659f566424::t_8bd302b3039b95 7
+  s_9c8d659f566424::t_c82df217f3a8a9 259
+  s_9c8d659f566424::t_90e80244ef0482 417
+  s_9c8d659f566424::t_937b131a6935c5 499-501
+  s_9c8d659f566424::t_2a71c4f76ac5b4 475
+  s_9c8d659f566424::t_2081b70cb3cff7 104-110,261,437-438
+  s_9c8d659f566424::t_a8ae82c4570168 117-125,128-134,138,143-167,169,179-183,192,194,196-200,202-203,212-214,218-225,228,502,506
+  s_9c8d659f566424::t_6365ee737ec163 21-22,24,26-31,478
+  s_9c8d659f566424::t_396b8fe3f10de3 503-505
+  s_9c8d659f566424::t_79401f91e4cb41 8
+  s_9c8d659f566424::t_5d685908eabace 37,234,260,262,265,422,435,507-510,513-514,565-566,784-854,857
+  s_9c8d659f566424::t_2700562409db27 23
+  s_9c8d659f566424::t_a499ac9af12f57 233
+  s_9c8d659f566424::t_68dfdf74c6105d 263-264
+  s_9c8d659f566424::t_9efd73491929e3 418-421
+  s_9c8d659f566424::t_0bd2131ed0cdba 436
+  s_9c8d659f566424::t_6aa85330f3d563 476-477
+  s_9c8d659f566424::t_f03d27b05d2e6a 479-480
+  s_9c8d659f566424::t_1ccb1c7b1f0f8b 855-856
+  s_9c8d659f566424::t_fe43c05068a8ce 858-859
+  s_9c8d659f566424::t_22ba036c0a1e64 237,244
+apps/scanner-app/src/components/DeviceUnlockScreen.tsx
+  s_9c8d659f566424::t_6c872de1637d6f 102
+  s_9c8d659f566424::t_44e42b4b3665d9 146,179,185,189,208,216
+  s_9c8d659f566424::t_2197785664e03a 162
+  s_9c8d659f566424::t_d7d25b82ae0d51 135,138,142-143
+  s_9c8d659f566424::t_b789943d1cf451 79,81-82,85,95
+  s_9c8d659f566424::t_a1928c9310d8e2 107
+  s_9c8d659f566424::t_f5dd0240fa243a 96
+  s_9c8d659f566424::t_58a607f14cd0ff 5,17,97-101,103-106,108,119-122,124,128-129,131-134,136-137,163-167
+apps/client-dashboard/src/app/[locale]/change-password/actions.ts
+  s_9c8d659f566424::t_4a9e87fcb453bb 44-46
+  s_9c8d659f566424::t_825e2a0b54ac96 1-43
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/residents/page.tsx
+  s_9c8d659f566424::t_50505f8d33b75e 9-12,32-34,37-38,41-42
+apps/client-dashboard/src/app/[locale]/login/actions.ts
+  s_9c8d659f566424::t_7b233ead8b7071 24
+  s_9c8d659f566424::t_26b87bdc8f3cf1 121-125
+  s_9c8d659f566424::t_1b377ace57a4bf 61
+apps/scanner-app/src/hooks/use-biometry.ts
+  s_9c8d659f566424::t_01863fbce92d28 74-77
+apps/scanner-app/src/lib/security/secure-pin.ts
+  s_9c8d659f566424::t_6f4821c45c9ac2 41
+  s_9c8d659f566424::t_d4a50aa6d50f9f 3-19,23-24,32,37,47,49,58,65-89
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/settings/actions.ts
+  s_9c8d659f566424::t_1e7d111ab3acc6 7,17-44,72-76,79,112-116,121-124,126-130,133,137-140,156-163,167-168,176-189,199-202,214,218-221,225-226,244-247,253-254,259-264,278-279,295-303,322-327,355-358
+apps/client-dashboard/src/app/[locale]/dashboard/profile/actions.ts
+  s_9c8d659f566424::t_4217cac6398a87 74-77
+  s_9c8d659f566424::t_b2f6e6aa377bae 78-80
+  s_9c8d659f566424::t_46142ec0f97d78 23-26,52,58-61,70-71
+packages/types/src/roles.test.ts
+  s_9c8d659f566424::t_41b66931e3bb16 3
+  s_9c8d659f566424::t_ff6f7f24a792a5 90
+  s_9c8d659f566424::t_80c8c63f4dd2ea 30-38,41-43,49-52
+  s_9c8d659f566424::t_0449a72fc62d27 8,11-16,18,20-26,39-40,44-48,72,78
+  s_9c8d659f566424::t_d1881f59b555d1 1-2,4-7,9-10,17,19,27-29,53-71,73-77,79-89
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/gates/page.tsx
+  s_9c8d659f566424::t_490e70a11359a3 8-11,58-60,62,66-67
+apps/client-dashboard/src/components/settings/team/invite-member-sheet.tsx
+  s_9c8d659f566424::t_bbf790823cd1ce 107-109
+  s_9c8d659f566424::t_8e4fcd2fb4d577 3,19-23,25-35,51-98,116-120,122,125-126,128-170,172,174,177-185,188-191,194-195,203-209,211-214,216-217,219,222,227-235,237-241,243-276,280-287,289-357,359-392,400-439,441-536,539,543,546
+  s_9c8d659f566424::t_93cab7ea816d1e 393-395,397-399
+  s_9c8d659f566424::t_52466918a83a1d 115
+  s_9c8d659f566424::t_16de902a9005ef 547
+  s_9c8d659f566424::t_a450c76c206bc9 99-101
+  s_9c8d659f566424::t_1592a89517d4ff 50,110-114
+  s_9c8d659f566424::t_ff5fc8a1947078 242
+  s_9c8d659f566424::t_24ac7440701ca6 277,358
+  s_9c8d659f566424::t_197c2bd302e77d 39,44,102,105-106,396,553
+apps/client-dashboard/src/app/[locale]/change-password/page.tsx
+  s_9c8d659f566424::t_db3476b449fda6 25
+  s_9c8d659f566424::t_6f257945555314 6-11,13,21
+  s_9c8d659f566424::t_7392a7883e024a 1-5,12,14-20,22-24
+apps/client-dashboard/src/components/settings/danger/danger-zone.tsx
+  s_9c8d659f566424::t_a4c750b2099cd1 30,427-431
+packages/types/src/index.ts
+  s_9c8d659f566424::t_640f1fac078fe3 2
+apps/scanner-app/src/components/scanner/result-overlay.tsx
+  s_9c8d659f566424::t_9e1a8267fedc28 2,31-43,51-58,80-87,103-108,156-160
+apps/scanner-app/src/screens/onboarding/security-setup-screen.tsx
+  s_9c8d659f566424::t_54e09d4c111abe 71-73
+  s_9c8d659f566424::t_4ad2dea128d205 77
+  s_9c8d659f566424::t_01e771addfc2dc 82
+  s_9c8d659f566424::t_8e1e0a6a64a4ff 4,13,23,65-69,76,78-79,81,83-91,130,137-138,140,153
+  s_9c8d659f566424::t_6e53a53db04c86 32-33
+apps/admin-dashboard/src/app/[locale]/(dashboard)/team-roles/page.tsx
+  s_9c8d659f566424::t_19daff211485ac 30
+  s_9c8d659f566424::t_06c7198a98b9f1 145
+packages/db/prisma/create-user.ts
+  s_9c8d659f566424::t_a0194b45294006 69
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/page.tsx
+  s_9c8d659f566424::t_12e251dc66a636 5,9,12-16,25-33,37-40,45,49-62
+apps/scanner-app/src/screens/login/login-screen.tsx
+  s_9c8d659f566424::t_747a307a24f033 108-112
+  s_9c8d659f566424::t_c8f74bc0740fef 17
+  s_9c8d659f566424::t_eb56aefa14fecc 277-283
+  s_9c8d659f566424::t_f3508cddb62b86 143-147
+apps/scanner-app/src/components/QueueStatus.tsx
+  s_9c8d659f566424::t_56de8298350215 444-448
+  s_9c8d659f566424::t_37927dec911356 15
+  s_9c8d659f566424::t_c16ce134b68def 220-227
+  s_9c8d659f566424::t_b541ccc93ef039 426-430
+  s_9c8d659f566424::t_4f1452e5c7e004 244-253
+apps/client-dashboard/src/components/settings/team/team-roster.tsx
+  s_9c8d659f566424::t_a14681f655f34f 42
+  s_9c8d659f566424::t_aa3cc5e6f4778d 177-191,199
+  s_9c8d659f566424::t_f3db405d2c0239 290
+  s_9c8d659f566424::t_f9df720fef7320 328
+  s_9c8d659f566424::t_2575acb1670262 47
+  s_9c8d659f566424::t_a0346e784df7f9 41
+apps/scanner-app/src/screens/scanner/scanner-screen.tsx
+  s_9c8d659f566424::t_89ddb8ece5066e 1071
+  s_9c8d659f566424::t_7d568cd67e7719 1011
+  s_9c8d659f566424::t_ccf13eec17e900 41,43-45,47,49-50,52
+  s_9c8d659f566424::t_e65ffd66473a05 42,46,48,51
+  s_9c8d659f566424::t_48c81e7750a81b 1112
+  s_9c8d659f566424::t_ae119d4aeb6343 612-616
+  s_9c8d659f566424::t_1ad8f31fb5ab07 1052
+  s_9c8d659f566424::t_7df0faf0a756b6 1090
+  s_9c8d659f566424::t_74149423bc4ca5 748-774
+  s_9c8d659f566424::t_f84de2c019ab10 546
+  s_9c8d659f566424::t_e4dbef352dcb0e 100-117
+  s_9c8d659f566424::t_f15867e3b52345 784-791
+  s_9c8d659f566424::t_2451aacccaa079 1033
+  s_9c8d659f566424::t_90cd88f2571c0b 1195-1200
+  s_9c8d659f566424::t_d24df170852912 715-724
+packages/types/src/base.ts
+  s_9c8d659f566424::t_3f4183dcb92032 82,84
+apps/client-dashboard/src/components/dashboard/team/TeamMembersTable.tsx
+  s_9c8d659f566424::t_830dabac7e0ef0 129
+  s_9c8d659f566424::t_2a5e9605f603e5 142
+  s_9c8d659f566424::t_46fa262dbe27ce 131-132
+  s_9c8d659f566424::t_d3d4365edaf6fc 151
+  s_9c8d659f566424::t_4d52c5cab6117b 37,227,237
+  s_9c8d659f566424::t_52affd3ea9049e 130,133-136,138-141,143-150
+apps/scanner-app/src/components/TodayVisitsTab.tsx
+  s_9c8d659f566424::t_8c379122756f83 122-125
+  s_9c8d659f566424::t_59ba9003b8415a 34,40,46,52,91
+  s_9c8d659f566424::t_90b942f3fff0de 15
+  s_9c8d659f566424::t_5b479b931817b1 126
+  s_9c8d659f566424::t_ae63a908f262d8 16
+apps/client-dashboard/src/components/settings/gates/gate-table.tsx
+  s_9c8d659f566424::t_bca019f7c25720 36
+  s_9c8d659f566424::t_1086f2a5729ff8 103-117,125
+packages/db/prisma/schema.prisma
+  s_9c8d659f566424::t_1a66bd311a02c9 153-154,166-167
+  s_9c8d659f566424::t_1c9ef134440aa0 175-176
+apps/client-dashboard/src/components/settings/api/api-key-table.tsx
+  s_9c8d659f566424::t_1299152622cc4c 20,61-65
+apps/scanner-app/src/components/SupervisorOverride.tsx
+  s_9c8d659f566424::t_3b302642473866 241,245-246,251,256-267,269
+  s_9c8d659f566424::t_eb4acc13c36634 282-286,288,307
+  s_9c8d659f566424::t_1a16d6efffdd8e 227,449,452,472
+  s_9c8d659f566424::t_d56b32c210f313 61-62
+  s_9c8d659f566424::t_92569268f17265 123-131,134
+  s_9c8d659f566424::t_c10a64e4cbb5db 16
+  s_9c8d659f566424::t_d77622d6f6f2e4 17
+  s_9c8d659f566424::t_942c0c446a846f 289-290
+  s_9c8d659f566424::t_18892df67d2dca 179
+  s_9c8d659f566424::t_d35765eeed59e1 301-305
+  s_9c8d659f566424::t_df31fa197a572e 447-448
+  s_9c8d659f566424::t_2e6903e29ec0d3 474-475
+apps/client-dashboard/src/app/[locale]/login/page.tsx
+  s_9c8d659f566424::t_111e35a279eb51 172-174
+  s_9c8d659f566424::t_a620feece2a620 175-177
+  s_9c8d659f566424::t_88c203f0c0075d 163-167
+  s_9c8d659f566424::t_d101ee75158144 171
+apps/scanner-app/src/lib/auth-client.ts
+  s_9c8d659f566424::t_4425d4cef93eb9 241-245
+apps/admin-dashboard/src/components/users/UsersClient.tsx
+  s_9c8d659f566424::t_27f884509c708c 170
+  s_9c8d659f566424::t_57aee1c663f1a3 26
+packages/db/prisma/migrations/20260814230000_add_user_must_change_password/migration.sql
+  s_9c8d659f566424::t_29a7e71b47dae4 2-3
+  s_9c8d659f566424::t_e6676dddda5590 1
+apps/client-dashboard/src/components/settings/team/gate-assignment-manager.tsx
+  s_9c8d659f566424::t_baf4474b52cf28 39,43,71,76,106-135,150-152,154,166-178,193-200,205-206,216-217,222,250,253-262,300-301,311-312,330,332-336,347,350,353,356,434-455
+packages/db/src/seed-roles.ts
+  s_9c8d659f566424::t_13bb9275fdcabc 1-2,13-14,20,23,25-30,33-40,42-49,51,53-57,110,115
+  s_9c8d659f566424::t_12dee4cb79f00a 12
+  s_9c8d659f566424::t_2812b8c2ddfc31 118-121
+  s_9c8d659f566424::t_90933c52be328e 108-109
+  s_9c8d659f566424::t_4f17664804af8b 61
+  s_9c8d659f566424::t_7d8ca6ba3069b1 99
+  s_9c8d659f566424::t_ad13022059ebea 58,60
+  s_9c8d659f566424::t_f3995c873bc915 3-5,7-8,10-11,17,65-71,73-77,79-80,87-90,92,94-95
+  s_9c8d659f566424::t_acad9891cbd991 6,9,15-16,24,31,41,50,52,59,62-64,72,78,81-86,91,93,96-98,100-107
+apps/scanner-app/src/components/scanner/decision-dialog.tsx
+  s_9c8d659f566424::t_e92d8306635f63 52-54
+  s_9c8d659f566424::t_ed4716c4d7011a 56
+  s_9c8d659f566424::t_411067d56f8c5b 55
+  s_9c8d659f566424::t_c07e4e3537127c 2,19-23
+  s_9c8d659f566424::t_6996271e5db849 67
+apps/client-dashboard/src/lib/dashboard-auth.ts
+  s_9c8d659f566424::t_446f7dc2fb6140 42
+  s_9c8d659f566424::t_3bbe9cd5b14b52 55
+  s_9c8d659f566424::t_8437844ae4ed31 14
+apps/client-dashboard/src/components/settings/notifications/notification-prefs-form.tsx
+  s_9c8d659f566424::t_eebf58b57ede9c 28,145-157,159,161-162
+apps/client-dashboard/src/app/[locale]/change-password/change-password-form.tsx
+  s_9c8d659f566424::t_1e469649e3260f 1-148
+  s_9c8d659f566424::t_a20f2a2c8087e5 149-150
+packages/types/src/user.ts
+  s_9c8d659f566424::t_55a364a3f696b4 9-13
+apps/client-dashboard/src/components/settings/team/shift-manager.tsx
+  s_9c8d659f566424::t_7c4c97a2108ddd 1-272
+apps/scanner-app/src/lib/security/secure-pin.test.ts
+  s_9c8d659f566424::t_b0a5e5f10c9222 1-61,71
+  s_9c8d659f566424::t_3da26bfc3cb93f 62-70
+apps/scanner-app/src/components/security/pin-keypad.tsx
+  s_9c8d659f566424::t_59963645b0947d 1-12,14-27,29-65,67-73,75-77,80-90,92-108,110-180
+  s_9c8d659f566424::t_598eb50dba6e91 74
+  s_9c8d659f566424::t_e315b96697479e 184-187
+  s_9c8d659f566424::t_d31b9035aaf0b4 66
+  s_9c8d659f566424::t_0aa0c250c9cda7 78-79
+  s_9c8d659f566424::t_2dc911143820ba 91
+  s_9c8d659f566424::t_f872a93139176f 109
+  s_9c8d659f566424::t_ae0e0e77a4c083 181-183
+  s_9c8d659f566424::t_aff9ab2fc2d91b 28
+  s_9c8d659f566424::t_8e4182753515c2 13
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/team/page.tsx
+  s_9c8d659f566424::t_b9613f54f78792 8,16,18-29,43,51,62,67-69,72,77-78,81,86-87,90-91,94,99-104,132-135
+CHANGELOG.md
+  s_9c8d659f566424::t_2333756a89b07e 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ae179e0abcec4cd3780f3ff104209ef5cab2d055",
+  "prompts": {},
+  "sessions": {
+    "s_63e05894fe1137": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e387ea4-d587-47a4-804d-1016f3059207",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
