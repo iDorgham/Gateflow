@@ -10,6 +10,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Workspace]** tracking next changes
+
+### AI Tools
+
+### Apps
+
+---
+
+## [0.4.0] — 2026-08-16
+
+### Workspace
+
 - **[DB]** Red Sea `--demo-full` seed fills all demo orgs with 6-month contacts, units/classrooms, role logins, and scan history
 - **[Workspace]** add `pnpm health` to run workflow contract, changelog check, and preflight
 - **[Security]** drop unused workspace @lhci/cli to remove unpatched extract-zip (CVE-2026-56876); CI still installs LHCI globally
