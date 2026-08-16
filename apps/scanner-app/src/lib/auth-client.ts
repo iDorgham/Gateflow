@@ -238,7 +238,11 @@ export async function login(
 
     return { success: true };
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    const detail = (error as Error).message || 'Network error';
+    return {
+      success: false,
+      error: `${detail} (${API_BASE_URL})`,
+    };
   }
 }
 

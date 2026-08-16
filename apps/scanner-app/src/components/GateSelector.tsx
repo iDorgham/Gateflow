@@ -11,6 +11,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getValidAccessToken } from '../lib/auth-client';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
+import { Check } from 'lucide-react-native';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -178,7 +179,13 @@ export function GateSelector({
             <Text style={s.gateLocation}>{item.location}</Text>
           )}
         </View>
-        {isSelected && <Text style={s.checkmark}>✓</Text>}
+        {isSelected && (
+          <Check
+            size={20}
+            strokeWidth={1.5}
+            color={nativeTokens.colors.primary}
+          />
+        )}
       </Pressable>
     );
   };
@@ -235,7 +242,13 @@ export function GateSelector({
                     >
                       No gate selected
                     </Text>
-                    {!selectedGate && <Text style={s.checkmark}>✓</Text>}
+                    {!selectedGate && (
+                      <Check
+                        size={20}
+                        strokeWidth={1.5}
+                        color={nativeTokens.colors.primary}
+                      />
+                    )}
                   </Pressable>
                 }
                 ListEmptyComponent={

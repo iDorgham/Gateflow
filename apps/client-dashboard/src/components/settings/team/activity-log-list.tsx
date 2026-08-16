@@ -24,6 +24,7 @@ import {
   FileText,
 } from 'lucide-react';
 import type { ActivityLog } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface ActivityLogListProps {
   logs: ActivityLog[];
@@ -76,101 +77,107 @@ const ACTION_MAP: Record<
 };
 
 export function ActivityLogList({ logs }: ActivityLogListProps) {
-  if (logs.length === 0) {
-    return (
-      <EmptyState
-        icon={History}
-        title="No activity recorded"
-        description="Administrative actions will appear here once they occur."
-        className="min-h-[240px]"
-      />
-    );
-  }
-
   return (
-    <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm">
-      <Table>
-        <TableHeader className="bg-muted/30">
-          <TableRow className="hover:bg-transparent border-border/50">
-            <TableHead className="text-[10px] font-black uppercase tracking-widest h-10">
-              Admin
-            </TableHead>
-            <TableHead className="text-[10px] font-black uppercase tracking-widest h-10">
-              Action
-            </TableHead>
-            <TableHead className="text-[10px] font-black uppercase tracking-widest h-10">
-              Target
-            </TableHead>
-            <TableHead className="text-[10px] font-black uppercase tracking-widest h-10 text-right">
-              Time
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {logs.map((log) => {
-            const action = ACTION_MAP[log.action] || {
-              label: log.action,
-              icon: FileText,
-              color: 'text-muted-foreground bg-muted',
-            };
-            const Icon = action.icon;
-
-            return (
-              <TableRow
-                key={log.id}
-                className="group border-border/50 hover:bg-muted/20 transition-colors"
-              >
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-7 w-7 border border-border">
-                      <AvatarImage src={log.user?.avatarUrl || ''} />
-                      <AvatarFallback className="text-[10px] font-black bg-primary/5 text-primary">
-                        {log.user?.name?.[0] || 'A'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-bold truncate">
-                        {log.user?.name || 'System / Anonymous'}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground truncate uppercase font-black tracking-tight">
-                        {log.user?.email || ''}
-                      </span>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell className="py-3">
-                  <Badge
-                    variant="outline"
-                    className={`gap-1.5 py-1 px-2 text-[9px] font-black uppercase tracking-widest border-none ${action.color}`}
-                  >
-                    <Icon className="h-3 w-3" />
-                    {action.label}
-                  </Badge>
-                </TableCell>
-                <TableCell className="py-3">
-                  <div className="flex flex-col">
-                    <span className="text-[11px] font-medium text-muted-foreground font-mono truncate max-w-[150px]">
-                      {log.entityId || '-'}
-                    </span>
-                    {log.metadata && (
-                      <span className="text-[9px] text-muted-foreground/70 font-medium">
-                        {JSON.stringify(log.metadata).length > 2
-                          ? JSON.stringify(log.metadata)
-                          : ''}
-                      </span>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell className="py-3 text-right">
-                  <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground transition-colors">
-                    {formatDistanceToNow(log.createdAt, { addSuffix: true })}
-                  </span>
-                </TableCell>
+    <div className="space-y-4">
+      <SettingsSectionHeader
+        title="Activity"
+        description="Administrative actions for this organization."
+      />
+      {logs.length === 0 ? (
+        <EmptyState
+          icon={History}
+          title="No activity recorded"
+          description="Administrative actions will appear here once they occur."
+          className="min-h-[240px]"
+        />
+      ) : (
+        <div className="overflow-hidden rounded-[8px] border border-[var(--ds-border)] bg-[var(--ds-surface)]">
+          <Table>
+            <TableHeader className="bg-[var(--ds-background-neutral-subtle)]">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="h-10 text-xs font-semibold">
+                  Admin
+                </TableHead>
+                <TableHead className="h-10 text-xs font-semibold">
+                  Action
+                </TableHead>
+                <TableHead className="h-10 text-xs font-semibold">
+                  Target
+                </TableHead>
+                <TableHead className="h-10 text-right text-xs font-semibold">
+                  Time
+                </TableHead>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableHeader>
+            <TableBody>
+              {logs.map((log) => {
+                const action = ACTION_MAP[log.action] || {
+                  label: log.action,
+                  icon: FileText,
+                  color: 'text-muted-foreground bg-muted',
+                };
+                const Icon = action.icon;
+
+                return (
+                  <TableRow
+                    key={log.id}
+                    className="group border-border/50 hover:bg-muted/20 transition-colors"
+                  >
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-7 w-7 border border-border">
+                          <AvatarImage src={log.user?.avatarUrl || ''} />
+                          <AvatarFallback className="text-[10px] font-black bg-primary/5 text-primary">
+                            {log.user?.name?.[0] || 'A'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-bold truncate">
+                            {log.user?.name || 'System / Anonymous'}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground truncate uppercase font-black tracking-tight">
+                            {log.user?.email || ''}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3">
+                      <Badge
+                        variant="outline"
+                        className={`gap-1.5 py-1 px-2 text-[9px] font-black uppercase tracking-widest border-none ${action.color}`}
+                      >
+                        <Icon className="h-3 w-3" />
+                        {action.label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="py-3">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-medium text-muted-foreground font-mono truncate max-w-[150px]">
+                          {log.entityId || '-'}
+                        </span>
+                        {log.metadata && (
+                          <span className="text-[9px] text-muted-foreground/70 font-medium">
+                            {JSON.stringify(log.metadata).length > 2
+                              ? JSON.stringify(log.metadata)
+                              : ''}
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 text-right">
+                      <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground transition-colors">
+                        {formatDistanceToNow(log.createdAt, {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }

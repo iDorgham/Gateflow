@@ -160,11 +160,21 @@ export default function LoginPage() {
       setIsSuccess(true);
       // Wait for animation, then redirect
       const timer = setTimeout(() => {
-        router.push(`/${state.locale || locale}/dashboard`);
+        router.push(
+          state.mustChangePassword
+            ? `/${state.locale || locale}/change-password`
+            : `/${state.locale || locale}/dashboard`
+        );
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [state?.success, state?.locale, locale, router]);
+  }, [
+    state?.success,
+    state?.locale,
+    state?.mustChangePassword,
+    locale,
+    router,
+  ]);
 
   // Increment errorKey whenever a new error appears so shake fires
   useEffect(() => {

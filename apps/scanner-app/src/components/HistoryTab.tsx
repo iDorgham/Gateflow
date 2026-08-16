@@ -15,6 +15,8 @@ import {
   type HistoryEntry,
   type ScanOutcome,
 } from '../lib/scan-history';
+import { Check, CloudOff, X, ClipboardList } from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -23,31 +25,31 @@ const TOP_OFFSET =
 
 const OUTCOME_CONFIG: Record<
   ScanOutcome,
-  { label: string; bg: string; text: string; icon: string }
+  { label: string; bg: string; text: string; Icon: LucideIcon }
 > = {
   pass: {
     label: 'Pass',
     bg: nativeTokens.colors.successSubtle,
     text: nativeTokens.colors.success,
-    icon: '✓',
+    Icon: Check,
   },
   deny: {
     label: 'Deny',
     bg: nativeTokens.colors.dangerSubtle,
     text: nativeTokens.colors.danger,
-    icon: '✗',
+    Icon: X,
   },
   offline: {
     label: 'Offline',
     bg: nativeTokens.colors.warningSubtle,
     text: nativeTokens.colors.warning,
-    icon: '⚡',
+    Icon: CloudOff,
   },
   rejected: {
     label: 'Rejected',
     bg: nativeTokens.colors.surfaceRaised,
     text: nativeTokens.colors.textSubtlest,
-    icon: '✗',
+    Icon: X,
   },
 };
 
@@ -85,7 +87,7 @@ function HistoryItem({ item }: { item: HistoryEntry }) {
     <View style={s.item}>
       {/* Outcome badge */}
       <View style={[s.badge, { backgroundColor: cfg.bg }]}>
-        <Text style={[s.badgeIcon, { color: cfg.text }]}>{cfg.icon}</Text>
+        <cfg.Icon size={14} strokeWidth={1.5} color={cfg.text} />
         <Text style={[s.badgeLabel, { color: cfg.text }]}>{cfg.label}</Text>
       </View>
 
@@ -186,7 +188,11 @@ export function LogTab() {
         </View>
       ) : entries.length === 0 ? (
         <View style={s.center}>
-          <Text style={s.emptyIcon}>📋</Text>
+          <ClipboardList
+            size={40}
+            color={nativeTokens.colors.textSubtlest}
+            strokeWidth={1.5}
+          />
           <Text style={s.emptyTitle}>No scans yet</Text>
           <Text style={s.emptySub}>
             Your recent scan activity will appear here after you scan QR codes.

@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 import { login } from '../../lib/auth-client';
 import { haptic } from '../../lib/haptics';
+import { CircleAlert } from 'lucide-react-native';
 
 export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
   const [email, setEmail] = useState('');
@@ -104,7 +105,11 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
 
             {!!error && (
               <View style={styles.errorBox}>
-                <Text style={styles.errorIcon}>⚠</Text>
+                <CircleAlert
+                  size={16}
+                  color={nativeTokens.colors.danger}
+                  strokeWidth={1.5}
+                />
                 <Text style={styles.errorText}>{error}</Text>
               </View>
             )}
@@ -135,6 +140,11 @@ export function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
             >
               <Text style={styles.forgotText}>Forgot password?</Text>
             </Pressable>
+            {__DEV__ ? (
+              <Text style={styles.devApiUrl} selectable>
+                {process.env.EXPO_PUBLIC_API_URL ?? 'API URL unset'}
+              </Text>
+            ) : null}
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -262,6 +272,13 @@ const styles = StyleSheet.create({
   forgotText: {
     color: nativeTokens.colors.textSubtlest,
     fontSize: 14,
+    fontFamily: 'Cairo_400Regular',
+  },
+  devApiUrl: {
+    marginTop: 8,
+    textAlign: 'center',
+    color: nativeTokens.colors.textSubtlest,
+    fontSize: 11,
     fontFamily: 'Cairo_400Regular',
   },
 });

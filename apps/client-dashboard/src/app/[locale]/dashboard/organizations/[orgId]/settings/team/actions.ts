@@ -4,22 +4,37 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
-import crypto from 'crypto';
-import { sendEmail, buildInvitationEmailHtml } from '@/lib/email';
+import { sendEmail, buildMemberWelcomeEmailHtml } from '@/lib/email';
+import { hashPassword } from '@/lib/password';
 import { logAuditAction } from '@/lib/audit';
+import {
+  filterVisibleTeamRoles,
+  formatRoleLabel,
+  OrganizationType,
+  Permission,
+  roleSlug,
+} from '@gate-access/types';
 
 type Result<T = unknown> = { success: boolean; data?: T; error?: string };
 
 const InviteSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  name: z.string().trim().min(2, 'Name must be at least 2 characters'),
+  email: z.string().trim().email('Invalid email address'),
+  phone: z.string().trim().max(32, 'Phone number is too long').optional(),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   roleId: z.string().min(1, 'Role is required'),
+  mustChangePassword: z.boolean().optional().default(true),
+  avatarUrl: z
+    .string()
+    .max(200_000, 'Photo is too large. Use a smaller image.')
+    .optional()
+    .nullable(),
 });
-
-import { Permission } from '@gate-access/types';
 
 export interface Role {
   id: string;
   name: string;
+  slug: string;
   description?: string | null;
   permissions: Record<Permission, boolean>;
   isBuiltIn: boolean;
@@ -86,31 +101,72 @@ export async function getTeamMembers(): Promise<Result<TeamMember[]>> {
       orderBy: { createdAt: 'desc' },
     });
 
-    return { success: true, data: users as unknown as TeamMember[] };
+    return {
+      success: true,
+      data: users.map((user) => ({
+        ...user,
+        role: { ...user.role, name: formatRoleLabel(user.role.name) },
+      })) as unknown as TeamMember[],
+    };
   } catch (error) {
     console.error('getTeamMembers error:', error);
     return { success: false, error: 'Failed to fetch team members.' };
   }
 }
 
-export async function inviteTeamMember(
-  email: string,
-  roleId: string
-): Promise<Result> {
+export async function inviteTeamMember(input: {
+  name: string;
+  email: string;
+  phone?: string;
+  password: string;
+  roleId: string;
+  mustChangePassword?: boolean;
+  avatarUrl?: string | null;
+}): Promise<Result> {
   try {
     const claims = await getSessionClaims();
-    if (!claims?.orgId || !claims.permissions?.['roles:manage']) {
+    if (
+      !claims?.orgId ||
+      !(
+        claims.permissions?.['roles:manage'] ||
+        claims.permissions?.['users:manage']
+      )
+    ) {
       return { success: false, error: 'Unauthorized.' };
     }
 
-    const validation = InviteSchema.safeParse({ email, roleId });
+    const validation = InviteSchema.safeParse(input);
     if (!validation.success) {
       return { success: false, error: validation.error.issues[0].message };
     }
 
-    // Check if user already exists
+    const {
+      name,
+      email,
+      phone,
+      password,
+      roleId,
+      mustChangePassword,
+      avatarUrl,
+    } = validation.data;
+    const normalizedEmail = email.toLowerCase();
+    const phoneValue = phone?.trim() ? phone.trim() : null;
+    const avatarValue =
+      avatarUrl && avatarUrl.startsWith('data:image/') ? avatarUrl : null;
+
+    const role = await prisma.role.findFirst({
+      where: {
+        id: roleId,
+        OR: [{ organizationId: claims.orgId }, { isBuiltIn: true }],
+      },
+      select: { id: true },
+    });
+    if (!role) {
+      return { success: false, error: 'Role not found.' };
+    }
+
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
     if (existingUser) {
       return {
@@ -119,9 +175,12 @@ export async function inviteTeamMember(
       };
     }
 
-    // Check if invitation already exists
     const existingInvite = await prisma.invitation.findFirst({
-      where: { email, organizationId: claims.orgId, acceptedAt: null },
+      where: {
+        email: normalizedEmail,
+        organizationId: claims.orgId,
+        acceptedAt: null,
+      },
     });
     if (existingInvite) {
       return {
@@ -130,54 +189,59 @@ export async function inviteTeamMember(
       };
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiry
+    const passwordHash = await hashPassword(password);
 
-    await prisma.invitation.create({
+    await prisma.user.create({
       data: {
-        email,
-        roleId,
-        token,
+        name,
+        email: normalizedEmail,
+        phone: phoneValue,
+        passwordHash,
+        roleId: role.id,
         organizationId: claims.orgId,
-        expiresAt,
+        mustChangePassword,
+        avatarUrl: avatarValue,
       },
     });
 
-    // Send invitation email
     const org = await prisma.organization.findUnique({
       where: { id: claims.orgId },
       select: { name: true },
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gateflow.site';
-    const joinUrl = `${baseUrl}/join?token=${token}`;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL || 'https://app.gateflow.site';
+    const loginUrl = `${baseUrl}/login`;
 
     try {
       await sendEmail({
-        to: email,
-        subject: `You've been invited to join ${org?.name || 'a team'} on GateFlow`,
-        html: buildInvitationEmailHtml(org?.name || 'GateFlow Team', joinUrl),
+        to: normalizedEmail,
+        subject: `Your ${org?.name || 'GateFlow'} account is ready`,
+        html: buildMemberWelcomeEmailHtml(
+          org?.name || 'GateFlow Team',
+          loginUrl,
+          name,
+          mustChangePassword
+        ),
       });
     } catch (emailError) {
-      console.error('Failed to send invitation email:', emailError);
+      console.error('Failed to send member welcome email:', emailError);
     }
 
-    // AUDIT LOG
     await logAuditAction({
       action: 'INVITE_MEMBER',
-      entityType: 'INVITATION',
-      entityId: email,
+      entityType: 'USER',
+      entityId: normalizedEmail,
       orgId: claims.orgId,
       userId: claims.sub,
-      metadata: { roleId },
+      metadata: { roleId, mustChangePassword },
     });
 
     revalidatePath('/dashboard/settings/team');
     return { success: true };
   } catch (error) {
     console.error('inviteTeamMember error:', error);
-    return { success: false, error: 'Failed to send invitation.' };
+    return { success: false, error: 'Failed to add team member.' };
   }
 }
 
@@ -192,7 +256,13 @@ export async function getInvitations(): Promise<Result<Invitation[]>> {
       orderBy: { createdAt: 'desc' },
     });
 
-    return { success: true, data: invitations as unknown as Invitation[] };
+    return {
+      success: true,
+      data: invitations.map((invite) => ({
+        ...invite,
+        role: { ...invite.role, name: formatRoleLabel(invite.role.name) },
+      })) as unknown as Invitation[],
+    };
   } catch (error) {
     console.error('getInvitations error:', error);
     return { success: false, error: 'Failed to fetch invitations.' };
@@ -344,6 +414,12 @@ export async function getRoles(): Promise<Result<Role[]>> {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
 
+    const org = await prisma.organization.findFirst({
+      where: { id: claims.orgId, deletedAt: null },
+      select: { type: true },
+    });
+    const orgType = org?.type ?? OrganizationType.REAL_ESTATE;
+
     const roles = await prisma.role.findMany({
       where: {
         OR: [{ isBuiltIn: true }, { organizationId: claims.orgId }],
@@ -356,7 +432,10 @@ export async function getRoles(): Promise<Result<Role[]>> {
       orderBy: { createdAt: 'asc' },
     });
 
-    return { success: true, data: roles as unknown as Role[] };
+    return {
+      success: true,
+      data: filterVisibleTeamRoles(roles, orgType) as unknown as Role[],
+    };
   } catch (error) {
     console.error('getRoles error:', error);
     return { success: false, error: 'Failed to fetch roles.' };
@@ -393,7 +472,12 @@ export async function getActivityLogs(): Promise<Result<ActivityLog[]>> {
 
 const RoleSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(80, 'Name is too long'),
+  slug: z.string().trim().max(80).optional(),
   description: z.string().optional(),
   permissions: z.record(z.string(), z.boolean()),
 });
@@ -412,9 +496,22 @@ export async function createRole(
       return { success: false, error: validation.error.issues[0].message };
     }
 
+    const name = validation.data.name.trim();
+    const slug = roleSlug(validation.data.slug || name);
+    const duplicate = await prisma.role.findFirst({
+      where: {
+        slug,
+        OR: [{ organizationId: claims.orgId }, { isBuiltIn: true }],
+      },
+    });
+    if (duplicate) {
+      return { success: false, error: 'A role with this name already exists.' };
+    }
+
     const role = await prisma.role.create({
       data: {
-        name: validation.data.name,
+        name,
+        slug,
         description: validation.data.description,
         permissions: validation.data.permissions,
         organizationId: claims.orgId,
@@ -465,7 +562,8 @@ export async function updateRole(
     await prisma.role.update({
       where: { id: data.id },
       data: {
-        name: validation.data.name,
+        name: validation.data.name.trim(),
+        slug: roleSlug(validation.data.slug || validation.data.name),
         description: validation.data.description,
         permissions: validation.data.permissions,
       },
@@ -681,5 +779,81 @@ export async function getGates(): Promise<Result<LiteGate[]>> {
   } catch (error) {
     console.error('getGates error:', error);
     return { success: false, error: 'Failed to fetch gates.' };
+  }
+}
+
+export interface ShiftLogRow {
+  id: string;
+  startTime: Date;
+  endTime: Date | null;
+  guard: { id: string; name: string; email: string; avatarUrl: string | null };
+  gate: { id: string; name: string; location: string | null };
+}
+
+export async function getShiftLogs(): Promise<Result<ShiftLogRow[]>> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
+
+    const logs = await prisma.shiftLog.findMany({
+      where: { organizationId: claims.orgId },
+      orderBy: { startTime: 'desc' },
+      take: 40,
+      select: {
+        id: true,
+        startTime: true,
+        endTime: true,
+        guard: {
+          select: { id: true, name: true, email: true, avatarUrl: true },
+        },
+        gate: { select: { id: true, name: true, location: true } },
+      },
+    });
+
+    return { success: true, data: logs };
+  } catch (error) {
+    console.error('getShiftLogs error:', error);
+    return { success: false, error: 'Failed to fetch shifts.' };
+  }
+}
+
+export async function updateAssignmentShift(
+  id: string,
+  shiftStart: string,
+  shiftEnd: string
+): Promise<Result> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions?.['gates:manage']) {
+      return { success: false, error: 'Unauthorized.' };
+    }
+
+    const existing = await prisma.gateAssignment.findFirst({
+      where: { id, organizationId: claims.orgId, deletedAt: null },
+    });
+    if (!existing) return { success: false, error: 'Assignment not found.' };
+
+    await prisma.gateAssignment.update({
+      where: { id },
+      data: {
+        shiftStart: shiftStart || null,
+        shiftEnd: shiftEnd || null,
+      },
+    });
+
+    await logAuditAction({
+      action: 'UPDATE_GATE_ASSIGNMENT',
+      entityType: 'GATE_ASSIGNMENT',
+      entityId: id,
+      orgId: claims.orgId,
+      userId: claims.sub,
+      metadata: { shiftStart, shiftEnd },
+    });
+
+    revalidatePath('/dashboard/settings/team');
+    return { success: true };
+  } catch (error) {
+    console.error('updateAssignmentShift error:', error);
+    return { success: false, error: 'Failed to update shift.' };
   }
 }

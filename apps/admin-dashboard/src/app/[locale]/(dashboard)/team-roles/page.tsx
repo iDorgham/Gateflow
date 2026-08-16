@@ -5,7 +5,6 @@ import {
   Shield,
   Plus,
   MoreVertical,
-  CheckCircle2,
   ShieldCheck,
   Users,
   Lock,
@@ -26,9 +25,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Separator,
 } from '@gateflow/ui';
 import { useRouter } from 'next/navigation';
+import { formatRoleLabel } from '@gate-access/types';
 
 interface Role {
   id: string;
@@ -143,7 +142,7 @@ export default function RolesPage() {
                       </div>
                       <div>
                         <h3 className="font-black uppercase tracking-tight group-hover:text-ds-text-brand transition-colors">
-                          {role.name}
+                          {formatRoleLabel(role.name)}
                         </h3>
                         {role.isBuiltIn && (
                           <Badge

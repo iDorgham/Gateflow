@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Team]** add role name/slug, shifts tab, and scanner outline icons
+
 - **[Security]** drop unused workspace @lhci/cli to remove unpatched extract-zip (CVE-2026-56876); CI still installs LHCI globally
 - **[Security]** remove polynomial ReDoS in email validation regex
 

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import {
   MoreVertical,
   Trash2,
-  Shield,
   ShieldCheck,
   ShieldAlert,
   User as UserIcon,
@@ -35,6 +34,7 @@ import {
 } from '@gateflow/ui';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { formatRoleLabel, roleSlug } from '@gate-access/types';
 import { csrfFetch } from '@/lib/csrf';
 
 interface Member {
@@ -126,20 +126,29 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
   });
 
   const getRoleIcon = (roleName: string) => {
-    switch (roleName.toLowerCase()) {
-      case 'admin':
-        return (
-          <ShieldCheck className="h-4 w-4 text-[var(--ds-icon-accent-green)]" />
-        );
-      case 'moderator':
-        return <Shield className="h-4 w-4 text-[var(--ds-icon-accent-blue)]" />;
-      case 'operator':
-        return (
-          <ShieldAlert className="h-4 w-4 text-[var(--ds-icon-accent-orange)]" />
-        );
-      default:
-        return <UserIcon className="h-4 w-4 text-[var(--ds-icon-subtle)]" />;
+    const slug = roleSlug(roleName);
+    if (/ADMIN|PRINCIPAL|MANAGER/.test(slug) && !slug.includes('SECURITY')) {
+      return (
+        <ShieldCheck
+          className="h-4 w-4 text-[var(--ds-icon-accent-green)]"
+          strokeWidth={1.5}
+        />
+      );
     }
+    if (/SECURITY|GUARD|BOUNCER|OPERATOR|SCANNER|DOOR_STAFF/.test(slug)) {
+      return (
+        <ShieldAlert
+          className="h-4 w-4 text-[var(--ds-icon-accent-orange)]"
+          strokeWidth={1.5}
+        />
+      );
+    }
+    return (
+      <UserIcon
+        className="h-4 w-4 text-[var(--ds-icon-subtle)]"
+        strokeWidth={1.5}
+      />
+    );
   };
 
   if (isLoading) {
@@ -215,7 +224,7 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
                       })
                     }
                   >
-                    <SelectTrigger className="h-8 w-[140px] border-none bg-transparent hover:bg-[var(--ds-background-neutral-subtle)] text-xs font-medium">
+                    <SelectTrigger className="h-8 min-w-[12rem] w-auto max-w-[18rem] border-none bg-transparent text-xs font-medium hover:bg-[var(--ds-background-neutral-subtle)]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -225,7 +234,7 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
                           value={role.id}
                           className="text-xs"
                         >
-                          {role.name}
+                          {formatRoleLabel(role.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>

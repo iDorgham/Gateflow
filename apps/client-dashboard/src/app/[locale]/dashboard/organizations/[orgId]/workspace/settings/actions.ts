@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
+import { roleSlug } from '@gate-access/types';
 
 const SettingsSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
@@ -13,10 +14,34 @@ const SettingsSchema = z.object({
 
 const RetentionSchema = z.object({
   requiredIdentityLevel: z.number().int().min(0).max(2).optional(),
-  scanLogRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
-  visitorHistoryRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
-  idArtifactRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
-  incidentRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
+  scanLogRetentionMonths: z
+    .number()
+    .int()
+    .min(1)
+    .max(120)
+    .nullable()
+    .optional(),
+  visitorHistoryRetentionMonths: z
+    .number()
+    .int()
+    .min(1)
+    .max(120)
+    .nullable()
+    .optional(),
+  idArtifactRetentionMonths: z
+    .number()
+    .int()
+    .min(1)
+    .max(120)
+    .nullable()
+    .optional(),
+  incidentRetentionMonths: z
+    .number()
+    .int()
+    .min(1)
+    .max(120)
+    .nullable()
+    .optional(),
   maskResidentNameOnLandingPage: z.boolean().optional(),
   showUnitOnLandingPage: z.boolean().optional(),
 });
@@ -44,10 +69,14 @@ function getErrorTarget(error: unknown): unknown {
   return undefined;
 }
 
-export async function updateWorkspaceSettingsAction(data: { name: string; email: string; domain?: string | null }) {
+export async function updateWorkspaceSettingsAction(data: {
+  name: string;
+  email: string;
+  domain?: string | null;
+}) {
   try {
     const claims = await getSessionClaims();
-    
+
     if (!claims?.orgId) {
       return { success: false, message: 'Unauthorized' };
     }
@@ -80,23 +109,35 @@ export async function updateWorkspaceSettingsAction(data: { name: string; email:
 
     return { success: true };
   } catch (error: unknown) {
-    console.error('Server Action Error - updateWorkspaceSettingsAction:', error);
-    
+    console.error(
+      'Server Action Error - updateWorkspaceSettingsAction:',
+      error
+    );
+
     // Catch unique constraint failures (usually domain or email already taken)
     // Avoid 'instanceof Prisma...' checks as they can fail across monorepo boundaries
     if (getErrorCode(error) === 'P2002') {
       const target = getErrorTarget(error);
-      const targetStr = Array.isArray(target) ? target.join(',') : String(target || '');
-      
+      const targetStr = Array.isArray(target)
+        ? target.join(',')
+        : String(target || '');
+
       if (targetStr.includes('domain')) {
-        return { success: false, message: 'This custom domain is already in use by another organization.' };
+        return {
+          success: false,
+          message:
+            'This custom domain is already in use by another organization.',
+        };
       }
       if (targetStr.includes('email')) {
-         return { success: false, message: 'This email is already in use.' };
+        return { success: false, message: 'This email is already in use.' };
       }
     }
 
-    return { success: false, message: 'An internal server error occurred while saving.' };
+    return {
+      success: false,
+      message: 'An internal server error occurred while saving.',
+    };
   }
 }
 
@@ -112,12 +153,19 @@ export async function updateRetentionAndPrivacyAction(data: {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, message: 'Unauthorized' };
-    if (!claims.permissions?.['workspace:manage'] && !claims.permissions?.['gates:manage']) {
-      return { success: false, message: 'Permission required to change retention settings' };
+    if (
+      !claims.permissions?.['workspace:manage'] &&
+      !claims.permissions?.['gates:manage']
+    ) {
+      return {
+        success: false,
+        message: 'Permission required to change retention settings',
+      };
     }
 
     const validation = RetentionSchema.safeParse(data);
-    if (!validation.success) return { success: false, message: 'Invalid data provided' };
+    if (!validation.success)
+      return { success: false, message: 'Invalid data provided' };
 
     const org = await prisma.organization.findFirst({
       where: { id: claims.orgId, deletedAt: null },
@@ -125,13 +173,20 @@ export async function updateRetentionAndPrivacyAction(data: {
     if (!org) return { success: false, message: 'Organization not found' };
 
     const update: Record<string, unknown> = {};
-    if (data.requiredIdentityLevel !== undefined) update.requiredIdentityLevel = data.requiredIdentityLevel;
-    if (data.scanLogRetentionMonths !== undefined) update.scanLogRetentionMonths = data.scanLogRetentionMonths;
-    if (data.visitorHistoryRetentionMonths !== undefined) update.visitorHistoryRetentionMonths = data.visitorHistoryRetentionMonths;
-    if (data.idArtifactRetentionMonths !== undefined) update.idArtifactRetentionMonths = data.idArtifactRetentionMonths;
-    if (data.incidentRetentionMonths !== undefined) update.incidentRetentionMonths = data.incidentRetentionMonths;
-    if (data.maskResidentNameOnLandingPage !== undefined) update.maskResidentNameOnLandingPage = data.maskResidentNameOnLandingPage;
-    if (data.showUnitOnLandingPage !== undefined) update.showUnitOnLandingPage = data.showUnitOnLandingPage;
+    if (data.requiredIdentityLevel !== undefined)
+      update.requiredIdentityLevel = data.requiredIdentityLevel;
+    if (data.scanLogRetentionMonths !== undefined)
+      update.scanLogRetentionMonths = data.scanLogRetentionMonths;
+    if (data.visitorHistoryRetentionMonths !== undefined)
+      update.visitorHistoryRetentionMonths = data.visitorHistoryRetentionMonths;
+    if (data.idArtifactRetentionMonths !== undefined)
+      update.idArtifactRetentionMonths = data.idArtifactRetentionMonths;
+    if (data.incidentRetentionMonths !== undefined)
+      update.incidentRetentionMonths = data.incidentRetentionMonths;
+    if (data.maskResidentNameOnLandingPage !== undefined)
+      update.maskResidentNameOnLandingPage = data.maskResidentNameOnLandingPage;
+    if (data.showUnitOnLandingPage !== undefined)
+      update.showUnitOnLandingPage = data.showUnitOnLandingPage;
 
     await prisma.organization.update({
       where: { id: claims.orgId },
@@ -141,7 +196,10 @@ export async function updateRetentionAndPrivacyAction(data: {
     revalidatePath('/dashboard/settings');
     return { success: true };
   } catch (error) {
-    console.error('Server Action Error - updateRetentionAndPrivacyAction:', error);
+    console.error(
+      'Server Action Error - updateRetentionAndPrivacyAction:',
+      error
+    );
     return { success: false, message: 'An internal server error occurred.' };
   }
 }
@@ -153,15 +211,19 @@ export async function updateMarketingSettingsAction(data: {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, message: 'Unauthorized' };
-    
+
     // Permission check - reusing workspace:manage or creating a specific one if needed
     // For now, workspace:manage is appropriate for marketing pixels
     if (!claims.permissions?.['workspace:manage']) {
-      return { success: false, message: 'Permission required to change marketing settings' };
+      return {
+        success: false,
+        message: 'Permission required to change marketing settings',
+      };
     }
 
     const validation = MarketingSettingsSchema.safeParse(data);
-    if (!validation.success) return { success: false, message: 'Invalid data provided' };
+    if (!validation.success)
+      return { success: false, message: 'Invalid data provided' };
 
     const org = await prisma.organization.findFirst({
       where: { id: claims.orgId, deletedAt: null },
@@ -179,18 +241,27 @@ export async function updateMarketingSettingsAction(data: {
     revalidatePath('/dashboard/settings');
     return { success: true };
   } catch (error) {
-    console.error('Server Action Error - updateMarketingSettingsAction:', error);
+    console.error(
+      'Server Action Error - updateMarketingSettingsAction:',
+      error
+    );
     return { success: false, message: 'An internal server error occurred.' };
   }
 }
 
 const RoleSchema = z.object({
-  name: z.string().min(1, 'Role name is required').max(50),
+  name: z.string().min(1, 'Role name is required').max(80),
+  slug: z.string().max(80).optional(),
   description: z.string().max(200).optional().nullable(),
   permissions: z.record(z.string(), z.boolean()),
 });
 
-export async function createRoleAction(data: { name: string; description?: string | null; permissions: Record<string, boolean> }) {
+export async function createRoleAction(data: {
+  name: string;
+  slug?: string;
+  description?: string | null;
+  permissions: Record<string, boolean>;
+}) {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId || !claims.permissions['roles:manage']) {
@@ -204,7 +275,8 @@ export async function createRoleAction(data: { name: string; description?: strin
 
     await prisma.role.create({
       data: {
-        name: validation.data.name,
+        name: validation.data.name.trim(),
+        slug: roleSlug(validation.data.slug || validation.data.name),
         description: validation.data.description ?? null,
         permissions: validation.data.permissions,
         organizationId: claims.orgId,
@@ -220,7 +292,15 @@ export async function createRoleAction(data: { name: string; description?: strin
   }
 }
 
-export async function updateRoleAction(id: string, data: { name: string; description?: string | null; permissions: Record<string, boolean> }) {
+export async function updateRoleAction(
+  id: string,
+  data: {
+    name: string;
+    slug?: string;
+    description?: string | null;
+    permissions: Record<string, boolean>;
+  }
+) {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId || !claims.permissions['roles:manage']) {
@@ -239,7 +319,12 @@ export async function updateRoleAction(id: string, data: { name: string; descrip
 
     await prisma.role.update({
       where: { id },
-      data: validation.data,
+      data: {
+        name: validation.data.name.trim(),
+        slug: roleSlug(validation.data.slug || validation.data.name),
+        description: validation.data.description ?? null,
+        permissions: validation.data.permissions,
+      },
     });
 
     revalidatePath('/dashboard/workspace/settings');
@@ -267,7 +352,10 @@ export async function deleteRoleAction(id: string) {
     }
 
     if (role._count.users > 0) {
-      return { success: false, message: 'Cannot delete a role that is assigned to users' };
+      return {
+        success: false,
+        message: 'Cannot delete a role that is assigned to users',
+      };
     }
 
     await prisma.role.delete({ where: { id } });

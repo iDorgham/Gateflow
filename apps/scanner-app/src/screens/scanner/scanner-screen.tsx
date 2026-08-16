@@ -38,6 +38,18 @@ import {
 } from '../../components/GateSelector';
 import { addHistoryEntry } from '../../lib/scan-history';
 import { getPreferences } from '../../lib/preferences';
+import {
+  ArrowUpDown,
+  Calendar,
+  ClipboardList,
+  Home,
+  MapPin,
+  MessageCircle,
+  Play,
+  ScanLine,
+  Settings,
+  Square,
+} from 'lucide-react-native';
 import { haptic } from '../../lib/haptics';
 import { Viewfinder } from '../../components/scanner/viewfinder';
 import { DecisionDialog } from '../../components/scanner/decision-dialog';
@@ -84,6 +96,24 @@ const SettingsTab = lazy(() =>
 const SCAN_COOLDOWN_MS = 2_500;
 const RESULT_DISPLAY_MS = 3_000;
 const SHORT_URL_RESOLVE_TIMEOUT_MS = 5_000;
+
+function NavIcon({
+  icon: Icon,
+  active,
+}: {
+  icon: typeof Home;
+  active: boolean;
+}) {
+  return (
+    <Icon
+      size={22}
+      strokeWidth={1.5}
+      color={
+        active ? nativeTokens.colors.primary : nativeTokens.colors.textSubtle
+      }
+    />
+  );
+}
 
 /**
  * Camera/verification sub-phase, only active while the scanner tab is active.
@@ -513,7 +543,7 @@ export function ScannerScreen({
       status: 'accepted',
       message: supervisorAuth
         ? 'Access granted by supervisor override'
-        : '⚠ Access granted — forced override (logged)',
+        : 'Access granted — forced override (logged)',
       offline: false,
     };
     showResult(overrideResult);
@@ -579,7 +609,11 @@ export function ScannerScreen({
           backgroundColor={nativeTokens.colors.background}
         />
         <View style={styles.permIcon}>
-          <Text style={styles.permIconText}>⬡</Text>
+          <ScanLine
+            size={36}
+            strokeWidth={1.5}
+            color={nativeTokens.colors.primary}
+          />
         </View>
         <Text style={styles.permTitle}>Camera Access Required</Text>
         <Text style={styles.permSub}>
@@ -678,9 +712,16 @@ export function ScannerScreen({
                   : 'Select gate'
               }
             >
-              <Text style={styles.topBarBtnText} numberOfLines={1}>
-                {selectedGate ? `⬡  ${selectedGate.name}` : '⬡  Select Gate'}
-              </Text>
+              <View style={styles.topBarBtnInner}>
+                <MapPin
+                  size={14}
+                  strokeWidth={1.5}
+                  color={nativeTokens.colors.textHeading}
+                />
+                <Text style={styles.topBarBtnText} numberOfLines={1}>
+                  {selectedGate ? selectedGate.name : 'Select Gate'}
+                </Text>
+              </View>
             </Pressable>
 
             {/* Shift start / end */}
@@ -704,13 +745,33 @@ export function ScannerScreen({
               }
               accessibilityState={{ disabled: shiftLoading || shiftBusy }}
             >
-              <Text style={styles.topBarBtnText} numberOfLines={1}>
-                {shiftLoading || shiftBusy
-                  ? '…'
-                  : canScan(selectedGate?.id)
-                    ? '■ End shift'
-                    : '▶ Start shift'}
-              </Text>
+              <View style={styles.topBarBtnInner}>
+                {shiftLoading || shiftBusy ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={nativeTokens.colors.textHeading}
+                  />
+                ) : canScan(selectedGate?.id) ? (
+                  <Square
+                    size={14}
+                    strokeWidth={1.5}
+                    color={nativeTokens.colors.textHeading}
+                  />
+                ) : (
+                  <Play
+                    size={14}
+                    strokeWidth={1.5}
+                    color={nativeTokens.colors.textHeading}
+                  />
+                )}
+                <Text style={styles.topBarBtnText} numberOfLines={1}>
+                  {shiftLoading || shiftBusy
+                    ? 'Please wait'
+                    : canScan(selectedGate?.id)
+                      ? 'End shift'
+                      : 'Start shift'}
+                </Text>
+              </View>
             </Pressable>
 
             {/* Queue status button */}
@@ -720,7 +781,14 @@ export function ScannerScreen({
               accessibilityRole="button"
               accessibilityLabel="Offline sync queue status"
             >
-              <Text style={styles.topBarBtnText}>⇅ Queue</Text>
+              <View style={styles.topBarBtnInner}>
+                <ArrowUpDown
+                  size={14}
+                  strokeWidth={1.5}
+                  color={nativeTokens.colors.textHeading}
+                />
+                <Text style={styles.topBarBtnText}>Queue</Text>
+              </View>
             </Pressable>
 
             {shiftError ? (
@@ -940,14 +1008,7 @@ export function ScannerScreen({
           accessibilityLabel="Home"
           accessibilityState={{ selected: activeTab === 'home' }}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'home' && styles.navTabIconActive,
-            ]}
-          >
-            🏠
-          </Text>
+          <NavIcon icon={Home} active={activeTab === 'home'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -969,14 +1030,7 @@ export function ScannerScreen({
           accessibilityLabel="Scan"
           accessibilityState={{ selected: activeTab === 'scanner' }}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'scanner' && styles.navTabIconActive,
-            ]}
-          >
-            ⬡
-          </Text>
+          <NavIcon icon={ScanLine} active={activeTab === 'scanner'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -995,14 +1049,7 @@ export function ScannerScreen({
           accessibilityLabel="Today's visitors"
           accessibilityState={{ selected: activeTab === 'today' }}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'today' && styles.navTabIconActive,
-            ]}
-          >
-            📅
-          </Text>
+          <NavIcon icon={Calendar} active={activeTab === 'today'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -1021,14 +1068,7 @@ export function ScannerScreen({
           accessibilityLabel="Activity log"
           accessibilityState={{ selected: activeTab === 'log' }}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'log' && styles.navTabIconActive,
-            ]}
-          >
-            ≡
-          </Text>
+          <NavIcon icon={ClipboardList} active={activeTab === 'log'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -1047,14 +1087,7 @@ export function ScannerScreen({
           accessibilityLabel="Chat"
           accessibilityState={{ selected: activeTab === 'chat' }}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'chat' && styles.navTabIconActive,
-            ]}
-          >
-            💬
-          </Text>
+          <NavIcon icon={MessageCircle} active={activeTab === 'chat'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -1076,14 +1109,7 @@ export function ScannerScreen({
           ]}
           onPress={() => setActiveTab('settings')}
         >
-          <Text
-            style={[
-              styles.navTabIcon,
-              activeTab === 'settings' && styles.navTabIconActive,
-            ]}
-          >
-            ⚙
-          </Text>
+          <NavIcon icon={Settings} active={activeTab === 'settings'} />
           <Text
             style={[
               styles.navTabLabel,
@@ -1166,7 +1192,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderWidth: 1,
     borderColor: nativeTokens.colors.border,
-    maxWidth: 160,
+    maxWidth: 180,
+  },
+  topBarBtnInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   topBarBtnText: {
     color: nativeTokens.colors.textHeading,

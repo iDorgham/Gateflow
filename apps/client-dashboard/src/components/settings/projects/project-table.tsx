@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { ProjectSheet } from './project-sheet';
 import { deleteProject } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/projects/actions';
 import { toast } from 'sonner';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface Project {
   id: string;
@@ -70,18 +71,21 @@ export function ProjectTable({ projects }: ProjectTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold flex items-center gap-2">
-          <Layers className="h-5 w-5 text-primary" />
-          {t('projects.title', 'Active Projects')}
-        </h3>
-        <ProjectSheet mode="create">
-          <Button size="sm" className="gap-2">
-            <Layers className="h-4 w-4" />
-            {t('projects.add', 'Add Project')}
-          </Button>
-        </ProjectSheet>
-      </div>
+      <SettingsSectionHeader
+        title={t('projects.title', 'Projects')}
+        description={t(
+          'projects.description',
+          'Group gates and units for isolation inside this workspace.'
+        )}
+        action={
+          <ProjectSheet mode="create">
+            <Button className="h-10 gap-2 rounded-[8px] px-4">
+              <Layers className="h-4 w-4" strokeWidth={1.5} />
+              {t('projects.create', 'Add project')}
+            </Button>
+          </ProjectSheet>
+        }
+      />
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         {projects.length === 0 ? (

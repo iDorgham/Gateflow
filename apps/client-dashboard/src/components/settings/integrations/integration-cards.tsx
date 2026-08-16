@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 export interface IntegrationConfig {
   gtmId?: string | null;
@@ -73,7 +74,7 @@ function IntegrationCard({
             </Badge>
           )}
         </div>
-        <CardTitle className="text-sm font-black uppercase tracking-tight mt-3">
+        <CardTitle className="text-sm font-semibold tracking-tight mt-3">
           {title}
         </CardTitle>
         <CardDescription className="text-xs leading-relaxed">
@@ -84,7 +85,7 @@ function IntegrationCard({
         <div className="space-y-2">
           <Label
             htmlFor={`int-${fieldKey}`}
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
+            className="text-[10px] font-medium text-[var(--ds-text-subtle)]"
           >
             {title} ID
           </Label>
@@ -174,27 +175,21 @@ export function IntegrationCards({
 
   return (
     <div className="space-y-8">
-      {/* Integration Grid */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-black uppercase tracking-tight">
-              Marketing Integrations
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Connect marketing platforms to track visitor journeys.
-            </p>
-          </div>
+      <SettingsSectionHeader
+        title="Integrations"
+        description="Connect marketing platforms to track visitor journeys."
+        action={
           <Button
             onClick={handleSave}
             disabled={isPending || !isDirty}
-            className="gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]"
+            className="h-10 gap-2 rounded-[8px] px-4"
           >
-            <Save className="h-4 w-4" />
-            {isPending ? 'Saving...' : 'Save All'}
+            <Save className="h-4 w-4" strokeWidth={1.5} />
+            {isPending ? 'Saving…' : 'Save'}
           </Button>
-        </div>
-
+        }
+      />
+      <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {integrations.map((int) => (
             <IntegrationCard

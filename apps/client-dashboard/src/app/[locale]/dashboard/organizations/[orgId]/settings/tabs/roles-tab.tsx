@@ -30,10 +30,12 @@ import {
   updateRoleAction,
   deleteRoleAction,
 } from '../../workspace/settings/actions';
+import { formatRoleLabel, roleSlug } from '@gate-access/types';
 
 interface Role {
   id: string;
   name: string;
+  slug?: string;
   description?: string | null;
   permissions: Record<string, boolean>;
   isBuiltIn: boolean;
@@ -69,20 +71,17 @@ export function RolesTab({
   const handleSaveRole = async () => {
     if (!canManageRoles) return toast.error('Unauthorized');
     if (!editingRole?.name) return toast.error('Role name is required');
-    // ... (rest of the file content needs to be updated appropriately)
 
     startTransition(async () => {
+      const payload = {
+        name: editingRole.name!,
+        slug: editingRole.slug || roleSlug(editingRole.name!),
+        description: editingRole.description,
+        permissions: editingRole.permissions || {},
+      };
       const res = editingRole.id
-        ? await updateRoleAction(editingRole.id, {
-            name: editingRole.name!,
-            description: editingRole.description,
-            permissions: editingRole.permissions || {},
-          })
-        : await createRoleAction({
-            name: editingRole.name!,
-            description: editingRole.description,
-            permissions: editingRole.permissions || {},
-          });
+        ? await updateRoleAction(editingRole.id, payload)
+        : await createRoleAction(payload);
 
       if (res.success) {
         toast.success(editingRole.id ? 'Role updated' : 'Role created');
@@ -158,8 +157,10 @@ export function RolesTab({
               <CardHeader className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-sm font-bold uppercase tracking-tight">
-                      {role.name}
+                    <CardTitle className="text-sm font-semibold tracking-tight">
+                      {role.name?.includes(' ')
+                        ? role.name
+                        : formatRoleLabel(role.name)}
                     </CardTitle>
                     {role.isBuiltIn && (
                       <Badge
@@ -170,6 +171,9 @@ export function RolesTab({
                       </Badge>
                     )}
                   </div>
+                  <p className="font-mono text-[11px] text-[var(--ds-text-subtle)]">
+                    {role.slug || roleSlug(role.name)}
+                  </p>
                   <CardDescription className="text-xs">
                     {role.description || 'No description provided.'}
                   </CardDescription>
@@ -238,11 +242,45 @@ export function RolesTab({
                     <Input
                       id="role-name"
                       value={editingRole.name}
-                      onChange={(e) =>
-                        setEditingRole({ ...editingRole, name: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const name = e.target.value;
+                        setEditingRole({
+                          ...editingRole,
+                          name,
+                          slug:
+                            editingRole.id && editingRole.slug
+                              ? editingRole.slug
+                              : roleSlug(name),
+                        });
+                      }}
                       placeholder="e.g. Content Moderator"
-                      className="rounded-xl border-border"
+                      className="rounded-[8px] border-border"
+                    />
+                    <p className="text-[11px] text-[var(--ds-text-subtle)]">
+                      Spaces are allowed.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="role-slug"
+                      className="text-xs font-medium text-[var(--ds-text-subtle)]"
+                    >
+                      Slug
+                    </Label>
+                    <Input
+                      id="role-slug"
+                      value={
+                        editingRole.slug ||
+                        (editingRole.name ? roleSlug(editingRole.name) : '')
+                      }
+                      onChange={(e) =>
+                        setEditingRole({
+                          ...editingRole,
+                          slug: roleSlug(e.target.value),
+                        })
+                      }
+                      placeholder="CONTENT_MODERATOR"
+                      className="rounded-[8px] font-mono text-sm uppercase"
                     />
                   </div>
                   <div className="space-y-2">

@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanQueue, syncManager } from '../lib/offline-queue';
 import { maintenanceQueue } from '../lib/maintenance-queue';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
+import { UploadCloud, X } from 'lucide-react-native';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -216,7 +217,14 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                     color={nativeTokens.colors.textInverse}
                   />
                 ) : (
-                  <Text style={s.syncBtnText}>↑ Sync Now</Text>
+                  <View style={s.syncBtnInner}>
+                    <UploadCloud
+                      size={16}
+                      strokeWidth={1.5}
+                      color={nativeTokens.colors.textInverse}
+                    />
+                    <Text style={s.syncBtnText}>Sync Now</Text>
+                  </View>
                 )}
               </Pressable>
 
@@ -233,9 +241,16 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                       color={nativeTokens.colors.danger}
                     />
                   ) : (
-                    <Text style={s.clearBtnText}>
-                      ✕ Clear Failed ({stats.failed})
-                    </Text>
+                    <View style={s.clearBtnInner}>
+                      <X
+                        size={16}
+                        strokeWidth={1.5}
+                        color={nativeTokens.colors.danger}
+                      />
+                      <Text style={s.clearBtnText}>
+                        Clear Failed ({stats.failed})
+                      </Text>
+                    </View>
                   )}
                 </Pressable>
               )}
@@ -408,6 +423,11 @@ const s = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
   },
+  syncBtnInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   syncBtnText: {
     fontFamily: 'Cairo_700Bold',
     color: nativeTokens.colors.textInverse,
@@ -420,6 +440,11 @@ const s = StyleSheet.create({
     borderColor: nativeTokens.colors.borderBold,
     paddingVertical: 15,
     alignItems: 'center',
+  },
+  clearBtnInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   clearBtnText: {
     fontFamily: 'Cairo_600SemiBold',

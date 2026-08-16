@@ -9,10 +9,12 @@ import {
   StyleSheet,
   Switch,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { PinDots, PinKeypad } from './security/pin-keypad';
+import { SUPERVISOR_PIN_KEY } from '../lib/security/secure-pin';
+import { ChevronRight } from 'lucide-react-native';
 import {
   getPreferences,
   setPreference,
@@ -22,8 +24,6 @@ import { clearHistory } from '../lib/scan-history';
 import { scanQueue } from '../lib/offline-queue';
 import { clearNonceCache } from '../lib/qr-verify';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
-
-const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -118,7 +118,15 @@ function ActionRow({
           color={nativeTokens.colors.textSubtlest}
         />
       ) : (
-        <Text style={[s.chevron, danger && s.chevronDanger]}>›</Text>
+        <ChevronRight
+          size={18}
+          strokeWidth={1.5}
+          color={
+            danger
+              ? nativeTokens.colors.danger
+              : nativeTokens.colors.textSubtlest
+          }
+        />
       )}
     </Pressable>
   );
@@ -154,6 +162,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
   );
   const [pinValue, setPinValue] = useState('');
   const [pinConfirm, setPinConfirm] = useState('');
+  const [pinField, setPinField] = useState<'value' | 'confirm'>('value');
   const [pinError, setPinError] = useState('');
   const [pinBusy, setPinBusy] = useState(false);
 
@@ -271,6 +280,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
   const openSetPin = () => {
     setPinValue('');
     setPinConfirm('');
+    setPinField('value');
     setPinError('');
     setShowPinInput('set');
   };
@@ -278,6 +288,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
   const openChangePin = () => {
     setPinValue('');
     setPinConfirm('');
+    setPinField('value');
     setPinError('');
     setShowPinInput('change');
   };
@@ -425,31 +436,30 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                     ? 'Set a new supervisor PIN (4–6 digits):'
                     : 'Change supervisor PIN (4–6 digits):'}
                 </Text>
-                <TextInput
-                  style={s.pinInput}
-                  value={pinValue}
-                  onChangeText={(t) => {
-                    setPinValue(t.replace(/[^0-9]/g, ''));
+                <Pressable onPress={() => setPinField('value')}>
+                  <Text style={s.pinFieldLabel}>New PIN</Text>
+                  <PinDots
+                    filled={pinValue.length}
+                    selected={pinField === 'value'}
+                  />
+                </Pressable>
+                <Pressable onPress={() => setPinField('confirm')}>
+                  <Text style={s.pinFieldLabel}>Confirm PIN</Text>
+                  <PinDots
+                    filled={pinConfirm.length}
+                    selected={pinField === 'confirm'}
+                  />
+                </Pressable>
+                <PinKeypad
+                  value={pinField === 'value' ? pinValue : pinConfirm}
+                  onChange={(next) => {
                     setPinError('');
+                    if (pinField === 'value') setPinValue(next);
+                    else setPinConfirm(next);
                   }}
-                  placeholder="New PIN"
-                  placeholderTextColor={nativeTokens.colors.textSubtlest}
-                  secureTextEntry
-                  keyboardType="number-pad"
-                  maxLength={6}
-                />
-                <TextInput
-                  style={[s.pinInput, { marginTop: 8 }]}
-                  value={pinConfirm}
-                  onChangeText={(t) => {
-                    setPinConfirm(t.replace(/[^0-9]/g, ''));
-                    setPinError('');
-                  }}
-                  placeholder="Confirm PIN"
-                  placeholderTextColor={nativeTokens.colors.textSubtlest}
-                  secureTextEntry
-                  keyboardType="number-pad"
-                  maxLength={6}
+                  disabled={pinBusy}
+                  onSubmit={handleSavePin}
+                  submitBusy={pinBusy}
                 />
                 {!!pinError && <Text style={s.pinError}>{pinError}</Text>}
                 <View style={s.pinBtnRow}>
@@ -482,8 +492,8 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                     <Text style={s.rowLabel}>Supervisor PIN</Text>
                     <Text style={s.rowSub}>
                       {pinConfigured
-                        ? '✅ PIN configured on this device'
-                        : '⚠ No PIN set — only force-override available'}
+                        ? 'PIN configured on this device'
+                        : 'No dedicated PIN — device unlock PIN still works for override'}
                     </Text>
                   </View>
                 </View>
@@ -669,17 +679,11 @@ const s = StyleSheet.create({
     color: nativeTokens.colors.textSubtle,
     marginBottom: 10,
   },
-  pinInput: {
-    backgroundColor: nativeTokens.colors.background,
-    borderWidth: 1,
-    borderColor: nativeTokens.colors.border,
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    fontSize: 20,
-    color: nativeTokens.colors.textHeading,
-    letterSpacing: 8,
-    textAlign: 'center',
+  pinFieldLabel: {
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 12,
+    color: nativeTokens.colors.textSubtlest,
+    marginTop: 8,
   },
   pinError: {
     fontFamily: 'Cairo_400Regular',

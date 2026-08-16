@@ -6,6 +6,10 @@ import { UnitTypeTable } from '@/components/settings/residents/unit-type-table';
 import { ResidentSettingsForm } from '@/components/settings/residents/resident-settings-form';
 import { LayoutGrid, ListTree, Cog } from 'lucide-react';
 import { getTranslation, Locale } from '@/lib/i18n';
+import {
+  SETTINGS_TAB_TRIGGER,
+  SETTINGS_TABS_LIST,
+} from '@/components/settings/settings-section-header';
 
 export default async function ResidentsSettings(props: {
   params: Promise<{ locale: Locale }>;
@@ -25,26 +29,17 @@ export default async function ResidentsSettings(props: {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto flex-wrap">
-          <TabsTrigger
-            value="overview"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <LayoutGrid className="h-4 w-4" />
+        <TabsList className={SETTINGS_TABS_LIST}>
+          <TabsTrigger value="overview" className={SETTINGS_TAB_TRIGGER}>
+            <LayoutGrid className="h-4 w-4" strokeWidth={1.5} />
             {t('settings.residents.tabs.overview')}
           </TabsTrigger>
-          <TabsTrigger
-            value="types"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <ListTree className="h-4 w-4" />
+          <TabsTrigger value="types" className={SETTINGS_TAB_TRIGGER}>
+            <ListTree className="h-4 w-4" strokeWidth={1.5} />
             {t('settings.residents.tabs.types')}
           </TabsTrigger>
-          <TabsTrigger
-            value="settings"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Cog className="h-4 w-4" />
+          <TabsTrigger value="settings" className={SETTINGS_TAB_TRIGGER}>
+            <Cog className="h-4 w-4" strokeWidth={1.5} />
             {t('settings.residents.tabs.settings')}
           </TabsTrigger>
         </TabsList>

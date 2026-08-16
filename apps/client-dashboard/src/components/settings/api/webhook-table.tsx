@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 import { WebhookSheet } from './webhook-sheet';
 import type { WebhookRow } from './types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface WebhookTableProps {
   webhooks: WebhookRow[];
@@ -61,12 +62,11 @@ export function WebhookTable({ webhooks: initial }: WebhookTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <p className="text-xs text-muted-foreground font-medium">
-          {hooks.length} webhook{hooks.length !== 1 ? 's' : ''} configured
-        </p>
-        <WebhookSheet mode="create" onSuccess={refresh} />
-      </div>
+      <SettingsSectionHeader
+        title="Webhooks"
+        description="Receive events when scans, invitations, and gates change."
+        action={<WebhookSheet mode="create" onSuccess={refresh} />}
+      />
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         {hooks.length === 0 ? (

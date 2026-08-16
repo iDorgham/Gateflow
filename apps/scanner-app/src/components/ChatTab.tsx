@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { getValidAccessToken } from '../lib/auth-client';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
+import { MessageCircle } from 'lucide-react-native';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -82,7 +83,11 @@ function MessageBubble({ item }: { item: ChatMessage }) {
 function EmptyState() {
   return (
     <View style={s.center}>
-      <Text style={s.emptyIcon}>💬</Text>
+      <MessageCircle
+        size={40}
+        color={nativeTokens.colors.textSubtlest}
+        strokeWidth={1.5}
+      />
       <Text style={s.emptyTitle}>No messages yet</Text>
       <Text style={s.emptySub}>
         Start a conversation with your team. Messages are synced when you are

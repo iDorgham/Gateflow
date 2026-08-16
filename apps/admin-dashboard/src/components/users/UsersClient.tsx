@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { UserDetailSheet } from './UserDetailSheet';
 import { AddUserSheet } from './AddUserSheet';
+import { formatRoleLabel } from '@gate-access/types';
 
 interface User {
   id: string;
@@ -166,7 +167,7 @@ export function UsersClient({
               variant="subtle"
               className="text-[10px] h-5 px-2 font-semibold bg-ds-background-neutral-subtle text-ds-text-subtle border-none"
             >
-              {user.role.name.replace('_', ' ')}
+              {formatRoleLabel(user.role.name)}
             </Badge>
           ) : null,
       },

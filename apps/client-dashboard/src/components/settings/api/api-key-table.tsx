@@ -17,6 +17,7 @@ import { Trash2, Key, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 import { CreateApiKeySheet } from './create-api-key-sheet';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 export interface ApiKeyRow {
   id: string;
@@ -57,13 +58,11 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <p className="text-xs text-muted-foreground font-medium">
-          {keys.length} key{keys.length !== 1 ? 's' : ''} — secrets are never
-          shown again after creation.
-        </p>
-        <CreateApiKeySheet onSuccess={refresh} />
-      </div>
+      <SettingsSectionHeader
+        title="API keys"
+        description="Secrets are shown only once after creation."
+        action={<CreateApiKeySheet onSuccess={refresh} />}
+      />
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         {keys.length === 0 ? (

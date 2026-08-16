@@ -5,6 +5,10 @@ import { GateTable } from '@/components/settings/gates/gate-table';
 import { ScannerRulesForm } from '@/components/settings/gates/scanner-rules-form';
 import { DoorOpen, Settings2 } from 'lucide-react';
 import type { ScannerConfig } from '@/components/settings/gates/scanner-rules-form';
+import {
+  SETTINGS_TAB_TRIGGER,
+  SETTINGS_TABS_LIST,
+} from '@/components/settings/settings-section-header';
 
 export default async function GatesSettings() {
   const { org } = await requireAuth();
@@ -51,22 +55,16 @@ export default async function GatesSettings() {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="gates" className="space-y-6">
-        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto">
-          <TabsTrigger
-            value="gates"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <DoorOpen className="h-4 w-4" />
+        <TabsList className={SETTINGS_TABS_LIST}>
+          <TabsTrigger value="gates" className={SETTINGS_TAB_TRIGGER}>
+            <DoorOpen className="h-4 w-4" strokeWidth={1.5} />
             Gates
-            <span className="ml-1 text-[10px] font-black bg-primary/10 text-primary rounded-full px-1.5 py-0.5">
+            <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
               {gateRows.length}
             </span>
           </TabsTrigger>
-          <TabsTrigger
-            value="scanner-rules"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Settings2 className="h-4 w-4" />
+          <TabsTrigger value="scanner-rules" className={SETTINGS_TAB_TRIGGER}>
+            <Settings2 className="h-4 w-4" strokeWidth={1.5} />
             Scanner Rules
           </TabsTrigger>
         </TabsList>

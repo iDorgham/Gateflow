@@ -1,4 +1,5 @@
 export * from './user';
+export * from './roles';
 export * from './organization';
 export * from './gate';
 export * from './qr';

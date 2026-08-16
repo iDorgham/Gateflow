@@ -21,6 +21,7 @@ export type LoginState = {
   success?: boolean;
   locale?: string;
   email?: string;
+  mustChangePassword?: boolean;
 } | null;
 
 export async function loginAction(
@@ -57,6 +58,7 @@ export async function loginAction(
         },
         organizationId: true,
         organization: { select: { type: true } },
+        mustChangePassword: true,
       },
     })
     .catch(() => null);
@@ -116,5 +118,9 @@ export async function loginAction(
     ? (localeCookie as (typeof i18n.locales)[number])
     : i18n.defaultLocale;
 
-  return { success: true, locale };
+  return {
+    success: true,
+    locale,
+    mustChangePassword: userData.mustChangePassword,
+  };
 }

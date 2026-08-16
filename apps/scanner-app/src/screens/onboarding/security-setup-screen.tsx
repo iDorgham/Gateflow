@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import {
   Pressable,
+  ScrollView,
   StyleSheet,
   Switch,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 import { setSecurePIN } from '../../lib/security/secure-pin';
 import { useBiometry } from '../../hooks/use-biometry';
+import { PinDots, PinKeypad } from '../../components/security/pin-keypad';
 
 type Props = {
   onReady: () => void;
@@ -19,6 +20,7 @@ export function SecuritySetupScreen({ onReady }: Props) {
   const { isSupported, isEnrolled, biometryType, authenticate } = useBiometry();
   const [pin, setPin] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [focus, setFocus] = useState<'pin' | 'confirm'>('pin');
   const [preferBio, setPreferBio] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -27,8 +29,8 @@ export function SecuritySetupScreen({ onReady }: Props) {
 
   const handleContinue = async () => {
     setError(null);
-    if (pin.length !== 4 && pin.length !== 6) {
-      setError('PIN must be 4 or 6 digits');
+    if (pin.length !== 6) {
+      setError('PIN must be 6 digits');
       return;
     }
     if (pin !== confirm) {
@@ -60,36 +62,33 @@ export function SecuritySetupScreen({ onReady }: Props) {
   };
 
   return (
-    <View style={styles.root}>
+    <ScrollView
+      style={styles.root}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.body}>
-        Create a device PIN. It unlocks the scanner after login when biometrics
-        are unavailable.
+        Create a 6-digit device PIN. It unlocks the scanner after login when
+        biometrics are unavailable. Use the keypad below — the system keyboard
+        is not used.
       </Text>
 
-      <Text style={styles.label}>PIN</Text>
-      <TextInput
-        value={pin}
-        onChangeText={setPin}
-        keyboardType="number-pad"
-        secureTextEntry
-        maxLength={6}
-        style={styles.input}
-        placeholder="4 or 6 digits"
-        placeholderTextColor={nativeTokens.colors.textSubtlest}
-        editable={!busy}
-      />
+      <Pressable onPress={() => setFocus('pin')} disabled={busy}>
+        <Text style={styles.label}>PIN (6 digits)</Text>
+        <PinDots filled={pin.length} selected={focus === 'pin'} />
+      </Pressable>
 
-      <Text style={styles.label}>Confirm PIN</Text>
-      <TextInput
-        value={confirm}
-        onChangeText={setConfirm}
-        keyboardType="number-pad"
-        secureTextEntry
-        maxLength={6}
-        style={styles.input}
-        placeholder="Repeat PIN"
-        placeholderTextColor={nativeTokens.colors.textSubtlest}
-        editable={!busy}
+      <Pressable onPress={() => setFocus('confirm')} disabled={busy}>
+        <Text style={styles.label}>Confirm PIN (6 digits)</Text>
+        <PinDots filled={confirm.length} selected={focus === 'confirm'} />
+      </Pressable>
+
+      <PinKeypad
+        value={focus === 'pin' ? pin : confirm}
+        onChange={focus === 'pin' ? setPin : setConfirm}
+        disabled={busy}
+        onSubmit={handleContinue}
+        submitBusy={busy}
       />
 
       <View style={styles.switchRow}>
@@ -128,14 +127,17 @@ export function SecuritySetupScreen({ onReady }: Props) {
       >
         <Text style={styles.primaryText}>Save and continue</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  content: {
     gap: nativeTokens.spacing['space-100'],
+    paddingBottom: nativeTokens.spacing['space-200'],
   },
   body: {
     fontFamily: 'Cairo_400Regular',
@@ -148,20 +150,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
     color: nativeTokens.colors.textPrimary,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: nativeTokens.colors.border,
-    backgroundColor: nativeTokens.colors.surfaceRaised,
-    borderRadius: 8,
-    paddingHorizontal: nativeTokens.spacing['space-200'],
-    paddingVertical: nativeTokens.spacing['space-150'],
-    color: nativeTokens.colors.textPrimary,
-    fontFamily: 'Cairo_600SemiBold',
-    fontSize: 20,
-    letterSpacing: 6,
-    textAlign: 'center',
-    marginBottom: nativeTokens.spacing['space-150'],
+    marginTop: nativeTokens.spacing['space-050'],
   },
   switchRow: {
     flexDirection: 'row',

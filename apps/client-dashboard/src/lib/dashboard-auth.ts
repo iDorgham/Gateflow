@@ -11,6 +11,7 @@ export interface DashboardSession {
     email: string;
     role: string;
     organizationId: string | null;
+    mustChangePassword: boolean;
   };
   org: {
     id: string;
@@ -38,6 +39,7 @@ export async function requireAuth(): Promise<DashboardSession> {
         email: true,
         role: { select: { name: true } },
         organizationId: true,
+        mustChangePassword: true,
       },
     })
     .catch(() => null);
@@ -50,6 +52,7 @@ export async function requireAuth(): Promise<DashboardSession> {
     email: userRow.email,
     role: userRow.role.name,
     organizationId: userRow.organizationId,
+    mustChangePassword: userRow.mustChangePassword,
   };
 
   let org: DashboardSession['org'] = null;

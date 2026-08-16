@@ -6,11 +6,11 @@ export interface UserWithOrganization extends User {
 }
 
 export const BUILT_IN_ROLES = {
-  SUPER_ADMIN: 'Super Admin',
-  ORG_ADMIN: 'Organization Admin',
-  SECURITY_MANAGER: 'Security Manager',
-  GATE_OPERATOR: 'Gate Operator',
-  RESIDENT: 'Resident',
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ORG_ADMIN: 'ORG_ADMIN',
+  SECURITY_MANAGER: 'SECURITY_MANAGER',
+  GATE_OPERATOR: 'GATE_OPERATOR',
+  RESIDENT: 'RESIDENT',
 } as const;
 
 export const DEFAULT_PERMISSIONS: Record<
