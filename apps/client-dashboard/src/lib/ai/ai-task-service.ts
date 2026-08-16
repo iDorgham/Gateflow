@@ -25,7 +25,7 @@ export const AiTaskService = {
         organizationId: data.organizationId,
         type: data.type,
         title: data.title,
-        params: data.params as any,
+        params: data.params as object,
         cron: data.cron,
         status: 'PENDING',
         nextRun: nextRun,

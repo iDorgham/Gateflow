@@ -10,6 +10,6 @@ export interface PerimeterWebhookPayload {
   projectId: string;
   gateId: string;
   type: PerimeterEventType;
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
   timestamp: string;
 }

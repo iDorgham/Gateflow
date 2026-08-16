@@ -24,7 +24,7 @@ export class MaintenanceExecutor {
 
     // 1. Log the event in EventLog (Agentic context)
     // We use a separate EventLog row to track the raw failure event
-    const event = await prisma.eventLog.create({
+    await prisma.eventLog.create({
       data: {
         organizationId: params.organizationId,
         type: 'SCAN_FAILURE',
@@ -53,9 +53,10 @@ export class MaintenanceExecutor {
     });
 
     // Filter manually for this gateId in payload since cross-db Json paths are non-standard
-    const matchingFailures = recentEvents.filter(
-      (e) => (e.payload as any)?.gateId === params.gateId
-    );
+    const matchingFailures = recentEvents.filter((e) => {
+      const payload = e.payload as Record<string, unknown> | null;
+      return payload?.gateId === params.gateId;
+    });
 
     console.log(
       `>>> [MaintenanceExecutor] Found ${matchingFailures.length} recent failures for gate ${params.gateId}`
@@ -95,7 +96,7 @@ export class MaintenanceExecutor {
         OR: [{ projectId: params.projectId }, { projectId: null }],
       },
       orderBy: {
-        projectId: { sort: 'desc', nulls: 'last' } as any, // Prefer specific project
+        projectId: { sort: 'desc', nulls: 'last' },
       },
     });
 

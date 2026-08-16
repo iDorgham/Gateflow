@@ -28,8 +28,17 @@ export interface HubSpotPhysicalVisitPayload {
  * This can be used by organizations that want to push data directly to HubSpot
  * without an intermediary like Zapier.
  */
+interface ScanData {
+  contact?: { email?: string | null; name?: string | null };
+  gate?: { name?: string | null };
+  unit?: { building?: string | null };
+  qrCode?: { visitorQR?: { visitorName?: string | null }; utm?: { source?: string; medium?: string; campaign?: string } };
+  timestamp: string;
+  scanId: string;
+}
+
 export function mapToHubSpotPhysicalVisit(
-  scanData: any
+  scanData: ScanData
 ): HubSpotPhysicalVisitPayload {
   return {
     eventName: 'Physical Visit',
@@ -63,7 +72,7 @@ export async function triggerHubSpotSync(
     select: { integrationConfig: true },
   });
 
-  const config = org?.integrationConfig as any;
+  const config = org?.integrationConfig as Record<string, unknown> | null;
   if (!config?.hubspotPortalId) return;
 
   // Fetch full scan data for rich mapping
@@ -107,5 +116,5 @@ export async function triggerHubSpotSync(
     ...hubspotPayload,
     _integration: 'hubspot',
     _portalId: config.hubspotPortalId,
-  } as any);
+  });
 }

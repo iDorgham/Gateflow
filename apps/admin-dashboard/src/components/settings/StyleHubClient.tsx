@@ -32,13 +32,25 @@ import {
   ScrollArea,
   cn,
 } from '@gateflow/ui';
-import { validateContrast } from '@/../../packages/utils/src/contrast';
+import { validateContrast } from '@gate-access/utils/contrast';
 import { OVERRIDABLE_TOKENS } from '@/lib/branding-css-generator';
+
+interface TokenVariable {
+  key: string;
+  value: string;
+}
+
+interface BrandingSnapshot {
+  id: string;
+  name: string;
+  createdAt: Date;
+  cssTokens: Record<string, string>;
+}
 
 interface StyleHubProps {
   orgId: string;
-  initialVariables: any[];
-  snapshots: any[];
+  initialVariables: TokenVariable[];
+  snapshots: BrandingSnapshot[];
 }
 
 export function StyleHubClient({

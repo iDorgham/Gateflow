@@ -19,6 +19,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@gate-access/utils": ["../../packages/utils/src/index.ts"],
+      "@gate-access/utils/*": ["../../packages/utils/src/*"],
       "react": ["../../node_modules/@types/react"],
       "react/jsx-runtime": ["../../node_modules/@types/react/jsx-runtime"],
       "react/jsx-dev-runtime": [
