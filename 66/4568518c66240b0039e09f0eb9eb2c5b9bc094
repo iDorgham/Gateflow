@@ -1,0 +1,22 @@
+packages/types/src/roles.ts
+  s_9c8d659f566424::t_1721c10a220a7e 75,81
+  s_9c8d659f566424::t_b1894c4414661c 56-64,73
+CHANGELOG.md
+  s_9c8d659f566424::t_4d37d1160a5ca9 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "664568518c66240b0039e09f0eb9eb2c5b9bc094",
+  "prompts": {},
+  "sessions": {
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
