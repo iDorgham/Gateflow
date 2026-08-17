@@ -1,0 +1,19 @@
+apps/scanner-app/src/lib/auth-client.test.ts
+  s_9c8d659f566424::t_a707a604351030 116-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "7fd0a2fa9e16cb0ad6feecae9647517a19c2356f",
+  "prompts": {},
+  "sessions": {
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
