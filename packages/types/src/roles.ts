@@ -53,6 +53,15 @@ export function formatRoleLabel(value: string): string {
   return titleCaseFromSlug(slug);
 }
 
+function asOrganizationType(
+  value: OrganizationType | string
+): OrganizationType {
+  if ((Object.values(OrganizationType) as string[]).includes(value)) {
+    return value as OrganizationType;
+  }
+  return OrganizationType.REAL_ESTATE;
+}
+
 export function filterVisibleTeamRoles<
   T extends {
     name: string;
@@ -61,14 +70,15 @@ export function filterVisibleTeamRoles<
   },
 >(
   roles: readonly T[],
-  orgType: OrganizationType
+  orgType: OrganizationType | string
 ): Array<T & { slug: string; name: string }> {
+  const typedOrgType = asOrganizationType(orgType);
   const seen = new Set<string>();
   return roles
     .filter((role) =>
       isTeamRoleVisibleForOrg(
         role.slug || role.name,
-        orgType,
+        typedOrgType,
         role.organizationId
       )
     )
