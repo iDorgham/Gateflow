@@ -1,29 +1,39 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Auto patch-bump + tag when merging a feat/* branch into master/main
+# Auto patch-bump + tag when a feat/* branch is merged into master/main.
+# Only look at merge commits in ORIG_HEAD..HEAD. Using `git log --merges -1`
+# on all history re-triggers after later `git pull` fast-forwards (e.g. a
+# chore version bump) because the previous feat/* merge is still the latest.
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-# Reliable merged branch detection via ORIG_HEAD comparison
-MERGED_BRANCH=$(git log --merges -1 --pretty=format:'%s' 2>/dev/null \
+if [ "$CURRENT_BRANCH" != "master" ] && [ "$CURRENT_BRANCH" != "main" ]; then
+  exit 0
+fi
+
+if ! git rev-parse -q --verify ORIG_HEAD >/dev/null; then
+  exit 0
+fi
+
+MERGED_BRANCH=$(git log ORIG_HEAD..HEAD --merges -1 --pretty=format:'%s' 2>/dev/null \
   | sed "s/Merge branch '\([^']*\)'.*/\1/" \
   | sed "s/Merge pull request.*from [^/]*\/\([^ ]*\).*/\1/")
 
-# Fallback: check reflog for the last merge action
 if [ -z "$MERGED_BRANCH" ]; then
-  MERGED_BRANCH=$(git reflog -1 --pretty=format:'%gs' 2>/dev/null \
-    | sed "s/merge [^:]*: //" \
-    | sed "s/Merge branch '\([^']*\)'.*/\1/")
+  REFLOG=$(git reflog -1 --pretty=format:'%gs' 2>/dev/null)
+  case "$REFLOG" in
+    merge\ feat/*:*)
+      MERGED_BRANCH=$(printf '%s' "$REFLOG" | sed 's/^merge \([^:]*\):.*/\1/')
+      ;;
+  esac
 fi
 
 case "$MERGED_BRANCH" in
   feat/*)
-    if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "main" ]; then
-      echo "🏷  feat/* merged into ${CURRENT_BRANCH} — auto bumping patch version..."
-      node scripts/version/ralph-version.js bump patch
-      node scripts/version/ralph-version.js tag "Auto-release after ${MERGED_BRANCH}"
-      echo "✓ Version bumped and tagged. Push with:"
-      echo "   git push origin HEAD && git push origin --tags"
-    fi
+    echo "🏷  feat/* merged into ${CURRENT_BRANCH} — auto bumping patch version..."
+    node scripts/version/ralph-version.js bump patch
+    node scripts/version/ralph-version.js tag "Auto-release after ${MERGED_BRANCH}"
+    echo "✓ Version bumped and tagged. Push with:"
+    echo "   git push origin HEAD && git push origin --tags"
     ;;
 esac
