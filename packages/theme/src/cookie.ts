@@ -19,6 +19,29 @@ export {
 
 const THEME_NAME_SET = new Set<string>(THEME_NAMES);
 
+const SCRIPT_ESCAPE_MAP: Record<string, string> = {
+  '<': '\\u003C',
+  '>': '\\u003E',
+  '/': '\\u002F',
+  '\\': '\\\\',
+  '\b': '\\b',
+  '\f': '\\f',
+  '\n': '\\n',
+  '\r': '\\r',
+  '\t': '\\t',
+  '\0': '\\0',
+  '\u2028': '\\u2028',
+  '\u2029': '\\u2029',
+};
+const SCRIPT_ESCAPE_RE = /[<>\/\\\b\f\n\r\t\0\u2028\u2029]/g;
+
+function escapeForInlineScriptLiteral(value: string): string {
+  return JSON.stringify(value).replace(
+    SCRIPT_ESCAPE_RE,
+    (ch) => SCRIPT_ESCAPE_MAP[ch] ?? ch
+  );
+}
+
 export function parseTheme(
   value: string | null | undefined
 ): ThemeName | undefined {
@@ -114,8 +137,8 @@ export function persistThemeCookie(
  * (which only reads localStorage) picks up the cross-subdomain preference
  * before first paint.
  */
-export const THEME_BOOTSTRAP_SCRIPT = `(function(){try{var KEY=${JSON.stringify(
+export const THEME_BOOTSTRAP_SCRIPT = `(function(){try{var KEY=${escapeForInlineScriptLiteral(
   THEME_STORAGE_KEY
-)};var LEGACY=${JSON.stringify(
+)};var LEGACY=${escapeForInlineScriptLiteral(
   LEGACY_THEME_STORAGE_KEY
 )};var valid={light:1,dark:1,system:1};function readCookie(name){var m=document.cookie.match(new RegExp('(?:^|; )'+name+'=([^;]*)'));return m?decodeURIComponent(m[1]):null}function pick(){var value=readCookie(KEY)||readCookie(LEGACY);if(!value||!valid[value]){try{value=localStorage.getItem(KEY)||localStorage.getItem(LEGACY)}catch(e){value=null}}return value&&valid[value]?value:null}var value=pick();if(value){try{localStorage.setItem(KEY,value)}catch(e){}}}catch(e){}})();`;
