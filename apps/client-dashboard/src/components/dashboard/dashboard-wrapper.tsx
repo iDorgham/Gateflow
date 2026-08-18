@@ -21,6 +21,10 @@ export async function DashboardWrapper({
 }) {
   const { user, org, claims } = await requireAuth();
 
+  if (user.mustChangePassword) {
+    redirect(`/${locale}/change-password`);
+  }
+
   // RESIDENT guard: require linked unit to access dashboard
   const roleName = claims.roleName ?? getRoleName(user);
   if (roleName?.toUpperCase() === 'RESIDENT') {
@@ -53,7 +57,9 @@ export async function DashboardWrapper({
   }
 
   return (
-    <OrganizationFeaturesProvider type={org?.type ?? OrganizationType.REAL_ESTATE}>
+    <OrganizationFeaturesProvider
+      type={org?.type ?? OrganizationType.REAL_ESTATE}
+    >
       <DashboardLayoutClient
         user={{
           id: user.id,
@@ -61,7 +67,11 @@ export async function DashboardWrapper({
           email: user.email,
           role: claims.roleName ?? getRoleName(user),
         }}
-        org={org ? { id: org.id, name: org.name, plan: org.plan, type: org.type } : null}
+        org={
+          org
+            ? { id: org.id, name: org.name, plan: org.plan, type: org.type }
+            : null
+        }
         projects={projects}
         currentProjectId={currentProjectId}
         locale={locale}

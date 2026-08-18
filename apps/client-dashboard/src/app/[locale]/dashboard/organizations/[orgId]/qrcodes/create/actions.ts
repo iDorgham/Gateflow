@@ -36,7 +36,8 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
-    if (claims.orgId !== input.organizationId) return { success: false, error: 'Forbidden.' };
+    if (claims.orgId !== input.organizationId)
+      return { success: false, error: 'Forbidden.' };
 
     const secret = process.env.QR_SIGNING_SECRET ?? '';
     if (!secret || secret.length < 32) {
@@ -50,14 +51,25 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
     // Validate gate belongs to org
     if (input.gateId) {
       const gate = await prisma.gate.findFirst({
-        where: { id: input.gateId, organizationId: claims.orgId, deletedAt: null },
+        where: {
+          id: input.gateId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
       });
       if (!gate) return { success: false, error: 'Gate not found.' };
     }
 
     if (input.type === QRCodeType.RECURRING) {
-      if (!input.maxUses || !Number.isInteger(input.maxUses) || input.maxUses < 1) {
-        return { success: false, error: 'maxUses must be a positive integer for RECURRING type.' };
+      if (
+        !input.maxUses ||
+        !Number.isInteger(input.maxUses) ||
+        input.maxUses < 1
+      ) {
+        return {
+          success: false,
+          error: 'maxUses must be a positive integer for RECURRING type.',
+        };
       }
     }
 
@@ -69,7 +81,11 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
     }
 
     const resolvedMaxUses =
-      input.type === QRCodeType.SINGLE ? 1 : input.type === QRCodeType.PERMANENT ? null : input.maxUses;
+      input.type === QRCodeType.SINGLE
+        ? 1
+        : input.type === QRCodeType.PERMANENT
+          ? null
+          : input.maxUses;
 
     const qrId = randomUUID();
     const nonce = randomUUID();
@@ -94,9 +110,10 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
 
     const projectId = await getValidatedProjectId(input.organizationId);
 
-    // Persist QRCode to DB
+    // Persist QRCode to DB — id must match payload.qrId (validate looks up by id)
     await prisma.qRCode.create({
       data: {
+        id: qrId,
         code: qrString,
         type: input.type as unknown as PrismaQRCodeType,
         organizationId: input.organizationId,
@@ -115,7 +132,8 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
     // ── Generate short link so the QR encodes a compact URL ─────────────────
     // 8-char hex = 4 random bytes = ~4 billion combinations (ample for this use case).
     const shortId = createId();
-    const appUrl = process.env.NEXT_PUBLIC_QR_BASE_URL ?? 'http://localhost:3000';
+    const appUrl =
+      process.env.NEXT_PUBLIC_QR_BASE_URL ?? 'http://localhost:3000';
     const shortUrl = `${appUrl}/s/${shortId}`;
 
     // Short link expires 1 hour after the QR's own expiry; 24 h for PERMANENT.
@@ -140,8 +158,12 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
       return { success: true, qrString, qrId };
     }
 
-    console.log(`createQRCode: Created ${input.type} QR ${qrId} for org ${input.organizationId} → shortId ${shortId}`);
-    emitEvent(input.organizationId, EventType.QR_CREATED, { qrId }).catch(() => {});
+    console.log(
+      `createQRCode: Created ${input.type} QR ${qrId} for org ${input.organizationId} → shortId ${shortId}`
+    );
+    emitEvent(input.organizationId, EventType.QR_CREATED, { qrId }).catch(
+      () => {}
+    );
     return { success: true, qrString, qrId, shortUrl };
   } catch (error) {
     console.error('createQRCode: Unexpected error:', error);

@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useEffect, useTransition, useCallback } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  useTransition,
+  useCallback,
+} from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -1034,14 +1040,14 @@ export default function UnitsPage() {
                         key={row.id}
                         className="group hover:bg-[var(--ds-background-neutral-subtle-hovered)] dark:hover:bg-[var(--ds-background-neutral-subtle)]/10 transition-colors border-none h-14"
                       >
-                        {row
-                          .getVisibleCells()
-                          .map((cell) =>
-                            flexRender(
+                        {row.getVisibleCells().map((cell) => (
+                          <Fragment key={cell.id}>
+                            {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
-                            )
-                          )}
+                            )}
+                          </Fragment>
+                        ))}
                       </TableRow>
                     ))
                   )}

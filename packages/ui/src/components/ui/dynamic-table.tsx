@@ -162,6 +162,10 @@ export function DynamicTable<T extends { id: string | number }>({
 
   const virtualRows = virtualizer.getVirtualItems();
   const totalHeight = virtualizer.getTotalSize();
+  const colSpan = columns.length + (isSelectable ? 1 : 0);
+  const padTop = virtualRows[0]?.start ?? 0;
+  const padBottom =
+    totalHeight - (virtualRows[virtualRows.length - 1]?.end ?? totalHeight);
 
   return (
     <div
@@ -171,10 +175,7 @@ export function DynamicTable<T extends { id: string | number }>({
     >
       <Table className="border-separate border-spacing-0">
         {renderHeaders()}
-        <TableBody
-          className="relative"
-          style={{ height: isVirtual ? totalHeight : 'auto' }}
-        >
+        <TableBody>
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <TableRow
@@ -210,13 +211,15 @@ export function DynamicTable<T extends { id: string | number }>({
             </TableRow>
           ) : isVirtual ? (
             <>
-              {/* Virtualized Rows */}
-              <div
-                style={{
-                  height: `${virtualRows[0]?.start ?? 0}px`,
-                  gridColumn: `1 / ${columns.length + (isSelectable ? 2 : 1)}`,
-                }}
-              />
+              {padTop > 0 ? (
+                <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                  <TableCell
+                    colSpan={colSpan}
+                    className="p-0 border-0"
+                    style={{ height: padTop }}
+                  />
+                </TableRow>
+              ) : null}
               {virtualRows.map((virtualRow) => {
                 const item = items[virtualRow.index];
                 return (
@@ -265,12 +268,15 @@ export function DynamicTable<T extends { id: string | number }>({
                   </TableRow>
                 );
               })}
-              <div
-                style={{
-                  height: `${totalHeight - (virtualRows[virtualRows.length - 1]?.end ?? totalHeight)}px`,
-                  gridColumn: `1 / ${columns.length + (isSelectable ? 2 : 1)}`,
-                }}
-              />
+              {padBottom > 0 ? (
+                <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                  <TableCell
+                    colSpan={colSpan}
+                    className="p-0 border-0"
+                    style={{ height: padBottom }}
+                  />
+                </TableRow>
+              ) : null}
             </>
           ) : (
             items.map((item) => (

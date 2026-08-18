@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   X,
@@ -9,9 +10,18 @@ import {
   Hash,
   Calendar,
   BarChart2,
+  Download,
+  ImageDown,
 } from 'lucide-react';
-import { cn } from '@gateflow/ui';
+import QRCode from 'react-qr-code';
+import { Button, cn } from '@gateflow/ui';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
+import {
+  QR_PRINT_BG,
+  QR_PRINT_FG,
+  downloadQrJpg,
+  downloadQrSvg,
+} from '@/lib/qr/qr-print';
 
 const STATUS_CONFIG: Record<
   string,
@@ -81,6 +91,20 @@ function Field({
 }
 
 export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
+  const qrRef = useRef<HTMLDivElement>(null);
+
+  function handleDownloadSvg() {
+    const svg = qrRef.current?.querySelector('svg');
+    if (!svg || !qr) return;
+    downloadQrSvg(svg, `gateflow-qr-${qr.id}.svg`);
+  }
+
+  function handleDownloadJpg() {
+    const svg = qrRef.current?.querySelector('svg');
+    if (!svg || !qr) return;
+    void downloadQrJpg(svg, `gateflow-qr-${qr.id}.jpg`);
+  }
+
   return (
     <AnimatePresence>
       {qr && (
@@ -104,7 +128,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 end-0 z-50 w-80 bg-[var(--ds-surface)] bg-background border-s border-[var(--ds-border)] shadow-xl flex flex-col overflow-hidden"
+            className="fixed inset-y-0 end-0 z-50 w-96 max-w-full bg-[var(--ds-surface)] bg-background border-s border-[var(--ds-border)] shadow-xl flex flex-col overflow-hidden"
             role="dialog"
             aria-modal="true"
             aria-label="QR code details"
@@ -144,6 +168,41 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                   </div>
                 );
               })()}
+
+              <div
+                ref={qrRef}
+                className="flex justify-center rounded-[8px] border border-[var(--ds-border)] bg-white p-4"
+                aria-label="QR code preview"
+              >
+                <QRCode
+                  value={qr.code}
+                  size={192}
+                  bgColor={QR_PRINT_BG}
+                  fgColor={QR_PRINT_FG}
+                  level="M"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-10 gap-2 rounded-[8px] text-xs font-bold"
+                  onClick={handleDownloadSvg}
+                >
+                  <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                  Download SVG
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-10 gap-2 rounded-[8px] text-xs font-bold"
+                  onClick={handleDownloadJpg}
+                >
+                  <ImageDown className="h-3.5 w-3.5" aria-hidden="true" />
+                  Download JPG
+                </Button>
+              </div>
 
               <dl className="space-y-4">
                 <Field icon={QrCode} label="QR Code">

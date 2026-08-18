@@ -101,7 +101,7 @@ const PLACEHOLDER_VALUES: Record<string, string> = {
   timestamp: new Date().toLocaleString(),
   denial_reason: 'QR code expired',
   issuer_name: 'Maria García',
-  role_name: 'Gate Operator',
+  role_name: 'GATE_OPERATOR',
   activation_link: 'https://app.gateflow.site/activate/abc123',
   alert_type: 'Maintenance Window',
   alert_message: 'Scheduled maintenance on Sunday 02:00–04:00 UTC.',
