@@ -33,7 +33,7 @@ const SCRIPT_ESCAPE_MAP: Record<string, string> = {
   '\u2028': '\\u2028',
   '\u2029': '\\u2029',
 };
-const SCRIPT_ESCAPE_RE = /[<>\/\\\b\f\n\r\t\0\u2028\u2029]/g;
+const SCRIPT_ESCAPE_RE = /[<>/\\\b\f\n\r\t\0\u2028\u2029]/g;
 
 function escapeForInlineScriptLiteral(value: string): string {
   return JSON.stringify(value).replace(
