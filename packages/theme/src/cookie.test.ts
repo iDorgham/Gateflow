@@ -105,6 +105,20 @@ describe('readThemeFromCookieHeader', () => {
   it('ignores invalid values', () => {
     assert.equal(readThemeFromCookieHeader('gateflow-theme=neon'), undefined);
   });
+
+  it('ignores malformed URI encoded values', () => {
+    assert.equal(
+      readThemeFromCookieHeader('gateflow-theme=%E0%A4'),
+      undefined
+    );
+  });
+
+  it('continues parsing after a malformed cookie pair', () => {
+    assert.equal(
+      readThemeFromCookieHeader('bad=%E0%A4; gateflow-theme=dark'),
+      'dark'
+    );
+  });
 });
 
 describe('THEME_BOOTSTRAP_SCRIPT', () => {

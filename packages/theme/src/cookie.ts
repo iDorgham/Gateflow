@@ -105,7 +105,14 @@ export function readThemeFromCookieHeader(
     const eq = trimmed.indexOf('=');
     if (eq < 0) continue;
     const name = trimmed.slice(0, eq);
-    const value = parseTheme(decodeURIComponent(trimmed.slice(eq + 1)));
+    let decoded: string;
+    try {
+      decoded = decodeURIComponent(trimmed.slice(eq + 1));
+    } catch (e) {
+      if (e instanceof URIError) continue;
+      throw e;
+    }
+    const value = parseTheme(decoded);
     if (!value) continue;
     if (name === THEME_COOKIE_NAME) return value;
     if (name === LEGACY_THEME_STORAGE_KEY) legacy = value;

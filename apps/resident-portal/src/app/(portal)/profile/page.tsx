@@ -27,21 +27,21 @@ export default async function ProfilePage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-ds-surface-sunken">
       <PageHeader title="Profile" backHref="/" />
 
       <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-6xl">
         <section className="grid gap-6 xl:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-2">
+          <div className="rounded-xl border border-ds-border bg-ds-surface p-6 shadow-sm xl:col-span-2">
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
                 <User className="h-8 w-8 text-blue-600" />
               </div>
               <div className="flex-1">
-                <h2 className="font-semibold text-slate-900">
+                <h2 className="font-semibold text-ds-text-heading">
                   {user?.name || 'Resident'}
                 </h2>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-ds-text-subtle">
                   {user?.email || 'resident@example.com'}
                 </p>
                 <span className="inline-flex items-center mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
@@ -67,21 +67,21 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100">
-              <h3 className="font-semibold text-slate-900">My Unit</h3>
+          <div className="bg-ds-surface rounded-xl shadow-sm border border-ds-border overflow-hidden">
+            <div className="px-5 py-4 border-b border-ds-border">
+              <h3 className="font-semibold text-ds-text-heading">My Unit</h3>
             </div>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-ds-border">
               {user?.unit ? (
                 <div className="px-5 py-4 flex items-center gap-3">
-                  <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
-                    <Home className="h-5 w-5 text-slate-500" />
+                  <div className="h-10 w-10 bg-ds-surface-raised rounded-full flex items-center justify-center">
+                    <Home className="h-5 w-5 text-ds-text-subtle" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-slate-900">
+                    <p className="font-medium text-ds-text-heading">
                       {user.unit.name}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-ds-text-subtle">
                       {user.unit.type.replace('_', ' ')} -{' '}
                       {user.unit.project?.name}
                     </p>
@@ -92,7 +92,7 @@ export default async function ProfilePage() {
                 </div>
               ) : (
                 <div className="px-5 py-6 text-center">
-                  <p className="text-sm text-slate-500">No unit assigned</p>
+                  <p className="text-sm text-ds-text-subtle">No unit assigned</p>
                   <Link
                     href="/"
                     className="text-sm text-blue-600 font-medium mt-1 inline-block"
@@ -105,20 +105,20 @@ export default async function ProfilePage() {
           </div>
         </section>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h3 className="font-semibold text-slate-900">Settings</h3>
+        <div className="bg-ds-surface rounded-xl shadow-sm border border-ds-border overflow-hidden">
+          <div className="px-5 py-4 border-b border-ds-border">
+            <h3 className="font-semibold text-ds-text-heading">Settings</h3>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-ds-border">
             <Link
               href="/settings/notifications"
-              className="px-5 py-4 flex items-center justify-between hover:bg-slate-50"
+              className="px-5 py-4 flex items-center justify-between hover:bg-ds-surface-raised"
             >
               <div className="flex items-center gap-3">
-                <Bell className="h-5 w-5 text-slate-400" />
-                <span className="text-sm text-slate-700">Notifications</span>
+                <Bell className="h-5 w-5 text-ds-text-subtle" />
+                <span className="text-sm text-ds-text">Notifications</span>
               </div>
-              <ChevronRight className="h-4 w-4 text-slate-400" />
+              <ChevronRight className="h-4 w-4 text-ds-text-subtle" />
             </Link>
             <div className="px-5 py-3">
               <ThemeToggle />
@@ -130,7 +130,7 @@ export default async function ProfilePage() {
           <SignOutButton />
         </div>
 
-        <div className="text-center text-xs text-slate-400">
+        <div className="text-center text-xs text-ds-text-subtle">
           <p>GateFlow Resident Portal v1.0</p>
           <p className="mt-1">Made for secure living</p>
         </div>
