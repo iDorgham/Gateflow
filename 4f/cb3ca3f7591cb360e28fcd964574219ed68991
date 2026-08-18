@@ -1,0 +1,19 @@
+package.json
+  s_9c8d659f566424::t_138cb68c018a2a 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4fcb3ca3f7591cb360e28fcd964574219ed68991",
+  "prompts": {},
+  "sessions": {
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
