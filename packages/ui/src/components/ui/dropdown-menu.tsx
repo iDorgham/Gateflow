@@ -47,10 +47,8 @@ export function getDropdownFixedStyle(
     style.transform = 'translateY(-100%)';
   } else if (side === 'right') {
     style.left = rect.right + sideOffset;
-    style.top = rect.top;
   } else {
     style.right = viewportWidth - rect.left + sideOffset;
-    style.top = rect.top;
   }
 
   if (side === 'top' || side === 'bottom') {
@@ -63,6 +61,20 @@ export function getDropdownFixedStyle(
         .join(' ');
     } else {
       style.right = viewportWidth - rect.right;
+    }
+  } else if (side === 'left' || side === 'right') {
+    if (align === 'start') {
+      style.top = rect.top;
+    } else if (align === 'center') {
+      style.top = rect.top + rect.height / 2;
+      style.transform = [style.transform, 'translateY(-50%)']
+        .filter(Boolean)
+        .join(' ');
+    } else {
+      style.top = rect.bottom;
+      style.transform = [style.transform, 'translateY(-100%)']
+        .filter(Boolean)
+        .join(' ');
     }
   }
 

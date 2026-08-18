@@ -1238,7 +1238,12 @@ export function CreateQRClient({
   function downloadJPG() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg) return;
-    void downloadQrJpg(svg, `gateflow-qr-${created?.qrId ?? 'code'}.jpg`);
+    downloadQrJpg(svg, `gateflow-qr-${created?.qrId ?? 'code'}.jpg`).catch(
+      (error) => {
+        toast.error('Failed to export QR code as JPG');
+        console.error('JPG export failed:', error);
+      }
+    );
   }
 
   function resetWizard() {

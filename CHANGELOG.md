@@ -10,8 +10,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Client-Dashboard]** print signed QRs and unclip overflow menus
-
 - **[Git]** only auto-bump version for feat merges in ORIG_HEAD..HEAD
 
 - **[Deps]** override deepmerge-ts to 8.x for GHSA-ggr8-5vv4-36mx
@@ -24,6 +22,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Apps
 
 - **[Theme]** sync light and dark mode across web apps via a shared `gateflow-theme` cookie on `.gateflow.site`
+- **[Client-Dashboard]** print signed QRs and unclip overflow menus
 
 ---
 

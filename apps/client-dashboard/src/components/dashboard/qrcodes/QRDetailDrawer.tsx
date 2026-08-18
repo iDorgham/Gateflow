@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { Button, cn } from '@gateflow/ui';
+import { toast } from 'sonner';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
 import {
   QR_PRINT_BG,
@@ -102,7 +103,10 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
   function handleDownloadJpg() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg || !qr) return;
-    void downloadQrJpg(svg, `gateflow-qr-${qr.id}.jpg`);
+    downloadQrJpg(svg, `gateflow-qr-${qr.id}.jpg`).catch((error) => {
+      toast.error('Failed to export QR code as JPG');
+      console.error('JPG export failed:', error);
+    });
   }
 
   return (
