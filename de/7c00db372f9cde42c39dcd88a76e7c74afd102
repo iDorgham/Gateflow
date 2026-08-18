@@ -1,0 +1,27 @@
+lint-staged.config.mjs
+  s_9c8d659f566424::t_2867d6480e0392 16-18
+pnpm-lock.yaml
+  s_9c8d659f566424::t_9dc724c079156c 17,6126,11277-11278
+.prettierignore
+  s_9c8d659f566424::t_e977a4ed33944a 7-9
+package.json
+  s_9c8d659f566424::t_c6d8f89f2a1477 140
+CHANGELOG.md
+  s_9c8d659f566424::t_e47ca689b9cc0f 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "de7c00db372f9cde42c39dcd88a76e7c74afd102",
+  "prompts": {},
+  "sessions": {
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": null
+    }
+  }
+}
