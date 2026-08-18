@@ -137,6 +137,7 @@
       "typescript": "5.9.3",
       "lodash": "4.18.1",
       "lodash-es": "4.18.1",
+      "deepmerge-ts": ">=8.0.0",
       "handlebars": ">=4.7.9",
       "path-to-regexp": ">=0.1.13",
       "minimatch": ">=10.2.4",
