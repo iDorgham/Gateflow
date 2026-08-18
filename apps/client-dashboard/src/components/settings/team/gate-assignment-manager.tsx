@@ -36,9 +36,11 @@ import {
   Clock,
   MapPin,
   UserPlus,
+  Pencil,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 import {
   getGateAssignments,
   assignGates,
@@ -66,10 +68,12 @@ export function GateAssignmentManager({
 
   // Sheet state
   const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState('');
   const [selectedGateIds, setSelectedGateIds] = useState<string[]>([]);
   const [shiftStart, setShiftStart] = useState('');
   const [shiftEnd, setShiftEnd] = useState('');
+  const [gateQuery, setGateQuery] = useState('');
 
   const filteredAssignments = assignments.filter(
     (a) =>
@@ -99,6 +103,36 @@ export function GateAssignmentManager({
     });
   };
 
+  const filteredGates = gates.filter(
+    (gate) =>
+      gate.name.toLowerCase().includes(gateQuery.toLowerCase()) ||
+      (gate.location ?? '').toLowerCase().includes(gateQuery.toLowerCase())
+  );
+
+  function resetForm() {
+    setEditingId(null);
+    setSelectedUserId('');
+    setSelectedGateIds([]);
+    setShiftStart('');
+    setShiftEnd('');
+    setGateQuery('');
+  }
+
+  function openCreate() {
+    resetForm();
+    setIsOpen(true);
+  }
+
+  function openEdit(row: GateAssignment) {
+    setEditingId(row.id);
+    setSelectedUserId(row.userId);
+    setSelectedGateIds([row.gateId]);
+    setShiftStart(row.shiftStart ?? '');
+    setShiftEnd(row.shiftEnd ?? '');
+    setGateQuery('');
+    setIsOpen(true);
+  }
+
   const handleAssign = async () => {
     if (!selectedUserId || selectedGateIds.length === 0) {
       toast.error('Please select a user and at least one gate.');
@@ -113,13 +147,11 @@ export function GateAssignmentManager({
         shiftEnd
       );
       if (res.success) {
-        toast.success('Gates assigned successfully');
+        toast.success(
+          editingId ? 'Assignment updated' : 'Gates assigned successfully'
+        );
         setIsOpen(false);
-        // Reset form
-        setSelectedUserId('');
-        setSelectedGateIds([]);
-        setShiftStart('');
-        setShiftEnd('');
+        resetForm();
         // Refresh list
         const refreshed = await getGateAssignments();
         if (refreshed.success) setAssignments(refreshed.data || []);
@@ -131,6 +163,19 @@ export function GateAssignmentManager({
 
   return (
     <div className="space-y-4">
+      <SettingsSectionHeader
+        title="Assign gates"
+        description="Authorize members for specific entry points and optional shift windows."
+        action={
+          <Button
+            onClick={openCreate}
+            className="h-10 gap-2 rounded-[8px] px-4 text-xs font-semibold"
+          >
+            <UserPlus className="h-4 w-4" strokeWidth={1.5} />
+            Assign gates
+          </Button>
+        }
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -145,21 +190,20 @@ export function GateAssignmentManager({
           />
         </div>
 
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <Button
-            onClick={() => setIsOpen(true)}
-            className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]"
-          >
-            <UserPlus className="h-4 w-4" />
-            {t('settings.team.assignGates', 'Assign Gates')}
-          </Button>
-          <SheetContent className="w-full sm:max-w-md bg-background border-l border-primary/10 shadow-2xl overflow-y-auto">
+        <Sheet
+          open={isOpen}
+          onOpenChange={(open) => {
+            setIsOpen(open);
+            if (!open) resetForm();
+          }}
+        >
+          <SheetContent className="w-full sm:max-w-md bg-background border-s border-[var(--ds-border)] overflow-y-auto">
             <SheetHeader className="pb-6">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                 <ShieldAlert className="h-5 w-5 text-primary" />
               </div>
-              <SheetTitle className="text-xl font-black uppercase tracking-tight">
-                Assign Gates
+              <SheetTitle className="text-xl font-semibold tracking-tight">
+                {editingId ? 'Edit gate assignment' : 'Assign gates'}
               </SheetTitle>
               <SheetDescription className="text-xs text-muted-foreground">
                 Authorize a team member to access specific gates and define
@@ -169,12 +213,13 @@ export function GateAssignmentManager({
 
             <div className="space-y-6 py-6 border-t border-primary/5">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
-                  Select Member
+                <Label className="text-xs font-medium text-[var(--ds-text-subtle)]">
+                  Member
                 </Label>
                 <Select
                   value={selectedUserId}
                   onValueChange={setSelectedUserId}
+                  disabled={!!editingId}
                 >
                   <SelectTrigger className="h-12 rounded-xl bg-muted/30 border-primary/5 focus:ring-primary/20">
                     <SelectValue placeholder="Choose a member..." />
@@ -202,11 +247,19 @@ export function GateAssignmentManager({
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+                <Label className="text-xs font-medium text-[var(--ds-text-subtle)]">
                   Gates
                 </Label>
-                <div className="grid grid-cols-1 gap-2 max-h-[200px] overflow-y-auto p-2 border border-primary/5 rounded-xl bg-muted/20">
-                  {gates.map((gate) => (
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Search gates…"
+                    value={gateQuery}
+                    onChange={(e) => setGateQuery(e.target.value)}
+                    className="h-10 rounded-[8px]"
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-2 max-h-[200px] overflow-y-auto p-2 border border-[var(--ds-border)] rounded-[8px] bg-[var(--ds-background-neutral-subtle)]">
+                  {filteredGates.map((gate) => (
                     <div
                       key={gate.id}
                       className={cn(
@@ -244,8 +297,8 @@ export function GateAssignmentManager({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
-                    Shift Start
+                  <Label className="text-xs font-medium text-[var(--ds-text-subtle)]">
+                    Shift start
                   </Label>
                   <Input
                     type="time"
@@ -255,8 +308,8 @@ export function GateAssignmentManager({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
-                    Shift End
+                  <Label className="text-xs font-medium text-[var(--ds-text-subtle)]">
+                    Shift end
                   </Label>
                   <Input
                     type="time"
@@ -274,9 +327,13 @@ export function GateAssignmentManager({
                 disabled={
                   isPending || !selectedUserId || selectedGateIds.length === 0
                 }
-                className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs gap-2"
+                className="h-12 w-full gap-2 rounded-[8px] text-sm font-semibold"
               >
-                {isPending ? 'Assigning...' : 'Assign Gates'}
+                {isPending
+                  ? 'Saving…'
+                  : editingId
+                    ? 'Save assignment'
+                    : 'Assign gates'}
               </Button>
             </SheetFooter>
           </SheetContent>
@@ -287,16 +344,16 @@ export function GateAssignmentManager({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50 hover:bg-muted/50">
-              <TableHead className="font-black uppercase tracking-widest text-[10px] h-11">
+              <TableHead className="h-11 text-xs font-semibold">
                 {t('settings.team.member', 'Member')}
               </TableHead>
-              <TableHead className="font-black uppercase tracking-widest text-[10px] h-11">
+              <TableHead className="h-11 text-xs font-semibold">
                 {t('settings.team.authorizedGates', 'Authorized Gates')}
               </TableHead>
-              <TableHead className="font-black uppercase tracking-widest text-[10px] h-11 text-center">
+              <TableHead className="h-11 text-center text-xs font-semibold">
                 {t('settings.team.shift', 'Shift')}
               </TableHead>
-              <TableHead className="font-black uppercase tracking-widest text-[10px] h-11 text-right">
+              <TableHead className="h-11 text-right text-xs font-semibold">
                 {t('common.actions', 'Actions')}
               </TableHead>
             </TableRow>
@@ -374,15 +431,28 @@ export function GateAssignmentManager({
                     )}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={isPending}
-                      onClick={() => handleUnassign(a.id)}
-                      className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={isPending}
+                        onClick={() => openEdit(a)}
+                        className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                        aria-label={`Edit assignment for ${a.user.name}`}
+                      >
+                        <Pencil className="h-4 w-4" strokeWidth={1.5} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={isPending}
+                        onClick={() => handleUnassign(a.id)}
+                        className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/5"
+                        aria-label={`Remove assignment for ${a.user.name}`}
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

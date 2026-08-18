@@ -25,6 +25,7 @@ import {
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 import type { NotificationConfig } from '@/lib/notifications/types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface NotificationPrefsFormProps {
   initialConfig: NotificationConfig;
@@ -141,11 +142,24 @@ export function NotificationPrefsForm({
 
   return (
     <div className="space-y-8">
+      <SettingsSectionHeader
+        title="Notifications"
+        description="Choose how this workspace is alerted about scans, QR expiry, and team changes."
+        action={
+          <Button
+            onClick={handleSave}
+            disabled={isPending || !isDirty}
+            className="h-10 gap-2 rounded-[8px] px-4"
+          >
+            {isPending ? 'Saving…' : 'Save preferences'}
+          </Button>
+        }
+      />
       {/* Channels */}
-      <Card className="rounded-2xl border-border shadow-none">
+      <Card className="rounded-[8px] border-border shadow-none">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-black uppercase tracking-tight">
-            Delivery Channels
+          <CardTitle className="text-sm font-semibold">
+            Delivery channels
           </CardTitle>
           <CardDescription>
             Choose how you receive notifications.
@@ -236,16 +250,6 @@ export function NotificationPrefsForm({
           ))}
         </CardContent>
       </Card>
-
-      <div className="flex justify-end">
-        <Button
-          onClick={handleSave}
-          disabled={isPending || !isDirty}
-          className="h-11 px-8 rounded-xl font-black uppercase tracking-widest text-[11px]"
-        >
-          {isPending ? 'Saving...' : 'Save Preferences'}
-        </Button>
-      </div>
     </div>
   );
 }

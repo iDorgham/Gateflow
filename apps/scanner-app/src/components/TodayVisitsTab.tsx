@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { getValidAccessToken } from '../lib/auth-client';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
+import { Calendar, Check, Clock, X } from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -29,25 +31,25 @@ interface ExpectedVisit {
 // Status badge config
 const STATUS_CONFIG: Record<
   ExpectedVisit['status'],
-  { label: string; bg: string; text: string; icon: string }
+  { label: string; bg: string; text: string; Icon: LucideIcon }
 > = {
   pending: {
     label: 'Pending',
     bg: nativeTokens.colors.infoSubtle,
     text: nativeTokens.colors.info,
-    icon: '⏳',
+    Icon: Clock,
   },
   used: {
     label: 'Used',
     bg: nativeTokens.colors.successSubtle,
     text: nativeTokens.colors.success,
-    icon: '✓',
+    Icon: Check,
   },
   expired: {
     label: 'Expired',
     bg: nativeTokens.colors.surfaceSubtle,
     text: nativeTokens.colors.textSubtlest,
-    icon: '✗',
+    Icon: X,
   },
 };
 
@@ -86,7 +88,7 @@ function VisitItem({ item }: { item: ExpectedVisit }) {
     <View style={s.item}>
       {/* Status badge */}
       <View style={[s.badge, { backgroundColor: cfg.bg }]}>
-        <Text style={[s.badgeIcon, { color: cfg.text }]}>{cfg.icon}</Text>
+        <cfg.Icon size={14} strokeWidth={1.5} color={cfg.text} />
         <Text style={[s.badgeLabel, { color: cfg.text }]}>{cfg.label}</Text>
       </View>
 
@@ -117,7 +119,11 @@ function VisitItem({ item }: { item: ExpectedVisit }) {
 function EmptyState() {
   return (
     <View style={s.center}>
-      <Text style={s.emptyIcon}>📅</Text>
+      <Calendar
+        size={40}
+        color={nativeTokens.colors.textSubtlest}
+        strokeWidth={1.5}
+      />
       <Text style={s.emptyTitle}>No expected visits today</Text>
       <Text style={s.emptySub}>
         QR codes scheduled for today will appear here. Expected visitor passes

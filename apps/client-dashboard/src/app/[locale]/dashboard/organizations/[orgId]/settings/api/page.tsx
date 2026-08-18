@@ -4,6 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gateflow/ui';
 import { ApiKeyTable } from '@/components/settings/api/api-key-table';
 import { WebhookTable } from '@/components/settings/api/webhook-table';
 import { Key, Webhook } from 'lucide-react';
+import {
+  SETTINGS_TAB_TRIGGER,
+  SETTINGS_TABS_LIST,
+} from '@/components/settings/settings-section-header';
 
 export default async function APISettings() {
   const { org } = await requireAuth();
@@ -49,27 +53,21 @@ export default async function APISettings() {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="api-keys" className="space-y-6">
-        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto">
-          <TabsTrigger
-            value="api-keys"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Key className="h-4 w-4" />
+        <TabsList className={SETTINGS_TABS_LIST}>
+          <TabsTrigger value="api-keys" className={SETTINGS_TAB_TRIGGER}>
+            <Key className="h-4 w-4" strokeWidth={1.5} />
             API Keys
             {apiKeyRows.length > 0 && (
-              <span className="ml-1 text-[10px] font-black bg-primary/10 text-primary rounded-full px-1.5 py-0.5">
+              <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {apiKeyRows.length}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger
-            value="webhooks"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Webhook className="h-4 w-4" />
+          <TabsTrigger value="webhooks" className={SETTINGS_TAB_TRIGGER}>
+            <Webhook className="h-4 w-4" strokeWidth={1.5} />
             Webhooks
             {webhookRows.length > 0 && (
-              <span className="ml-1 text-[10px] font-black bg-primary/10 text-primary rounded-full px-1.5 py-0.5">
+              <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {webhookRows.length}
               </span>
             )}

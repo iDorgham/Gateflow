@@ -38,10 +38,13 @@ import {
   revokeUserSessions,
 } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 import { InviteMemberSheet } from './invite-member-sheet';
+import { formatRoleLabel } from '@gate-access/types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface Role {
   id: string;
   name: string;
+  slug?: string;
   isBuiltIn: boolean;
 }
 
@@ -171,6 +174,21 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
 
   return (
     <div className="space-y-4">
+      <SettingsSectionHeader
+        title={t('settings.team.membersTitle', 'Members')}
+        description={t(
+          'settings.team.membersDesc',
+          'People with access to this organization.'
+        )}
+        action={
+          <InviteMemberSheet roles={roles}>
+            <Button className="h-10 gap-2 rounded-[8px] px-4">
+              <Mail className="h-4 w-4" strokeWidth={1.5} />
+              {t('settings.team.invite', 'Invite member')}
+            </Button>
+          </InviteMemberSheet>
+        }
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -178,15 +196,9 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
             placeholder={t('settings.team.search', 'Search members...')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 h-10 rounded-xl"
+            className="pl-9 h-10 rounded-[8px]"
           />
         </div>
-        <InviteMemberSheet roles={roles}>
-          <Button className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]">
-            <Mail className="h-4 w-4" />
-            {t('settings.team.invite', 'Invite Member')}
-          </Button>
-        </InviteMemberSheet>
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
@@ -275,7 +287,7 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
                           : 'bg-primary/5 border-primary/20 text-primary'
                       )}
                     >
-                      {user.role.name}
+                      {formatRoleLabel(user.role.name)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center text-xs font-bold text-muted-foreground">
@@ -313,7 +325,7 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
                             )}
                           >
                             <UserCog className="h-3.5 w-3.5 mr-2 opacity-50" />
-                            {role.name}
+                            {formatRoleLabel(role.name)}
                           </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator />

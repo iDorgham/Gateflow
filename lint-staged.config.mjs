@@ -13,7 +13,9 @@ export default {
   '*.{ts,tsx}': ['eslint --fix', 'prettier --write'],
   '*.{js,mjs,cjs}': ['prettier --write'],
   '*.{json,md,yml,yaml}': (files) => {
-    const targets = files.filter(notSymlink);
+    const targets = files.filter(
+      (file) => notSymlink(file) && !file.endsWith('pnpm-lock.yaml')
+    );
     if (targets.length === 0) return [];
     return `prettier --write ${targets.map((f) => JSON.stringify(f)).join(' ')}`;
   },

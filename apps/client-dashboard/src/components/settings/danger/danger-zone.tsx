@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { CooldownButton } from './cooldown-button';
 import { csrfFetch } from '@/lib/csrf';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface DangerZoneProps {
   orgName: string;
@@ -423,7 +424,11 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
 export function DangerZone({ orgName }: DangerZoneProps) {
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3 p-4 rounded-xl border border-destructive/30 bg-destructive/5">
+      <SettingsSectionHeader
+        title="Danger zone"
+        description="Destructive actions. Each control has a cooldown, and every change is written to the audit log."
+      />
+      <div className="flex items-center gap-3 p-4 rounded-[8px] border border-destructive/30 bg-destructive/5">
         <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
         <p className="text-sm font-medium text-destructive">
           All actions on this page are destructive. Buttons have a cooldown

@@ -10,7 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Workspace]** tracking next changes
+- **[Deps]** override deepmerge-ts to 8.x for GHSA-ggr8-5vv4-36mx
+
+- **[Types]** accept Prisma org type strings in role visibility filter
+- **[Team]** add role name/slug, shifts tab, and scanner outline icons
 
 ### AI Tools
 

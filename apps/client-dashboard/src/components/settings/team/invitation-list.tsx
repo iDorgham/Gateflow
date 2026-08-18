@@ -15,6 +15,8 @@ import { Trash2, Clock, XCircle, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { revokeInvitation } from '../../../app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
+import { formatRoleLabel } from '@gate-access/types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface Role {
   id: string;
@@ -66,7 +68,14 @@ export function InvitationList({ invitations }: InvitationListProps) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <SettingsSectionHeader
+        title={t('settings.team.invitationsTitle', 'Invitations')}
+        description={t(
+          'settings.team.invitationsDesc',
+          'Pending invites expire automatically. Revoke any you no longer need.'
+        )}
+      />
+      <div className="overflow-hidden rounded-[8px] border border-[var(--ds-border)] bg-[var(--ds-surface)]">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
@@ -109,7 +118,7 @@ export function InvitationList({ invitations }: InvitationListProps) {
                       variant="outline"
                       className="font-black uppercase tracking-widest text-[10px] px-2 py-0.5 bg-muted/50"
                     >
-                      {invite.role.name}
+                      {formatRoleLabel(invite.role.name)}
                     </Badge>
                   </TableCell>
                   <TableCell>

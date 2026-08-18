@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Check, CircleHelp, X } from 'lucide-react-native';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 import type { ScanResult } from '../../lib/scanner';
 import { feedbackStyles } from './feedback-styles';
@@ -14,9 +15,12 @@ export function DecisionDialog({
 }) {
   return (
     <View style={[feedbackStyles.feedbackLayer, styles.backdrop]}>
-      {/* Icon */}
       <View style={styles.iconWrap}>
-        <Text style={styles.icon}>?</Text>
+        <CircleHelp
+          size={40}
+          strokeWidth={1.5}
+          color={nativeTokens.colors.primary}
+        />
       </View>
 
       <Text style={feedbackStyles.feedbackTitle}>Approve Entry?</Text>
@@ -45,7 +49,11 @@ export function DecisionDialog({
           accessibilityRole="button"
           accessibilityLabel="Pass — approve entry"
         >
-          <Text style={styles.passIcon}>✓</Text>
+          <Check
+            size={22}
+            strokeWidth={1.5}
+            color={nativeTokens.colors.success}
+          />
           <Text style={styles.btnLabel}>Pass</Text>
         </Pressable>
 
@@ -56,7 +64,7 @@ export function DecisionDialog({
           accessibilityRole="button"
           accessibilityLabel="Deny — reject entry"
         >
-          <Text style={styles.denyIcon}>✗</Text>
+          <X size={22} strokeWidth={1.5} color={nativeTokens.colors.danger} />
           <Text style={styles.btnLabel}>Deny</Text>
         </Pressable>
       </View>

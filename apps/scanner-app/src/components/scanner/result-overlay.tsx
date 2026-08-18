@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Check, CloudOff, Flag, X } from 'lucide-react-native';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 import type { ScanResult } from '../../lib/scanner';
 import { feedbackStyles } from './feedback-styles';
@@ -27,7 +28,19 @@ export function ResultOverlay({
         },
       ]}
     >
-      <Text style={feedbackStyles.feedbackIcon}>{ok ? '✓' : '✗'}</Text>
+      {ok ? (
+        <Check
+          size={72}
+          strokeWidth={1.5}
+          color={nativeTokens.colors.textHeading}
+        />
+      ) : (
+        <X
+          size={72}
+          strokeWidth={1.5}
+          color={nativeTokens.colors.textHeading}
+        />
+      )}
       <Text style={feedbackStyles.feedbackTitle}>
         {ok ? 'Access Granted' : 'Access Denied'}
       </Text>
@@ -35,7 +48,14 @@ export function ResultOverlay({
         <Text style={feedbackStyles.feedbackSub}>{result.message}</Text>
       )}
       {result.offline && (
-        <Text style={styles.offlineBadge}>⚡ Offline — queued for sync</Text>
+        <View style={styles.offlineRow}>
+          <CloudOff
+            size={16}
+            strokeWidth={1.5}
+            color={nativeTokens.colors.warning}
+          />
+          <Text style={styles.offlineBadge}>Offline — queued for sync</Text>
+        </View>
       )}
 
       {/* Override button — only for non-offline rejections */}
@@ -57,7 +77,14 @@ export function ResultOverlay({
         accessibilityRole="button"
         accessibilityLabel="Report an issue with this gate"
       >
-        <Text style={styles.maintenanceButtonText}>⚐ Report Issue</Text>
+        <View style={styles.maintenanceButtonInner}>
+          <Flag
+            size={16}
+            strokeWidth={1.5}
+            color={nativeTokens.colors.warning}
+          />
+          <Text style={styles.maintenanceButtonText}>Report Issue</Text>
+        </View>
       </Pressable>
 
       <Pressable
@@ -73,11 +100,16 @@ export function ResultOverlay({
 }
 
 const styles = StyleSheet.create({
+  offlineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 4,
+  },
   offlineBadge: {
     fontSize: 13,
     color: nativeTokens.colors.warning,
     fontFamily: 'Cairo_600SemiBold',
-    marginTop: 4,
     textTransform: 'uppercase',
   },
   overrideButton: {
@@ -120,6 +152,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: nativeTokens.colors.warning,
+  },
+  maintenanceButtonInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   maintenanceButtonText: {
     fontSize: 14,

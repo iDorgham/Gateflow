@@ -66,7 +66,7 @@ async function main() {
   // Create role
   const role = await prisma.role.create({
     data: {
-      name: 'Organization Admin',
+      name: 'ORG_ADMIN',
       description: 'Full access admin',
       permissions: ALL_PERMISSIONS,
       isBuiltIn: true,

@@ -113,7 +113,9 @@ describe('login()', () => {
     const result = await login('op@example.com', 'password123');
 
     expect(result.success).toBe(false);
-    expect(result.error).toBe('Network request failed');
+    expect(result.error).toBe(
+      'Network request failed (http://localhost:3001/api)'
+    );
     expect(mockSetItem).not.toHaveBeenCalled();
   });
 

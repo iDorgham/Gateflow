@@ -5,6 +5,7 @@ import { InvitationList } from '@/components/settings/team/invitation-list';
 import { RoleDashboard } from '@/components/settings/team/role-dashboard';
 import { ActivityLogList } from '@/components/settings/team/activity-log-list';
 import { GateAssignmentManager } from '@/components/settings/team/gate-assignment-manager';
+import { ShiftManager } from '@/components/settings/team/shift-manager';
 import {
   getTeamMembers,
   getInvitations,
@@ -12,8 +13,20 @@ import {
   getActivityLogs,
   getGateAssignments,
   getGates,
+  getShiftLogs,
 } from './actions';
-import { Users, Mail, ShieldCheck, History, ShieldAlert } from 'lucide-react';
+import {
+  Users,
+  Mail,
+  ShieldCheck,
+  History,
+  ShieldAlert,
+  Clock,
+} from 'lucide-react';
+import {
+  SETTINGS_TAB_TRIGGER,
+  SETTINGS_TABS_LIST,
+} from '@/components/settings/settings-section-header';
 
 export default async function TeamSettings() {
   const { user, claims } = await requireAuth();
@@ -27,6 +40,7 @@ export default async function TeamSettings() {
     logsResult,
     assignmentsResult,
     gatesResult,
+    shiftsResult,
   ] = await Promise.all([
     getTeamMembers(),
     getInvitations(),
@@ -34,6 +48,7 @@ export default async function TeamSettings() {
     getActivityLogs(),
     getGateAssignments(),
     getGates(),
+    getShiftLogs(),
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,59 +59,49 @@ export default async function TeamSettings() {
   const logs = logsResult.data ?? [];
   const assignments = assignmentsResult.data ?? [];
   const gates = gatesResult.data ?? [];
+  const shiftLogs = shiftsResult.data ?? [];
 
   return (
     <div className="space-y-6">
       <Tabs defaultValue="members" className="space-y-6">
-        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto flex-wrap sm:flex-nowrap">
-          <TabsTrigger
-            value="members"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Users className="h-4 w-4" />
+        <TabsList className={SETTINGS_TABS_LIST}>
+          <TabsTrigger value="members" className={SETTINGS_TAB_TRIGGER}>
+            <Users className="h-4 w-4" strokeWidth={1.5} />
             Members
             {members.length > 0 && (
-              <span className="ml-1 text-[10px] font-black bg-primary/10 text-primary rounded-full px-1.5 py-0.5">
+              <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {members.length}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger
-            value="invitations"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <Mail className="h-4 w-4" />
+          <TabsTrigger value="invitations" className={SETTINGS_TAB_TRIGGER}>
+            <Mail className="h-4 w-4" strokeWidth={1.5} />
             Invitations
             {invitations.length > 0 && (
-              <span className="ml-1 text-[10px] font-black bg-warning/10 text-warning rounded-full px-1.5 py-0.5">
+              <span className="ml-1 rounded-full bg-warning/10 px-1.5 py-0.5 text-[10px] font-semibold text-warning">
                 {invitations.length}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger
-            value="roles"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <ShieldCheck className="h-4 w-4" />
+          <TabsTrigger value="roles" className={SETTINGS_TAB_TRIGGER}>
+            <ShieldCheck className="h-4 w-4" strokeWidth={1.5} />
             Roles
           </TabsTrigger>
-          <TabsTrigger
-            value="assignments"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <ShieldAlert className="h-4 w-4" />
+          <TabsTrigger value="assignments" className={SETTINGS_TAB_TRIGGER}>
+            <ShieldAlert className="h-4 w-4" strokeWidth={1.5} />
             Gate Access
             {assignments.length > 0 && (
-              <span className="ml-1 text-[10px] font-black bg-warning/10 text-warning rounded-full px-1.5 py-0.5">
+              <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {assignments.length}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger
-            value="activity"
-            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
-          >
-            <History className="h-4 w-4" />
+          <TabsTrigger value="shifts" className={SETTINGS_TAB_TRIGGER}>
+            <Clock className="h-4 w-4" strokeWidth={1.5} />
+            Shifts
+          </TabsTrigger>
+          <TabsTrigger value="activity" className={SETTINGS_TAB_TRIGGER}>
+            <History className="h-4 w-4" strokeWidth={1.5} />
             Activity
           </TabsTrigger>
         </TabsList>
@@ -122,6 +127,10 @@ export default async function TeamSettings() {
             users={members}
             gates={gates}
           />
+        </TabsContent>
+
+        <TabsContent value="shifts">
+          <ShiftManager assignments={assignments} logs={shiftLogs} />
         </TabsContent>
 
         <TabsContent value="activity">

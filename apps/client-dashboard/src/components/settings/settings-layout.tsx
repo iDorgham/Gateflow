@@ -166,11 +166,11 @@ export function SettingsLayout({
       {/* Header with Global Search Placeholder */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text)]">
             {t(features.terminology.orgLabel)}{' '}
             {t('settings.titleSuffix', 'Settings')}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[var(--ds-text-subtle)]">
             {t('settings.description', {
               defaultValue:
                 'Global configuration and administrative nodes for {{orgName}}.',
@@ -215,16 +215,16 @@ export function SettingsLayout({
                     href={tab.href}
                     aria-current={isActive ? 'page' : undefined}
                     className={cn(
-                      'group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200',
+                      'group relative flex items-center gap-3 rounded-[8px] px-3 py-2 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-primary/10 text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
-                        : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:text-[var(--ds-text)]'
                     )}
                   >
                     {isActive && (
                       <motion.span
                         layoutId="active-sidebar-pill"
-                        className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.6)]"
+                        className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
                         transition={{
                           type: 'spring',
                           stiffness: 300,
@@ -235,11 +235,12 @@ export function SettingsLayout({
                     )}
                     <Icon
                       className={cn(
-                        'h-4.5 w-4.5 shrink-0 transition-transform duration-300',
+                        'h-4 w-4 shrink-0',
                         isActive
-                          ? 'text-primary scale-110'
-                          : 'group-hover:scale-110'
+                          ? 'text-primary'
+                          : 'text-[var(--ds-icon-subtle)]'
                       )}
+                      strokeWidth={1.5}
                       aria-hidden="true"
                     />
                     <span>{tab.label}</span>
@@ -263,13 +264,17 @@ export function SettingsLayout({
                     href={tab.href}
                     aria-current={isActive ? 'page' : undefined}
                     className={cn(
-                      'flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all',
+                      'flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                        : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/50'
+                        ? 'bg-primary/10 text-primary'
+                        : 'border border-[var(--ds-border)] bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] hover:text-[var(--ds-text)]'
                     )}
                   >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    <Icon
+                      className="h-4 w-4"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
                     <span>{tab.label}</span>
                   </Link>
                 );

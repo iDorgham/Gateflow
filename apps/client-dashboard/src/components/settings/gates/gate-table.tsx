@@ -33,6 +33,7 @@ import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
 import { GateSheet } from './gate-sheet';
 import type { GateRow, Project } from './types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface GateTableProps {
   gates: GateRow[];
@@ -99,6 +100,21 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
 
   return (
     <div className="space-y-4">
+      <SettingsSectionHeader
+        title={t('settings.gates.title', 'Gates')}
+        description={t(
+          'settings.gates.description',
+          'Entry points scanners can be assigned to.'
+        )}
+        action={
+          <GateSheet mode="create" projects={projects} onSuccess={refresh}>
+            <Button className="h-10 gap-2 rounded-[8px] px-4">
+              <DoorOpen className="h-4 w-4" strokeWidth={1.5} />
+              {t('settings.gates.addGate', 'Add gate')}
+            </Button>
+          </GateSheet>
+        }
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -106,15 +122,9 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
             placeholder={t('settings.gates.search', 'Search gates...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 h-10 rounded-xl"
+            className="pl-9 h-10 rounded-[8px]"
           />
         </div>
-        <GateSheet mode="create" projects={projects} onSuccess={refresh}>
-          <Button className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]">
-            <DoorOpen className="h-4 w-4" />
-            {t('settings.gates.addGate', 'Add Gate')}
-          </Button>
-        </GateSheet>
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">

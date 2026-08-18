@@ -79,7 +79,9 @@ export interface User {
   name: string;
   avatarUrl?: string | null;
   bio?: string | null;
+  phone?: string | null;
   passwordHash: string;
+  mustChangePassword?: boolean;
   roleId: string;
   role: Role;
   organizationId: string | null;

@@ -9,15 +9,15 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import * as Haptics from 'expo-haptics';
 import * as Crypto from 'expo-crypto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
+import { hasOverridePin, verifyOverridePin } from '../lib/security/secure-pin';
+import { Check, Delete, TriangleAlert } from 'lucide-react-native';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 const OVERRIDE_LOG_KEY = 'supervisor_overrides';
 const MAX_ATTEMPTS = 3;
 
@@ -58,8 +58,8 @@ export function SupervisorOverride({
   // Check PIN provisioning state when modal opens
   useEffect(() => {
     if (visible) {
-      SecureStore.getItemAsync(SUPERVISOR_PIN_KEY)
-        .then((stored) => setHasPinConfigured(stored !== null))
+      hasOverridePin()
+        .then(setHasPinConfigured)
         .catch(() => setHasPinConfigured(false));
     }
   }, [visible]);
@@ -120,15 +120,18 @@ export function SupervisorOverride({
     setError('');
 
     try {
-      const stored = await SecureStore.getItemAsync(SUPERVISOR_PIN_KEY);
+      const matched = await verifyOverridePin(pin);
 
-      if (!stored) {
-        setError('No supervisor PIN configured. Contact your administrator.');
-        setIsValidating(false);
-        return;
+      if (!matched) {
+        const hasPin = await hasOverridePin();
+        if (!hasPin) {
+          setError('No supervisor PIN configured. Contact your administrator.');
+          setIsValidating(false);
+          return;
+        }
       }
 
-      if (pin === stored) {
+      if (matched) {
         await haptic(Haptics.NotificationFeedbackType.Success);
         await logOverride(true, attempts + 1);
         const capturedReason = reason.trim() || 'No reason provided';
@@ -173,7 +176,7 @@ export function SupervisorOverride({
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['←', '0', '✓'],
+    ['back', '0', 'submit'],
   ];
 
   return (
@@ -221,11 +224,7 @@ export function SupervisorOverride({
                   {Array.from({ length: 6 }).map((_, i) => (
                     <View
                       key={i}
-                      style={[
-                        s.dot,
-                        i < pin.length && s.dotFilled,
-                        i >= 4 && i >= Math.max(pin.length, 4) && s.dotOptional,
-                      ]}
+                      style={[s.dot, i < pin.length && s.dotFilled]}
                     />
                   ))}
                 </View>
@@ -239,30 +238,35 @@ export function SupervisorOverride({
                           key={key}
                           style={({ pressed }) => [
                             s.padKey,
-                            key === '✓' && s.padConfirm,
+                            key === 'submit' && s.padConfirm,
                             pressed && s.padKeyPressed,
                           ]}
                           onPress={() => {
-                            if (key === '←') deleteLast();
-                            else if (key === '✓') handleValidate();
+                            if (key === 'back') deleteLast();
+                            else if (key === 'submit') handleValidate();
                             else appendDigit(key);
                           }}
                           disabled={isValidating}
                         >
-                          {key === '✓' && isValidating ? (
+                          {key === 'submit' && isValidating ? (
                             <ActivityIndicator
                               size="small"
                               color={nativeTokens.colors.textInverse}
                             />
+                          ) : key === 'back' ? (
+                            <Delete
+                              size={22}
+                              strokeWidth={1.5}
+                              color={nativeTokens.colors.textHeading}
+                            />
+                          ) : key === 'submit' ? (
+                            <Check
+                              size={22}
+                              strokeWidth={1.5}
+                              color={nativeTokens.colors.textInverse}
+                            />
                           ) : (
-                            <Text
-                              style={[
-                                s.padKeyText,
-                                key === '✓' && s.padConfirmText,
-                              ]}
-                            >
-                              {key}
-                            </Text>
+                            <Text style={s.padKeyText}>{key}</Text>
                           )}
                         </Pressable>
                       ))}
@@ -275,10 +279,15 @@ export function SupervisorOverride({
             {/* No PIN configured warning */}
             {noPinSetup && !exhausted && (
               <View style={s.noPinBox}>
+                <TriangleAlert
+                  size={18}
+                  color={nativeTokens.colors.warning}
+                  strokeWidth={1.5}
+                />
                 <Text style={s.noPinText}>
-                  ⚠ No supervisor PIN is configured on this device. Contact your
-                  administrator to provision one. You may only force-override
-                  below.
+                  No PIN is configured on this device. Set a device PIN during
+                  setup or a supervisor PIN in Settings. You may only
+                  force-override below.
                 </Text>
               </View>
             )}
@@ -289,8 +298,13 @@ export function SupervisorOverride({
             {/* Force override (after 3 failed attempts OR no PIN configured) */}
             {(exhausted || noPinSetup) && (
               <Pressable style={s.forceBtn} onPress={handleForceOverride}>
+                <TriangleAlert
+                  size={16}
+                  color={nativeTokens.colors.danger}
+                  strokeWidth={1.5}
+                />
                 <Text style={s.forceBtnText}>
-                  ⚠ Override with Warning (logged)
+                  Override with warning (logged)
                 </Text>
               </Pressable>
             )}
@@ -388,10 +402,6 @@ const s = StyleSheet.create({
     backgroundColor: nativeTokens.colors.primary,
     borderColor: nativeTokens.colors.primary,
   },
-  dotOptional: {
-    borderColor: nativeTokens.colors.textSubtlest,
-    opacity: 0.3,
-  },
   pad: {
     gap: 12,
     marginBottom: 20,
@@ -434,8 +444,12 @@ const s = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
   },
   noPinText: {
+    flex: 1,
     fontFamily: 'Cairo_400Regular',
     color: nativeTokens.colors.warning,
     fontSize: 14,
@@ -455,7 +469,10 @@ const s = StyleSheet.create({
     borderColor: nativeTokens.colors.danger,
     borderRadius: 16,
     paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     marginBottom: 12,
   },
   forceBtnText: {

@@ -150,6 +150,8 @@ model Vendor {
 model Role {
   id             String        @id @default(cuid())
   name           String
+  /// Canonical identifier (SCHOOL_TEACHER). Display name may contain spaces.
+  slug           String        @default("")
   description    String?
   permissions    Json
   isBuiltIn      Boolean       @default(false)
@@ -161,6 +163,8 @@ model Role {
   users          User[]
 
   @@index([organizationId])
+  @@index([slug])
+  @@index([organizationId, slug])
 }
 
 model User {
@@ -168,6 +172,8 @@ model User {
   email           String           @unique
   name            String
   passwordHash    String
+  /// When true, the member must set a new password after first successful login.
+  mustChangePassword Boolean      @default(false)
   organizationId  String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt

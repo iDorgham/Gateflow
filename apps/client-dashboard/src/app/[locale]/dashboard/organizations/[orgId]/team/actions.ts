@@ -4,6 +4,12 @@ import { logger } from '@/lib/logger';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/password';
+import {
+  formatRoleLabel,
+  ORG_TYPE_MEMBER_ROLES,
+  PLATFORM_TEAM_ROLES,
+  roleSlug,
+} from '@gate-access/types';
 
 type MemberResult = {
   success: boolean;
@@ -19,11 +25,9 @@ type MemberResult = {
 
 type SimpleResult = { success: boolean; error?: string };
 
-const ALLOWED_ROLES = new Set([
-  'TENANT_ADMIN',
-  'TENANT_USER',
-  'VISITOR',
-  'RESIDENT',
+const ALLOWED_ROLES = new Set<string>([
+  ...PLATFORM_TEAM_ROLES,
+  ...ORG_TYPE_MEMBER_ROLES.map((role) => role.slug),
 ]);
 
 export async function inviteMember(
@@ -34,7 +38,8 @@ export async function inviteMember(
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
-    if (!ALLOWED_ROLES.has(role))
+    const slug = roleSlug(role);
+    if (!ALLOWED_ROLES.has(slug))
       return { success: false, error: 'Invalid role.' };
     if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email))
       return { success: false, error: 'Invalid email.' };
@@ -53,8 +58,10 @@ export async function inviteMember(
 
     const roleRecord = await prisma.role.findFirst({
       where: {
-        name: { equals: role, mode: 'insensitive' },
-        OR: [{ organizationId: claims.orgId }, { organizationId: null }],
+        OR: [{ slug }, { name: { equals: role, mode: 'insensitive' } }],
+        AND: [
+          { OR: [{ organizationId: claims.orgId }, { organizationId: null }] },
+        ],
       },
     });
     if (!roleRecord) return { success: false, error: 'Role not found.' };
@@ -77,13 +84,13 @@ export async function inviteMember(
     });
 
     logger.info(
-      `inviteMember: Success - Invited ${email} as ${role} to org ${claims.orgId}`
+      `inviteMember: Success - Invited ${email} as ${slug} to org ${claims.orgId}`
     );
     return {
       success: true,
       member: {
         ...member,
-        role: member.role.name,
+        role: formatRoleLabel(member.role.name),
         createdAt: member.createdAt.toISOString(),
       },
     };

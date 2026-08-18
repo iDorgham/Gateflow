@@ -29,10 +29,13 @@ import {
   updateRole,
   deleteRole,
 } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
+import { formatRoleLabel, roleSlug } from '@gate-access/types';
+import { SettingsSectionHeader } from '@/components/settings/settings-section-header';
 
 interface Role {
   id: string;
   name: string;
+  slug?: string;
   description?: string | null;
   permissions: Record<string, boolean>;
   isBuiltIn: boolean;
@@ -49,6 +52,7 @@ interface RoleDashboardProps {
 export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
   const { t } = useTranslation('dashboard');
   const [editingRole, setEditingRole] = useState<Partial<Role> | null>(null);
+  const [slugLocked, setSlugLocked] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const handleSave = async () => {
@@ -60,6 +64,7 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
     startTransition(async () => {
       const data = {
         name: editingRole.name!,
+        slug: editingRole.slug || roleSlug(editingRole.name!),
         description: editingRole.description,
         permissions: editingRole.permissions || {},
       };
@@ -107,26 +112,26 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
   if (editingRole) {
     return (
       <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
-        <div className="flex items-center justify-between gap-4 border-b border-border pb-6">
+        <div className="flex items-center justify-between gap-4 border-b border-[var(--ds-border)] pb-6">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setEditingRole(null)}
-              className="h-10 w-10 rounded-xl"
+              className="h-10 w-10 rounded-[8px]"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
             </Button>
             <div className="space-y-1">
-              <h2 className="text-xl font-black uppercase tracking-tight">
+              <h2 className="text-lg font-semibold tracking-tight">
                 {editingRole.id
                   ? t('settings.team.editRole', 'Edit Role')
                   : t('settings.team.newRole', 'New Custom Role')}
               </h2>
-              <p className="text-xs text-muted-foreground font-medium">
+              <p className="text-sm text-[var(--ds-text-subtle)]">
                 {t(
                   'settings.team.roleEditorDesc',
-                  'Define granular access rights for this role.'
+                  'Name can include spaces. Slug is the stable identifier.'
                 )}
               </p>
             </div>
@@ -134,12 +139,12 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
           <Button
             onClick={handleSave}
             disabled={isPending || !!(editingRole.isBuiltIn && editingRole.id)}
-            className="rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px] gap-2"
+            className="h-10 gap-2 rounded-[8px] px-5"
           >
             {isPending ? (
-              <Shield className="h-4 w-4 animate-spin" />
+              <Shield className="h-4 w-4 animate-spin" strokeWidth={1.5} />
             ) : (
-              <Save className="h-4 w-4" />
+              <Save className="h-4 w-4" strokeWidth={1.5} />
             )}
             {t('common.saveChanges', 'Save Changes')}
           </Button>
@@ -148,33 +153,69 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <Card className="lg:col-span-1 rounded-2xl border-primary/10 shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-primary/5 pb-6">
-              <CardTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground">
-                General Info
+              <CardTitle className="text-sm font-semibold text-[var(--ds-text)]">
+                Role details
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               <div className="space-y-2">
                 <Label
                   htmlFor="role-name"
-                  className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1"
+                  className="text-xs font-medium text-[var(--ds-text-subtle)]"
                 >
-                  Role Name
+                  Name
                 </Label>
                 <Input
                   id="role-name"
                   value={editingRole.name || ''}
-                  onChange={(e) =>
-                    setEditingRole({ ...editingRole, name: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const name = e.target.value;
+                    const nextSlug = slugLocked
+                      ? editingRole.slug
+                      : roleSlug(name);
+                    setEditingRole({
+                      ...editingRole,
+                      name,
+                      slug: nextSlug,
+                    });
+                  }}
                   placeholder="e.g. Building Manager"
                   disabled={editingRole.isBuiltIn}
-                  className="h-11 rounded-xl border-border"
+                  className="h-11 rounded-[8px]"
+                />
+                <p className="text-[11px] text-[var(--ds-text-subtle)]">
+                  Spaces are allowed. This is what members see.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="role-slug"
+                  className="text-xs font-medium text-[var(--ds-text-subtle)]"
+                >
+                  Slug
+                </Label>
+                <Input
+                  id="role-slug"
+                  value={
+                    editingRole.slug ||
+                    (editingRole.name ? roleSlug(editingRole.name) : '')
+                  }
+                  onChange={(e) => {
+                    setSlugLocked(true);
+                    setEditingRole({
+                      ...editingRole,
+                      slug: roleSlug(e.target.value),
+                    });
+                  }}
+                  placeholder="BUILDING_MANAGER"
+                  disabled={editingRole.isBuiltIn}
+                  className="h-11 rounded-[8px] font-mono text-sm uppercase"
                 />
               </div>
               <div className="space-y-2">
                 <Label
                   htmlFor="role-desc"
-                  className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1"
+                  className="text-xs font-medium text-[var(--ds-text-subtle)]"
                 >
                   Description
                 </Label>
@@ -210,8 +251,8 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
 
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
-                Permission Matrix
+              <h3 className="text-sm font-semibold text-[var(--ds-text)]">
+                Permissions
               </h3>
               <Badge
                 variant="outline"
@@ -239,30 +280,32 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border/50 pb-6">
-        <div className="space-y-1">
-          <h2 className="text-xl font-black uppercase tracking-tight">
-            {t('settings.team.rolesTitle', 'Roles Configuration')}
-          </h2>
-          <p className="text-xs text-muted-foreground font-medium">
-            {t(
-              'settings.team.rolesDesc',
-              'Manage built-in and custom workspace roles.'
-            )}
-          </p>
-        </div>
-        {canManageRoles && (
-          <Button
-            onClick={() =>
-              setEditingRole({ name: '', permissions: {}, isBuiltIn: false })
-            }
-            className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]"
-          >
-            <Plus className="h-4 w-4" />
-            {t('settings.team.createRole', 'Create Custom Role')}
-          </Button>
+      <SettingsSectionHeader
+        title={t('settings.team.rolesTitle', 'Roles')}
+        description={t(
+          'settings.team.rolesDesc',
+          'Each role has a display name (spaces allowed) and a slug used in permissions.'
         )}
-      </div>
+        action={
+          canManageRoles ? (
+            <Button
+              onClick={() => {
+                setSlugLocked(false);
+                setEditingRole({
+                  name: '',
+                  slug: '',
+                  permissions: {},
+                  isBuiltIn: false,
+                });
+              }}
+              className="h-10 gap-2 rounded-[8px] px-4"
+            >
+              <Plus className="h-4 w-4" strokeWidth={1.5} />
+              {t('settings.team.createRole', 'Create role')}
+            </Button>
+          ) : undefined
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {roles.map((role) => (
@@ -288,9 +331,14 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
                   </Badge>
                 )}
               </div>
-              <CardTitle className="text-base font-bold uppercase tracking-tight mt-3">
-                {role.name}
+              <CardTitle className="mt-3 text-base font-semibold tracking-tight">
+                {role.name?.includes(' ')
+                  ? role.name
+                  : formatRoleLabel(role.name)}
               </CardTitle>
+              <p className="font-mono text-[11px] text-[var(--ds-text-subtle)]">
+                {role.slug || roleSlug(role.name)}
+              </p>
               <CardDescription className="text-xs line-clamp-2 min-h-[2.5rem] mt-1">
                 {role.description ||
                   t(
@@ -317,8 +365,11 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
               <div className="flex items-center gap-2 pt-2">
                 <Button
                   variant="outline"
-                  onClick={() => setEditingRole(role)}
-                  className="flex-1 h-9 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all hover:bg-primary hover:text-white hover:border-primary"
+                  onClick={() => {
+                    setSlugLocked(true);
+                    setEditingRole(role);
+                  }}
+                  className="h-9 flex-1 rounded-[8px] text-xs font-semibold"
                 >
                   {role.isBuiltIn ? 'View Rights' : 'Configure'}
                 </Button>

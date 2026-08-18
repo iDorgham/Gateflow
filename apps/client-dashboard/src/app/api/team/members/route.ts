@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+import { formatRoleLabel } from '@gate-access/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +42,13 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: members,
+      data: members.map((member) => ({
+        ...member,
+        role: {
+          ...member.role,
+          name: formatRoleLabel(member.role.name),
+        },
+      })),
     });
   } catch (error) {
     console.error('GET /api/team/members error:', error);
@@ -61,13 +68,23 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const body = await request.json();
     const validation = UpdateMemberSchema.safeParse(body);
     if (!validation.success) {
-      return NextResponse.json({ success: false, message: 'Invalid request body', error: validation.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
+        { status: 400 }
+      );
     }
 
     const { id, roleId } = validation.data;
@@ -78,7 +95,10 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!target) {
-      return NextResponse.json({ success: false, message: 'User not found in organization' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'User not found in organization' },
+        { status: 404 }
+      );
     }
 
     await prisma.user.update({
@@ -88,10 +108,16 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       },
     });
 
-    return NextResponse.json({ success: true, message: 'Member updated effectively' });
+    return NextResponse.json({
+      success: true,
+      message: 'Member updated effectively',
+    });
   } catch (error) {
     console.error('PATCH /api/team/members error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -99,13 +125,19 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     if (!id) {
-      return NextResponse.json({ success: false, message: 'Target user ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Target user ID is required' },
+        { status: 400 }
+      );
     }
 
     // Verify user belongs to same org
@@ -114,11 +146,17 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!target) {
-      return NextResponse.json({ success: false, message: 'User not found in organization' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'User not found in organization' },
+        { status: 404 }
+      );
     }
 
     if (id === claims.sub) {
-      return NextResponse.json({ success: false, message: 'Cannot remove yourself' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Cannot remove yourself' },
+        { status: 400 }
+      );
     }
 
     await prisma.user.update({
@@ -126,9 +164,15 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
       data: { deletedAt: new Date() },
     });
 
-    return NextResponse.json({ success: true, message: 'Member removed effectively' });
+    return NextResponse.json({
+      success: true,
+      message: 'Member removed effectively',
+    });
   } catch (error) {
     console.error('DELETE /api/team/members error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

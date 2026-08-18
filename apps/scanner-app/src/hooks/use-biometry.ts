@@ -71,8 +71,10 @@ export function useBiometry(): UseBiometryResult {
       try {
         const result = await LocalAuthentication.authenticateAsync({
           promptMessage: reason,
-          fallbackLabel: 'Use PIN',
-          disableDeviceFallback: false,
+          // Stay in-app: iOS "Use PIN" with device fallback is the iPhone
+          // passcode, not the GateFlow scanner PIN.
+          disableDeviceFallback: true,
+          cancelLabel: 'Use PIN',
         });
 
         return result.success;
