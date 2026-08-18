@@ -1,0 +1,21 @@
+.husky/post-merge
+  s_9c8d659f566424::t_5347759f402b80 4-7,10-18,23-28,33-37
+CHANGELOG.md
+  s_9c8d659f566424::t_753f710cdfbb5f 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+  "prompts": {},
+  "sessions": {
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
