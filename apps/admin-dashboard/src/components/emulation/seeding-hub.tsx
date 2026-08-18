@@ -27,9 +27,10 @@ import { formatDistanceToNow } from 'date-fns';
  * Advanced organizational hierarchy and data seeding control center.
  */
 export function SeedingHub() {
+  // Default org for demo purposes - in production, derive from user session
   const [organizationId, setOrganizationId] = useState(
     'clkz88m7v000008l4f6d8h7d3'
-  ); // TODO: Context-driven or selector
+  );
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 

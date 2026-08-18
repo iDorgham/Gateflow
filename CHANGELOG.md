@@ -11,9 +11,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Workspace
 
 - **[Types]** accept Prisma org type strings in role visibility filter
-
 - **[Team]** add role name/slug, shifts tab, and scanner outline icons
 
+### AI Tools
+
+### Apps
+
+---
+
+## [0.4.0] — 2026-08-16
+
+### Workspace
+
+- **[DB]** Red Sea `--demo-full` seed fills all demo orgs with 6-month contacts, units/classrooms, role logins, and scan history
+- **[Workspace]** add `pnpm health` to run workflow contract, changelog check, and preflight
 - **[Security]** drop unused workspace @lhci/cli to remove unpatched extract-zip (CVE-2026-56876); CI still installs LHCI globally
 - **[Security]** remove polynomial ReDoS in email validation regex
 
@@ -22,9 +33,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Scanner-App]** split 2118-line `App.tsx` into screen/component modules, remove 5 dead components, fix README stack description
 - **[Deps]** regenerate pnpm-lock.yaml for scanner-app Expo SDK 57 bump
 
-- **[Db]** validate retention mode and clamp month-end retention cutoffs
-- **[Db]** commit missing retention-policy module and migration for PR #224
-- **[Ci]** regenerate pnpm-lock.yaml with correct patch hashes
+- **[DB]** validate retention mode and clamp month-end retention cutoffs
+- **[DB]** commit missing retention-policy module and migration for PR #224
+- **[CI]** regenerate pnpm-lock.yaml with correct patch hashes
 - **[Security]** scope ScanLog export to org when zero QR codes match
 - **[Security]** remove dead mock admin login route
 - **[Security]** attach CSRF token to all client-dashboard mutation requests
@@ -35,9 +46,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Deps]** update z.record() to zod 4 two-argument form
 
-- **[Ci]** regenerate lockfile against committed package.json, not local WIP
+- **[CI]** regenerate lockfile against committed package.json, not local WIP
 
-- **[Ci]** commit missing pnpm patch files blocking CI Setup
+- **[CI]** commit missing pnpm patch files blocking CI Setup
 
 - **[Deps]** reconcile CodeRabbit autofix — Babel dependency fix (PR #212)
 
@@ -102,7 +113,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Client-Dashboard]** add loading skeletons for routes that lacked one
 - **[Client-Dashboard]** show next billing date on the billing settings page
 - **[Client-Dashboard]** fix legacy dashboard route redirects
-- **[Ui]** register ds-* design tokens as real Tailwind utilities
+- **[UI]** register ds-* design tokens as real Tailwind utilities
 - **[Client-Dashboard]** polish header search input
 
 - **[Deps]** revert eslint and typescript bumps that broke shared-package lint
@@ -111,33 +122,33 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Deps]** repair pnpm-lock.yaml broken by CodeRabbit autofix merge
 
-- **[Ui]** register packages/ui as a Tailwind v4 source
-- **[Ui]** enforce items-center on login shell flexbox container to fix full-width stretching
+- **[UI]** register packages/ui as a Tailwind v4 source
+- **[UI]** enforce items-center on login shell flexbox container to fix full-width stretching
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
-- **[Ui]** redesign login page with clean modern SaaS web app layout
+- **[UI]** redesign login page with clean modern SaaS web app layout
 
-- **[Ui]** use semantic bg-background token in login-shell to pass ADS check
+- **[UI]** use semantic bg-background token in login-shell to pass ADS check
 
-- **[Ui]** constrain login shell container to compact 380px width
+- **[UI]** constrain login shell container to compact 380px width
 
-- **[Ui]** elevate design tokens and login page layout
+- **[UI]** elevate design tokens and login page layout
 
-- **[Ui]** update create QR code button and KPI card links to use org-scoped paths
+- **[UI]** update create QR code button and KPI card links to use org-scoped paths
 
-- **[Ui]** create organization dashboard overview page at /dashboard/organizations/[orgId]
+- **[UI]** create organization dashboard overview page at /dashboard/organizations/[orgId]
 
-- **[Ui]** suppress React 19 DEV script warning for next-themes in theme-provider
+- **[UI]** suppress React 19 DEV script warning for next-themes in theme-provider
 
-- **[Ui]** add client mounted guard to ThemeProvider to prevent React 19 SSR script warning
+- **[UI]** add client mounted guard to ThemeProvider to prevent React 19 SSR script warning
 
-- **[Ui]** pass scriptProps to ThemeProvider inside theme-provider client component
+- **[UI]** pass scriptProps to ThemeProvider inside theme-provider client component
 
-- **[Ui]** encapsulate ThemeProvider in client component to prevent RSC script warning
+- **[UI]** encapsulate ThemeProvider in client component to prevent RSC script warning
 
-- **[Ui]** pass scriptProps to ThemeProvider to silence script hydration warning
+- **[UI]** pass scriptProps to ThemeProvider to silence script hydration warning
 
-- **[Ui]** add use client directive to components index and suppress layout hydration warning
+- **[UI]** add use client directive to components index and suppress layout hydration warning
 
 - **[Scripts]** harden workflow-v2 guide parsing and docs alignment
 - **[Workflow-V2]** bootstrap guide status/next/prompt/delivery

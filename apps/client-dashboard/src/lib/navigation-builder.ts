@@ -10,8 +10,9 @@ import {
   Buildings,
   Stack,
   Pulse,
+  type Icon as PhosphorIcon,
 } from '@phosphor-icons/react';
-import { Wrench } from 'lucide-react';
+import { Wrench, type LucideIcon } from 'lucide-react';
 import { OrganizationFeatures } from '@gate-access/types';
 import { TFunction } from 'i18next';
 
@@ -30,11 +31,13 @@ export type NavCapabilityId =
   | 'units'
   | 'emulation';
 
+type NavIcon = PhosphorIcon | LucideIcon;
+
 export interface NavItemDef {
   id: NavCapabilityId;
   label: string;
   href: string;
-  icon: any;
+  icon: NavIcon;
   exact?: boolean;
   i18nKey: string;
   permission?: string;

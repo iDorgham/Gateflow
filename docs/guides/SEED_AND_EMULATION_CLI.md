@@ -18,7 +18,27 @@ pnpm prisma db seed -- --test-integrity
 
 # Assert organization count (requires --dry-run unless you are also running emulation)
 pnpm prisma db seed -- --organizations.min=2 --organizations.max=5 --dry-run
+
+# Full Red Sea demo: all orgs, role logins, contacts/units/classrooms, 180-day scans
+pnpm --filter=@gate-access/db seed:demo
+# equivalent:
+pnpm prisma db seed -- --demo-full
 ```
+
+`--demo-full` is idempotent. It runs the legacy org/admin seed first, then fills every demo organization with Hurghada-area contacts (Egyptian + German/Russian/British/Italian/Polish/Ukrainian/Dutch and other Red Sea nationalities), units (classrooms for the school org), role accounts, and scan history over 180 days when `QR_SIGNING_SECRET` is set.
+
+### Demo logins (password `password123` or `SEED_PASSWORD`)
+
+| Role | Selena | School | Club | Nightclub | Events |
+|------|--------|--------|------|-----------|--------|
+| Org admin | `admin@selenadev.com` | `admin@school.demo` | `admin@club.demo` | `admin@nightclub.demo` | `admin@event_organiser.demo` |
+| Security manager | `security@selenadev.com` | `security@school.demo` | `security@club.demo` | `security@nightclub.demo` | `security@event_organiser.demo` |
+| Gate operator | `guard@selenadev.com` | `guard@school.demo` | `guard@club.demo` | `guard@nightclub.demo` | `guard@event_organiser.demo` |
+| Resident | `resident@selenadev.com` | `resident@school.demo` | `resident@club.demo` | `resident@nightclub.demo` | `resident@event_organiser.demo` |
+| Super admin | `superadmin@gateflow.demo` (platform, no org) | | | | |
+
+Selena projects: **Selena Bay** (Hurghada), **Vernada** (Sahl Hasheesh), **El Gouna Residences**, **Soma Bay Villas**.
+
 
 ## Traffic emulation (same knobs as `POST /api/admin/emulate-traffic`)
 

@@ -48,9 +48,26 @@ export {
   pickWeighted,
   RED_SEA_COMPOUND_NAMES,
   HURGHADA_AREA_LABELS,
+  RED_SEA_AREAS,
+  AREA_NATIONALITY_WEIGHT_INTS,
   EGYPTIAN_FIRST_NAMES,
   EGYPTIAN_LAST_NAMES,
 } from './lib/red-sea-data';
+export type { RedSeaArea } from './lib/red-sea-data';
+export {
+  DEMO_ORG_SPECS,
+  DEMO_PAST_DAYS,
+  SELENA_PROJECT_SPECS,
+  SUPER_ADMIN_EMAIL,
+  areaNationalityWeights,
+  demoRoleEmailMatrix,
+  demoRoleEmails,
+  planClassroomNames,
+  planVerticalUnitNames,
+  shouldSkipEmulation,
+  spreadCreatedAt,
+} from './lib/seed-demo-catalog';
+export type { DemoOrgSpec, DemoRoleEmails } from './lib/seed-demo-catalog';
 export { generateUnitId, normalizeBuildingCode } from './lib/unit-id-formats';
 export type { UnitIdGenerationContext } from './lib/unit-id-formats';
 export {
@@ -89,7 +106,10 @@ export {
   scanLogWhereForOrganization,
 } from './lib/relational-chain-seed';
 export type { BuildVisitorSignedCodeInput } from './lib/relational-chain-seed';
-export { executeRetention, RETENTION_ORDER } from './lib/retention-executor';
+export {
+  executeRetention,
+  RETENTION_ORDER,
+} from './lib/retention-executor';
 export type {
   RetentionAdapter,
   RetentionBatchResult,

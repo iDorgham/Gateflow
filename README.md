@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square&color=22c55e" alt="CI status"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square&color=3b82f6" alt="CodeQL status"></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/release-v0.3.0-6366f1?style=flat-square" alt="Release 0.3.0"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/release-v0.4.0-6366f1?style=flat-square" alt="Release 0.4.0"></a>
   <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 20 or later">
   <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm 8.15">
   <img src="https://img.shields.io/badge/license-proprietary-lightgrey?style=flat-square" alt="Proprietary license">

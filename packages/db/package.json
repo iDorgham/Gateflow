@@ -19,6 +19,7 @@
     "db:migrate:create": "prisma migrate dev --create-only",
     "db:studio": "prisma studio",
     "seed:compounds": "npx tsx prisma/seed-compounds.ts",
+    "seed:demo": "npx tsx prisma/seed-entry.ts --demo-full",
     "verify:seed-contract": "npx tsx scripts/verify-seed-contract.ts",
     "lint": "eslint src/",
     "typecheck": "tsc -p tsconfig.json",

@@ -186,7 +186,7 @@ export function ProjectWizard({
             data.details || data.error || 'Failed to finalize project setup.'
           );
         }
-      } catch (e) {
+      } catch {
         toast.error('Network error during setup.');
       }
     });

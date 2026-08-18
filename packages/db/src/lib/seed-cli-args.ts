@@ -24,6 +24,7 @@ export type SeedCliParsed = {
   help: boolean;
   dryRun: boolean;
   testIntegrity: boolean;
+  demoFull: boolean;
   organizationsMin: number | null;
   organizationsMax: number | null;
   emulate: SeedCliEmulateSlice;
@@ -77,6 +78,7 @@ export function parseSeedCliArgv(argv: string[]): SeedCliParsed {
     help: false,
     dryRun: false,
     testIntegrity: false,
+    demoFull: false,
     organizationsMin: null,
     organizationsMax: null,
     emulate: {
@@ -126,6 +128,10 @@ export function parseSeedCliArgv(argv: string[]): SeedCliParsed {
     }
     if (nk === 'test-integrity' || nk === 'testintegrity') {
       out.testIntegrity = parseBool(valueStr);
+      continue;
+    }
+    if (nk === 'demo-full' || nk === 'demofull') {
+      out.demoFull = parseBool(valueStr);
       continue;
     }
     if (nk === 'emulate') {
@@ -187,11 +193,13 @@ Usage:
   pnpm prisma db seed -- --dry-run
   pnpm prisma db seed -- --test-integrity
   pnpm prisma db seed -- --organizations.min=2 --organizations.max=5 --dry-run
+  pnpm prisma db seed -- --demo-full
   pnpm prisma db seed -- --organizationId=<org> --scenario=nightclub --scans=10000 --pastDays=30 --incidentRate=0.25 --seed=12345 --dry-run
 
 Flags:
   --help                 Show this help
-  --dry-run              Skip legacy dev seed writes; emulation respects dry-run (no QR/ScanLog writes)
+  --dry-run              Skip legacy / demo-full writes; emulation respects dry-run (no QR/ScanLog writes)
+  --demo-full            After legacy orgs: Red Sea contacts, units, role logins, 180-day scan history
   --test-integrity       In-memory uniqueness self-test + DB duplicate scan (active contacts)
   --organizations.min=N  With --dry-run: assert org count >= N
   --organizations.max=N With --dry-run: assert org count <= N

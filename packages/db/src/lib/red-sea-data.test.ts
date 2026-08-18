@@ -4,6 +4,8 @@ import {
   mulberry32,
   pickRandom,
   pickWeighted,
+  AREA_NATIONALITY_WEIGHT_INTS,
+  RED_SEA_AREAS,
   RED_SEA_COMPOUND_NAMES,
 } from './red-sea-data';
 
@@ -32,5 +34,19 @@ describe('red-sea-data', () => {
       rng
     );
     expect(v).toBe('c');
+  });
+
+  test('area nationality maps cover every Red Sea area', () => {
+    expect(RED_SEA_AREAS).toEqual([
+      'HURGHADA',
+      'SAHL_HASHEESH',
+      'EL_GOUNA',
+      'SOMA_BAY',
+    ]);
+    for (const area of RED_SEA_AREAS) {
+      const weights = AREA_NATIONALITY_WEIGHT_INTS[area];
+      expect(weights.EGYPTIAN).toBeGreaterThan(0);
+      expect(weights.GERMAN).toBeGreaterThan(0);
+    }
   });
 });

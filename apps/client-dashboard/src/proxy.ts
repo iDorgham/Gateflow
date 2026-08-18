@@ -68,7 +68,7 @@ function getLocale(request: NextRequest): string {
 
   try {
     return match(languages, locales, i18n.defaultLocale);
-  } catch (e) {
+  } catch {
     return i18n.defaultLocale;
   }
 }
@@ -161,7 +161,7 @@ export async function proxy(request: NextRequest) {
         if (payload.orgId) {
           orgId = payload.orgId as string;
         }
-      } catch (e) {
+      } catch {
         // Token invalid or decode error, fall back to cookie orgId if available
       }
     }
