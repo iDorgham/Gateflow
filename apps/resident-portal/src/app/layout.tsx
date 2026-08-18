@@ -2,6 +2,7 @@ import './globals.css';
 import { Inter, Cairo } from 'next/font/google';
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import { PwaBootstrap } from '@/components/pwa/pwa-bootstrap';
 import { resolveHtmlDocumentAttrs } from '@/lib/portal-i18n';
 
@@ -33,13 +34,18 @@ export default function RootLayout({
   const { lang, dir } = resolveHtmlDocumentAttrs();
 
   return (
-    <html lang={lang} dir={dir}>
+    <html lang={lang} dir={dir} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={`min-h-screen bg-background antialiased ${inter.variable} ${cairo.variable} font-sans`}
       >
-        <PwaBootstrap />
-        {children}
-        <Toaster position="top-right" />
+        <ThemeProvider>
+          <PwaBootstrap />
+          {children}
+          <Toaster position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

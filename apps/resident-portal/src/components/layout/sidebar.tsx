@@ -5,6 +5,7 @@ import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@gateflow/ui';
 import { portalNavItems } from './nav-items';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -77,6 +78,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           );
         })}
       </nav>
+      <div className="absolute inset-x-3 bottom-3">
+        <ThemeToggle compact={collapsed} />
+      </div>
     </aside>
   );
 }

@@ -12,6 +12,7 @@ const nextConfig = {
   transpilePackages: [
     '@gate-access/types',
     '@gateflow/ui',
+    '@gateflow/theme',
     '@gate-access/db',
     '@gate-access/i18n',
   ],

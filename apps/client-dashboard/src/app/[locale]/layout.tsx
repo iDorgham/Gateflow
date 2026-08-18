@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -49,12 +49,15 @@ export default async function RootLayout(props: {
       dir={isRtl ? 'rtl' : 'ltr'}
       suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={`min-h-dvh bg-background antialiased ${poppins.variable} ${cairo.variable} ${isRtl ? 'font-arabic' : 'font-sans'}`}
         suppressHydrationWarning
       >
         <I18nProvider locale={params.locale}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider>
             <QueryProvider>{children}</QueryProvider>
           </ThemeProvider>
         </I18nProvider>

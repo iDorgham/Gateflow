@@ -30,6 +30,7 @@
   "scripts": {
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/cookie.test.ts",
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --external react,react-dom,next-themes"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "typescript": "^5.9.3",
-    "tsup": "^8.3.6"
+    "tsup": "^8.3.6",
+    "tsx": "^4.23.11"
   }
 }

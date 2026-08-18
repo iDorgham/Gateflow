@@ -7,6 +7,7 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: [
     '@gateflow/ui',
+    '@gateflow/theme',
     '@gate-access/i18n',
     'framer-motion',
   ],

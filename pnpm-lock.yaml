@@ -178,6 +178,9 @@ importers:
       '@gateflow/components':
         specifier: workspace:^
         version: link:../../packages/components
+      '@gateflow/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@gateflow/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -344,6 +347,9 @@ importers:
       '@gateflow/components':
         specifier: workspace:^
         version: link:../../packages/components
+      '@gateflow/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@gateflow/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -610,6 +616,9 @@ importers:
       '@gate-access/types':
         specifier: workspace:^0.1.0
         version: link:../../packages/types
+      '@gateflow/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@gateflow/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -653,8 +662,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(@types/react@19.2.18)(react@19.2.8)
       next-themes:
-        specifier: ^0.3.0
-        version: 0.3.0(react-dom@19.2.7)(react@19.2.8)
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.7)(react@19.2.8)
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -819,6 +828,9 @@ importers:
       '@gate-access/types':
         specifier: ^0.1.0
         version: link:../../packages/types
+      '@gateflow/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@gateflow/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -1300,6 +1312,9 @@ importers:
       tsup:
         specifier: ^8.3.6
         version: 8.5.1(postcss@8.5.26)(tsx@4.23.11)(typescript@5.9.3)(yaml@2.9.0)
+      tsx:
+        specifier: ^4.23.11
+        version: 4.23.11
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -16885,16 +16900,6 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
-    dev: false
-
-  /next-themes@0.3.0(react-dom@19.2.7)(react@19.2.8):
-    resolution: {integrity: sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==}
-    peerDependencies:
-      react: ^19.2.4
-      react-dom: ^19.2.4
-    dependencies:
-      react: 19.2.8
-      react-dom: 19.2.7(react@19.2.8)
     dev: false
 
   /next-themes@0.4.6(react-dom@19.2.7)(react@19.2.8):

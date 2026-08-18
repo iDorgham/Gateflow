@@ -57,7 +57,7 @@
 
   /* ds-* namespaced aliases — registers rounded-[var(--ds-*)] / bg-ds-*, text-ds-*,
      border-ds-* utility classes used throughout the app. Values point at the
-     :root/.dark --ds-* custom properties defined below, so these stay theme-correct. */
+     :root/.dark/[data-color-mode="dark"] --ds-* custom properties defined below, so these stay theme-correct. */
   --color-ds-background: var(--ds-background);
   --color-ds-background-brand-bold: var(--ds-background-brand-bold);
   --color-ds-background-brand-bold-hovered: var(--ds-background-brand-bold-hovered);
@@ -304,7 +304,8 @@
     --ds-ai-glow: 0 0 40px rgba(237, 75, 0, 0.15);
   }
 
-  .dark {
+  .dark,
+  [data-color-mode='dark'] {
     --gf-color-primary: #ed4b00;
     --gf-color-primary-hover: #ff5c0a;
     --gf-color-primary-foreground: #ffffff;

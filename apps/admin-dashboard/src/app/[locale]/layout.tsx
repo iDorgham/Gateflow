@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import { Inter, Cairo } from 'next/font/google';
 import { I18nProvider } from '@/components/i18n/i18n-provider';
 import { Locale, i18n, isRtl } from '@/lib/i18n/i18n-config';
@@ -40,11 +40,14 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={`bg-background text-foreground antialiased ${inter.variable} ${cairo.variable} ${rtl ? 'font-arabic' : 'font-sans'}`}
       >
         <I18nProvider locale={locale}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider>
             {props.children}
             <Toaster richColors position="top-right" />
           </ThemeProvider>
