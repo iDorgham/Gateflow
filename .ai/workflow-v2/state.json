@@ -228,6 +228,48 @@
       "baseline": null,
       "evidence": [
         {
+          "id": "scanner-app-check-all-2026-08-18",
+          "type": "focused-check",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-08-18T20:40:00.000Z",
+          "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/CHECK_ALL_2026-08-18.json",
+          "note": "lint/test/build passed; owned P0 steps remain partial; certifyReady=false"
+        },
+        {
+          "id": "scanner-app-pilot-gate-owned-2026-08-18",
+          "type": "pilot-gate",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-08-18T20:40:00.000Z",
+          "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+          "reviewMode": "device-evidence",
+          "artifact": "docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-18.json",
+          "note": "Shift-lock and nonce replay-deny captured 2026-08-14; ACCESS GRANTED and offline sync still missing"
+        },
+        {
+          "id": "scanner-app-device-evidence-2026-08-14",
+          "type": "device-evidence",
+          "status": "partial",
+          "valid": true,
+          "createdAt": "2026-08-14T18:07:00.000Z",
+          "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+          "reviewMode": "device-evidence",
+          "artifact": "docs/audits/scanner-app/evidence/2026-08-14/NOTES.md"
+        },
+        {
+          "id": "scanner-app-audit-2026-08-10",
+          "type": "application-audit",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-08-10T02:24:40.000Z",
+          "commit": "3b98d663cf0829d3b0798a65dced5525bd1f4986",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/AUDIT_2026-08-10.md"
+        },
+        {
           "id": "scanner-app-audit-2026-07-30",
           "type": "application-audit",
           "status": "blocked",
@@ -281,7 +323,7 @@
         }
       ],
       "certificationReceipt": null,
-      "updatedAt": "2026-08-01T00:27:48.542Z",
+      "updatedAt": "2026-08-18T20:40:00.000Z",
       "pageScoresFile": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
       "pilotFlowCoverage": {
         "covered": 0,
@@ -291,25 +333,18 @@
         "ownedTotal": 2,
         "ownedMissingUndocumented": 0,
         "status": "blocked",
-        "artifact": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json",
-        "lastCheckedAt": "2026-07-30T04:15:00.000Z"
+        "artifact": "docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-18.json",
+        "lastCheckedAt": "2026-08-18T20:40:00.000Z"
       },
       "selection": {
-        "command": "/dev",
+        "command": "/pilot",
         "agent": "gateflow-guide",
-        "skills": [
-          "gf-guide",
-          "security",
-          "testing",
-          "mobile",
-          "test-driven-development"
-        ],
-        "cli": "cursor",
-        "phase": "05"
+        "skills": ["gf-guide", "security", "testing"],
+        "cli": "cursor"
       }
     }
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-08-01T11:54:12.555Z"
+  "updatedAt": "2026-08-18T20:40:00.000Z"
 }

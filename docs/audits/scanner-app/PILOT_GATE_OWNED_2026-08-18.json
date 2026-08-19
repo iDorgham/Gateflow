@@ -1,0 +1,36 @@
+[
+  {
+    "step": "Security scans the QR",
+    "priority": "P0",
+    "ownerApp": "scanner-app",
+    "status": "partial",
+    "reviewMode": "device-evidence",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "updatedAt": "2026-08-18T20:40:00.000Z",
+    "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+    "reason": "Device 2026-08-14 captured shift-lock overlay and HMAC nonce-replay ACCESS DENIED on a non-DB test PNG (qrId=test-1786730010823-94fe3fc2). ACCESS GRANTED on a dashboard QR whose DB id equals payload qrId is still missing. Do not treat replay-deny as the grant proof.",
+    "evidence": [
+      "docs/audits/scanner-app/evidence/2026-08-14/NOTES.md",
+      "docs/audits/scanner-app/evidence/2026-08-14/scan-shift-locked.png",
+      "docs/audits/scanner-app/evidence/2026-08-14/scan-nonce-replay-denied.png",
+      "docs/audits/scanner-app/evidence/2026-08-14/signed-qr-meta.txt",
+      "apps/scanner-app/src/lib/qr-verify.ts",
+      "apps/scanner-app/src/lib/qr-verify.test.ts"
+    ]
+  },
+  {
+    "step": "Offline scan sync",
+    "priority": "P0",
+    "ownerApp": "scanner-app",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "updatedAt": "2026-08-18T20:40:00.000Z",
+    "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+    "reason": "Encrypted offline queue with scanUuid dedup and POST /scans/bulk covered by unit tests. No device offline-enqueue or reconnect-sync screenshot.",
+    "evidence": [
+      "apps/scanner-app/src/lib/offline-queue.ts",
+      "apps/scanner-app/src/lib/offline-queue.test.ts"
+    ]
+  }
+]

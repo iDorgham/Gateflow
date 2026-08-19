@@ -238,3 +238,58 @@ pod and its supporting scripts) during the P0 attempt, even though that
 attempt's actual iOS build still failed. Not something to re-verify by
 assumption next time — just run `pnpm --filter scanner-app build` and
 check for `.hbc` output.
+
+## 2026-08-14 `/dev` re-check (still blocked; root cause narrowed)
+
+`/dev scanner_onboarding_session` on `master` @ `283ed809` (PR #210 already
+merged). Goal was the two remaining Phase 05 device-evidence items. No
+product code and no `PILOT_GATE_*.json` changes.
+
+Fresh environment facts:
+
+- Workflow: focused app `scanner-app`, stage `checking`, lock acquired for
+  phase `05`. `scope-diff scanner-app` **invalid** because parked
+  `apps/client-dashboard/.gitignore` is dirty in this worktree — left
+  untouched.
+- `xcodebuild -version` → **Xcode 26.1.1** (Build 17B100). Unchanged since
+  2026-08-10.
+- `expo-modules-core@57.0.10` still declares `s.swift_version = '6.0'` in
+  `ExpoModulesCore.podspec`.
+- Expo's current position: SDK 56/57 need **Xcode 26.4+ / Swift 6.3**
+  ([expo#47539](https://github.com/expo/expo/issues/47539)). The 2026-08-10
+  `SWIFT_VERSION=5.9` / `AppDelegate` access-level chain is the wrong fix;
+  do not retry it.
+- No Android SDK at `~/Library/Android/sdk`. No `apps/scanner-app/eas.json`.
+- Booted simulator `iPhone 17 Pro` (`BD2CA456-259C-468F-8C1E-BC47081A94A5`)
+  had only stock Apple apps — no Expo Go, no `com.gateflow.scanner`.
+- Postgres listening on 5432. Nothing on 3001 or 8081 at session start.
+- `pnpm --filter scanner-app dev:sim` (`expo start --go --localhost --ios -c`)
+  loaded `.env`/`.env.local`, started Metro, then hung on
+  `Fetching Expo Go`. Metro cache write to `apps/scanner-app/.metro` failed
+  with ENOENT first; a later `mkdir -p` of that dir took ~135s. Disk at
+  session start: 3.6GB free. This is not a viable evidence path until Xcode
+  26.4+ (native `pnpm ios`) or a physical device with a custom dev client
+  (App Store Expo Go stopped at SDK 54; SDK 57 requires sign.expo.dev or
+  `eas go` build with Expo CLI and device client signed into the same account).
+
+Stop condition honored: did not fabricate screenshots and did not mark
+owned pilot steps `passed`. Plan stays in `Active/` (last phase incomplete).
+
+## 2026-08-14 toolchain confirmation (OS/hardware floor)
+
+User reconfirmed: scanner-app still `checking`; Phase 05 code on master
+(PR #210); remaining work is the two owned device proofs; live toolchain
+is Xcode **26.1.1 (17B100)** / Swift **6.2.1**.
+
+Additional host facts, not recorded in the earlier `/dev` re-check:
+
+- `sw_vers` → macOS Sequoia **15.7.1** (24G231).
+- `hw.model` → **MacBookPro14,3** (2017 15" Intel, i7-7820HQ, 16 GB).
+- Xcode 26.4+ requires macOS Tahoe **26.2+** (Apple release notes). This
+  model is not on Apple’s Tahoe Intel list. `softwareupdate --list`
+  nonetheless offered Tahoe 26.6.1 (~17 GB) and Sequoia 15.7.9; disk is
+  **4.9 GiB** free, so neither update can land as-is. Do not treat the
+  catalog row as proof this Mac can run 26.4.
+- Native `expo run:ios` on this machine remains the wrong next step.
+  Unblockers: physical iPhone + Expo Go, another Tahoe/Xcode 26.4 Mac, or
+  EAS with an Xcode 26.4 image.

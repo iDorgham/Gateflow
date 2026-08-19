@@ -1,0 +1,8 @@
+org=Gateway Academy
+organizationId=cmoldsofx000512u2mm47bvik
+qrId=test-1786730010823-94fe3fc2
+type=SINGLE
+maxUses=1
+expiresAt=2026-08-15T17:53:30.816Z
+encoded=full-signed-payload (not short URL)
+payloadChars=390

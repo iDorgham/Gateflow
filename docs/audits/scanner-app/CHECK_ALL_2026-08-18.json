@@ -1,0 +1,133 @@
+{
+  "id": "scanner-app-check-all-2026-08-18",
+  "type": "focused-check",
+  "status": "blocked",
+  "valid": true,
+  "createdAt": "2026-08-18T20:40:00.000Z",
+  "commit": "58c0afe116801a0ec9907403a2fec6c8071f2552",
+  "application": "scanner-app",
+  "focusedApp": "scanner-app",
+  "stage": "checking",
+  "branch": "fix/post-merge-version-bump",
+  "plan": "scanner_onboarding_session",
+  "reviewMode": "static-review-only",
+  "summary": "scanner-app lint/test/build passed. Page scores schema valid but stale (avg 47.33, securityBoundaryProven=false). Whole-tree focused-diff invalid because of parked client-dashboard/packages/ui work. Owned P0 pilot steps remain partial. 2026-08-14 device shots prove shift-lock and nonce replay-deny only. Certify blocked.",
+  "checks": {
+    "registry": {
+      "status": "passed",
+      "command": "node scripts/workflow-v2/support-cli.js registry scanner-app --json",
+      "package": "scanner-app",
+      "path": "apps/scanner-app",
+      "type": "expo",
+      "order": 3
+    },
+    "lint": {
+      "status": "passed",
+      "command": "pnpm --filter scanner-app lint",
+      "errors": 0,
+      "warnings": 30
+    },
+    "typecheck": {
+      "status": "not-applicable",
+      "note": "operations-cli verify omits typecheck for scanner-app; package.json has no typecheck script"
+    },
+    "tests": {
+      "status": "passed",
+      "command": "pnpm --filter scanner-app test",
+      "suitesPassed": 13,
+      "testsPassed": 141
+    },
+    "build": {
+      "status": "passed",
+      "command": "pnpm --filter scanner-app build",
+      "note": "expo export --no-bytecode; Android 2652 modules, iOS 2656 modules; output gitignored dist/",
+      "elapsedMs": 485394
+    },
+    "envNames": {
+      "status": "passed",
+      "required": ["EXPO_PUBLIC_API_URL"],
+      "note": "Expo lint/build loaded EXPO_PUBLIC_API_URL and EXPO_PUBLIC_QR_SECRET names from app dotenv. operations-cli env-check against process.env without dotenv reported missing. Values not recorded."
+    },
+    "securityStatic": {
+      "status": "static-review-only",
+      "localStorageInProduct": false,
+      "hmacUnitTests": "passed",
+      "qrSecretFailClosedTests": "passed",
+      "offlineScanUuidTests": "passed",
+      "note": "localStorage appears only in Jest test environment mocks, not product scan/auth paths"
+    },
+    "pageScores": {
+      "status": "passed-stale-baseline",
+      "artifact": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
+      "pages": 6,
+      "validPages": 6,
+      "average": 47.33,
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "fresh": false,
+      "note": "Re-validated pages array via score-report; not re-scored. /chat classified unusable/missing/blocked (39); other five routes capped at 49."
+    },
+    "routeInventory": {
+      "status": "passed",
+      "command": "node scripts/workflow-v2/support-cli.js routes scanner-app --json",
+      "expoRouterPages": 0,
+      "note": "Empty inventory expected: single-shell App.tsx state machine, not Expo Router app/ routes"
+    },
+    "pilotEvidence": {
+      "status": "blocked",
+      "artifact": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json",
+      "ownedSnapshot": "docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-18.json",
+      "ready": false,
+      "ownedPassed": 0,
+      "ownedPartial": 2,
+      "ownedTotal": 2,
+      "blockers": ["Security scans the QR", "Offline scan sync"]
+    },
+    "deviceEvidence2026_08_14": {
+      "status": "partial",
+      "reviewMode": "device-evidence",
+      "fresh": false,
+      "createdAt": "2026-08-14T18:07:00.000Z",
+      "artifact": "docs/audits/scanner-app/evidence/2026-08-14/NOTES.md",
+      "captured": [
+        "shift-lock overlay (scan-shift-locked.png)",
+        "HMAC nonce replay ACCESS DENIED (scan-nonce-replay-denied.png)"
+      ],
+      "missing": [
+        "ACCESS GRANTED on a DB-backed signed QR",
+        "offline enqueue + reconnect sync"
+      ],
+      "note": "Do not rescan signed-qr-gateway-academy.png; qrId is not a DB QRCode row"
+    },
+    "auditFreshness": {
+      "status": "stale",
+      "artifact": "docs/audits/scanner-app/AUDIT_2026-08-10.md",
+      "reviewMode": "static-review-only",
+      "note": "Newer than 2026-07-30 audit still in workflow state; still static-review-only and still blocked on device proofs"
+    },
+    "focusedDiff": {
+      "status": "blocked",
+      "worktreeValid": false,
+      "scannerSubsetValid": true,
+      "note": "Whole-tree dirty files include apps/client-dashboard/**, packages/ui/**, root AGENTS.md, and Draft workspace_ai_surface_hardening_2026. Scanner-scoped subset (plan Active files + docs/audits/scanner-app/evidence/2026-08-14) passed validateScopeDiff. Do not mix those parked edits into this check commit."
+    }
+  },
+  "artifacts": {
+    "checkAll": "docs/audits/scanner-app/CHECK_ALL_2026-08-18.json",
+    "pilotGate": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json",
+    "pilotGateOwned": "docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-18.json",
+    "pageScores": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
+    "audit": "docs/audits/scanner-app/AUDIT_2026-08-10.md",
+    "deviceEvidence": "docs/audits/scanner-app/evidence/2026-08-14/NOTES.md",
+    "plan": "docs/plan/Active/scanner_onboarding_session/PLAN_scanner_onboarding_session.md"
+  },
+  "blockers": [
+    "pilotEvidence.ready=false (Security scans the QR still missing ACCESS GRANTED on a DB-backed QR)",
+    "pilotEvidence.ready=false (Offline scan sync has no device enqueue+sync proof)",
+    "focusedDiff worktree invalid (parked client-dashboard and packages/ui files)",
+    "page scores and 2026-07-30 pilot gate stale versus 24h freshness window"
+  ],
+  "certifyReady": false,
+  "stageTransition": "none",
+  "nextCommands": ["/pilot"]
+}
