@@ -1,0 +1,34 @@
+.ai/workflow-v2/state.json
+  s_092c0bd7ecb526::t_25cb7e2180e1a3 230-251
+  s_092c0bd7ecb526::t_5daa35d2cacd07 348,358-359
+  s_092c0bd7ecb526::t_ebeab39aaca705 371
+docs/NOTEBOOKLM_10_MASTER_REVIEW_TASKS_SECURITY_PERFORMANCE_CRITIQUE.md
+  s_092c0bd7ecb526::t_43c5c9c0f9179d 357-358
+  s_092c0bd7ecb526::t_70072ca5a721fc 240
+  s_092c0bd7ecb526::t_4716d5e2de0c32 359
+docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-19.json
+  s_092c0bd7ecb526::t_9483218d246912 1-36
+docs/NOTEBOOKLM_11_FULL_HISTORY_DAY1_TO_PRESENT_AND_AI_CONTEXT.md
+  s_092c0bd7ecb526::t_3ce3090acdefda 22
+  s_092c0bd7ecb526::t_abae1149413d0c 93,95
+  s_092c0bd7ecb526::t_7fabb4616131d4 69
+  s_092c0bd7ecb526::t_c284c526b9ca17 94
+docs/audits/scanner-app/CHECK_ALL_2026-08-19.json
+  s_092c0bd7ecb526::t_9060a3c17013e9 1-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a670520a55a0dbf9add4534d61632642f9414797",
+  "prompts": {},
+  "sessions": {
+    "s_092c0bd7ecb526": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "92554b4e-47f8-42b4-998d-1c78184a9918",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
