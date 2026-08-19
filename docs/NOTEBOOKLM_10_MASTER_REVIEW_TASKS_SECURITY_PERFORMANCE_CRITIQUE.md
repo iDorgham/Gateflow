@@ -237,7 +237,7 @@ GateFlow enforces a **Zero-Trust Physical-to-Digital Security Architecture**. Se
 
 The deep security audit on 2026-07-16 identified critical vulnerabilities that were systematically remediated:
 
-- **P0 Bootstrap Route Exploitation (FIXED):** Deleted the exposed `/api/setup/reset-admin` route that contained a hard-coded fallback secret (redacted; rotate/revoke if this was ever a real credential) and static password hash. Introduced a local, authenticated CLI seed tool.
+- **P0 Bootstrap Route Exploitation (FIXED):** Deleted the exposed `/api/setup/reset-admin` route that contained a hard-coded fallback secret (redacted and revoked; do not reuse historical values) and static password hash. Introduced a local, authenticated CLI seed tool.
 - **P0 Cron Fail-Open Vulnerability (FIXED):** Fixed `/api/cron/ai-tasks` which previously executed when `CRON_SECRET` was absent. The endpoint now strictly requires constant-time Bearer token validation and fails closed.
 - **P1 Workspace Deletion Authorization (FIXED):** Added strict RBAC checks (`workspace:manage` permission required) on `/api/danger/delete-workspace` to prevent low-privilege tenant users from triggering organization deletion.
 - **P1 Dependency CVE Overrides (FIXED):** Remediated 16 high-and-critical vulnerabilities (including Next.js App Router bypasses and `shell-quote` injection) via lockfile upgrades and explicit pnpm overrides.
@@ -354,7 +354,9 @@ sequenceDiagram
 
 ### 7.2 Zero-Manual-Checkbox Certification Policy
 
-In GateFlow, pilot certification (`/certify`) cannot be granted via manual affirmations. The certification engine inspects immutable test output logs, cryptographic signature test runs, and headless browser session recordings (`CERTIFICATION_PACKET`) to verify that all 9 gates are mathematically and deterministically proven. The `CERTIFICATION_PACKET` must contain `valid:true` and include evidence for owned browser/session gates.
+The 9 outcomes above are the **journey model**, not current integrated-pilot status. As of August 2026, `client-dashboard` and `resident-portal` have certification receipts; `scanner-app` is `checking` and the integrated pilot is `parked`. ACCESS GRANTED on a dashboard QR whose DB `id` matches payload `qrId`, and offline enqueue+sync, remain unproven. Nonce replay-deny is not a grant proof.
+
+`/certify` cannot be granted via manual checkboxes. It requires `CERTIFICATION_PACKET` `valid:true` plus owned browser/session/device gates.
 
 ---
 
