@@ -1,443 +1,167 @@
 #!/usr/bin/env bash
 # =============================================================================
-# sync-ai-tools.sh — Unified AI Tools Sync
+# sync-ai-tools.sh — Unified AI Tools Sync (smart 24h cache)
 # Single source of truth: .agents/
 #
 # Usage:
-#   ./scripts/ai-sync/sync-ai-tools.sh              # sync all tools
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool claude
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool cursor
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool gemini
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool kiro
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool antigravity
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool kilocode
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool opencode
-#   ./scripts/ai-sync/sync-ai-tools.sh --tool qwen
-#   ./scripts/ai-sync/sync-ai-tools.sh --dry-run    # preview without writing
+#   ./scripts/ai-sync/sync-ai-tools.sh              # sync (smart cache)
+#   ./scripts/ai-sync/sync-ai-tools.sh --force      # ignore 24h cache
+#   ./scripts/ai-sync/sync-ai-tools.sh --status     # show last success
+#   ./scripts/ai-sync/sync-ai-tools.sh --dry-run
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool <name>
+#
+# After a successful FULL sync, skip for 24h unless .agents/ changed or --force.
 # =============================================================================
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SRC="$ROOT/.agents"
+CACHE_DIR="$ROOT/.cache"
+STAMP_FILE="$CACHE_DIR/ai-tools-sync.json"
+TTL_SECONDS=$((24 * 60 * 60))
 DRY_RUN=false
 ONLY_TOOL=""
+FORCE=false
+STATUS_ONLY=false
+IMPL="$ROOT/scripts/ai-sync/sync-ai-tools.impl.sh"
+# Known-good full implementation (pre-cache) on master history
+IMPL_FALLBACK_URL="https://raw.githubusercontent.com/iDorgham/Gateflow/ec9d248c13f099a7361a1389291c68df50ee5aa7/scripts/ai-sync/sync-ai-tools.sh"
 
-# ── parse args ────────────────────────────────────────────────────────────────
+FORWARD_ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --tool) ONLY_TOOL="$2"; shift 2 ;;
-    --dry-run) DRY_RUN=true; shift ;;
+    --tool) ONLY_TOOL="$2"; FORWARD_ARGS+=(--tool "$2"); shift 2 ;;
+    --dry-run) DRY_RUN=true; FORWARD_ARGS+=(--dry-run); shift ;;
+    --force) FORCE=true; shift ;;
+    --status) STATUS_ONLY=true; shift ;;
     -h|--help)
-      sed -n '2,13p' "$0"
+      sed -n '2,16p' "$0"
       exit 0 ;;
     *) echo "Unknown arg: $1" >&2; exit 1 ;;
   esac
 done
 
-# ── helpers ───────────────────────────────────────────────────────────────────
-log()  { echo "  $*"; }
-ok()   { echo "  ✓ $*"; }
-skip() { echo "  · $* (dry-run)"; }
+export STAMP_FILE TTL_SECONDS
 
-rsync_dir() {
-  local src="$1" dest="$2"
-  [[ -d "$src" ]] || return 0
-  if $DRY_RUN; then skip "rsync $src → $dest"; return; fi
-  mkdir -p "$dest"
-  rsync -a --delete \
-    --exclude ".DS_Store" --exclude "**/.DS_Store" \
-    --exclude "node_modules" --exclude "**/node_modules" \
-    "$src/" "$dest/"
+agents_mtime() {
+  [[ -d "$SRC" ]] || { echo 0; return; }
+  find "$SRC" -type f -print0 2>/dev/null \
+    | xargs -0 stat -c %Y 2>/dev/null \
+    | sort -n | tail -1 || echo 0
 }
 
-copy_file() {
-  local src="$1" dest="$2"
-  [[ -f "$src" ]] || return 0
-  if $DRY_RUN; then skip "copy $src → $dest"; return; fi
-  # Skip if source and destination are the same path
-  [[ "$(realpath "$src" 2>/dev/null || echo "$src")" == "$(realpath "$dest" 2>/dev/null || echo "$dest")" ]] && return 0
-  cp -f "$src" "$dest"
-}
-
-write_file() {
-  local dest="$1" content="$2"
-  if $DRY_RUN; then skip "write $dest"; return; fi
-  mkdir -p "$(dirname "$dest")"
-  printf '%s\n' "$content" > "$dest"
-}
-
-should_sync() {
-  local tool="$1"
-  [[ -z "$ONLY_TOOL" || "$ONLY_TOOL" == "$tool" ]]
-}
-
-# ── command metadata ──────────────────────────────────────────────────────────
-# Array of "key|title|description|gemini_name|kiro_prompt_intro"
-COMMANDS=(
-  "focus|Focus|Select or report the single Workflow v2 pilot application.|focus|Select or report the focused pilot application"
-  "audit|Audit|Audit the focused application, pages, security, usability, or pilot flow.|audit|Audit the focused application using dated evidence"
-  "progress|Progress|Report focused app stage, scores, coverage, blockers, and one next command.|progress|Report Workflow v2 progress"
-  "page-map|Page Map|Inventory and pilot-classify focused application routes.|page-map|Inventory and classify focused application routes"
-  "page|Page|Create or update a complete evidence-backed P0 page brief.|page|Create or update a focused page brief"
-  "components|Components|Map pages to existing components, variants, and states.|components|Map focused page components"
-  "usability|Usability|Review usability, accessibility, RTL, and responsive behavior.|usability|Review focused application usability"
-  "check|Check|Run deterministic focused checks and artifact validation.|check|Check the focused application"
-  "design|Design|Produce GateFlow design contracts and audits.|design|Create or review a GateFlow design contract"
-  "api|API|Plan or review secure typed API resources and flows.|api|Plan or review a typed API contract"
-  "database|Database|Plan or audit safe tenant-aware database work.|database|Plan or audit database work"
-  "security|Security|Run a read-only focused security review.|security|Review focused application security"
-  "test|Test|Run focused test scopes with dated evidence.|test|Test the focused application"
-  "github|GitHub|Inspect or prepare focused GitHub and CI work with mutation hardlocks.|github|Inspect or prepare GitHub work"
-  "vercel|Vercel|Inspect focused Vercel readiness with mutation hardlocks.|vercel|Inspect Vercel readiness"
-  "observe|Observe|Audit reliability, observability, and pilot metrics.|observe|Audit focused observability"
-  "release|Release|Prepare a focused release and rollback handoff.|release|Prepare release readiness"
-  "pilot|Pilot|Orchestrate the focused pilot or run its bounded loop profile through certification.|pilot|Run the focused pilot workflow or bounded pilot loop"
-  "certify|Certify|Certify a pilot-ready application from fresh evidence.|certify|Certify the focused pilot application"
-  "next-app|Next App|Recommend and confirm the next fixed-sequence pilot application.|next-app|Recommend the next pilot application"
-  "idea|Idea|Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries.|idea|Capture and refine a new idea or initiative into IDEA_<slug>.md"
-  "draft|Draft|Capture raw planning notes under docs/plan/Draft/<slug>/ before formal /plan.|draft|Capture or continue a draft plan under docs/plan/Draft"
-  "prompt|Prompt|Build FOR_PLAN_PROMPT.md from draft to feed /plan.|prompt|Write FOR_PLAN_PROMPT.md for a plan slug"
-  "plan|Plan|Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts.|plan|Turn an IDEA_<slug>.md into a multi-phase PLAN_<slug>.md with phase prompts"
-  "dev|Dev|Implement one phase or run a bounded approved plan/task loop with explicit delivery gates.|dev|Implement one phase or run the bounded development loop"
-  "ship|Ship|Execute all remaining phases of a plan sequentially via repeated /dev-style execution.|ship|Execute all remaining phases of a plan sequentially"
-  "guide|Guide|Run the GateFlow workspace guide — router plus coach; what should I do now?|guide|Run the GateFlow workspace guide"
-  "man|Man|One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).|man|Act as the one-man orchestrator"
-  "brainstorm|Brainstorm|Strategic brainstorming for roadmap, gaps, and release planning.|brainstorm|Run a strategic brainstorming session for GateFlow"
-  "creative|Creative|Creative direction for brand, content, and marketing assets.|creative|Run creative direction workflow"
-  "deploy|Deploy|Deploy target app or workspace apps per deploy workflow.|deploy|Deploy a GateFlow app"
-  "clis-team|CLIs Team|Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.|clis|Run a fixed team of 2-4 CLIs in sequence"
-  "docs|Docs|Automated documentation updates — changelog, version badge, PRD, feature log, README, release.|docs|Update project documentation automatically after shipping a feature or cutting a release"
-  "version|Version|Semantic versioning — bump package.json, create annotated git tags, generate versioned branch names.|version|Manage semantic versioning across package.json, git tags, and branch names"
-  "organize|Organize|Docs folder cleanup — scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.|organize|Keep the docs/ folder clean, structured, and navigable"
-  "ralph|Ralph|Compatibility alias for the bounded /dev loop across all approved remaining phases.|ralph|Run all remaining phases through the bounded development loop"
-)
-
-# ── generate commands.json ────────────────────────────────────────────────────
-generate_commands_json() {
-  local run_prefix="$1"   # e.g. ".agents/workflows" or ".cursor/commands"
-  local ext="${2:-.md}"   # file extension
-
-  local out='{"version":1,"commands":{'
-  local first=true
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key title desc _ _ <<< "$entry"
-    $first || out+=","
-    first=false
-    out+="\"$key\":{\"title\":\"$title\",\"description\":\"$desc\",\"run\":\"$run_prefix/$key$ext\"}"
-  done
-  out+="}}"
-  echo "$out" | python3 -m json.tool
-}
-
-# ── generate Gemini TOML ──────────────────────────────────────────────────────
-generate_gemini_toml() {
-  local key="$1" desc="$2" gemini_name="$3" intro="$4"
-  cat <<TOML
-description = "$desc"
-prompt = """
-Follow the workflow defined in the $key workflow to $intro.
-
-@{.agents/workflows/$key.md}
-
-User input: {{args}}
-"""
-TOML
-}
-
-# ── generate Kiro hook JSON ───────────────────────────────────────────────────
-generate_kiro_hook() {
-  local key="$1" desc="$2"
-  # Kiro reads files from the repo — embed a minimal prompt that loads the workflow
-  python3 - <<PYEOF
-import json
-data = {
-  "name": "/$key",
-  "version": "1.0.0",
-  "description": "$desc",
-  "when": {"type": "userTriggered"},
-  "then": {
-    "type": "askAgent",
-    "prompt": (
-      "Read and follow the GateFlow /$key workflow exactly as defined in "
-      ".agents/workflows/$key.md\n\n"
-      "Load it now and execute it. User input: {{args}}"
-    )
-  }
-}
-print(json.dumps(data, indent=2))
-PYEOF
-}
-
-# =============================================================================
-# TOOL SYNC FUNCTIONS
-# =============================================================================
-
-# ── Claude CLI ────────────────────────────────────────────────────────────────
-sync_claude() {
-  echo "── Claude CLI (.claude/) ──"
-  local dest="$ROOT/.claude"
-  mkdir -p "$dest"
-
-  # commands → .md files
-  mkdir -p "$dest/commands"
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ _ _ _ <<< "$entry"
-    copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
-  done
-  ok "commands (${#COMMANDS[@]})"
-
-  # settings.json — commands registry
-  if ! $DRY_RUN; then
-    generate_commands_json ".agents/workflows" ".md" > "$dest/settings.json"
-    # Merge: preserve existing permissions from settings.json (if any)
-    # We regenerate only the commands section; permissions stay in settings.local.json
-    python3 - <<PYEOF
-import json, os
-path = "$dest/settings.json"
-with open(path) as f:
-    data = json.load(f)
-# Ensure we don't blow away existing top-level keys
-existing_path = path  # already written above
-print("  · settings.json written")
-PYEOF
+show_status() {
+  if [[ ! -f "$STAMP_FILE" ]]; then
+    echo "AI tools sync: no successful run recorded yet."
+    echo "  Stamp: $STAMP_FILE"
+    return 0
   fi
-  ok "settings.json"
-
-  # skills / agents / subagents / commands-ref
-  rsync_dir "$SRC/skills"       "$dest/skills"
-  rsync_dir "$SRC/agents"       "$dest/agents"
-  rsync_dir "$SRC/subagents"    "$dest/subagents"
-  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
-  ok "skills ($(ls "$SRC/skills" | wc -l | tr -d ' ')) / agents / subagents / commands-ref"
+  python3 - <<'PY'
+import json, time, os
+from pathlib import Path
+p = Path(os.environ["STAMP_FILE"])
+ttl = int(os.environ["TTL_SECONDS"])
+d = json.loads(p.read_text())
+ts = float(d.get("ok_at", 0))
+age = time.time() - ts
+remain = max(0, ttl - age)
+print(f"AI tools sync: last OK at {d.get('ok_at_iso', '?')}")
+print(f"  tool scope : {d.get('only_tool') or 'all'}")
+print(f"  agents mtime: {d.get('agents_mtime', '?')}")
+print(f"  age        : {int(age // 3600)}h {int((age % 3600) // 60)}m")
+print(f"  remaining  : {int(remain // 3600)}h {int((remain % 3600) // 60)}m of {ttl // 3600}h TTL")
+print(f"  stamp      : {p}")
+PY
 }
 
-# ── Cursor IDE ────────────────────────────────────────────────────────────────
-sync_cursor() {
-  echo "── Cursor IDE (.cursor/) ──"
-  local dest="$ROOT/.cursor"
-  mkdir -p "$dest"
-
-  # commands → .md files + commands.json
-  mkdir -p "$dest/commands"
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ _ _ _ <<< "$entry"
-    copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
-  done
-  ok "commands (${#COMMANDS[@]})"
-
-  if ! $DRY_RUN; then
-    generate_commands_json ".cursor/commands" ".md" > "$dest/commands.json"
-  fi
-  ok "commands.json (all ${#COMMANDS[@]})"
-
-  # skills / agents / subagents / commands-ref / templates / contracts
-  rsync_dir "$SRC/skills"       "$dest/skills"
-  rsync_dir "$SRC/agents"       "$dest/agents"
-  rsync_dir "$SRC/subagents"    "$dest/subagents"
-  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
-  rsync_dir "$SRC/templates"    "$dest/templates"
-  rsync_dir "$SRC/contracts"    "$dest/contracts"
-  ok "skills ($(ls "$SRC/skills" | wc -l | tr -d ' ')) / agents / subagents / commands-ref / templates / contracts"
-
-  # rules — sync .md and .mdc from canonical .agents/rules
-  if [[ -d "$SRC/rules" ]]; then
-    if ! $DRY_RUN; then
-      mkdir -p "$dest/rules"
-      for f in "$SRC/rules/"*.md "$SRC/rules/"*.mdc; do
-        [[ -f "$f" ]] || continue
-        cp -f "$f" "$dest/rules/$(basename "$f")"
-      done
-    fi
-    ok "rules (.md + .mdc synced from .agents/rules)"
-  fi
-
-  # hooks / mcp
-  if ! $DRY_RUN; then
-    copy_file "$SRC/hooks.json" "$dest/hooks.json"
-    copy_file "$SRC/mcp.json"   "$dest/mcp.json"
-  fi
-  ok "hooks.json / mcp.json"
+cache_is_fresh() {
+  [[ -z "$ONLY_TOOL" ]] || return 1
+  [[ "$DRY_RUN" = false ]] || return 1
+  [[ -f "$STAMP_FILE" ]] || return 1
+  export CURRENT_AGENTS_MTIME
+  CURRENT_AGENTS_MTIME="$(agents_mtime)"
+  python3 - <<'PY'
+import json, time, os, sys
+from pathlib import Path
+p = Path(os.environ["STAMP_FILE"])
+ttl = int(os.environ["TTL_SECONDS"])
+cur = str(os.environ.get("CURRENT_AGENTS_MTIME", "0"))
+try:
+    d = json.loads(p.read_text())
+except Exception:
+    sys.exit(1)
+if time.time() - float(d.get("ok_at", 0)) > ttl:
+    sys.exit(1)
+if str(d.get("agents_mtime", "")) != cur:
+    sys.exit(1)
+sys.exit(0)
+PY
 }
 
-# ── Antigravity IDE ───────────────────────────────────────────────────────────
-sync_antigravity() {
-  echo "── Antigravity IDE (.antigravity/) ──"
-  local dest="$ROOT/.antigravity"
-  mkdir -p "$dest"
+write_stamp() {
+  [[ "$DRY_RUN" = false && -z "$ONLY_TOOL" ]] || return 0
+  mkdir -p "$CACHE_DIR"
+  export AGENTS_MTIME ONLY_TOOL
+  AGENTS_MTIME="$(agents_mtime)"
+  python3 - <<'PY'
+import json, time, os
+from pathlib import Path
+from datetime import datetime, timezone
+p = Path(os.environ["STAMP_FILE"])
+p.parent.mkdir(parents=True, exist_ok=True)
+now = time.time()
+p.write_text(json.dumps({
+    "ok_at": now,
+    "ok_at_iso": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "only_tool": os.environ.get("ONLY_TOOL") or None,
+    "agents_mtime": os.environ.get("AGENTS_MTIME", "0"),
+    "ttl_seconds": int(os.environ.get("TTL_SECONDS", "86400")),
+}, indent=2) + "\n")
+PY
+}
 
-  # workflows
-  mkdir -p "$dest/workflows"
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ _ _ _ <<< "$entry"
-    copy_file "$SRC/workflows/$key.md" "$dest/workflows/$key.md"
-  done
-  ok "workflows (${#COMMANDS[@]})"
-
-  if ! $DRY_RUN; then
-    generate_commands_json ".antigravity/workflows" ".md" > "$dest/commands.json"
+ensure_impl() {
+  if [[ -f "$IMPL" ]]; then
+    return 0
   fi
-  ok "commands.json"
-
-  # all shared dirs
-  rsync_dir "$SRC/skills"       "$dest/skills"
-  rsync_dir "$SRC/agents"       "$dest/agents"
-  rsync_dir "$SRC/subagents"    "$dest/subagents"
-  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
-  rsync_dir "$SRC/rules"        "$dest/rules"
-  rsync_dir "$SRC/templates"    "$dest/templates"
-  rsync_dir "$SRC/contracts"    "$dest/contracts"
-  rsync_dir "$SRC/hooks"        "$dest/hooks"
-  ok "skills / agents / subagents / commands-ref / rules / templates / contracts / hooks"
-
-  if ! $DRY_RUN; then
-    copy_file "$SRC/hooks.json" "$dest/hooks.json"
-    copy_file "$SRC/mcp.json"   "$dest/mcp.json"
-    copy_file "$SRC/rules.md"   "$dest/rules.md" 2>/dev/null || true
+  echo "· Restoring sync implementation body to $IMPL …"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$IMPL_FALLBACK_URL" -o "$IMPL"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO "$IMPL" "$IMPL_FALLBACK_URL"
+  else
+    echo "ERROR: missing $IMPL and neither curl nor wget available" >&2
+    exit 1
   fi
-  ok "hooks.json / mcp.json / rules.md"
+  chmod +x "$IMPL" || true
 }
 
+if $STATUS_ONLY; then
+  show_status
+  exit 0
+fi
 
-# ── Gemini CLI ────────────────────────────────────────────────────────────────
-sync_gemini() {
-  echo "── Gemini CLI (.gemini/) ──"
-  local dest="$ROOT/.gemini/commands"
-  if ! $DRY_RUN; then mkdir -p "$dest"; fi
+if ! $FORCE && cache_is_fresh; then
+  echo ""
+  echo "⏭  Skipping AI tools sync — last success still within 24h and .agents/ unchanged."
+  echo "   Use --force to sync anyway, or --status to inspect the stamp."
+  show_status
+  echo ""
+  exit 0
+fi
 
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ desc gemini_name intro <<< "$entry"
-    local toml_file="$dest/$gemini_name.toml"
-    if $DRY_RUN; then
-      skip "write $toml_file"
-    else
-      generate_gemini_toml "$key" "$desc" "$gemini_name" "$intro" > "$toml_file"
-    fi
-  done
-  ok "TOML commands (${#COMMANDS[@]} → .gemini/commands/*.toml)"
-}
+ensure_impl
 
-# ── Kiro CLI ──────────────────────────────────────────────────────────────────
-sync_kiro() {
-  echo "── Kiro CLI (.kiro/) ──"
-  local dest="$ROOT/.kiro/hooks"
-  if ! $DRY_RUN; then mkdir -p "$dest"; fi
+if $FORCE; then
+  echo "Cache: forced (ignoring 24h success stamp)"
+fi
 
-  for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ desc _ _ <<< "$entry"
-    local json_file="$dest/cmd-$key.json"
-    if $DRY_RUN; then
-      skip "write $json_file"
-    else
-      generate_kiro_hook "$key" "$desc" > "$json_file"
-    fi
-  done
-  ok "hook JSON files (${#COMMANDS[@]} → .kiro/hooks/cmd-*.json)"
-
-  # Kiro MCP — extract from .agents/mcp.json (exclude pencil which is Antigravity-specific)
-  if ! $DRY_RUN; then
-    mkdir -p "$ROOT/.kiro/settings"
-    python3 - <<PYEOF
-import json
-with open("$SRC/mcp.json") as f:
-    src = json.load(f)
-# Only include generic MCP servers (not Antigravity-specific pencil)
-exclude = {"pencil"}
-servers = {k: v for k, v in src.get("mcpServers", {}).items() if k not in exclude}
-out = {"mcpServers": servers}
-with open("$ROOT/.kiro/settings/mcp.json", "w") as f:
-    json.dump(out, f, indent=2)
-PYEOF
+bash "$IMPL" ${FORWARD_ARGS[@]+"${FORWARD_ARGS[@]}"}
+status=$?
+if [[ $status -eq 0 ]]; then
+  write_stamp
+  if [[ -z "$ONLY_TOOL" && "$DRY_RUN" = false ]]; then
+    echo "Stamp written: $STAMP_FILE (valid ~24h unless .agents/ changes)"
   fi
-  ok "settings/mcp.json"
-}
-
-# ── KiloCode CLI ──────────────────────────────────────────────────────────────
-sync_kilocode() {
-  echo "── KiloCode CLI (.kilocode/) ──"
-  local dest="$ROOT/.kilocode"
-
-  rsync_dir "$SRC/skills"       "$dest/skills"
-  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
-  rsync_dir "$SRC/agents"       "$dest/agents"
-  ok "skills / commands-ref / agents"
-}
-
-# ── OpenCode CLI ──────────────────────────────────────────────────────────────
-sync_opencode() {
-  echo "── OpenCode CLI (.opencode/) ──"
-  local dest="$ROOT/.opencode"
-
-  rsync_dir "$SRC/skills"    "$dest/skills"
-  rsync_dir "$SRC/agents"    "$dest/agents"
-  ok "skills / agents"
-
-  # Add the 7 main workflow commands to .opencode/commands/ (keep existing operational ones)
-  if ! $DRY_RUN; then
-    mkdir -p "$dest/commands"
-    for entry in "${COMMANDS[@]}"; do
-      IFS='|' read -r key _ desc _ _ <<< "$entry"
-      # Only write if not a more specific opencode-native command
-      if [[ ! -f "$dest/commands/$key.md" ]] || grep -q "agent: build" "$dest/commands/$key.md" 2>/dev/null; then
-        cat > "$dest/commands/$key.md" <<MD
----
-description: $desc
-workflow: .agents/workflows/$key.md
----
-
-Read and follow: .agents/workflows/$key.md
-MD
-      fi
-    done
-  fi
-  ok "commands (${#COMMANDS[@]} workflow shortcuts added)"
-}
-
-# ── Qwen CLI ──────────────────────────────────────────────────────────────────
-sync_qwen() {
-  echo "── Qwen CLI (.qwen/) ──"
-  # Qwen uses ~/.qwen for global config; sync skills and commands to repo-local .qwen/
-  local dest="$ROOT/.qwen"
-  mkdir -p "$dest"
-
-  rsync_dir "$SRC/skills"       "$dest/skills"
-  rsync_dir "$SRC/agents"       "$dest/agents"
-  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
-  ok "skills / agents / commands-ref"
-
-  # Add workflow commands as markdown files in .qwen/workflows/
-  if ! $DRY_RUN; then
-    mkdir -p "$dest/workflows"
-    for entry in "${COMMANDS[@]}"; do
-      IFS='|' read -r key _ desc _ _ <<< "$entry"
-      copy_file "$SRC/workflows/$key.md" "$dest/workflows/$key.md"
-    done
-  fi
-  ok "workflows (${#COMMANDS[@]} commands synced)"
-}
-
-# =============================================================================
-# MAIN
-# =============================================================================
-
-echo ""
-echo "GateFlow AI Tools Sync"
-echo "Source: $SRC"
-echo "$([ "$DRY_RUN" = true ] && echo "(DRY RUN — no files written)" || echo "Mode: write")"
-echo "────────────────────────────────────"
-
-[[ -d "$SRC" ]] || { echo "ERROR: .agents/ not found at $SRC" >&2; exit 1; }
-
-should_sync claude      && { echo; sync_claude; }
-should_sync cursor      && { echo; sync_cursor; }
-should_sync antigravity && { echo; sync_antigravity; }
-should_sync gemini      && { echo; sync_gemini; }
-should_sync kiro        && { echo; sync_kiro; }
-should_sync kilocode    && { echo; sync_kilocode; }
-should_sync opencode    && { echo; sync_opencode; }
-should_sync qwen        && { echo; sync_qwen; }
-
-echo ""
-echo "────────────────────────────────────"
-echo "Done. All tools synced from .agents/"
-echo ""
-echo "Tip: commit .agents/ changes and push — GitHub Actions auto-syncs on CI."
+fi
+exit $status
