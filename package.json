@@ -130,7 +130,7 @@
       "expo-router@6.0.23": "patches/expo-router@6.0.23.patch",
       "react-native-screens@4.26.2": "patches/react-native-screens@4.26.2.patch",
       "expo-modules-jsi@57.0.4": "patches/expo-modules-jsi@57.0.4.patch",
-      "expo-modules-core@57.0.10": "patches/expo-modules-core@57.0.10.patch"
+      "expo-modules-core@57.0.11": "patches/expo-modules-core@57.0.10.patch"
     },
     "overrides": {
       "eslint": "9.39.5",

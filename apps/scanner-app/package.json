@@ -21,7 +21,7 @@
     "ai": "5.0.52",
     "buffer": "^6.0.3",
     "crypto-js": "^4.2.0",
-    "expo": "~57.0.11",
+    "expo": "57.0.13",
     "expo-camera": "~57.0.3",
     "expo-crypto": "~57.0.1",
     "expo-device": "~57.0.1",
