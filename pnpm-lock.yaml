@@ -34,7 +34,7 @@ overrides:
   '@xmldom/xmldom': '>=0.9.10 <1.0.0'
   react: ^19.2.4
   react-dom: ^19.2.4
-  next: ^16.3.0
+  next: ^16.3.1
   postcss: '>=8.5.23'
   sharp: '>=0.35.0'
   basic-ftp: '>=5.3.0 <6.0.0'
@@ -233,7 +233,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       next-themes:
         specifier: ^0.4.6
@@ -438,7 +438,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       next-themes:
         specifier: ^0.4.6
@@ -556,7 +556,7 @@ importers:
         specifier: ^1.31.0
         version: 1.33.0(react@19.2.8)
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       react:
         specifier: ^19.2.4
@@ -656,7 +656,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       next-mdx-remote:
         specifier: ^6.0.0
@@ -859,7 +859,7 @@ importers:
         specifier: ^1.31.0
         version: 1.33.0(react@19.2.8)
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       next-themes:
         specifier: ^0.4.6
@@ -1051,7 +1051,7 @@ importers:
         specifier: ^6.0.246
         version: 6.0.246(zod@4.4.3)
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       react:
         specifier: ^19.2.4
@@ -1119,7 +1119,7 @@ importers:
         specifier: ^1.31.0
         version: 1.33.0(react@19.2.8)
       next:
-        specifier: ^16.3.0
+        specifier: ^16.3.1
         version: 16.3.1(@babel/core@7.29.7)(@types/node@26.2.0)(react-dom@19.2.8)(react@19.2.8)
       react:
         specifier: ^19.2.4
@@ -8502,7 +8502,7 @@ packages:
     peerDependencies:
       '@remix-run/react': ^2
       '@sveltejs/kit': ^1 || ^2
-      next: ^16.3.0
+      next: ^16.3.1
       nuxt: '>= 3'
       react: ^19.2.4
       svelte: '>= 4'
@@ -8573,7 +8573,7 @@ packages:
     resolution: {integrity: sha512-jwkNcrTeafWxjmWq4AHBaptSqZiJkYU5adLC9QBSqeim0GcqDMgN5Ievh8OG1rJ6W3A4l1oiP7qr9CWxGuzu3w==}
     peerDependencies:
       '@sveltejs/kit': ^1 || ^2
-      next: ^16.3.0
+      next: ^16.3.1
       nuxt: '>= 3'
       react: ^19.2.4
       svelte: '>= 4'
