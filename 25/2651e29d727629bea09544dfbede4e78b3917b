@@ -1,0 +1,135 @@
+docs/audits/scanner-app/PILOT_GATE_OWNED_2026-08-18.json
+  s_2cb078cec93f7c::t_f8a8c313f3e794 1-36
+docs/plan/Draft/workspace_ai_surface_hardening_2026/PLAN_workspace_ai_surface_hardening_2026.md
+  s_99620abfde1a72::t_8d6b0770495126 42-43
+  s_99620abfde1a72::t_857ddedcc6a2f6 25
+  s_99620abfde1a72::t_c115f37244ca5e 1-24,26-41,44-83,86-93,99,101,103-159
+  s_99620abfde1a72::t_d94cfc92b17677 94-98,100,102
+  s_99620abfde1a72::t_ee22e209f5b9c4 84-85
+AGENTS.md
+  s_ac76e85d5c6189::t_afd6233d6aae79 14
+  s_ac76e85d5c6189::t_cd837aec45e944 8
+  s_ac76e85d5c6189::t_f365f4f1aec774 24
+  s_c619100714f9c0::t_0b3ce3c3846009 21
+  s_c619100714f9c0::t_d8c95ffdf855f2 29
+  s_72738c29ed7b18::t_9af1a5d0a45fd8 20
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_c3c61892039733::t_74826f8ee5186b 8-10,12-13
+  s_9c8d659f566424::t_73e657e549169b 11
+  s_c3c61892039733::t_d7be92f6b6d914 24
+  s_c3c61892039733::t_e65ba638af0fdb 35
+  s_9c8d659f566424::t_cc2706505d1bb0 25
+  s_9c8d659f566424::t_3de4f0fccda87c 37
+  s_9c8d659f566424::t_edd7207fec8ab6 45
+  s_c3c61892039733::t_a005109cf02e8c 42-44,49-50
+  s_9c8d659f566424::t_2cd21a8a17220d 36
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_9c8d659f566424::t_07fba347e83520 276-294
+  s_c3c61892039733::t_529646a2a987ed 241-275
+docs/plan/Draft/workspace_ai_surface_hardening_2026/TASKS_workspace_ai_surface_hardening_2026.md
+  s_99620abfde1a72::t_6c35908ea1e7e2 5
+  s_99620abfde1a72::t_d6235b9e484fcc 4
+  s_99620abfde1a72::t_3aba9bb87de561 1-3,6-8
+docs/audits/scanner-app/CHECK_ALL_2026-08-18.json
+  s_2cb078cec93f7c::t_318cfd9aaa2381 1-133
+docs/plan/Draft/workspace_ai_surface_hardening_2026/PLAN_FEEDBACK.md
+  s_99620abfde1a72::t_f8fbd37a3b1e64 6,8
+  s_99620abfde1a72::t_104d8547be8d4d 1-5,7,9-13
+.ai/workflow-v2/state.json
+  s_2cb078cec93f7c::t_56702fa79ab113 230-271
+  s_2cb078cec93f7c::t_87274bcccde041 337,340
+  s_092c0bd7ecb526::t_11a872d57aa0ee 326,336,342-343
+  s_2cb078cec93f7c::t_834c092856bd8c 349
+docs/audits/scanner-app/evidence/2026-08-14/signed-qr-meta.txt
+  s_092c0bd7ecb526::t_11a872d57aa0ee 1-8
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_99620abfde1a72::t_dac26010f019ee 7-21
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_9c8d659f566424::t_553db24871b8b5 60-61,63
+docs/audits/scanner-app/evidence/2026-08-14/NOTES.md
+  s_9c8d659f566424::t_7453f6537b1d73 1-22
+apps/client-dashboard/AGENTS.md
+  s_2cb078cec93f7c::t_e63133e90695ba 1-9
+apps/client-dashboard/CLAUDE.md
+  s_2cb078cec93f7c::t_1a9f252251d440 1
+apps/client-dashboard/next-env.d.ts
+  s_2cb078cec93f7c::t_28c80cd3967208 4
+docs/NOTEBOOKLM_10_MASTER_REVIEW_TASKS_SECURITY_PERFORMANCE_CRITIQUE.md
+  s_2cb078cec93f7c::t_86f41f0e4275f9 1-364
+docs/NOTEBOOKLM_11_FULL_HISTORY_DAY1_TO_PRESENT_AND_AI_CONTEXT.md
+  s_2cb078cec93f7c::t_ecbc9093eb6ddc 1-218
+docs/NOTEBOOKLM_README.md
+  s_2cb078cec93f7c::t_ca6fa728c8ce2b 11-23,31-36,41-47,50-51,53,55-56,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "252651e29d727629bea09544dfbede4e78b3917b",
+  "prompts": {},
+  "sessions": {
+    "s_092c0bd7ecb526": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "92554b4e-47f8-42b4-998d-1c78184a9918",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_2cb078cec93f7c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ba2e7a7b-093b-483f-9364-525c2bffad02",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_72738c29ed7b18": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "94982dc1-06f7-4750-99c7-260657dd39c6",
+        "model": "cursor-grok-4.6-high-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_99620abfde1a72": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a7eaa837-6004-45f5-b551-1c4473ec0833",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_ac76e85d5c6189": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "29ff6e38-a15e-4566-a99a-6a2724f9f875",
+        "model": "cursor-grok-4.6-high-fast"
+      },
+      "human_author": null
+    },
+    "s_c3c61892039733": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5f073b43-bac0-4f62-9401-1e77299b065e",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_c619100714f9c0": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "06bf95c1-2d99-407e-a685-e83fd1c24839",
+        "model": "cursor-grok-4.6-high-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
