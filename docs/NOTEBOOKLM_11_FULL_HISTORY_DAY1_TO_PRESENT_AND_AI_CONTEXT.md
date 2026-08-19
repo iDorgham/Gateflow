@@ -19,7 +19,7 @@ timeline
     April 2026 : Design System v1.0 Launch : Atlassian Design System (ADS) Tokens : RTL Arabic Localization Engine
     May - June 2026 : Platform Evolution : Admin Emulation Hub & Traffic Generator : Webflow-like CMS Block Builder
     July 2026 : Deep Security Audit (July 16) : P0/P1 Containment & Remediation : AsyncLocalStorage Tenant Scoping : v0.2.0 & v0.3.0 Release
-    August 2026 : Scanner App Expo SDK 57 : Hermes Bytecode Fix : Guard Shift Accountability : Workflow v2 9/9 Pilot Certification (v0.4.0 & v0.4.1)
+    August 2026 : Scanner App Expo SDK 57 : Hermes Bytecode Fix : Guard Shift Accountability : client-dashboard and resident-portal certified; scanner-app checking; integrated pilot parked (v0.4.0 & v0.4.1)
 ```
 
 ---
@@ -66,7 +66,7 @@ timeline
 On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineering and security audit (`GATEFLOW_DEEP_AUDIT_2026-07-16.md`). Critical findings were triaged into immediate P0/P1 remediation plans (`audit_remediation_2026`):
 
 1. **P0 Remediation — Backdoor Route Removal:**
-   - Deleted `/api/setup/reset-admin/route.ts` which contained hard-coded fallback secrets (redacted; rotate/revoke if this was ever a real credential) and static password hashes. Replaced it with a secure, local interactive CLI.
+   - Deleted `/api/setup/reset-admin/route.ts` which contained a hard-coded fallback secret (redacted and revoked; do not reuse historical values) and static password hashes. Replaced it with a secure, local interactive CLI.
 2. **P0 Remediation — Cron Fail-Open Closure:**
    - Fixed `/api/cron/ai-tasks/route.ts` to strictly fail closed with constant-time Bearer token verification when `CRON_SECRET` is missing.
 3. **P1 Remediation — Workspace Deletion Authorization:**
@@ -90,8 +90,9 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 - **Cross-Subdomain SSO:**
   - Configured shared authentication cookies across `Domain=.gateflow.site` enabling single sign-on between `app.gateflow.site` (Client) and `portal.gateflow.site` (Resident).
 - **Workflow v2 & Pilot Certification:**
-  - Instituted the single focused pilot model (`client-dashboard`). Scanner certification remains in progress (Active plan phase).
-  - Established the **Zero-Manual-Checkbox Certification Standard** (`/certify`), requiring deterministic, machine-verifiable evidence packets (`CERTIFICATION_PACKET`) containing `valid:true` and evidence for owned browser/session gates.
+  - Instituted the single focused-app sequence (`client-dashboard` → `resident-portal` → `scanner-app`).
+  - `client-dashboard` and `resident-portal` have certification receipts. `scanner-app` remains `checking`; the integrated 9-step journey is **parked`. ACCESS GRANTED on a DB-backed signed QR and offline enqueue+sync are not proven. `certifyReady=false` for scanner.
+  - `/certify` requires `CERTIFICATION_PACKET` `valid:true` plus owned browser/session/device gates. Manual checkboxes are not certification.
 - **Comprehensive Demo Seeding:**
   - Added the Red Sea `--demo-full` seed script populating demo tenants with 6 months of historical scan events, contacts, units, role logins, and guard shifts.
 
