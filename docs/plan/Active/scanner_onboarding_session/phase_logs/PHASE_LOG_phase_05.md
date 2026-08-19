@@ -268,8 +268,9 @@ Fresh environment facts:
   `Fetching Expo Go`. Metro cache write to `apps/scanner-app/.metro` failed
   with ENOENT first; a later `mkdir -p` of that dir took ~135s. Disk at
   session start: 3.6GB free. This is not a viable evidence path until Xcode
-  26.4+ (native `pnpm ios`) or a physical device with a matching Expo Go /
-  dev client.
+  26.4+ (native `pnpm ios`) or a physical device with a custom dev client
+  (App Store Expo Go stopped at SDK 54; SDK 57 requires sign.expo.dev or
+  `eas go` build with Expo CLI and device client signed into the same account).
 
 Stop condition honored: did not fabricate screenshots and did not mark
 owned pilot steps `passed`. Plan stays in `Active/` (last phase incomplete).

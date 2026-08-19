@@ -7,7 +7,7 @@
 - Do not recertify apps as part of this plan; only stop lying about coverage in `state.json`.
 - Alias map for the 15+ folder/frontmatter mismatches belongs in the hygiene script, not a new skill.
 
-## Workspace skills / agents to add (only after prune)
+## Workspace quality-check scripts to add (only after prune)
 
-- `ai-surface-hygiene` — run the catalog check; refuse new stubs.
+- `ai-surface-hygiene` (Phase 5 quality-check script) — run the catalog check; refuse new stubs.
 - Conductor routing table lives in `gf-guide`, not a new skill, until Phase 5 lands.

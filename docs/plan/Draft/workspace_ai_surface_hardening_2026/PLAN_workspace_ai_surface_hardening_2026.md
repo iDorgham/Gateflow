@@ -71,7 +71,7 @@ Success: one command universe, executable (not stub) skills, truthful workflow s
 - Document the restore one-liner in `docs/workspace/WORKSPACE_GUIDE.md`.
 - Do not commit `.cursor/hooks/state/` or `.ai-memory/`.
 
-**Acceptance:** `git check-ignore .antigravity/skills/gf-guide/SKILL.md` is empty **or** `pnpm sync` recreates it from a tracked path. CI comment explains the chosen model.
+**Acceptance:** `git check-ignore .antigravity/skills/gf-guide/SKILL.md` is empty **or** `pnpm sync` recreates it from a tracked path. CI verification checks representative files from all three canonical surfaces: a command (e.g., `.antigravity/workflows/guide.md`), a skill (e.g., `.antigravity/skills/gf-guide/SKILL.md`), and a rule (e.g., `.antigravity/rules/00-gateflow-core.md`). CI comment explains the chosen model.
 
 ### Phase 1 — One command universe
 
@@ -84,7 +84,7 @@ Success: one command universe, executable (not stub) skills, truthful workflow s
 - Either register `/ready`, `/develop`, `/perf`, `/dept`, `/automate`, `/run` as aliases of existing workflows, or delete those rows from `/guide` and `commands-ref/`.
 - Include `.claude/agents/` in `pnpm sync` (currently empty while `.cursor/agents/` has 69 files).
 
-**Acceptance:** `rg -l '^name: (guide|dev|plan|audit)' .ai/commands .agents/workflows` shows each name in **one** tree only. `pnpm sync --dry-run` does not copy Sovereign files over GateFlow workflows.
+**Acceptance:** `rg -l '^name: (guide|dev|plan|audit)' .ai/commands .agents/workflows` shows each name in **one** tree only. A uniqueness check extracts command names from `.ai/commands`, `.agents/workflows`, and `commands.json`, groups them, and fails on duplicates. `pnpm sync --dry-run` does not copy Sovereign files over GateFlow workflows.
 
 ### Phase 2 — Prune skills and agents
 
@@ -123,7 +123,7 @@ Success: one command universe, executable (not stub) skills, truthful workflow s
 - Rewrite `01-gateflow-ai-workflow` `/dev ralph` line to match `ralph.md`.
 - Rewrite `06-response-format` to match `GUIDE_RESPONSE_CONTRACT.md` (no emoji banners).
 
-**Acceptance:** Always-apply rule count ≤ 2. `rg 'autopilot|✅|deletedAt' .agents/rules .cursor/rules` shows aligned text.
+**Acceptance:** Always-apply rule count = 1 (only `00-gateflow-core`). Validation fails if more than one rule is marked always-apply. `deletedAt: null` check verifies it only applies to models defining `deletedAt` (not a broad unconditional grep check). `rg 'autopilot|✅' .agents/rules .cursor/rules` shows aligned text.
 
 ### Phase 5 — Indexes, CI, conductor
 
@@ -141,7 +141,7 @@ Success: one command universe, executable (not stub) skills, truthful workflow s
 - pnpm only. Do not add `ai:sync` / `ai:check` to root `package.json` (keep in template-project if needed; root already has `pnpm sync`).
 - Do not edit scanner app code in this plan.
 - Do not commit secrets, `.env`, or hook state under `.cursor/hooks/state/`.
-- After moving this plan Draft → Ready → Active, update `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
+- After moving this plan among Draft, Ready, Active, AND Complete directories, update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` (both plan path and status).
 
 ## Risks
 

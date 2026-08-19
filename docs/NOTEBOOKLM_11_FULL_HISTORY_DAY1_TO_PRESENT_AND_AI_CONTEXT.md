@@ -4,7 +4,7 @@
 
 ## 1. Executive Summary & Purpose
 
-This document serves as the **definitive historical and contextual chronicle of the GateFlow platform** from its inception (**Day 1 / Q1 2026**) through its current production-grade milestone (**v0.4.1 / August 2026**).
+This document serves as the **definitive historical and contextual chronicle of the GateFlow platform** from its inception (**Day 1 / Q1 2026**) through its current milestone (**v0.4.1 / August 2026**).
 
 It is engineered as a zero-loss, high-density reference source specifically formatted for **Google NotebookLM**, as well as multi-CLI and external AI agent systems (Claude, Cursor, Gemini, Opencode, Kiro, Kilo, Qwen, Antigravity).
 
@@ -39,7 +39,7 @@ timeline
 ### Phase 2: Design System v1.0 & Multi-Surface Expansion (April 2026 — v1.0.0)
 
 - **Design System Launch:**
-  - Published the canonical `@gateflow/ui`, `@gateflow/tokens`, `@gateflow/theme`, and `@gateflow/components` packages.
+  - Published the canonical `@gateflow/ui`, `@gateflow/tokens`, `@gateflow/theme`, and `@gate-access/components` packages (note: the repo uses both `@gateflow/*` for design tokens/theme/ui and `@gate-access/*` for other shared packages).
   - Adopted Atlassian Design System (ADS) semantic token conventions.
   - Implemented the **Kimchi Palette**, deep dark mode (#111112, #191a1c), and unified 6px/12px border radii.
   - Built [design.gateflow.site](https://design.gateflow.site) with live component previews, token explorers, and RTL/LTR live toggles.
@@ -66,7 +66,7 @@ timeline
 On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineering and security audit (`GATEFLOW_DEEP_AUDIT_2026-07-16.md`). Critical findings were triaged into immediate P0/P1 remediation plans (`audit_remediation_2026`):
 
 1. **P0 Remediation — Backdoor Route Removal:**
-   - Deleted `/api/setup/reset-admin/route.ts` which contained hard-coded fallback secrets (`gateflow-setup-2026`) and static password hashes. Replaced it with a secure, local interactive CLI.
+   - Deleted `/api/setup/reset-admin/route.ts` which contained hard-coded fallback secrets (redacted; rotate/revoke if this was ever a real credential) and static password hashes. Replaced it with a secure, local interactive CLI.
 2. **P0 Remediation — Cron Fail-Open Closure:**
    - Fixed `/api/cron/ai-tasks/route.ts` to strictly fail closed with constant-time Bearer token verification when `CRON_SECRET` is missing.
 3. **P1 Remediation — Workspace Deletion Authorization:**
@@ -90,8 +90,8 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 - **Cross-Subdomain SSO:**
   - Configured shared authentication cookies across `Domain=.gateflow.site` enabling single sign-on between `app.gateflow.site` (Client) and `portal.gateflow.site` (Resident).
 - **Workflow v2 & Pilot Certification:**
-  - Instituted the single focused pilot model (`client-dashboard`), achieving **9/9 certified pilot outcomes**.
-  - Established the **Zero-Manual-Checkbox Certification Standard** (`/certify`), requiring deterministic, machine-verifiable evidence packets (`CERTIFICATION_PACKET`).
+  - Instituted the single focused pilot model (`client-dashboard`). Scanner certification remains in progress (Active plan phase).
+  - Established the **Zero-Manual-Checkbox Certification Standard** (`/certify`), requiring deterministic, machine-verifiable evidence packets (`CERTIFICATION_PACKET`) containing `valid:true` and evidence for owned browser/session gates.
 - **Comprehensive Demo Seeding:**
   - Added the Red Sea `--demo-full` seed script populating demo tenants with 6 months of historical scan events, contacts, units, role logins, and guard shifts.
 
@@ -99,7 +99,7 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 
 ## 3. Comprehensive System Architecture & Topology
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                    GATEFLOW SYSTEM TOPOLOGY                                     │
 ├─────────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -158,8 +158,9 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 
 ### 5.2 Cryptographic Pass Generation & Validation
 
-- Passes use cryptographic HMAC-SHA256 signing:
-  $$\text{QR Token} = \text{Base64Url}(\text{passId} \cdot \text{unitId} \cdot \text{validFrom} \cdot \text{validUntil} \cdot \text{nonce}) + \text{"."} + \text{HMAC-SHA256}(\dots)$$
+- Passes use cryptographic HMAC-SHA256 signing with `qrId` (the QRCode database record ID) included in the signed payload:
+  $$\text{QR Token} = \text{Base64Url}(\text{qrId} \cdot \text{organizationId} \cdot \text{type} \cdot \text{maxUses} \cdot \text{expiresAt} \cdot \text{issuedAt} \cdot \text{nonce}) + \text{"."} + \text{HMAC-SHA256}(\dots)$$
+- The `qrId` is part of the signed payload and must match the database record ID; short URLs are provided for copy/share purposes only and do not replace the signed QR verification.
 - Mobile scanners maintain encrypted keys in device SecureStore for offline evaluation.
 - Anti-replay logic checks `nonce` against local and remote `ScanLog` tables.
 
@@ -167,7 +168,7 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 
 - **Access Token:** 15-minute ephemeral signed JWT (`jose`).
 - **Refresh Token:** 30-day encrypted token stored in `httpOnly`, `SameSite=Lax`, `Secure` cookies.
-- **SSO Domain:** `AUTH_COOKIE_DOMAIN=.gateflow.site` synchronizes sessions across client and resident web portals.
+- **SSO Domain:** `AUTH_COOKIE_DOMAIN=.gateflow.site` synchronizes sessions across client and resident web portals. JWT configuration and `NEXTAUTH_SECRET` must match across all subdomains sharing SSO, in addition to the shared cookie domain.
 - **CSRF Defense:** Double-submit cookie pattern with custom header validation on all mutations.
 
 ---
@@ -182,7 +183,7 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
 
 ### 6.2 The Phased Initiative Lifecycle
 
-```
+```text
 docs/plan/Draft/      ──[ /plan ]──>   docs/plan/Ready/
                                              │
                                          [ /dev ]
@@ -209,7 +210,7 @@ The repository supports unified cross-tool development across Cursor, Claude CLI
 
 ```typescript
 // CORE INVARIANTS CHEAT-SHEET FOR AI GENERATION:
-// 1. Prisma Scoping: ALWAYS include { organizationId: ctx.orgId, deletedAt: null }
+// 1. Prisma Scoping: ALWAYS include { organizationId: ctx.orgId }; add deletedAt: null ONLY for models that define deletedAt
 // 2. Auth Context: Use requireAuth(req) or getSession() returning { userId, orgId, role }
 // 3. UI Styling: Use tokens from @gate-access/ui (e.g. bg-background, text-foreground)
 // 4. Localization: Wrap copy in useTranslation() or dict[locale] with RTL support

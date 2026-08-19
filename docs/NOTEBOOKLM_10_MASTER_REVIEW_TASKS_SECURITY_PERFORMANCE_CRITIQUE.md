@@ -8,9 +8,9 @@
 
 ### 1.1 Platform Topology & Monorepo Organization
 
-GateFlow operates as a **Turborepo monorepo** managed with `pnpm` (version `0.4.1`, Node.js >= 20.0.0). The codebase isolates concerns across 7 distinct application surfaces and 12 shared foundational packages:
+GateFlow operates as a **Turborepo monorepo** managed with `pnpm` (version `8.15.0`, GateFlow release version `0.4.1`, Node.js >= 20.0.0). The codebase isolates concerns across 7 distinct application surfaces and 12 shared foundational packages:
 
-```
+```text
 GateFlow Monorepo (gate-access)
 ├── apps/
 │   ├── client-dashboard/       # Property manager & security supervisor console (Next.js 16)
@@ -62,12 +62,14 @@ gitGraph
    merge fix/scanner-qr-timeout id: "merge PR #157" tag: "v0.4.1"
 ```
 
-1. **Allowed Branch Prefixes:**
+1. **Allowed Branch Prefixes** (enforced by `.husky/pre-push` regex `^(feat|fix|chore|hotfix|refactor|docs|test|perf|ci|security)(/.+)?$`):
    - `feat/<initiative>-phase-<N>`: Feature work tied to an active plan phase.
    - `fix/<issue-description>`: Bug fixes and security patch remediation.
    - `chore/<maintenance-task>`: Dependency bumps, workspace hygiene, and refactoring.
    - `hotfix/<critical-patch>`: Immediate production emergency patches.
+   - `refactor/<scope>`: Refactoring and code restructuring.
    - `docs/<topic>`: Documentation, guides, and changelog updates.
+   - `test/<scope>`: Test infrastructure and test additions.
    - `perf/<scope>`: Dedicated performance, query optimization, or bundle tuning.
    - `ci/<scope>`: GitHub Actions and quality gate improvements.
    - `security/<scope>`: Security hardening and vulnerability fixes.
@@ -80,15 +82,17 @@ gitGraph
 
 3. **Preflight Quality Gate (`pnpm preflight`):**
    Before any push or merge, the full deterministic verification suite must pass:
+
    ```bash
    pnpm docs:changelog:check && pnpm check:ads && pnpm check:bootstrap-routes && pnpm turbo lint && pnpm turbo typecheck && pnpm turbo test
    ```
+
 
 ### 2.2 Phased Development Framework (`docs/plan/`)
 
 Every non-trivial initiative follows a strict lifecycle across four state directories:
 
-```
+```text
 docs/plan/
 ├── Draft/<slug>/       # Raw initiatives, brainstorming, exploratory architecture (DRAFT_<slug>.md)
 ├── Ready/<slug>/       # Approved, fully phased specifications with per-phase prompts (PLAN_<slug>.md)
@@ -107,6 +111,8 @@ The repository maintains synchronized instruction sets across multiple AI engine
 
 - **CLI Limit Tracking & The 80% Rule:** Usage across high-token CLIs is tracked in `docs/development/learning/CLI_LIMITS_TRACKING.md`. When usage crosses 80%, agents fail-closed and request explicit user confirmation.
 - **Ralph Perspectives:** Automated scripts (`ralph-prioritize.js`, `ralph-skill-discover.js`, `ralph-git.js`) continuously audit task backlog priority, discover architectural patterns, and automate atomic git phase branching.
+
+
 
 ---
 
@@ -180,7 +186,7 @@ The repository maintains synchronized instruction sets across multiple AI engine
 
 GateFlow enforces a **Zero-Trust Physical-to-Digital Security Architecture**. Security guarantees are implemented at every architectural layer:
 
-```
+```text
 [ Incoming Request / Scan ]
            │
            ▼
@@ -212,9 +218,10 @@ GateFlow enforces a **Zero-Trust Physical-to-Digital Security Architecture**. Se
    - Direct database calls without `organizationId` are strictly forbidden. If `organizationId` is missing from the context, queries abort and throw a `TenantIsolationViolationError`.
 
 2. **Cryptographic QR Credentials & Offline Verification:**
-   - Physical passes contain an encrypted or signed token payload:
-     $$\text{Payload} = \text{Base64Url}(\text{passId} \parallel \text{unitId} \parallel \text{validFrom} \parallel \text{validUntil} \parallel \text{nonce})$$
+   - Physical passes contain an encrypted or signed token payload including `qrId` (the QRCode database record ID):
+     $$\text{Payload} = \text{Base64Url}(\text{qrId} \parallel \text{organizationId} \parallel \text{type} \parallel \text{maxUses} \parallel \text{expiresAt} \parallel \text{issuedAt} \parallel \text{nonce})$$
      $$\text{Signature} = \text{HMAC-SHA256}(\text{Payload}, \text{SecretKey})$$
+   - The `qrId` is part of the signed payload and must match the database record ID; short URLs are provided for copy/share purposes only and do not replace the signed QR verification.
    - Mobile scanners carry securely cached cryptographic keys in hardware keystores (`Expo SecureStore` / iOS Keychain / Android Keystore) allowing sub-50ms offline verification without server communication.
 
 3. **Append-Only Scan Auditing:**
@@ -224,12 +231,13 @@ GateFlow enforces a **Zero-Trust Physical-to-Digital Security Architecture**. Se
 4. **Session Hygiene & Cross-Subdomain SSO:**
    - Authentication tokens are partitioned into a 15-minute ephemeral Access JWT and a 30-day encrypted Refresh Token.
    - Cookies are configured with `HttpOnly`, `Secure`, `SameSite=Lax`, and `Domain=.gateflow.site` to enable seamless SSO between `app.gateflow.site` (Client Dashboard) and `portal.gateflow.site` (Resident Portal).
+   - JWT configuration and `NEXTAUTH_SECRET` must match across all subdomains sharing SSO, in addition to the shared cookie domain.
 
 ### 4.2 Security Audit & Remediation History (P0/P1 Closures)
 
 The deep security audit on 2026-07-16 identified critical vulnerabilities that were systematically remediated:
 
-- **P0 Bootstrap Route Exploitation (FIXED):** Deleted the exposed `/api/setup/reset-admin` route that contained a fallback secret (`gateflow-setup-2026`) and static password hash. Introduced a local, authenticated CLI seed tool.
+- **P0 Bootstrap Route Exploitation (FIXED):** Deleted the exposed `/api/setup/reset-admin` route that contained a hard-coded fallback secret (redacted; rotate/revoke if this was ever a real credential) and static password hash. Introduced a local, authenticated CLI seed tool.
 - **P0 Cron Fail-Open Vulnerability (FIXED):** Fixed `/api/cron/ai-tasks` which previously executed when `CRON_SECRET` was absent. The endpoint now strictly requires constant-time Bearer token validation and fails closed.
 - **P1 Workspace Deletion Authorization (FIXED):** Added strict RBAC checks (`workspace:manage` permission required) on `/api/danger/delete-workspace` to prevent low-privilege tenant users from triggering organization deletion.
 - **P1 Dependency CVE Overrides (FIXED):** Remediated 16 high-and-critical vulnerabilities (including Next.js App Router bypasses and `shell-quote` injection) via lockfile upgrades and explicit pnpm overrides.
@@ -249,7 +257,7 @@ The deep security audit on 2026-07-16 identified critical vulnerabilities that w
      - `ScanLog`: `@@index([organizationId, createdAt(sort: Desc)])`, `@@index([gateId, createdAt])`
      - `GuestPass`: `@@index([organizationId, validUntil, status])`, `@@unique([qrCodeSecret])`
      - `Contact`: `@@index([organizationId, phone])`, `@@index([organizationId, email])`
-   - Soft-delete queries require composite filtering on `(organizationId, deletedAt)` to ensure PostgreSQL index-only scans.
+   - Soft-delete queries require composite filtering on `(organizationId, deletedAt)` to ensure PostgreSQL index-only scans, but only for models that actually define a `deletedAt` field in the schema (not all models have this field).
 
 ### 5.2 Frontend & Mobile Latency Budgets
 
@@ -267,7 +275,7 @@ The deep security audit on 2026-07-16 identified critical vulnerabilities that w
 
 _An unvarnished, high-rigor engineering critique of the current GateFlow codebase._
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        CRITIQUE SCORECARD                              │
 ├────────────────────────────────┬─────────┬────────────────────────────┤
@@ -346,7 +354,7 @@ sequenceDiagram
 
 ### 7.2 Zero-Manual-Checkbox Certification Policy
 
-In GateFlow, pilot certification (`/certify`) cannot be granted via manual affirmations. The certification engine inspects immutable test output logs, cryptographic signature test runs, and headless browser session recordings (`CERTIFICATION_PACKET`) to verify that all 9 gates are mathematically and deterministically proven.
+In GateFlow, pilot certification (`/certify`) cannot be granted via manual affirmations. The certification engine inspects immutable test output logs, cryptographic signature test runs, and headless browser session recordings (`CERTIFICATION_PACKET`) to verify that all 9 gates are mathematically and deterministically proven. The `CERTIFICATION_PACKET` must contain `valid:true` and include evidence for owned browser/session gates.
 
 ---
 
