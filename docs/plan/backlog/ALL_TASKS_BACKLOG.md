@@ -4,6 +4,21 @@
 
 ## 🚀 Active Initiatives (Q2-Q3 2026)
 
+### workspace_ai_surface_hardening_2026 — Skills, agents, commands, rules, loops
+
+**PLAN:** `docs/plan/Draft/workspace_ai_surface_hardening_2026/`
+`PLAN_workspace_ai_surface_hardening_2026.md`
+**Status:** Draft — audit 2026-08-14; overall 5.4/10
+**Priority:** P1 workspace (does not replace scanner product P0)
+**Target:** One command universe, executable skills, tracked canonical AI config
+
+- [ ] Phase 0 — Version canonical AI slice
+- [ ] Phase 1 — Quarantine Sovereign command collisions
+- [ ] Phase 2 — Prune/merge stubs and duplicates
+- [ ] Phase 3 — Unify loops + reconcile workflow-v2 state
+- [ ] Phase 4 — Rules: one always-apply core
+- [ ] Phase 5 — Generated indexes + skill-quality CI
+
 ### client_dashboard_readiness_2026 — Client Dashboard development readiness
 
 **PLAN:** `docs/plan/Draft/client_dashboard_readiness_2026/`

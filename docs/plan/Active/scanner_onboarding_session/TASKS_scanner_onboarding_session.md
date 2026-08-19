@@ -57,10 +57,10 @@
       hardcoded left/right found; visual on-device confirmation still pending
 - [x] Error boundaries + loading states for duty widgets
 - [ ] Device evidence: Security scans the QR → update pilot gate to `passed`
-      **(blocked — see 2026-08-10 attempt in phase log: Xcode 26.1.1 on this
-      Mac cannot build `scanner-app` at all right now, not just "no device")**
+      **(blocked — Xcode 26.1.1 / Swift 6.2.1 on Sequoia 15.7.1
+      MacBookPro14,3; SDK 57 needs Xcode 26.4+ / Swift 6.3 / Tahoe 26.2+)**
 - [ ] Device evidence: offline enqueue + sync → update pilot gate to `passed`
-      **(blocked — same Xcode 26.1.1 build gap; see phase log)**
+      **(blocked — same OS/Xcode floor; see SESSION_MEMORY)**
 - [ ] Refresh `docs/audits/scanner-app/` packet artifacts as needed (depends
       on the two device-evidence items above)
 - [x] `phase_logs/PHASE_LOG_phase_05.md` updated
