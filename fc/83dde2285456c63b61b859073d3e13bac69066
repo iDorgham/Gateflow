@@ -1,0 +1,19 @@
+pnpm-lock.yaml
+  s_1122b42bf5a742::t_322b4be7d2c244 37,236,441,559,659,862,1054,1122,4736,4743,4750,4757,4764,4771,4778,4785,4793,4803,4813,4823,4833,4843,4853,4863,5883,5891,5899,5907,9670,9741
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "fc83dde2285456c63b61b859073d3e13bac69066",
+  "prompts": {},
+  "sessions": {
+    "s_1122b42bf5a742": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0186a-84b0-7310-a3ef-e2bc4b000c63",
+        "model": "gpt-5.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
