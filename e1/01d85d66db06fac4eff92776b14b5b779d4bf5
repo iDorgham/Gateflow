@@ -1,0 +1,66 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/create-qr-client.tsx
+  s_9c8d659f566424::t_095b8d61e09d47 964-967
+  s_9c8d659f566424::t_6b199585fe34b7 19-21,24
+  s_9c8d659f566424::t_4c1c35457a3bb3 22-23
+  s_9c8d659f566424::t_d184dcc36a5956 982
+  s_9c8d659f566424::t_82524ab232beeb 933-935
+  s_9c8d659f566424::t_9ec122aeeece2a 1235,1241
+apps/client-dashboard/src/lib/qr/qr-print.ts
+  s_9c8d659f566424::t_c9bc7762ff1813 1-40
+  s_9c8d659f566424::t_c1e77eafa7892c 41-99
+packages/ui/src/components/ui/dropdown-menu.tsx
+  s_9c8d659f566424::t_130fceae5cf581 70-71
+  s_9c8d659f566424::t_3103cd69abbd2a 166-182,184-195,197,199,202,204-205
+  s_9c8d659f566424::t_11ab7eefe891e6 4,11-12,27-69
+  s_9c8d659f566424::t_79df4c4daf2c6d 87-88,98-101,112-115,120
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/units/page.tsx
+  s_9c8d659f566424::t_9055c43587b9f4 1043-1045,1048-1050
+  s_9c8d659f566424::t_dcf40dbe891825 3-9
+packages/ui/src/components/ui/dynamic-table.tsx
+  s_9c8d659f566424::t_9cbdf9182a9c82 214-222
+  s_9c8d659f566424::t_c1a11359d69fa5 165-168,178
+  s_9c8d659f566424::t_f8221bf599b177 271-279
+apps/client-dashboard/src/lib/qr/qr-print.test.ts
+  s_9c8d659f566424::t_a9085f5c4caabc 1-38
+apps/client-dashboard/.gitignore
+  s_9c8d659f566424::t_4c1f7b6e2826c6 2
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/actions.ts
+  s_092c0bd7ecb526::t_f71bbd552b4023 39-40,54-58,64-72,84-88,135-136,161-166
+  s_9c8d659f566424::t_f439870f0ec6d5 113,116
+apps/client-dashboard/src/components/settings/notifications/template-previewer.tsx
+  s_9c8d659f566424::t_daf7e6784b63ae 104
+apps/client-dashboard/src/lib/dropdown-menu-position.test.ts
+  s_9c8d659f566424::t_5cf8124bcd1bc5 1-27
+apps/client-dashboard/src/components/dashboard/qrcodes/QRDetailDrawer.tsx
+  s_9c8d659f566424::t_4f2b86e431a064 206
+  s_9c8d659f566424::t_22c52037953dfd 3,13-14,16-17,19-24,94-107,131,172-205
+apps/client-dashboard/src/components/dashboard/dashboard-wrapper.tsx
+  s_9c8d659f566424::t_db17668baed214 24-27
+  s_092c0bd7ecb526::t_4f1ad6c0b5a546 60-62,70-74
+CHANGELOG.md
+  s_092c0bd7ecb526::t_6c3cf9612641ed 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e101d85d66db06fac4eff92776b14b5b779d4bf5",
+  "prompts": {},
+  "sessions": {
+    "s_092c0bd7ecb526": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "92554b4e-47f8-42b4-998d-1c78184a9918",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_9c8d659f566424": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e180538e-05e7-480c-829b-7499f72dd4dc",
+        "model": "grok-4.6"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
