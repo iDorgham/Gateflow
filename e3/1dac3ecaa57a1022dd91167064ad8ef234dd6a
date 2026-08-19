@@ -1,0 +1,24 @@
+apps/resident-mobile/package.json
+  s_1122b42bf5a742::t_3fc609df0778d9 21
+  s_1122b42bf5a742::t_96328145d8cd0a 27
+package.json
+  s_1122b42bf5a742::t_e3e58188173706 133
+apps/scanner-app/package.json
+  s_1122b42bf5a742::t_3fc609df0778d9 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e31dac3ecaa57a1022dd91167064ad8ef234dd6a",
+  "prompts": {},
+  "sessions": {
+    "s_1122b42bf5a742": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0186a-84b0-7310-a3ef-e2bc4b000c63",
+        "model": "gpt-5.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
