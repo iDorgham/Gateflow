@@ -1,0 +1,23 @@
+packages/components/package.json
+  s_1122b42bf5a742::t_e1f45b3c986c2e 54
+apps/design-system/package.json
+  s_1122b42bf5a742::t_e1f45b3c986c2e 21
+apps/resident-portal/package.json
+  s_1122b42bf5a742::t_e1f45b3c986c2e 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4c4b6cfb50ca90d4f253e219acce94a8419d37c1",
+  "prompts": {},
+  "sessions": {
+    "s_1122b42bf5a742": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0186a-84b0-7310-a3ef-e2bc4b000c63",
+        "model": "gpt-5.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
