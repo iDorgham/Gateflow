@@ -965,8 +965,8 @@ importers:
         specifier: ~57.0.8
         version: 57.0.8(expo@57.0.11)(typescript@5.9.3)
       expo-modules-core:
-        specifier: ~57.0.10
-        version: 57.0.10(patch_hash=qmne3yfgupy2lup22rzxstzcwa)(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8)
+        specifier: ~57.0.11
+        version: 57.0.11(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8)
       expo-network:
         specifier: ~57.0.1
         version: 57.0.1(expo@57.0.11)(react@19.2.8)
@@ -12668,8 +12668,8 @@ packages:
     dev: false
     patched: true
 
-  /expo-modules-core@57.0.10(patch_hash=qmne3yfgupy2lup22rzxstzcwa)(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8):
-    resolution: {integrity: sha512-aRi3G8OctoyZl8x9CLTVpbPljClfKm2eqKRgBzhcGsrH3gS1t5Y2ye7+PIZK4XK2VVP5iGqygN2b1vtqRo3xVQ==}
+  /expo-modules-core@57.0.11(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8):
+    resolution: {integrity: sha512-gzRAI+vs0g9eObyQfGq1kp017flMeqZMzprqquCWxKg/AYdJXKmGXibJqMVFvRbUpluYBsW8U9P0inntKbzJOg==}
     peerDependencies:
       react: ^19.2.4
       react-native: '*'
@@ -12685,7 +12685,6 @@ packages:
       react-native: 0.86.2(@babel/core@7.29.7)(@react-native/metro-config@0.87.0)(@types/react@19.2.18)(react@19.2.8)
       react-native-worklets: 0.11.3(@babel/core@7.29.7)(@react-native/metro-config@0.87.0)(react-native@0.86.2)(react@19.2.8)
     dev: false
-    patched: true
 
   /expo-modules-jsi@57.0.4(patch_hash=l5qkgkhxvem6pkg5s2tx5fonrm)(react-native@0.81.5):
     resolution: {integrity: sha512-vt7FyqUqqFXiRVnBqYD7y+GSPTgeua5Ocoy0+SYt+RSHkZEA2Fyop7If3g1TYDzQObYybPRo7TG2Rle1XLaWFw==}
@@ -13003,7 +13002,7 @@ packages:
       expo-font: 57.0.1(expo@57.0.11)(react-native@0.86.2)(react@19.2.8)
       expo-keep-awake: 57.0.1(expo@57.0.11)(react@19.2.8)
       expo-modules-autolinking: 57.0.9(typescript@5.9.3)
-      expo-modules-core: 57.0.10(patch_hash=qmne3yfgupy2lup22rzxstzcwa)(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8)
+      expo-modules-core: 57.0.11(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8)
       pretty-format: 29.7.0
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
