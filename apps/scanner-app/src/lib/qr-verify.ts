@@ -9,6 +9,15 @@ const MAX_NONCE_CACHE_SIZE = 1000;
  *
  * This is the optimistic local check — server is always final authority.
  * Invalid QRs are rejected immediately without hitting the network.
+ *
+ * SECURITY NOTE: The HMAC secret used here (EXPO_PUBLIC_QR_SECRET) is embedded
+ * in the app bundle and can be extracted via reverse engineering. This means
+ * attackers can potentially forge QR signatures that pass client-side verification.
+ * However, all scans MUST be validated by the server (/api/qrcodes/validate)
+ * which performs authoritative verification with the server-side secret, checks
+ * the QR against the database, enforces organization boundaries, and records
+ * the scan. Client-side verification is only for fast-path rejection to reduce
+ * unnecessary network calls. Do NOT rely on client-side verification alone.
  */
 export async function verifyScanQR(
   qrString: string,
