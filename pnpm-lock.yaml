@@ -771,8 +771,8 @@ importers:
         specifier: ~6.0.23
         version: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.18)(expo-constants@18.0.14)(expo-linking@8.0.12)(expo@57.0.11)(react-dom@19.2.8)(react-native-gesture-handler@3.1.0)(react-native-reanimated@4.5.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.81.5)(react@19.2.8)
       expo-secure-store:
-        specifier: ~15.0.8
-        version: 15.0.8(expo@57.0.11)
+        specifier: ~57.0.1
+        version: 57.0.1(expo@57.0.11)
       expo-sharing:
         specifier: ^55.0.11
         version: 55.0.14(expo@57.0.11)(react-native@0.81.5)(react@19.2.8)
@@ -12889,20 +12889,12 @@ packages:
     dev: false
     patched: true
 
-  /expo-secure-store@15.0.8(expo@57.0.11):
-    resolution: {integrity: sha512-lHnzvRajBu4u+P99+0GEMijQMFCOYpWRO4dWsXSuMt77+THPIGjzNvVKrGSl6mMrLsfVaKL8BpwYZLGlgA+zAw==}
-    peerDependencies:
-      expo: '*'
-    dependencies:
-      expo: 57.0.11(@babel/core@7.29.7)(@expo/dom-webview@57.0.1)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-dom@19.2.8)(react-native-worklets@0.11.3)(react-native@0.81.5)(react@19.2.8)(typescript@5.9.3)
-    dev: false
-
   /expo-secure-store@57.0.1(expo@57.0.11):
     resolution: {integrity: sha512-tLa1VmSadOq19mA/dwkl99RbHyjLE0T1qqBYMY3/OsguZTI+rlrDy/DDJjupqlVtmr95hD7o1pYqx5aL+B4YMA==}
     peerDependencies:
       expo: '*'
     dependencies:
-      expo: 57.0.11(@babel/core@7.29.7)(@expo/dom-webview@57.0.1)(@expo/metro-runtime@57.0.11)(expo-router@57.0.11)(react-dom@19.2.8)(react-native-worklets@0.11.3)(react-native@0.86.2)(react@19.2.8)(typescript@5.9.3)
+      expo: 57.0.11(@babel/core@7.29.7)(@expo/dom-webview@57.0.1)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-dom@19.2.8)(react-native-worklets@0.11.3)(react-native@0.81.5)(react@19.2.8)(typescript@5.9.3)
     dev: false
 
   /expo-server@1.0.5:
