@@ -91,7 +91,7 @@ On **July 16, 2026**, GateFlow underwent a comprehensive, source-level engineeri
   - Configured shared authentication cookies across `Domain=.gateflow.site` enabling single sign-on between `app.gateflow.site` (Client) and `portal.gateflow.site` (Resident).
 - **Workflow v2 & Pilot Certification:**
   - Instituted the single focused-app sequence (`client-dashboard` → `resident-portal` → `scanner-app`).
-  - `client-dashboard` and `resident-portal` have certification receipts. `scanner-app` remains `checking`; the integrated 9-step journey is **parked`. ACCESS GRANTED on a DB-backed signed QR and offline enqueue+sync are not proven. `certifyReady=false` for scanner.
+  - `client-dashboard` and `resident-portal` have certification receipts. `scanner-app` remains `checking`; the integrated 9-step journey is **parked**. ACCESS GRANTED on a DB-backed signed QR and offline enqueue+sync are not proven. `certifyReady=false` for scanner.
   - `/certify` requires `CERTIFICATION_PACKET` `valid:true` plus owned browser/session/device gates. Manual checkboxes are not certification.
 - **Comprehensive Demo Seeding:**
   - Added the Red Sea `--demo-full` seed script populating demo tenants with 6 months of historical scan events, contacts, units, role logins, and guard shifts.
