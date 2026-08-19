@@ -1,12 +1,15 @@
 'use client';
 
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '../../lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 
 interface DropdownMenuContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const DropdownMenuContext = React.createContext<
@@ -19,6 +22,63 @@ function useDropdownMenu() {
     throw new Error('Dropdown components must be used within a DropdownMenu');
   }
   return context;
+}
+
+export function getDropdownFixedStyle(
+  rect: Pick<DOMRect, 'top' | 'bottom' | 'left' | 'right' | 'width' | 'height'>,
+  options: {
+    align?: 'start' | 'center' | 'end';
+    side?: 'top' | 'bottom' | 'left' | 'right';
+    sideOffset?: number;
+    viewportWidth: number;
+  }
+): React.CSSProperties {
+  const align = options.align ?? 'end';
+  const side = options.side ?? 'bottom';
+  const sideOffset = options.sideOffset ?? 8;
+  const { viewportWidth } = options;
+
+  const style: React.CSSProperties = { position: 'fixed' };
+
+  if (side === 'bottom') {
+    style.top = rect.bottom + sideOffset;
+  } else if (side === 'top') {
+    style.top = rect.top - sideOffset;
+    style.transform = 'translateY(-100%)';
+  } else if (side === 'right') {
+    style.left = rect.right + sideOffset;
+  } else {
+    style.right = viewportWidth - rect.left + sideOffset;
+  }
+
+  if (side === 'top' || side === 'bottom') {
+    if (align === 'start') {
+      style.left = rect.left;
+    } else if (align === 'center') {
+      style.left = rect.left + rect.width / 2;
+      style.transform = [style.transform, 'translateX(-50%)']
+        .filter(Boolean)
+        .join(' ');
+    } else {
+      style.right = viewportWidth - rect.right;
+    }
+  } else if (side === 'left' || side === 'right') {
+    if (align === 'start') {
+      style.top = rect.top;
+    } else if (align === 'center') {
+      style.top = rect.top + rect.height / 2;
+      style.transform = [style.transform, 'translateY(-50%)']
+        .filter(Boolean)
+        .join(' ');
+    } else {
+      style.top = rect.bottom;
+      style.transform = [style.transform, 'translateY(-100%)']
+        .filter(Boolean)
+        .join(' ');
+    }
+  }
+
+  return style;
 }
 
 export function DropdownMenu({
@@ -36,7 +96,8 @@ export function DropdownMenu({
   const setOpen =
     onOpenChange !== undefined ? onOpenChange : setUncontrolledOpen;
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const triggerRef = React.useRef<HTMLDivElement>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (!open) return;
@@ -46,12 +107,10 @@ export function DropdownMenu({
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target)) return;
+      if (contentRef.current?.contains(target)) return;
+      setOpen(false);
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -62,12 +121,15 @@ export function DropdownMenu({
     };
   }, [open, setOpen]);
 
-  const value = React.useMemo(() => ({ open, setOpen }), [open, setOpen]);
+  const value = React.useMemo(
+    () => ({ open, setOpen, triggerRef, contentRef }),
+    [open, setOpen]
+  );
 
   return (
     <DropdownMenuContext.Provider value={value}>
       <div
-        ref={containerRef}
+        ref={triggerRef}
         className={cn('relative inline-block', className)}
         {...props}
       >
@@ -113,53 +175,46 @@ export function DropdownMenuContent({
   side?: 'top' | 'bottom' | 'left' | 'right';
   sideOffset?: number;
 }) {
-  const { open } = useDropdownMenu();
+  const { open, triggerRef, contentRef } = useDropdownMenu();
+  const [coords, setCoords] = React.useState<React.CSSProperties>({});
 
-  if (!open) return null;
+  React.useLayoutEffect(() => {
+    if (!open || !triggerRef.current) return;
 
-  const isVertical = side === 'top' || side === 'bottom';
+    const update = () => {
+      if (!triggerRef.current) return;
+      setCoords(
+        getDropdownFixedStyle(triggerRef.current.getBoundingClientRect(), {
+          align,
+          side,
+          sideOffset,
+          viewportWidth: window.innerWidth,
+        })
+      );
+    };
 
-  const sideClass =
-    side === 'bottom'
-      ? 'top-full'
-      : side === 'top'
-        ? 'bottom-full'
-        : side === 'right'
-          ? 'left-full'
-          : 'right-full';
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update, true);
+    };
+  }, [open, align, side, sideOffset, triggerRef]);
 
-  const alignClass = isVertical
-    ? align === 'start'
-      ? 'left-0'
-      : align === 'center'
-        ? 'left-1/2 -translate-x-1/2'
-        : 'right-0'
-    : align === 'start'
-      ? 'top-0'
-      : align === 'center'
-        ? 'top-1/2 -translate-y-1/2'
-        : 'bottom-0';
+  if (!open || typeof document === 'undefined') return null;
 
-  const offsetStyle: React.CSSProperties =
-    side === 'bottom'
-      ? { marginTop: sideOffset }
-      : side === 'top'
-        ? { marginBottom: sideOffset }
-        : side === 'right'
-          ? { marginLeft: sideOffset }
-          : { marginRight: sideOffset };
-
-  return (
+  return createPortal(
     <div
+      ref={contentRef}
       className={cn(
-        'absolute z-50 min-w-[8rem] overflow-hidden rounded-xl border border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] p-1 text-[var(--ds-text)] shadow-lg animate-in fade-in zoom-in-95',
-        sideClass,
-        alignClass,
+        'z-50 min-w-[8rem] overflow-hidden rounded-xl border border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] p-1 text-[var(--ds-text)] shadow-lg animate-in fade-in zoom-in-95',
         className
       )}
-      style={{ ...offsetStyle, ...style }}
+      style={{ ...coords, ...style }}
       {...props}
-    />
+    />,
+    document.body
   );
 }
 

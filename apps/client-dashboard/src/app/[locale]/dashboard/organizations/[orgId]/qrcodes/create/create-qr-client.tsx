@@ -13,10 +13,15 @@ import {
   NativeSelect,
   cn,
 } from '@gateflow/ui';
-import { token } from '@atlaskit/tokens';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';
 import { csrfFetch } from '@/lib/csrf';
+import {
+  QR_PRINT_BG,
+  QR_PRINT_FG,
+  downloadQrJpg,
+  downloadQrSvg,
+} from '@/lib/qr/qr-print';
 import { QRCodeType } from '@gate-access/types';
 import {
   Check,
@@ -925,7 +930,9 @@ function ResultView({
   onReset: () => void;
   qrRef: React.RefObject<HTMLDivElement>;
 }) {
-  const qrValue = created.shortUrl ?? created.qrString;
+  // Encode the signed payload so a phone on LAN can scan without resolving
+  // localhost short URLs. Short URL remains visible below for copy/share.
+  const qrValue = created.qrString;
 
   return (
     <div className="space-y-6">
@@ -954,10 +961,10 @@ function ResultView({
       >
         <QRCode
           value={qrValue}
-          size={200}
-          bgColor={token('elevation.surface')}
-          fgColor={token('color.text')}
-          level="L"
+          size={256}
+          bgColor={QR_PRINT_BG}
+          fgColor={QR_PRINT_FG}
+          level="M"
         />
       </div>
 
@@ -972,7 +979,7 @@ function ResultView({
             {created.shortUrl}
           </span>
           <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-black text-primary uppercase tracking-wider">
-            encoded in QR
+            short link
           </span>
         </div>
       ) : (
@@ -1225,47 +1232,18 @@ export function CreateQRClient({
   function downloadSVG() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg) return;
-    const blob = new Blob([new XMLSerializer().serializeToString(svg)], {
-      type: 'image/svg+xml',
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `gateflow-qr-${created?.qrId ?? 'code'}.svg`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadQrSvg(svg, `gateflow-qr-${created?.qrId ?? 'code'}.svg`);
   }
 
   function downloadJPG() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg) return;
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const scale = 4;
-    canvas.width = 200 * scale;
-    canvas.height = 200 * scale;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const img = new Image();
-    img.onload = () => {
-      ctx.fillStyle = token('elevation.surface');
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) return;
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `gateflow-qr-${created?.qrId ?? 'code'}.jpg`;
-          a.click();
-          URL.revokeObjectURL(url);
-        },
-        'image/jpeg',
-        0.95
-      );
-    };
-    img.src = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgData)))}`;
+    downloadQrJpg(svg, `gateflow-qr-${created?.qrId ?? 'code'}.jpg`).catch(
+      (error) => {
+        toast.error('Failed to export QR code as JPG');
+        console.error('JPG export failed:', error);
+      }
+    );
   }
 
   function resetWizard() {

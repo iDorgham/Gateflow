@@ -22,6 +22,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Apps
 
 - **[Theme]** sync light and dark mode across web apps via a shared `gateflow-theme` cookie on `.gateflow.site`
+- **[Client-Dashboard]** print signed QRs and unclip overflow menus
 
 ---
 
