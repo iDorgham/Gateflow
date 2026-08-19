@@ -53,7 +53,7 @@
     "@types/react-dom": "^19.2.3",
     "ai": "^6.0.246",
     "@ai-sdk/react": "^3.0.248",
-    "next": "^16.3.0",
+    "next": "^16.3.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
