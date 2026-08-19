@@ -200,8 +200,8 @@ importers:
         specifier: ^3.29.2
         version: 3.29.2(@tiptap/pm@3.29.2)
       '@tiptap/extension-placeholder':
-        specifier: ^3.20.4
-        version: 3.20.5(@tiptap/extensions@3.30.2)
+        specifier: ^3.30.1
+        version: 3.30.1(@tiptap/extensions@3.30.1)
       '@tiptap/pm':
         specifier: ^3.29.2
         version: 3.29.2
@@ -381,8 +381,8 @@ importers:
         specifier: ^3.29.2
         version: 3.29.2(@tiptap/pm@3.29.2)
       '@tiptap/extension-placeholder':
-        specifier: ^3.20.4
-        version: 3.20.5(@tiptap/extensions@3.30.2)
+        specifier: ^3.30.1
+        version: 3.30.1(@tiptap/extensions@3.30.1)
       '@tiptap/pm':
         specifier: ^3.29.2
         version: 3.29.2
@@ -8761,12 +8761,12 @@ packages:
       '@tiptap/core': 3.29.2(@tiptap/pm@3.29.2)
     dev: false
 
-  /@tiptap/extension-placeholder@3.20.5(@tiptap/extensions@3.30.2):
-    resolution: {integrity: sha512-PcZJbzJ8j+YcRdYWFjmFFVnOOx3nETA0pzMj9fXADi28vNABnrWLwsHAseh3I5QfLmywKQb9SpTSTU2LxQgBoA==}
+  /@tiptap/extension-placeholder@3.30.1(@tiptap/extensions@3.30.1):
+    resolution: {integrity: sha512-z0WAMWLF6Hh3C1kuhcYVA3srK0J7d7UNdrY8hw4LlrhmJv1xIoZSUIwH+c8WkMJ5c79idL2zpeWVCtGEyH8UHw==}
     peerDependencies:
-      '@tiptap/extensions': ^3.20.5
+      '@tiptap/extensions': 3.30.1
     dependencies:
-      '@tiptap/extensions': 3.30.2(@tiptap/core@3.29.2)(@tiptap/pm@3.29.2)
+      '@tiptap/extensions': 3.30.1(@tiptap/core@3.29.2)(@tiptap/pm@3.29.2)
     dev: false
 
   /@tiptap/extension-strike@3.20.5(@tiptap/core@3.29.2):
@@ -8803,11 +8803,11 @@ packages:
       '@tiptap/pm': 3.29.2
     dev: false
 
-  /@tiptap/extensions@3.30.2(@tiptap/core@3.29.2)(@tiptap/pm@3.29.2):
-    resolution: {integrity: sha512-2LqAHXk26QDsryW+beECxYeBzv5Ylk4GuB3cOmfghS7/G37R2W+Te3TkUK7BT0EWoDryvBT57/5q0DEFIhfZZg==}
+  /@tiptap/extensions@3.30.1(@tiptap/core@3.29.2)(@tiptap/pm@3.29.2):
+    resolution: {integrity: sha512-prNrvF1oMj+tngCLmZgXzQfuUuvYMbCe2sEPXXKJPqJNNffHd2wAuUZ0h6UQS5aRILaxB2kN1/yfwpxnhRpwYA==}
     peerDependencies:
-      '@tiptap/core': 3.30.2
-      '@tiptap/pm': 3.30.2
+      '@tiptap/core': 3.30.1
+      '@tiptap/pm': 3.30.1
     dependencies:
       '@tiptap/core': 3.29.2(@tiptap/pm@3.29.2)
       '@tiptap/pm': 3.29.2
