@@ -1,0 +1,34 @@
+.github/workflows/ci.yml
+  s_d91dd5f90959a6::t_68ab4efeff3027 40,42
+package.json
+  s_d91dd5f90959a6::t_68ab4efeff3027 41
+scripts/workflow-v2/runtime-proof-cli.js
+  s_d91dd5f90959a6::t_68ab4efeff3027 18-19,21-28,72-84,95
+  s_d91dd5f90959a6::t_f58bca85888010 85-94,96-106,109-112
+scripts/workflow-v2/runtime-proof.js
+  s_d91dd5f90959a6::t_68ab4efeff3027 131-132
+scripts/check/__tests__/check-ai-workspace.test.js
+  s_d91dd5f90959a6::t_68ab4efeff3027 2-3,20-41
+  s_d91dd5f90959a6::t_1dd3774854f452 42
+scripts/workflow-v2/__tests__/runtime-proof.test.js
+  s_d91dd5f90959a6::t_68ab4efeff3027 6,8-13,66-141
+  s_d91dd5f90959a6::t_faa7c7ec2c8bdc 142-149
+scripts/check/check-ai-workspace.js
+  s_d91dd5f90959a6::t_68ab4efeff3027 61-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "28118ece5b74d0e4be5be7a1f971be791a98d170",
+  "prompts": {},
+  "sessions": {
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
