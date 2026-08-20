@@ -1,0 +1,54 @@
+docs/workspace/WORKFLOW_V2.md
+  s_d91dd5f90959a6::t_2d8ba2fcf337d3 77-80,111-116
+docs/plan/Draft/workspace_ai_surface_hardening_2026/SESSION_MEMORY.md
+  s_d91dd5f90959a6::t_527f4afb18aaf3 8,12-16,27,29-30,34-41
+  s_d91dd5f90959a6::t_058980d68ed5e2 1-7,9-11,17-26,28,31-33,42-43
+scripts/workflow-v2/runtime-proof.js
+  s_d91dd5f90959a6::t_ab0af6f9a47b9d 28,166-169,200-210
+  s_d91dd5f90959a6::t_1d83275a9e440a 25,39-44,57-61,68-77,161,173-174,177-187
+  s_d91dd5f90959a6::t_1fbe2d13188122 26-27,29-33,78,124-143,145,147,149,156
+  s_d91dd5f90959a6::t_594c1a4159ac88 213,217-218
+scripts/workflow-v2/runtime-proof-cli.js
+  s_d91dd5f90959a6::t_1d83275a9e440a 76,86-88
+scripts/check/check-ai-workspace.js
+  s_d91dd5f90959a6::t_1d83275a9e440a 41-68,71-74,76-79,81,83,85,173
+  s_d91dd5f90959a6::t_527f4afb18aaf3 69-70,190
+docs/plan/Draft/workspace_ai_surface_hardening_2026/phase_logs/PHASE_LOG_phase_00_extension.md
+  s_d91dd5f90959a6::t_527f4afb18aaf3 28-34
+  s_d91dd5f90959a6::t_058980d68ed5e2 1-27
+.github/workflows/ci.yml
+  s_d91dd5f90959a6::t_1d83275a9e440a 18,33-34,39,43-44,172-174,337,358,363-364,367-368,370,378
+scripts/check/__tests__/ci-workflow.test.js
+  s_d91dd5f90959a6::t_4e9901a1bbf36d 40-43
+  s_d91dd5f90959a6::t_15dd8431c7763c 1-39
+scripts/check/__tests__/check-ai-workspace.test.js
+  s_d91dd5f90959a6::t_1ccba6243c9045 12-15
+  s_d91dd5f90959a6::t_15dd8431c7763c 48-68
+  s_d91dd5f90959a6::t_892ed7be6ce6fd 16-18,69-71
+scripts/workflow-v2/__tests__/runtime-proof.test.js
+  s_d91dd5f90959a6::t_15dd8431c7763c 34-48,223-256
+  s_d91dd5f90959a6::t_95cd3a1f5f0a63 49-56,121-144,178,185,257
+  s_d91dd5f90959a6::t_4e9901a1bbf36d 6,162-177,179-184
+  s_d91dd5f90959a6::t_085359559c0558 145
+  s_d91dd5f90959a6::t_55965a59446773 186
+CHANGELOG.md
+  s_d91dd5f90959a6::t_2d8ba2fcf337d3 14
+docs/workspace/CHANGELOG.md
+  s_d91dd5f90959a6::t_2d8ba2fcf337d3 36-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "8ea33b3b4e7a4718ec4a55a2fa7cc08209155646",
+  "prompts": {},
+  "sessions": {
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
