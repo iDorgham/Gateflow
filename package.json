@@ -38,7 +38,7 @@
     "workflow:v2:routes": "node scripts/workflow-v2/support-cli.js routes",
     "workflow:v2:verify": "node scripts/workflow-v2/operations-cli.js verify",
     "proof:plan": "node scripts/workflow-v2/runtime-proof-cli.js",
-    "proof:check": "node scripts/workflow-v2/runtime-proof-cli.js --evidence .ai/runtime-proof.json",
+    "proof:check": "node scripts/workflow-v2/runtime-proof-cli.js --base origin/master --evidence .ai/runtime-proof.json",
     "pr:ready": "node scripts/workflow-v2/runtime-proof-cli.js --base origin/master",
     "workflow:v2:loop": "node scripts/workflow-v2/loop-cli.js",
     "workflow:v2:delivery": "node scripts/workflow-v2/delivery-cli.js",

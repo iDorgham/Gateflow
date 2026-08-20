@@ -58,13 +58,18 @@ function validateWorkspace(root) {
   for (const [name, command] of Object.entries(commands)) {
     if (!command.title || !command.description || !command.run)
       errors.push(`command ${name} is missing title, description, or run`);
-    if (
-      command.run &&
-      !fs.existsSync(
-        path.join(root, command.run.replace(/^\.antigravity/, '.agents'))
-      )
-    )
-      errors.push(`command ${name} points to missing ${command.run}`);
+    if (command.run) {
+      const target = path.resolve(
+        root,
+        command.run.replace(/^\.antigravity/, '.agents')
+      );
+      const targetInSource =
+        target === source || target.startsWith(`${source}${path.sep}`);
+      if (!targetInSource)
+        errors.push(`command ${name} points outside .agents: ${command.run}`);
+      else if (!fs.existsSync(target))
+        errors.push(`command ${name} points to missing ${command.run}`);
+    }
   }
 
   const skillFiles = walk(path.join(source, 'skills')).filter(

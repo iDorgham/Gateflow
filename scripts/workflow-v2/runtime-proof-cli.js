@@ -15,11 +15,17 @@ const value = (flag) => {
   return index === -1 ? undefined : args[index + 1];
 };
 const json = args.includes('--json');
-const explicitFiles = (() => {
-  const index = args.indexOf('--files');
+function parseExplicitFiles(cliArgs) {
+  const index = cliArgs.indexOf('--files');
   if (index === -1) return null;
-  return args.slice(index + 1).filter((arg) => !arg.startsWith('--'));
-})();
+  const files = [];
+  for (const arg of cliArgs.slice(index + 1)) {
+    if (arg.startsWith('--')) break;
+    files.push(arg);
+  }
+  return files;
+}
+const explicitFiles = parseExplicitFiles(args);
 
 function headSha() {
   return execFileSync('git', ['rev-parse', 'HEAD'], {
@@ -63,38 +69,44 @@ function markdown(result) {
   return `${lines.join('\n')}\n`;
 }
 
-try {
-  if (args.includes('--help')) {
-    console.log(
-      'Usage: runtime-proof-cli [--base <ref>] [--files <paths...>] [--evidence <receipt.json>] [--json] [--github-summary <file>]'
-    );
-    process.exit(0);
+function run() {
+  try {
+    if (args.includes('--help')) {
+      console.log(
+        'Usage: runtime-proof-cli [--base <ref>] [--files <paths...>] [--evidence <receipt.json>] [--json] [--github-summary <file>]'
+      );
+      process.exit(0);
+    }
+    const files = explicitFiles || changedFiles(repoRoot, value('--base'));
+    const result = {
+      version: 1,
+      head: headSha(),
+      ...classifyRuntimeProof(files),
+    };
+    const evidenceFile = value('--evidence');
+    if (evidenceFile) {
+      const evidence = JSON.parse(
+        fs.readFileSync(path.resolve(evidenceFile), 'utf8')
+      );
+      result.evidence = validateEvidence(result, evidence, result.head, {
+        root: repoRoot,
+      });
+      if (!result.evidence.valid) process.exitCode = 1;
+    }
+    const output = json
+      ? `${JSON.stringify(result, null, 2)}\n`
+      : markdown(result);
+    const summaryFile =
+      value('--github-summary') || process.env.GITHUB_STEP_SUMMARY;
+    if (summaryFile)
+      fs.appendFileSync(path.resolve(summaryFile), markdown(result));
+    process.stdout.write(output);
+  } catch (error) {
+    console.error(`runtime-proof: ${error.message}`);
+    process.exitCode = 1;
   }
-  const files = explicitFiles || changedFiles(repoRoot, value('--base'));
-  const result = {
-    version: 1,
-    head: headSha(),
-    ...classifyRuntimeProof(files),
-  };
-  const evidenceFile = value('--evidence');
-  if (evidenceFile) {
-    const evidence = JSON.parse(
-      fs.readFileSync(path.resolve(evidenceFile), 'utf8')
-    );
-    result.evidence = validateEvidence(result, evidence, result.head, {
-      root: repoRoot,
-    });
-    if (!result.evidence.valid) process.exitCode = 1;
-  }
-  const output = json
-    ? `${JSON.stringify(result, null, 2)}\n`
-    : markdown(result);
-  const summaryFile =
-    value('--github-summary') || process.env.GITHUB_STEP_SUMMARY;
-  if (summaryFile)
-    fs.appendFileSync(path.resolve(summaryFile), markdown(result));
-  process.stdout.write(output);
-} catch (error) {
-  console.error(`runtime-proof: ${error.message}`);
-  process.exitCode = 1;
 }
+
+if (require.main === module) run();
+
+module.exports = { parseExplicitFiles };

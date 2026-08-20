@@ -128,7 +128,8 @@ function validateEvidence(plan, evidence, head, options = {}) {
     const artifactExists =
       artifactInRoot &&
       fs.existsSync(artifact) &&
-      fs.statSync(artifact).isFile();
+      !fs.lstatSync(artifact).isSymbolicLink() &&
+      fs.lstatSync(artifact).isFile();
     const actualHash = artifactExists
       ? crypto
           .createHash('sha256')
