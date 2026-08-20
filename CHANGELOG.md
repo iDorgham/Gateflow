@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Workspace
 
 - **[Workspace]** automate runtime proof and PR readiness
+- **[CI]** require head-bound runtime proof, prevent duplicate PR runs, and fail honestly on performance and AI validation
 
 - **[Git]** only auto-bump version for feat merges in ORIG_HEAD..HEAD
 

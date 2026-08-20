@@ -33,6 +33,12 @@
 
 ### Changed
 
+- Runtime proof is now a required `CI OK` dependency, covers runtime manifests,
+  assets, dependency resolution, shared UI, deletions, and both rename paths,
+  and rejects evidence that escapes through symlinked directories.
+- Feature branches use the pull-request CI run only, deterministic performance
+  failures are blocking, and clean checkouts validate the tracked AI registry
+  instead of silently skipping AI checks.
 - `/plan`, `/dev`, and `/guide` now enforce Workflow v2 focus and stage.
 - AI sync registers the Workflow v2 command surface for all supported clients.
 - `/pilot loop` delegates to `/dev loop --profile=pilot`; `/ralph` delegates to

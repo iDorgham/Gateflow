@@ -15,7 +15,7 @@ permissions:
 
 on:
   push:
-    branches: [main, master, develop, 'feat/**', 'fix/**', 'chore/**']
+    branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
 
@@ -30,19 +30,18 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
-  runtime-proof-plan:
-    name: Runtime Proof Plan
-    if: github.event_name == 'pull_request'
+  runtime-proof-check:
+    name: Runtime Proof Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Publish head-bound proof checklist
-        run: node scripts/workflow-v2/runtime-proof-cli.js --base "${{ github.event.pull_request.base.sha }}" --github-summary "$GITHUB_STEP_SUMMARY"
+      - name: Validate head-bound runtime proof
+        run: node scripts/workflow-v2/runtime-proof-cli.js --base "${{ github.event.pull_request.base.sha || github.event.before }}" --require-evidence .ai/runtime-proof.json --github-summary "$GITHUB_STEP_SUMMARY"
 
   # ── 1. Setup (shared across all jobs via cache) ──────────────────────────
   setup:
@@ -169,6 +168,9 @@ jobs:
 
       - name: Scanner smoke tests
         run: pnpm test:check-scripts
+
+      - name: Validate tracked AI routing surface
+        run: pnpm check:workspace-ai
 
       - name: Import / TODO scanner gates
         run: |
@@ -327,15 +329,12 @@ jobs:
           QR_SIGNING_SECRET: 'ci-qr-signing-secret-32-chars-min'
           NEXTAUTH_URL: 'http://localhost:3001'
           NEXT_PUBLIC_APP_URL: 'http://localhost:3001'
-        continue-on-error: true
 
       - name: Check bundle size vs baseline
         run: node scripts/check/check-bundle-size.js
-        continue-on-error: true
 
       - name: Check circular imports
-        run: node scripts/check/check-imports.js --summary
-        continue-on-error: true
+        run: node scripts/check/check-imports.js --fail --summary
 
       - name: Print .lighthouserc.js thresholds
         run: |
@@ -356,16 +355,19 @@ jobs:
   ci-ok:
     name: CI OK
     if: always()
-    needs: [lint, typecheck, test, performance, security]
+    needs: [runtime-proof-check, lint, typecheck, test, performance, security]
     runs-on: ubuntu-latest
     steps:
       - name: Check all jobs passed
         run: |
-          if [[ "${{ needs.lint.result }}" != "success" ||
+          if [[ "${{ needs.runtime-proof-check.result }}" != "success" ||
+                "${{ needs.lint.result }}" != "success" ||
                 "${{ needs.typecheck.result }}" != "success" ||
                 "${{ needs.security.result }}" != "success" ||
-                "${{ needs.test.result }}" != "success" ]]; then
+                "${{ needs.test.result }}" != "success" ||
+                "${{ needs.performance.result }}" != "success" ]]; then
             echo "One or more CI jobs failed:"
+            echo "  runtime proof: ${{ needs.runtime-proof-check.result }}"
             echo "  lint:        ${{ needs.lint.result }}"
             echo "  typecheck:   ${{ needs.typecheck.result }}"
             echo "  security:    ${{ needs.security.result }}"
@@ -373,5 +375,4 @@ jobs:
             echo "  performance: ${{ needs.performance.result }}"
             exit 1
           fi
-          echo "All required CI jobs passed."
-          echo "Advisory performance job: ${{ needs.performance.result }} (reported separately; not part of CI OK)"
+          echo "All CI jobs passed."

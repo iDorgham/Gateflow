@@ -74,9 +74,10 @@ separate authorization.
 
 `pnpm check:workspace-ai` validates the live command registry, workflow-agent
 frontmatter and parent graph, unique skill metadata, referenced workflow files,
-and generated-artifact hygiene before orchestration starts. Clean CI/worktree
-checkouts explicitly soft-skip when the local, gitignored `.agents` source is
-absent; the tracked-source migration is recorded in the automation audit.
+and generated-artifact hygiene before orchestration starts. When the local,
+gitignored `.agents` source is absent, CI validates the tracked routing registry
+instead of silently skipping. Versioning the full canonical AI source remains
+Phase 0 of `workspace_ai_surface_hardening_2026`.
 
 ### Automated runtime-proof planning
 
@@ -107,8 +108,12 @@ Store collected evidence locally in `.ai/runtime-proof.json`:
 Then run `pnpm proof:check`. Every required category must have an in-repository
 artifact and matching SHA-256, owner/session, environment, assertions, a
 timestamp no older than 24 hours, and the exact HEAD SHA. The receipt contains
-references, not secrets or fabricated evidence. GitHub Actions can append the same checklist with
-`--github-summary "$GITHUB_STEP_SUMMARY"`.
+references, not secrets or fabricated evidence. GitHub Actions runs the same
+classifier at the exact PR head. When proof is required,
+`.ai/runtime-proof.json` and every referenced artifact must be committed,
+fresh, hashed, and head-bound; otherwise `CI OK` fails. Runtime manifests,
+native assets/configuration, app dependency manifests, shared UI runtime code,
+root lockfile changes, deletions, and both sides of renames are classified.
 
 ## Bounded development loops
 

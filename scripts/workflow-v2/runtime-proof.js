@@ -23,12 +23,25 @@ const RULES = [
       'Integration or E2E receipt containing endpoint, status, actor, environment, and head SHA.',
   },
   {
+    id: 'dependency-runtime',
+    kind: 'cross-app',
+    test: (file) => file === 'pnpm-lock.yaml',
+    reason:
+      'Root dependency resolution changed; prove representative runtime consumers against the resolved graph.',
+    suggestedEvidence:
+      'Head-bound smoke receipts for representative browser and device consumers affected by the dependency change.',
+  },
+  {
     id: 'mobile-device',
     kind: 'device',
     test: (file) =>
       /^apps\/(scanner-app|resident-mobile)\//.test(file) &&
-      /\.(tsx?|jsx?)$/.test(file) &&
-      !/(__tests__|\.test\.|\.spec\.)/.test(file),
+      !/(__tests__|\.test\.|\.spec\.|\/docs?\/|\.md$)/.test(file) &&
+      (/\.(tsx?|jsx?)$/.test(file) ||
+        /(^|\/)(app\.json|app\.config\.[cm]?[jt]s|eas\.json|package\.json|metro\.config\.[cm]?js|babel\.config\.[cm]?js|AndroidManifest\.xml|Info\.plist|Podfile|build\.gradle)$/.test(
+          file
+        ) ||
+        /\/(assets|ios|android)\//.test(file)),
     reason:
       'Native/mobile runtime code changed; unit tests cannot prove device behavior.',
     suggestedEvidence:
@@ -41,12 +54,27 @@ const RULES = [
       /^apps\/(client-dashboard|resident-portal|admin-dashboard|marketing)\//.test(
         file
       ) &&
-      /\.(tsx?|jsx?|css)$/.test(file) &&
+      (/\.(tsx?|jsx?|css)$/.test(file) ||
+        /(^|\/)(package\.json|next\.config\.[cm]?[jt]s|vercel\.json|middleware\.[cm]?[jt]s)$/.test(
+          file
+        ) ||
+        /\/(public|assets)\//.test(file)) &&
       !/(\/api\/|route\.[jt]s$|__tests__|\.test\.|\.spec\.)/.test(file),
     reason:
       'User-facing web runtime changed; static checks cannot prove browser behavior.',
     suggestedEvidence:
       'Owned browser/E2E receipt with URL, locale, viewport, scenario result, time, and head SHA.',
+  },
+  {
+    id: 'shared-ui-runtime',
+    kind: 'cross-app',
+    test: (file) =>
+      /^packages\/(ui|components|theme|tokens)\//.test(file) &&
+      !/(__tests__|\.test\.|\.spec\.|\.md$)/.test(file),
+    reason:
+      'Shared runtime UI changed; prove representative affected consumers instead of assuming package checks cover integration.',
+    suggestedEvidence:
+      'Head-bound browser/device smoke receipts for the affected consuming applications.',
   },
   {
     id: 'access-decision',
@@ -93,43 +121,70 @@ function git(repoRoot, args) {
   return execFileSync('git', args, { cwd: repoRoot, encoding: 'utf8' }).trim();
 }
 
+function diffChangedPaths(repoRoot, range) {
+  const tokens = execFileSync(
+    'git',
+    ['diff', '--name-status', '-z', '-M', '-C', range],
+    { cwd: repoRoot, encoding: 'utf8' }
+  ).split('\0');
+  const files = [];
+  for (let index = 0; index < tokens.length;) {
+    const status = tokens[index++];
+    if (!status) continue;
+    const first = tokens[index++];
+    if (first) files.push(first);
+    if (/^[RC]/.test(status)) {
+      const second = tokens[index++];
+      if (second) files.push(second);
+    }
+  }
+  return files;
+}
+
 function changedFiles(repoRoot, base) {
-  const committed = git(
+  const committed = diffChangedPaths(
     repoRoot,
-    base
-      ? ['diff', '--name-only', `${base}...HEAD`]
-      : ['diff', '--name-only', 'HEAD']
+    base ? `${base}...HEAD` : 'HEAD'
   );
-  const working = base ? git(repoRoot, ['diff', '--name-only', 'HEAD']) : '';
+  const working = base ? diffChangedPaths(repoRoot, 'HEAD') : [];
   const untracked = git(repoRoot, [
     'ls-files',
     '--others',
     '--exclude-standard',
   ]);
   return unique(
-    `${committed}\n${working}\n${untracked}`.split(/\r?\n/).filter(Boolean)
+    [...committed, ...working, ...untracked.split(/\r?\n/)].filter(Boolean)
   );
 }
 
 function validateEvidence(plan, evidence, head, options = {}) {
-  const root = path.resolve(options.root || process.cwd());
+  const root = fs.realpathSync(path.resolve(options.root || process.cwd()));
   const now = Date.parse(options.now || new Date().toISOString());
   const maxAgeMs = (options.maxAgeHours || 24) * 60 * 60 * 1000;
   const entries = Array.isArray(evidence?.entries) ? evidence.entries : [];
   const results = plan.requirements.map((requirement) => {
-    const entry = entries.find((item) => item.requirement === requirement.id);
+    const matchingEntries = entries.filter(
+      (item) => item.requirement === requirement.id
+    );
+    const entry = matchingEntries.length === 1 ? matchingEntries[0] : null;
     const artifact = entry?.artifact
       ? path.resolve(root, entry.artifact)
       : null;
-    const artifactInRoot = Boolean(
+    let artifactExists = false;
+    if (
       artifact &&
       (artifact === root || artifact.startsWith(`${root}${path.sep}`))
-    );
-    const artifactExists =
-      artifactInRoot &&
-      fs.existsSync(artifact) &&
-      !fs.lstatSync(artifact).isSymbolicLink() &&
-      fs.lstatSync(artifact).isFile();
+    ) {
+      try {
+        const realArtifact = fs.realpathSync(artifact);
+        artifactExists =
+          !fs.lstatSync(artifact).isSymbolicLink() &&
+          fs.statSync(realArtifact).isFile() &&
+          realArtifact.startsWith(`${root}${path.sep}`);
+      } catch {
+        artifactExists = false;
+      }
+    }
     const actualHash = artifactExists
       ? crypto
           .createHash('sha256')
@@ -142,14 +197,25 @@ function validateEvidence(plan, evidence, head, options = {}) {
       captured <= now &&
       now - captured <= maxAgeMs;
     const assertions =
-      Array.isArray(entry?.assertions) && entry.assertions.length > 0;
+      Array.isArray(entry?.assertions) &&
+      entry.assertions.length > 0 &&
+      entry.assertions.every(
+        (assertion) => typeof assertion === 'string' && assertion.trim() !== ''
+      );
+    const owner = typeof entry?.owner === 'string' && entry.owner.trim() !== '';
+    const environment =
+      typeof entry?.environment === 'string' && entry.environment.trim() !== '';
+    const declaredHash =
+      typeof entry?.artifactSha256 === 'string' &&
+      /^[a-f0-9]{64}$/.test(entry.artifactSha256);
     const complete = Boolean(
       artifactExists &&
+      declaredHash &&
       entry?.artifactSha256 === actualHash &&
       fresh &&
       entry?.commit === head &&
-      entry?.owner &&
-      entry?.environment &&
+      owner &&
+      environment &&
       assertions
     );
     return {

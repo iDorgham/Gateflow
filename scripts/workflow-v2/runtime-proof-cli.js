@@ -73,7 +73,7 @@ function run() {
   try {
     if (args.includes('--help')) {
       console.log(
-        'Usage: runtime-proof-cli [--base <ref>] [--files <paths...>] [--evidence <receipt.json>] [--json] [--github-summary <file>]'
+        'Usage: runtime-proof-cli [--base <ref>] [--files <paths...>] [--evidence <receipt.json>] [--require-evidence <receipt.json>] [--json] [--github-summary <file>]'
       );
       process.exit(0);
     }
@@ -83,7 +83,9 @@ function run() {
       head: headSha(),
       ...classifyRuntimeProof(files),
     };
-    const evidenceFile = value('--evidence');
+    const evidenceFile =
+      value('--evidence') ||
+      (result.requiresRuntimeProof ? value('--require-evidence') : undefined);
     if (evidenceFile) {
       const evidence = JSON.parse(
         fs.readFileSync(path.resolve(evidenceFile), 'utf8')

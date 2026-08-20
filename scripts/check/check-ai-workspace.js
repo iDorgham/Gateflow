@@ -38,16 +38,51 @@ function validateWorkspace(root) {
   const errors = [];
   const warnings = [];
   const source = path.join(root, '.agents');
-  if (!fs.existsSync(source))
+  if (!fs.existsSync(source)) {
+    const registryFile = path.join(
+      root,
+      'scripts',
+      'workflow-v2',
+      'ai-routing-registry.json'
+    );
+    if (!fs.existsSync(registryFile))
+      return {
+        valid: false,
+        skipped: false,
+        mode: 'missing',
+        errors: ['missing tracked AI routing registry'],
+        warnings: [],
+        counts: {},
+      };
+    const registry = JSON.parse(fs.readFileSync(registryFile, 'utf8'));
+    const agents = Array.isArray(registry.agents) ? registry.agents : [];
+    const skills = Array.isArray(registry.skills) ? registry.skills : [];
+    const invalid = [...agents, ...skills].filter(
+      (name) => typeof name !== 'string' || name.trim() === ''
+    );
+    const duplicates = [...agents, ...skills].filter(
+      (name, index, values) => values.indexOf(name) !== index
+    );
+    const registryErrors = [];
+    if (!agents.length) registryErrors.push('tracked registry has no agents');
+    if (!skills.length) registryErrors.push('tracked registry has no skills');
+    if (invalid.length)
+      registryErrors.push('tracked registry has invalid names');
+    if (duplicates.length)
+      registryErrors.push(
+        `tracked registry has duplicate names: ${[...new Set(duplicates)].join(', ')}`
+      );
     return {
-      valid: true,
-      skipped: true,
-      errors: [],
+      valid: registryErrors.length === 0,
+      skipped: false,
+      mode: 'tracked-registry',
+      errors: registryErrors,
       warnings: [
-        '.agents is local/gitignored in this checkout; structural validation skipped',
+        'full local AI source unavailable; validated tracked routing registry only',
       ],
-      counts: {},
+      counts: { agents: agents.length, skills: skills.length },
     };
+  }
 
   const commandsFile = path.join(source, 'commands.json');
   if (!fs.existsSync(commandsFile))
@@ -135,6 +170,7 @@ function validateWorkspace(root) {
   return {
     valid: errors.length === 0,
     skipped: false,
+    mode: 'local-source',
     errors,
     warnings,
     counts: {
@@ -151,7 +187,7 @@ if (require.main === module) {
     console.log(JSON.stringify(result, null, 2));
   else {
     console.log(
-      `AI workspace: ${result.valid ? 'valid' : 'invalid'} (${result.counts.commands || 0} commands, ${result.counts.workflowAgents || 0} agents, ${result.counts.skills || 0} skills)`
+      `AI workspace: ${result.valid ? 'valid' : 'invalid'} [${result.mode}] (${result.counts.commands || 0} commands, ${result.counts.workflowAgents || result.counts.agents || 0} agents, ${result.counts.skills || 0} skills)`
     );
     for (const warning of result.warnings) console.log(`warning: ${warning}`);
     for (const error of result.errors) console.error(`error: ${error}`);
