@@ -74,7 +74,9 @@ separate authorization.
 
 `pnpm check:workspace-ai` validates the live command registry, workflow-agent
 frontmatter and parent graph, unique skill metadata, referenced workflow files,
-and generated-artifact hygiene before orchestration starts.
+and generated-artifact hygiene before orchestration starts. Clean CI/worktree
+checkouts explicitly soft-skip when the local, gitignored `.agents` source is
+absent; the tracked-source migration is recorded in the automation audit.
 
 ### Automated runtime-proof planning
 

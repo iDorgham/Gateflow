@@ -40,9 +40,12 @@ function validateWorkspace(root) {
   const source = path.join(root, '.agents');
   if (!fs.existsSync(source))
     return {
-      valid: false,
-      errors: ['missing .agents workspace source'],
-      warnings,
+      valid: true,
+      skipped: true,
+      errors: [],
+      warnings: [
+        '.agents is local/gitignored in this checkout; structural validation skipped',
+      ],
       counts: {},
     };
 
@@ -126,6 +129,7 @@ function validateWorkspace(root) {
 
   return {
     valid: errors.length === 0,
+    skipped: false,
     errors,
     warnings,
     counts: {
