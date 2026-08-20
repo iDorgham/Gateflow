@@ -1,0 +1,21 @@
+packages/config/package.json
+  s_1122b42bf5a742::t_6b22efd6eb2607 19-20,28
+pnpm-lock.yaml
+  s_1122b42bf5a742::t_d13742f5d62775 1150,1153,1177
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5a9871c32951e21eed01af4ccc8ef3881a69833f",
+  "prompts": {},
+  "sessions": {
+    "s_1122b42bf5a742": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0186a-84b0-7310-a3ef-e2bc4b000c63",
+        "model": "gpt-5.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
