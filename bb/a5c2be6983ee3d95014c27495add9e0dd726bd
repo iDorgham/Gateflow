@@ -1,0 +1,23 @@
+scripts/check/__tests__/check-ai-workspace.test.js
+  s_d91dd5f90959a6::t_86bfcb43c6b326 10-13
+scripts/check/check-ai-workspace.js
+  s_d91dd5f90959a6::t_86bfcb43c6b326 43-48,132
+docs/workspace/WORKFLOW_V2.md
+  s_d91dd5f90959a6::t_86bfcb43c6b326 77-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "bba5c2be6983ee3d95014c27495add9e0dd726bd",
+  "prompts": {},
+  "sessions": {
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
