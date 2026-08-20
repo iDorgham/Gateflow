@@ -1,0 +1,37 @@
+apps/scanner-app/src/components/scanner/result-overlay.tsx
+  s_81d992d667878b::t_c5fabc486f80dd 2,20,28-30,40-45
+  s_81d992d667878b::t_5566c277d2b721 54-58
+apps/scanner-app/src/screens/scanner/scanner-screen.tsx
+  s_81d992d667878b::t_c5fabc486f80dd 508-509,511,522-530
+  s_81d992d667878b::t_8e162aad55296c 531-533
+apps/scanner-app/src/lib/scanner.test.ts
+  s_81d992d667878b::t_c5fabc486f80dd 12-13,232,238,240-242,244-245,251,254-259,261,267,275-280,282,285-295,297-299,301-304,307,315-317
+  s_81d992d667878b::t_5566c277d2b721 247
+  s_81d992d667878b::t_b45298b61024a8 246
+  s_81d992d667878b::t_c1e42bea28c693 248
+apps/scanner-app/src/lib/scan-history.ts
+  s_81d992d667878b::t_c5fabc486f80dd 14-15
+apps/scanner-app/src/components/HistoryTab.tsx
+  s_81d992d667878b::t_c5fabc486f80dd 43-49
+apps/scanner-app/src/lib/scanner.ts
+  s_81d992d667878b::t_c5fabc486f80dd 17-18,32-33,52,55-59,93,96-100,153,156-160,254-257,260,262,264,266
+apps/scanner-app/docs/README.md
+  s_81d992d667878b::t_2d3647904ea2da 24-27,33-39,79-83
+  s_81d992d667878b::t_7e01fff0776615 21-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "8abc096d5086e4c61ad3a9667c5ac83592f5fd81",
+  "prompts": {},
+  "sessions": {
+    "s_81d992d667878b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02018-c481-73a2-beab-27b341ae7673",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
