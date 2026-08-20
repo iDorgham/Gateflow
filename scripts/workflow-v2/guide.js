@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { inventoryRoutes, resolveApp } = require('./support');
+const routingRegistry = require('./ai-routing-registry.json');
 
 const NEXT_COMMAND = {
   focused: '/audit all',
@@ -43,26 +44,31 @@ const KNOWN_COMMANDS = new Set([
   '/plan',
 ]);
 
-const KNOWN_AGENTS = new Set([
-  'gateflow-guide',
-  'gateflow-build',
-  'gateflow-conductor',
-  'evidence-verifier',
-  'ci-fixer',
-  'schema-architect',
-  'security-reviewer',
-  'visual-qa',
-  'dashboard-ux',
-  'test-writer',
-]);
+function directoryNames(directory, marker = null) {
+  if (!fs.existsSync(directory)) return [];
+  return fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((entry) =>
+      marker
+        ? entry.isDirectory() &&
+          fs.existsSync(path.join(directory, entry.name, marker))
+        : entry.isFile() &&
+          entry.name.endsWith('.md') &&
+          entry.name !== 'README.md'
+    )
+    .map((entry) => (marker ? entry.name : path.basename(entry.name, '.md')));
+}
 
+const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..');
+const KNOWN_AGENTS = new Set([
+  ...routingRegistry.agents,
+  ...directoryNames(
+    path.join(WORKSPACE_ROOT, '.agents', 'agents', 'workflow-v2')
+  ),
+]);
 const KNOWN_SKILLS = new Set([
-  'gf-guide',
-  'gateflow',
-  'cli-limits',
-  'security',
-  'testing',
-  'visual-qa',
+  ...routingRegistry.skills,
+  ...directoryNames(path.join(WORKSPACE_ROOT, '.agents', 'skills'), 'SKILL.md'),
 ]);
 
 const KNOWN_CLIS = new Set([
@@ -294,7 +300,9 @@ function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
     blockers.push(`Workdir is locked by ${state.workdirLock.owner}`);
   if (evidence.stale > 0)
     blockers.push(`${evidence.stale} evidence item(s) are stale or undated`);
-  const gates = Array.isArray(appState?.externalGates) ? appState.externalGates : [];
+  const gates = Array.isArray(appState?.externalGates)
+    ? appState.externalGates
+    : [];
   for (const gate of gates) {
     if (!['passed', 'closed', 'complete'].includes(gate.status)) {
       blockers.push(

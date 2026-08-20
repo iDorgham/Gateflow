@@ -11,8 +11,13 @@ function git(root, args) {
 
 function detectBaseBranch(repoRoot) {
   try {
-    const remoteHead = git(repoRoot, ['symbolic-ref', '--short', 'refs/remotes/origin/HEAD']);
-    if (remoteHead.startsWith('origin/')) return remoteHead.slice('origin/'.length);
+    const remoteHead = git(repoRoot, [
+      'symbolic-ref',
+      '--short',
+      'refs/remotes/origin/HEAD',
+    ]);
+    if (remoteHead.startsWith('origin/'))
+      return remoteHead.slice('origin/'.length);
   } catch {
     // A local-only repository may have no origin.
   }
@@ -28,8 +33,13 @@ function sanitize(value) {
 }
 
 function worktreePlan({ repoRoot, runId, target, baseBranch }) {
-  const branch = `codex/loop-${sanitize(target)}-${sanitize(runId)}`;
-  const worktreePath = path.join(repoRoot, '.worktrees', 'loop', sanitize(runId));
+  const branch = `feat/loop-${sanitize(target)}-${sanitize(runId)}`;
+  const worktreePath = path.join(
+    repoRoot,
+    '.worktrees',
+    'loop',
+    sanitize(runId)
+  );
   return {
     branch,
     path: worktreePath,
@@ -43,7 +53,9 @@ function createWorktree(plan) {
   if (fs.existsSync(plan.path)) {
     const branch = git(plan.path, ['branch', '--show-current']);
     if (branch !== plan.branch) {
-      throw new Error(`Existing worktree uses ${branch}, expected ${plan.branch}`);
+      throw new Error(
+        `Existing worktree uses ${branch}, expected ${plan.branch}`
+      );
     }
     return { ...plan, created: false, reused: true };
   }
@@ -66,20 +78,19 @@ function removeWorktree(repoRoot, worktreePath) {
 }
 
 function validateCommitMessage(message) {
-  return /^(feat|fix|docs|test|refactor|perf|chore|ci|build|revert)(\([a-z0-9._-]+\))?!?: .{3,}$/.test(message);
+  return /^(feat|fix|docs|test|refactor|perf|chore|ci|build|revert)(\([a-z0-9._-]+\))?!?: .{3,}$/.test(
+    message
+  );
 }
 
-function buildCommitPlan({
-  delivery,
-  shipPhaseApproved,
-  ownedFiles,
-  message,
-}) {
+function buildCommitPlan({ delivery, shipPhaseApproved, ownedFiles, message }) {
   if (!Array.isArray(ownedFiles) || ownedFiles.length === 0) {
     throw new Error('No loop-owned files are available to commit');
   }
   if (delivery === 'local' && !shipPhaseApproved) {
-    throw new Error('Local delivery requires ship-phase approval before staging or commit');
+    throw new Error(
+      'Local delivery requires ship-phase approval before staging or commit'
+    );
   }
   if (!validateCommitMessage(message)) {
     throw new Error('Commit message must follow Conventional Commits');
@@ -92,8 +103,10 @@ function buildCommitPlan({
 
 function validateMergeApproval({ approval, prNumber, currentHeadSha }) {
   if (!approval) throw new Error('Merge approval receipt is required');
-  if (Number(approval.prNumber) !== Number(prNumber)) throw new Error('Merge approval targets another PR');
-  if (approval.headSha !== currentHeadSha) throw new Error('Merge approval is stale because PR head changed');
+  if (Number(approval.prNumber) !== Number(prNumber))
+    throw new Error('Merge approval targets another PR');
+  if (approval.headSha !== currentHeadSha)
+    throw new Error('Merge approval is stale because PR head changed');
   return true;
 }
 

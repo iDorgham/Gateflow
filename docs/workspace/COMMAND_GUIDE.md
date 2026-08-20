@@ -46,18 +46,19 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 
 ## Command reference
 
-| Workflow v2 command | When to use |
-| ------------------- | ----------- |
-| `/focus` | Inspect/select the one active pilot app |
-| `/audit` | Collect read-only app/page/security/pilot evidence |
-| `/progress` | Report stage, scores, coverage, blockers, one next command |
-| `/page-map`, `/page`, `/components`, `/usability` | Plan and review focused pages |
-| `/check`, `/test`, `/security` | Produce deterministic dated evidence |
-| `/design`, `/api`, `/database`, `/observe` | Apply cross-cutting contracts |
-| `/github`, `/vercel`, `/release` | Inspect readiness; mutations need authorization |
-| `/pilot`, `/certify`, `/next-app` | Orchestrate, certify, and unlock the sequence |
-| `/dev loop` | Run approved phases/tasks in bounded batches |
-| `/pilot loop` | Run the bounded controller with pilot gates |
+| Workflow v2 command                               | When to use                                                               |
+| ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `/focus`                                          | Inspect/select the one active pilot app                                   |
+| `/audit`                                          | Collect read-only app/page/security/pilot evidence                        |
+| `/progress`                                       | Report stage, scores, coverage, blockers, one next command                |
+| `/page-map`, `/page`, `/components`, `/usability` | Plan and review focused pages                                             |
+| `/check`, `/test`, `/security`                    | Produce deterministic dated evidence                                      |
+| `/design`, `/api`, `/database`, `/observe`        | Apply cross-cutting contracts                                             |
+| `/github`, `/vercel`, `/release`                  | Inspect readiness; mutations need authorization                           |
+| `/github ready`                                   | Generate a head-bound PR and runtime-proof checklist with `pnpm pr:ready` |
+| `/pilot`, `/certify`, `/next-app`                 | Orchestrate, certify, and unlock the sequence                             |
+| `/dev loop`                                       | Run approved phases/tasks in bounded batches                              |
+| `/pilot loop`                                     | Run the bounded controller with pilot gates                               |
 
 | Command           | When to use                                                   |
 | ----------------- | ------------------------------------------------------------- |
@@ -80,15 +81,15 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 
 ### `/guide` shorthand
 
-| You type          | Routes to                                  |
-| ----------------- | ------------------------------------------ |
-| `/guide ready`    | `/ready` (preflight; not `/plan ready`)    |
-| `/guide plan X`   | `/plan X`                                  |
-| `/guide phase 2`  | `/prompt phase 2`                          |
-| `/guide develop`  | develop workflow                           |
-| `/guide test`     | `pnpm preflight`                           |
-| `/guide github`   | GitHub flow                                |
-| `/guide security` | security review                            |
+| You type          | Routes to                                   |
+| ----------------- | ------------------------------------------- |
+| `/guide ready`    | `/ready` (preflight; not `/plan ready`)     |
+| `/guide plan X`   | `/plan X`                                   |
+| `/guide phase 2`  | `/prompt phase 2`                           |
+| `/guide develop`  | develop workflow                            |
+| `/guide test`     | `pnpm preflight`                            |
+| `/guide github`   | GitHub flow                                 |
+| `/guide security` | security review                             |
 | `/guide all`      | `/ralph` (recursive phases; not `/run all`) |
 
 Bare **`/guide`** or **“what should I do now”** loads **`gf-guide`** skill: Situation → Teach → Ask → Action → Motivate, plus Must do / Recommended / Critical.

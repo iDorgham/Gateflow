@@ -4,6 +4,16 @@
 
 ### Added
 
+- Automated, diff-aware runtime-proof planning with `pnpm proof:plan`,
+  head-bound evidence validation with `pnpm proof:check`, and fast PR readiness
+  through `pnpm pr:ready` / `/github ready`.
+- A runtime proof coordinator agent for browser, device, API, database, and
+  access-decision evidence.
+- AI workspace graph validation for commands, agents, parents, skills, and
+  generated-artifact hygiene; Guide routing now discovers the live registry.
+- Loop worktrees now use the pre-push-compatible `feat/loop-*` branch prefix.
+- CI jobs now skip redundant dependency installation after an exact cache hit,
+  and the required gate no longer describes advisory performance as required.
 - Red Sea `--demo-full` / `pnpm --filter=@gate-access/db seed:demo` fills all demo orgs with 6-month contacts, units/classrooms, role logins, and optional scan history.
 - Root `pnpm health` runs workflow v2 contract tests, changelog check, and preflight.
 

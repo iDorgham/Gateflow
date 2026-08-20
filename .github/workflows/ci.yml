@@ -30,6 +30,18 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  runtime-proof-plan:
+    name: Runtime Proof Plan
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Publish head-bound proof checklist
+        run: node scripts/workflow-v2/runtime-proof-cli.js --base "${{ github.event.pull_request.base.sha }}" --github-summary "$GITHUB_STEP_SUMMARY"
+
   # ── 1. Setup (shared across all jobs via cache) ──────────────────────────
   setup:
     name: Setup
@@ -86,6 +98,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
+        id: restore-deps
         uses: actions/cache@v6
         with:
           path: |
@@ -97,6 +110,7 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies (if cache missed)
+        if: steps.restore-deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
@@ -127,6 +141,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
+        id: restore-deps
         uses: actions/cache@v6
         with:
           path: |
@@ -138,6 +153,7 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies (if cache missed)
+        if: steps.restore-deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Scan for secrets (full tree)
@@ -182,6 +198,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
+        id: restore-deps
         uses: actions/cache@v6
         with:
           path: |
@@ -193,6 +210,7 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies (if cache missed)
+        if: steps.restore-deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
@@ -236,6 +254,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
+        id: restore-deps
         uses: actions/cache@v6
         with:
           path: |
@@ -247,6 +266,7 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies (if cache missed)
+        if: steps.restore-deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
@@ -275,6 +295,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
+        id: restore-deps
         uses: actions/cache@v6
         with:
           path: |
@@ -286,6 +307,7 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies (if cache missed)
+        if: steps.restore-deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
@@ -349,5 +371,5 @@ jobs:
             echo "  performance: ${{ needs.performance.result }}"
             exit 1
           fi
-          echo "All CI jobs passed."
-          echo "Performance job: ${{ needs.performance.result }} (non-blocking during pagespeed_100 Phase 1)"
+          echo "All required CI jobs passed."
+          echo "Advisory performance job: ${{ needs.performance.result }} (reported separately; not part of CI OK)"

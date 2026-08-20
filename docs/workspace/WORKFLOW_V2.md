@@ -62,12 +62,51 @@ node scripts/workflow-v2/support-cli.js routes client-dashboard --json
 node scripts/workflow-v2/support-cli.js scope-diff client-dashboard --json
 node scripts/workflow-v2/operations-cli.js verify client-dashboard
 node scripts/workflow-v2/operations-cli.js env-check client-dashboard --json
+pnpm proof:plan
+pnpm pr:ready
+pnpm check:workspace-ai
 ```
 
 These tools are local-only by default. Environment checks report variable names,
 never values. Verification prints its plan unless `--run` is explicitly passed.
 GitHub, Vercel, deployment, migration, release, and remote mutations require
 separate authorization.
+
+`pnpm check:workspace-ai` validates the live command registry, workflow-agent
+frontmatter and parent graph, unique skill metadata, referenced workflow files,
+and generated-artifact hygiene before orchestration starts.
+
+### Automated runtime-proof planning
+
+`pnpm proof:plan` reads the current focused diff (including untracked files)
+and deterministically lists required browser, device, API, database, and
+access-flow proof. `pnpm pr:ready` compares the branch with `origin/master` and
+prints a copy-ready PR checklist bound to the current HEAD.
+
+Store collected evidence locally in `.ai/runtime-proof.json`:
+
+```json
+{
+  "entries": [
+    {
+      "requirement": "browser-flow",
+      "artifact": "artifacts/e2e/client-dashboard.json",
+      "artifactSha256": "SHA256_OF_ARTIFACT",
+      "owner": "owned-browser-session-id",
+      "environment": "preview",
+      "assertions": ["authorized flow passed", "denial flow passed"],
+      "capturedAt": "2026-08-20T10:00:00Z",
+      "commit": "CURRENT_FULL_HEAD_SHA"
+    }
+  ]
+}
+```
+
+Then run `pnpm proof:check`. Every required category must have an in-repository
+artifact and matching SHA-256, owner/session, environment, assertions, a
+timestamp no older than 24 hours, and the exact HEAD SHA. The receipt contains
+references, not secrets or fabricated evidence. GitHub Actions can append the same checklist with
+`--github-summary "$GITHUB_STEP_SUMMARY"`.
 
 ## Bounded development loops
 
