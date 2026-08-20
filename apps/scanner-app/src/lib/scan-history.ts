@@ -11,7 +11,8 @@ import * as Crypto from 'expo-crypto';
 export type ScanOutcome =
   | 'pass' // operator pressed Pass after server SUCCESS
   | 'deny' // operator pressed Deny (DENIED)
-  | 'offline' // accepted offline, queued for sync
+  | 'pending' // queued offline; entry is not authorized
+  | 'offline' // legacy persisted value from before fail-closed semantics
   | 'rejected'; // server or local rejected
 
 export interface HistoryEntry {

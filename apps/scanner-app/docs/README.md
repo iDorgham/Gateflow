@@ -18,25 +18,25 @@ To provide a lightning-fast, highly resilient scanning interface capable of vali
 
 ## Key Features
 
-| Feature                          | Description                                         |
-| :------------------------------- | :-------------------------------------------------- |
-| **High-Speed Camera Parsing**    | Rapid frame extraction and QR logic via Expo Camera |
-| **Cryptographic Validation**     | JWT token decoding locally to verify expiry         |
-| **Offline First Pipeline**       | Sync authorized passes locally in SQLite            |
-| **Background Sync Engine**       | Resolves queued scans when network restores         |
-| **Supervisor Override Protocol** | PIN bypass for software validation failures         |
+| Feature                          | Description                                                         |
+| :------------------------------- | :------------------------------------------------------------------ |
+| **High-Speed Camera Parsing**    | Rapid frame extraction and QR logic via Expo Camera                 |
+| **Cryptographic Validation**     | HMAC-signed QR verification plus server policy validation           |
+| **Offline Queue**                | Encrypt pending scans locally; never grant before server validation |
+| **Background Sync Engine**       | Resolves queued scans when network restores                         |
+| **Supervisor Override Protocol** | PIN bypass for software validation failures                         |
 
 ---
 
 ## Tech Stack
 
-| Layer            | Technology                              |
-| :--------------- | :-------------------------------------- |
-| **Framework**    | React Native + Expo (Managed Workflow)  |
-| **Camera**       | `expo-camera` / `expo-barcode-scanner`  |
-| **Offline Sync** | Prisma/SQLite managing `SyncQueue`      |
-| **Styling**      | Nativewind / React Native `StyleSheet`  |
-| **Auth**         | `expo-secure-store` for gate-level JWTs |
+| Layer            | Technology                                    |
+| :--------------- | :-------------------------------------------- |
+| **Framework**    | React Native + Expo (Managed Workflow)        |
+| **Camera**       | `expo-camera`                                 |
+| **Offline Sync** | AES-encrypted AsyncStorage queue              |
+| **Styling**      | ADS native tokens + React Native `StyleSheet` |
+| **Auth**         | `expo-secure-store` for mobile tokens         |
 
 ---
 
@@ -76,7 +76,11 @@ The app mandates strict `NSCameraUsageDescription` parameters inside `app.json`.
 
 ## Security Note
 
-This app utilizes "Kiosk Mode" logic to lock single-purpose Android devices into the Viewfinder perspective.
+Local HMAC verification proves payload integrity only; it is not an access
+decision. If server validation is unavailable, a scan may be encrypted and
+queued as **Validation Pending**. Operators must not grant entry until sync
+returns an authoritative accepted result with a persisted `scanId`. A failed
+queue write or missing gate identity is rejected fail-closed.
 
 ---
 

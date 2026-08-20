@@ -14,7 +14,8 @@ export interface LocationContext {
 }
 
 export interface ScanResult {
-  status: 'accepted' | 'rejected';
+  /** Pending scans are captured locally but do not authorize entry. */
+  status: 'accepted' | 'rejected' | 'pending';
   reason?: string;
   message?: string;
   scanId?: string;
@@ -28,8 +29,8 @@ export interface ScanResult {
  * Validate a locally-verified QR code against the server.
  *
  * Precondition: the QR string has already passed verifyScanQR() locally.
- * Falls back to optimistic local acceptance + offline queue ONLY for true
- * network/server failures (5xx, connection refused).
+ * Falls back to a fail-closed pending result + offline queue ONLY for true
+ * network/server failures (5xx, connection refused). Pending never grants entry.
  *
  * 4xx responses are treated as server rejections (invalid QR, wrong org, etc.)
  * and surfaced as rejected results — they are NOT queued offline.
@@ -48,11 +49,14 @@ export async function validateOnServer(
   const token = await getValidAccessToken();
 
   if (!token) {
-    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
+    const queued = await enqueueOfflineScan(qrPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
-      status: 'accepted',
-      message: 'Not signed in — result queued for sync',
+      status: queued ? 'pending' : 'rejected',
+      reason: queued ? 'pending_server_validation' : 'queue_failed',
+      message: queued
+        ? 'Validation pending — do not grant entry'
+        : 'Cannot validate or securely queue this scan',
       offline: true,
     };
   }
@@ -86,11 +90,14 @@ export async function validateOnServer(
     if (!response.ok) {
       // 5xx → true server error; queue for later retry
       if (response.status >= 500) {
-        await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
+        const queued = await enqueueOfflineScan(qrPayload, gateId, shiftLogId);
         await haptic(Haptics.NotificationFeedbackType.Warning);
         return {
-          status: 'accepted',
-          message: `Server error (${response.status}) — queued for sync`,
+          status: queued ? 'pending' : 'rejected',
+          reason: queued ? 'pending_server_validation' : 'queue_failed',
+          message: queued
+            ? `Server unavailable (${response.status}) — validation pending; do not grant entry`
+            : 'Cannot validate or securely queue this scan',
           offline: true,
         };
       }
@@ -143,11 +150,14 @@ export async function validateOnServer(
     };
   } catch {
     // Network-level failure (no connection, DNS failure, timeout)
-    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
+    const queued = await enqueueOfflineScan(qrPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
-      status: 'accepted',
-      message: 'No network — queued for sync',
+      status: queued ? 'pending' : 'rejected',
+      reason: queued ? 'pending_server_validation' : 'queue_failed',
+      message: queued
+        ? 'Offline — validation pending; do not grant entry'
+        : 'Cannot validate or securely queue this scan',
       offline: true,
     };
   }
@@ -239,20 +249,21 @@ export async function createMaintenanceRequest(params: {
 
 async function enqueueOfflineScan(
   qrPayload: string,
-  localPayload: QRPayload,
   gateId?: string,
   shiftLogId?: string
-): Promise<void> {
+): Promise<boolean> {
+  // A tenant id is not a gate id. Without the selected gate, ownership and
+  // assignment cannot be validated during sync, so fail closed.
+  if (!gateId) return false;
   try {
-    // Use the selected gateId when available; fall back to organizationId
-    const resolvedGateId = gateId ?? localPayload.organizationId;
     if (shiftLogId) {
-      await scanQueue.addScan(qrPayload, resolvedGateId, shiftLogId);
+      await scanQueue.addScan(qrPayload, gateId, shiftLogId);
     } else {
-      await scanQueue.addScan(qrPayload, resolvedGateId);
+      await scanQueue.addScan(qrPayload, gateId);
     }
+    return true;
   } catch {
-    // Queue throws if the user is not authenticated — silently ignore.
+    return false;
   }
 }
 
