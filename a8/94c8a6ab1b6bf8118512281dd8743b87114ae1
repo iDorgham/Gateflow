@@ -1,0 +1,33 @@
+scripts/workflow-v2/__tests__/runtime-proof.test.js
+  s_d91dd5f90959a6::t_7f8f636e3d9108 160
+  s_d91dd5f90959a6::t_57f8f24c3f3017 161-163,178,183
+scripts/workflow-v2/runtime-proof-cli.js
+  s_d91dd5f90959a6::t_7f8f636e3d9108 26
+scripts/check/check-ai-workspace.js
+  s_d91dd5f90959a6::t_7f8f636e3d9108 63-65
+CHANGELOG.md
+  s_d91dd5f90959a6::t_7f8f636e3d9108 14
+docs/plan/Draft/workspace_ai_surface_hardening_2026/phase_logs/PHASE_LOG_phase_00_extension.md
+  s_d91dd5f90959a6::t_7f8f636e3d9108 16-17
+scripts/check/__tests__/check-ai-workspace.test.js
+  s_d91dd5f90959a6::t_7f8f636e3d9108 65-78
+  s_d91dd5f90959a6::t_72a2fedea4f573 79-80
+scripts/check/__tests__/ci-workflow.test.js
+  s_d91dd5f90959a6::t_7f8f636e3d9108 24-28,43-47,64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "a894c8a6ab1b6bf8118512281dd8743b87114ae1",
+  "prompts": {},
+  "sessions": {
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
