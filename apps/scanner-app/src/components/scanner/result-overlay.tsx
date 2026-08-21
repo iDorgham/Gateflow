@@ -60,7 +60,7 @@ export function ResultOverlay({
       {!!result.message && (
         <Text style={feedbackStyles.feedbackSub}>{result.message}</Text>
       )}
-      {result.offline && (
+      {result.offline && pending && (
         <View style={styles.offlineRow}>
           <CloudOff
             size={16}

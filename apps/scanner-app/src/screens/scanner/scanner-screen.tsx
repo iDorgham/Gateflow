@@ -527,6 +527,8 @@ export function ScannerScreen({
         message: 'Validation incomplete — do not grant entry',
         offline: false,
       };
+      lastRejectedResult.current = invalidResult;
+      lastRejectedQRData.current = qrData;
       showResult(invalidResult);
       return;
     }

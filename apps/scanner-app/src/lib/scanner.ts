@@ -122,6 +122,16 @@ export async function validateOnServer(
     const body = await response.json();
 
     if (body.status === 'accepted') {
+      // Fail closed: a valid accepted response must include a scanId for audit trail
+      if (!body.scanId) {
+        await haptic(Haptics.NotificationFeedbackType.Error);
+        return {
+          status: 'rejected',
+          reason: 'invalid_server_response',
+          message: 'Validation incomplete — do not grant entry',
+          offline: false,
+        };
+      }
       const escortRequired = body.escortRequired === true;
       if (escortRequired) {
         await haptic(Haptics.NotificationFeedbackType.Warning);

@@ -30,13 +30,13 @@ To provide a lightning-fast, highly resilient scanning interface capable of vali
 
 ## Tech Stack
 
-| Layer            | Technology                                    |
-| :--------------- | :-------------------------------------------- |
-| **Framework**    | React Native + Expo (Managed Workflow)        |
-| **Camera**       | `expo-camera`                                 |
-| **Offline Sync** | AES-encrypted AsyncStorage queue              |
-| **Styling**      | ADS native tokens + React Native `StyleSheet` |
-| **Auth**         | `expo-secure-store` for mobile tokens         |
+| Layer            | Technology                                                       |
+| :--------------- | :--------------------------------------------------------------- |
+| **Framework**    | React Native + Expo (Managed Workflow)                           |
+| **Camera**       | `expo-camera`                                                    |
+| **Offline Sync** | AES-encrypted AsyncStorage queue (see `db/` for SQLite mappings) |
+| **Styling**      | ADS native tokens + React Native `StyleSheet`                    |
+| **Auth**         | `expo-secure-store` for mobile tokens                            |
 
 ---
 

@@ -172,6 +172,26 @@ describe('scan success', () => {
 
     expect(mockAddScan).not.toHaveBeenCalled();
   });
+
+  it('fails closed when server responds accepted without scanId', async () => {
+    mockGetToken.mockResolvedValue('valid-access-token');
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          status: 'accepted',
+          message: 'Welcome!',
+          // scanId is missing
+        }),
+    });
+
+    const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
+
+    expect(result.status).toBe('rejected');
+    expect(result.reason).toBe('invalid_server_response');
+    expect(result.message).toContain('do not grant entry');
+    expect(result.offline).toBe(false);
+  });
 });
 
 // ─── 2. Invalid signature / server rejection ──────────────────────────────────
