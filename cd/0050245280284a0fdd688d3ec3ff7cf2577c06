@@ -1,0 +1,22 @@
+scripts/check/check-bundle-size.js
+  s_d91dd5f90959a6::t_fa9b39914b6f97 46-48
+scripts/check/__tests__/ci-workflow.test.js
+  s_d91dd5f90959a6::t_db99bec67bfcbd 12-21,51-62
+  s_d91dd5f90959a6::t_4e51de1e09830c 63-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "cd0050245280284a0fdd688d3ec3ff7cf2577c06",
+  "prompts": {},
+  "sessions": {
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
