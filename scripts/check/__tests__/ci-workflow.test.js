@@ -9,6 +9,16 @@ const workflow = fs.readFileSync(
   path.join(root, '.github', 'workflows', 'ci.yml'),
   'utf8'
 );
+const bundleCheck = fs.readFileSync(
+  path.join(root, 'scripts', 'check', 'check-bundle-size.js'),
+  'utf8'
+);
+const bundleBaseline = JSON.parse(
+  fs.readFileSync(
+    path.join(root, 'scripts', 'check', '.bundle-baseline.json'),
+    'utf8'
+  )
+);
 
 test('PR branches do not trigger a duplicate full push workflow', () => {
   const trigger = workflow.slice(
@@ -36,6 +46,20 @@ test('deterministic performance checks are not hidden soft passes', () => {
   assert.doesNotMatch(performance, /continue-on-error:\s*true/);
   assert.match(performance, /check-imports\.js --fail --summary/);
   assert.match(workflow, /needs\.performance\.result/);
+});
+
+test('marketing hard budget matches the committed regression policy', () => {
+  const failPercent = Number(bundleCheck.match(/const FAIL_PCT = (\d+)/)?.[1]);
+  const marketingBudget = Number(
+    bundleCheck.match(
+      /name: 'marketing'[\s\S]*?budget: \{ total: (\d+), page:/
+    )?.[1]
+  );
+  const expectedBudget = Math.ceil(
+    bundleBaseline.marketing.totalKb * (1 + failPercent / 100)
+  );
+
+  assert.equal(marketingBudget, expectedBudget);
 });
 
 test('CI runs the fail-honest tracked AI validator', () => {
