@@ -23,7 +23,7 @@ function parseExplicitFiles(cliArgs) {
     if (arg.startsWith('--')) break;
     files.push(arg);
   }
-  return files;
+  return files.length ? files : null;
 }
 const explicitFiles = parseExplicitFiles(args);
 

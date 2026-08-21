@@ -13,7 +13,8 @@ canonical artifact containment, and workflow contract tests.
 - Feature branches matched both push and pull-request triggers; restricted push
   validation to protected branches.
 - Performance steps used `continue-on-error` and import summary mode; made the
-  deterministic checks blocking and enabled `--fail`.
+  deterministic build, bundle, and import checks blocking and enabled `--fail`.
+  Lighthouse remains a separate soft-pass workflow.
 - Missing `.agents` returned valid/skipped; clean CI now validates the tracked
   routing registry and fails if neither source exists.
 - Runtime rules missed manifests/assets/dependencies/shared UI and rename old

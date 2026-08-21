@@ -21,10 +21,11 @@ const bundleBaseline = JSON.parse(
 );
 
 test('PR branches do not trigger a duplicate full push workflow', () => {
-  const trigger = workflow.slice(
-    workflow.indexOf('\non:\n'),
-    workflow.indexOf('\nconcurrency:')
-  );
+  const onMarker = workflow.indexOf('\non:\n');
+  const concurrencyMarker = workflow.indexOf('\nconcurrency:');
+  assert.notEqual(onMarker, -1);
+  assert.notEqual(concurrencyMarker, -1);
+  const trigger = workflow.slice(onMarker, concurrencyMarker);
   assert.doesNotMatch(trigger, /'feat\/\*\*'|'fix\/\*\*'|'chore\/\*\*'/);
 });
 
@@ -39,10 +40,11 @@ test('CI OK requires head-bound runtime evidence validation', () => {
 });
 
 test('deterministic performance checks are not hidden soft passes', () => {
-  const performance = workflow.slice(
-    workflow.indexOf('\n  performance:'),
-    workflow.indexOf('\n  # ── 6. CI gate')
-  );
+  const performanceMarker = workflow.indexOf('\n  performance:');
+  const ciGateMarker = workflow.indexOf('\n  # ── 6. CI gate');
+  assert.notEqual(performanceMarker, -1);
+  assert.notEqual(ciGateMarker, -1);
+  const performance = workflow.slice(performanceMarker, ciGateMarker);
   assert.doesNotMatch(performance, /continue-on-error:\s*true/);
   assert.match(performance, /check-imports\.js --fail --summary/);
   assert.match(workflow, /needs\.performance\.result/);
@@ -59,6 +61,7 @@ test('marketing hard budget matches the committed regression policy', () => {
     bundleBaseline.marketing.totalKb * (1 + failPercent / 100)
   );
 
+  assert.equal(failPercent, 25);
   assert.equal(marketingBudget, expectedBudget);
 });
 

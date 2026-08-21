@@ -60,9 +60,9 @@ function validateWorkspace(root) {
     const invalid = [...agents, ...skills].filter(
       (name) => typeof name !== 'string' || name.trim() === ''
     );
-    const duplicates = [...agents, ...skills].filter(
-      (name, index, values) => values.indexOf(name) !== index
-    );
+    const duplicatesIn = (values) =>
+      values.filter((name, index) => values.indexOf(name) !== index);
+    const duplicates = [...duplicatesIn(agents), ...duplicatesIn(skills)];
     const registryErrors = [];
     if (!agents.length) registryErrors.push('tracked registry has no agents');
     if (!skills.length) registryErrors.push('tracked registry has no skills');

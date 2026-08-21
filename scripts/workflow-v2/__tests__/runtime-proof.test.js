@@ -157,6 +157,10 @@ test('--files parsing stops at the next option', () => {
     ['apps/scanner-app/src/lib/scanner.ts', 'docs/note.md']
   );
   assert.equal(parseExplicitFiles(['--evidence', 'receipt.json']), null);
+  assert.equal(
+    parseExplicitFiles(['--files', '--evidence', 'receipt.json']),
+    null
+  );
 });
 
 test('--require-evidence fails only when the classified plan requires proof', () => {
@@ -171,12 +175,12 @@ test('--require-evidence fails only when the classified plan requires proof', ()
       '--require-evidence',
       missing,
     ],
-    { encoding: 'utf8' }
+    { encoding: 'utf8', env: { ...process.env, GITHUB_STEP_SUMMARY: '' } }
   );
   const docsOnly = spawnSync(
     process.execPath,
     [cli, '--files', 'docs/workspace/README.md', '--require-evidence', missing],
-    { encoding: 'utf8' }
+    { encoding: 'utf8', env: { ...process.env, GITHUB_STEP_SUMMARY: '' } }
   );
 
   assert.equal(required.status, 1);

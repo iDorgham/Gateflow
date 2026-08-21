@@ -62,6 +62,22 @@ test('missing local AI source validates a tracked registry instead of soft-passi
   assert.match(result.warnings.join('\n'), /full local AI source unavailable/);
 });
 
+test('tracked registry keeps agent and skill names in separate namespaces', () => {
+  const root = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'gateflow-ai-namespaces-')
+  );
+  const registryDirectory = path.join(root, 'scripts', 'workflow-v2');
+  fs.mkdirSync(registryDirectory, { recursive: true });
+  fs.writeFileSync(
+    path.join(registryDirectory, 'ai-routing-registry.json'),
+    JSON.stringify({ agents: ['review'], skills: ['review'] })
+  );
+
+  const result = validateWorkspace(root);
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
 test('missing local AI source and tracked registry fails closed', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'gateflow-ai-missing-'));
   const result = validateWorkspace(root);
