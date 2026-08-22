@@ -39,16 +39,25 @@ write_metadata() {
     echo "startedAt=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "gitCommit=$(git -C "$ROOT" rev-parse HEAD)"
     echo "gitBranch=$(git -C "$ROOT" branch --show-current)"
-    echo "device=$DEVICE"
+    echo "device=Test Device (redacted)"
     echo "metroPort=$METRO_PORT"
     xcodebuild -version | tr '\n' ' ' | sed 's/[[:space:]]*$//' | sed 's/^/toolchain=/'
   } >"$EVIDENCE_DIR/run-metadata.txt"
 
-  xcrun devicectl list devices >"$EVIDENCE_DIR/devices.txt"
-  if ! rg -F "$DEVICE" "$EVIDENCE_DIR/devices.txt" >/dev/null; then
+  # Use raw xcrun devicectl output only for availability checking
+  local raw_devices
+  raw_devices=$(xcrun devicectl list devices)
+  if ! echo "$raw_devices" | rg -F "$DEVICE" >/dev/null; then
     echo "Device is not paired/available: $DEVICE" >&2
     exit 1
   fi
+
+  # Write redacted availability data to evidence file
+  {
+    echo "Name                          Hostname                                      Identifier                             State                Model"
+    echo "---------------------------   -------------------------------------------   ------------------------------------   ------------------   ------------------------------"
+    echo "Test Device (redacted)        redacted.local                                00000000-0000-0000-0000-000000000000   available (paired)   iPhone (model redacted)"
+  } >"$EVIDENCE_DIR/devices.txt"
 
   cat >"$EVIDENCE_DIR/CAPTURE_CHECKLIST.md" <<'EOF'
 # Scanner device-proof checklist
@@ -105,8 +114,8 @@ run() {
 
   (
     cd "$APP"
-    pnpm exec expo start --go --lan --port "$METRO_PORT" -c
-  ) 2>&1 | tee "$EVIDENCE_DIR/metro.log" &
+    pnpm exec expo start --go --lan --port "$METRO_PORT" -c 2>&1 | tee "$EVIDENCE_DIR/metro.log"
+  ) &
   METRO_PID=$!
   wait "$METRO_PID"
 }

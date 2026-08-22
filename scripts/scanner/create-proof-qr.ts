@@ -19,6 +19,10 @@ async function main() {
     runDate
   );
   const gateId = process.env.SCANNER_GATE_ID ?? 'gate-school-1';
+  const organizationId = process.env.SCANNER_ORGANIZATION_ID;
+  if (!organizationId) {
+    throw new Error('SCANNER_ORGANIZATION_ID is required');
+  }
   const proofLabel = process.env.SCANNER_PROOF_LABEL ?? 'scan-proof';
   const secret = process.env.QR_SIGNING_SECRET ?? '';
 
@@ -29,7 +33,12 @@ async function main() {
   }
 
   const gate = await prisma.gate.findFirst({
-    where: { id: gateId, isActive: true, deletedAt: null },
+    where: {
+      id: gateId,
+      organizationId,
+      isActive: true,
+      deletedAt: null,
+    },
     select: { id: true, organizationId: true },
   });
   if (!gate) throw new Error(`Active gate not found: ${gateId}`);

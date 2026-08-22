@@ -24,12 +24,23 @@ async function main() {
     );
   }
 
-  const qr = await prisma.qRCode.findUnique({
-    where: { id: qrId },
-    select: { id: true, currentUses: true, maxUses: true, isActive: true },
+  const organizationId = process.env.SCANNER_ORGANIZATION_ID;
+  if (!organizationId) {
+    throw new Error('SCANNER_ORGANIZATION_ID is required');
+  }
+
+  const qr = await prisma.qRCode.findFirst({
+    where: { id: qrId, organizationId, deletedAt: null },
+    select: {
+      id: true,
+      organizationId: true,
+      currentUses: true,
+      maxUses: true,
+      isActive: true,
+    },
   });
   const scan = await prisma.scanLog.findFirst({
-    where: { qrCodeId: qrId, deletedAt: null },
+    where: { qrCode: { id: qrId, organizationId, deletedAt: null } },
     orderBy: { scannedAt: 'desc' },
     select: {
       id: true,
@@ -44,9 +55,12 @@ async function main() {
 
   const verified =
     qr.id === qrId &&
+    qr.organizationId === organizationId &&
     scan.qrCodeId === qrId &&
     scan.status === 'SUCCESS' &&
-    scan.gateId === (process.env.SCANNER_GATE_ID ?? 'gate-school-1');
+    scan.gateId === (process.env.SCANNER_GATE_ID ?? 'gate-school-1') &&
+    qr.currentUses === qr.maxUses &&
+    qr.currentUses === 1;
   if (!verified)
     throw new Error('Persisted scan does not satisfy grant invariants');
 

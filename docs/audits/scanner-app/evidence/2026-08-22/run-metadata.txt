@@ -2,7 +2,7 @@ runDate=2026-08-22
 startedAt=2026-08-22T16:53:22Z
 gitCommit=bf5ad4010c25e85a8bb0547f579d92f9c5c08123
 gitBranch=feat/scanner-runtime-proof
-device=Dorgham’s iPhone 12 Pro Max
+device=Test Device (redacted)
 metroPort=8081
 toolchain=Xcode 26.1.1 Build version 17B100finalizedAt=2026-08-22T17:11:09Z
 finalizedAt=2026-08-22T17:19:05Z

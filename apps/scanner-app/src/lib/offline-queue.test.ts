@@ -1,4 +1,12 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import CryptoJS from 'crypto-js';
+import {
+  encryption,
+  scanQueue,
+  generateScanUuid,
+  deriveEncryptionKey,
+  getOrCreateSalt,
+} from './offline-queue';
 
 // @ts-expect-error - Jest mock for global fetch
 global.fetch = jest.fn().mockImplementation(() =>
@@ -130,14 +138,6 @@ jest.mock('./offline-queue', () => {
     },
   };
 });
-
-import {
-  encryption,
-  scanQueue,
-  generateScanUuid,
-  deriveEncryptionKey,
-  getOrCreateSalt,
-} from './offline-queue';
 
 function clearMockStore() {
   Object.keys(mockStore).forEach((key) => delete mockStore[key]);
@@ -478,6 +478,57 @@ describe('Encryption Failure Fallback', () => {
     await expect(
       encryption.decrypt('not_valid_ciphertext_at_all')
     ).rejects.toThrow(/Decryption failed|Malformed UTF-8 data/);
+  });
+});
+
+describe('Legacy Ciphertext Decryption', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    clearMockStore();
+  });
+
+  it('should decrypt valid pre-upgrade unprefixed ciphertext with token and salt', async () => {
+    const testToken = 'test_token_for_legacy';
+    mockStore['auth_token'] = testToken;
+
+    // Generate a salt
+    const salt = await getOrCreateSalt();
+    expect(salt).toBeTruthy();
+
+    // Derive the key from the token
+    const key = await deriveEncryptionKey(testToken);
+
+    // Manually encrypt data using the passphrase-based API to simulate legacy format
+    const originalData = JSON.stringify({
+      qrCode: 'LEGACY_QR_CODE',
+      gateId: 'legacy_gate',
+      scannedAt: '2026-01-01T12:00:00.000Z',
+    });
+    const legacyCiphertext = CryptoJS.AES.encrypt(originalData, key).toString();
+
+    // Verify it's unprefixed (legacy format)
+    expect(legacyCiphertext).not.toMatch(/^v[23]:/);
+
+    // Now decrypt using the module's decrypt function
+    const decrypted = await encryption.decrypt(legacyCiphertext);
+    const parsed = JSON.parse(decrypted);
+
+    expect(parsed.qrCode).toBe('LEGACY_QR_CODE');
+    expect(parsed.gateId).toBe('legacy_gate');
+    expect(parsed.scannedAt).toBe('2026-01-01T12:00:00.000Z');
+  });
+
+  it('should require token for legacy unprefixed ciphertext', async () => {
+    // Create legacy ciphertext without storing a token
+    const key = await deriveEncryptionKey('temp_token');
+    const legacyCiphertext = CryptoJS.AES.encrypt('test_data', key).toString();
+
+    // Clear token
+    clearMockStore();
+
+    await expect(encryption.decrypt(legacyCiphertext)).rejects.toThrow(
+      'token required for legacy ciphertext'
+    );
   });
 });
 

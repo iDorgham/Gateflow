@@ -132,9 +132,11 @@ export const encryption = {
 
   async decrypt(encryptedData: string): Promise<string> {
     try {
-      const key = await this.getOrDeriveKey();
+      let key: string;
       let bytes: CryptoJS.lib.WordArray;
       if (encryptedData.startsWith('v3:') || encryptedData.startsWith('v2:')) {
+        // v2/v3 records use the device key
+        key = await this.getOrDeriveKey();
         const [, ivHex, ciphertextBase64] = encryptedData.split(':');
         if (!ivHex || !ciphertextBase64) {
           throw new Error('Decryption failed - malformed encrypted data');
@@ -152,7 +154,14 @@ export const encryption = {
           }
         );
       } else {
-        // Legacy passphrase-format queue items remain readable.
+        // Legacy unprefixed ciphertext uses token-derived key with stored salt
+        const token = await this.getToken();
+        if (!token) {
+          throw new Error(
+            'Decryption failed - token required for legacy ciphertext'
+          );
+        }
+        key = await deriveEncryptionKey(token);
         bytes = CryptoJS.AES.decrypt(encryptedData, key);
       }
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
@@ -209,6 +218,24 @@ async function checkNetworkConnection(): Promise<boolean> {
   }
 }
 
+/**
+ * Serialize all queue mutations through a single read-modify-write mechanism
+ * to prevent concurrent write races.
+ */
+let queueMutationLock: Promise<void> = Promise.resolve();
+
+async function atomicQueueUpdate(
+  mutator: (queue: EncryptedQueueItem[]) => EncryptedQueueItem[]
+): Promise<void> {
+  queueMutationLock = queueMutationLock.then(async () => {
+    const data = await AsyncStorage.getItem(STORAGE_KEY);
+    const queue = data ? JSON.parse(data) : [];
+    const updated = mutator(queue);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  });
+  await queueMutationLock;
+}
+
 export const scanQueue = {
   async addScan(
     qrCode: string,
@@ -221,7 +248,6 @@ export const scanQueue = {
     }
 
     const scanUuid = await generateScanUuid();
-    const queue = await this.getQueue();
 
     const scanData = JSON.stringify({
       qrCode,
@@ -245,8 +271,10 @@ export const scanQueue = {
       retryCount: 0,
     };
 
-    queue.push(newScan);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+    await atomicQueueUpdate((queue) => {
+      queue.push(newScan);
+      return queue;
+    });
 
     const isConnected = await checkNetworkConnection();
     if (isConnected) {
@@ -323,9 +351,8 @@ export const scanQueue = {
         JSON.stringify([...byId.values()])
       );
       const unreadableIds = new Set(unreadable.map((item) => item.id));
-      await AsyncStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(queue.filter((item) => !unreadableIds.has(item.id)))
+      await atomicQueueUpdate((latestQueue) =>
+        latestQueue.filter((item) => !unreadableIds.has(item.id))
       );
     }
 
@@ -333,37 +360,37 @@ export const scanQueue = {
   },
 
   async removeScan(scanId: string): Promise<void> {
-    const queue = await this.getQueue();
-    const filtered = queue.filter((scan) => scan.id !== scanId);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    await atomicQueueUpdate((queue) =>
+      queue.filter((scan) => scan.id !== scanId)
+    );
   },
 
   async markAsSynced(scanId: string): Promise<void> {
-    const queue = await this.getQueue();
-    const index = queue.findIndex((scan) => scan.id === scanId);
-
-    if (index !== -1) {
-      queue[index].synced = true;
-      // Clear any error from an earlier failed attempt — a scan that
-      // eventually succeeds must not still read as "failed" via its stale error.
-      delete queue[index].error;
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
-    }
+    await atomicQueueUpdate((queue) => {
+      const index = queue.findIndex((scan) => scan.id === scanId);
+      if (index !== -1) {
+        queue[index].synced = true;
+        // Clear any error from an earlier failed attempt — a scan that
+        // eventually succeeds must not still read as "failed" via its stale error.
+        delete queue[index].error;
+      }
+      return queue;
+    });
   },
 
   async markAsFailed(scanId: string, error: string): Promise<void> {
-    const queue = await this.getQueue();
-    const index = queue.findIndex((scan) => scan.id === scanId);
-
-    if (index !== -1) {
-      queue[index].retryCount += 1;
-      queue[index].error = error;
-      if (queue[index].retryCount >= MAX_RETRIES) {
-        queue[index].synced = true;
-        queue[index].error = 'Max retries exceeded';
+    await atomicQueueUpdate((queue) => {
+      const index = queue.findIndex((scan) => scan.id === scanId);
+      if (index !== -1) {
+        queue[index].retryCount += 1;
+        queue[index].error = error;
+        if (queue[index].retryCount >= MAX_RETRIES) {
+          queue[index].synced = true;
+          queue[index].error = 'Max retries exceeded';
+        }
       }
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
-    }
+      return queue;
+    });
   },
 
   /**
@@ -373,15 +400,15 @@ export const scanQueue = {
    * as failed immediately instead of burning down MAX_RETRIES.
    */
   async markAsUnattributable(scanId: string): Promise<void> {
-    const queue = await this.getQueue();
-    const index = queue.findIndex((scan) => scan.id === scanId);
-
-    if (index !== -1) {
-      queue[index].synced = true;
-      queue[index].retryCount = MAX_RETRIES;
-      queue[index].error = 'No shift attribution — cannot sync';
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
-    }
+    await atomicQueueUpdate((queue) => {
+      const index = queue.findIndex((scan) => scan.id === scanId);
+      if (index !== -1) {
+        queue[index].synced = true;
+        queue[index].retryCount = MAX_RETRIES;
+        queue[index].error = 'No shift attribution — cannot sync';
+      }
+      return queue;
+    });
   },
 
   async getPendingScans(): Promise<QueuedScan[]> {
@@ -404,9 +431,7 @@ export const scanQueue = {
   },
 
   async clearSynced(): Promise<void> {
-    const queue = await this.getQueue();
-    const pending = queue.filter((scan) => !scan.synced);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
+    await atomicQueueUpdate((queue) => queue.filter((scan) => !scan.synced));
   },
 };
 
