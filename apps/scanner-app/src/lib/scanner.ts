@@ -246,7 +246,7 @@ export async function createMaintenanceRequest(params: {
         offline: true,
         message: 'No connection — report queued for sync',
       };
-    } catch (queueErr) {
+    } catch {
       return {
         success: false,
         message: (err as Error).message ?? 'Network failure',
@@ -266,13 +266,25 @@ async function enqueueOfflineScan(
   // assignment cannot be validated during sync, so fail closed.
   if (!gateId) return false;
   try {
-    if (shiftLogId) {
-      await scanQueue.addScan(qrPayload, gateId, shiftLogId);
-    } else {
-      await scanQueue.addScan(qrPayload, gateId);
+    const queuedScan = shiftLogId
+      ? await scanQueue.addScan(qrPayload, gateId, shiftLogId)
+      : await scanQueue.addScan(qrPayload, gateId);
+    if (typeof __DEV__ !== 'undefined' && __DEV__) {
+      // Non-PII correlation receipt for physical-device pilot evidence.
+      console.info('[Scanner] Offline scan queued:', {
+        id: queuedScan.id,
+        scanUuid: queuedScan.scanUuid,
+        gateId: queuedScan.gateId,
+      });
     }
     return true;
-  } catch {
+  } catch (error) {
+    if (typeof __DEV__ !== 'undefined' && __DEV__) {
+      console.error(
+        '[Scanner] Failed to enqueue offline scan:',
+        error instanceof Error ? error.message : 'unknown queue error'
+      );
+    }
     return false;
   }
 }

@@ -1,0 +1,10 @@
+qrId=b23e90d6-cc96-40f7-ac5c-0985eb3f7739
+payloadQrId=b23e90d6-cc96-40f7-ac5c-0985eb3f7739
+scanId=cmt4i5ymx0001xv7fs4ieie8x
+scanStatus=SUCCESS
+scannedAt=2026-08-22T14:57:53.816Z
+gateId=gate-school-1
+scanUuid=null
+currentUses=1
+maxUses=1
+grantInvariantVerified=true

@@ -28,6 +28,7 @@ export interface EncryptedQueueItem {
 }
 
 const STORAGE_KEY = 'scan_queue';
+const QUARANTINE_STORAGE_KEY = 'scan_queue_quarantine';
 const TOKEN_KEY = 'auth_token';
 const ENCRYPTION_KEY_NAME = 'scan_encryption_key';
 const PBKDF2_SALT_KEY = 'scan_pbkdf2_salt';
@@ -100,31 +101,65 @@ export const encryption = {
       return newKey;
     } catch (error) {
       console.error('Failed to get/create encryption key:', error);
-      throw new Error('Encryption key management failed');
+      throw new Error('Encryption key management failed', { cause: error });
     }
   },
 
   async getOrDeriveKey(): Promise<string> {
-    const token = await SecureStore.getItemAsync(TOKEN_KEY);
-    if (token) {
-      return deriveEncryptionKey(token);
-    }
+    // Queue data can outlive an access token. JWT refresh and re-login rotate
+    // the token, so deriving the encryption key from it makes already queued
+    // scans permanently unreadable. Keep authentication as the prerequisite
+    // for enqueueing, but encrypt with a random device key held in SecureStore.
     return this.getOrCreateKey();
   },
 
   async encrypt(data: string): Promise<string> {
     const key = await this.getOrDeriveKey();
-    const encrypted = CryptoJS.AES.encrypt(data, key).toString();
-    return encrypted;
+    // CryptoJS's passphrase API generates its own salt via a browser/native
+    // crypto global that Hermes does not provide. Generate the IV through
+    // expo-crypto and use the already-derived 256-bit key directly instead.
+    const ivBytes = await Crypto.getRandomBytesAsync(16);
+    const ivHex = Array.from(ivBytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+    const encrypted = CryptoJS.AES.encrypt(data, CryptoJS.enc.Hex.parse(key), {
+      iv: CryptoJS.enc.Hex.parse(ivHex),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+    return `v3:${ivHex}:${encrypted.ciphertext.toString(CryptoJS.enc.Base64)}`;
   },
 
   async decrypt(encryptedData: string): Promise<string> {
     try {
       const key = await this.getOrDeriveKey();
-      const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+      let bytes: CryptoJS.lib.WordArray;
+      if (encryptedData.startsWith('v3:') || encryptedData.startsWith('v2:')) {
+        const [, ivHex, ciphertextBase64] = encryptedData.split(':');
+        if (!ivHex || !ciphertextBase64) {
+          throw new Error('Decryption failed - malformed encrypted data');
+        }
+        const cipherParams = CryptoJS.lib.CipherParams.create({
+          ciphertext: CryptoJS.enc.Base64.parse(ciphertextBase64),
+        });
+        bytes = CryptoJS.AES.decrypt(
+          cipherParams,
+          CryptoJS.enc.Hex.parse(key),
+          {
+            iv: CryptoJS.enc.Hex.parse(ivHex),
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7,
+          }
+        );
+      } else {
+        // Legacy passphrase-format queue items remain readable.
+        bytes = CryptoJS.AES.decrypt(encryptedData, key);
+      }
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       if (!decrypted) {
-        throw new Error('Decryption failed - invalid key or corrupted data');
+        throw new Error('Decryption failed - invalid key or corrupted data', {
+          cause: err,
+        });
       }
       return decrypted;
     } catch (err) {
@@ -133,7 +168,9 @@ export const encryption = {
         msg.includes('Malformed UTF-8') ||
         msg.includes('Decryption failed')
       ) {
-        throw new Error('Decryption failed - invalid key or corrupted data');
+        throw new Error('Decryption failed - invalid key or corrupted data', {
+          cause: err,
+        });
       }
       throw err;
     }
@@ -242,6 +279,7 @@ export const scanQueue = {
   async getDecryptedQueue(): Promise<QueuedScan[]> {
     const queue = await this.getQueue();
     const decrypted: QueuedScan[] = [];
+    const unreadable: EncryptedQueueItem[] = [];
 
     for (const item of queue) {
       try {
@@ -260,9 +298,37 @@ export const scanQueue = {
             ? { shiftLogId: parsed.shiftLogId }
             : {}),
         });
-      } catch (error) {
-        console.error(`Failed to decrypt scan ${item.id}:`, error);
+      } catch {
+        // A token-derived key used by older builds could rotate and make a
+        // queued item permanently unreadable. Keep the encrypted record for
+        // diagnostics, but remove it from the active queue so every render and
+        // sync attempt does not trigger LogBox or leave the UI stuck forever.
+        unreadable.push({
+          ...item,
+          synced: true,
+          error: 'Quarantined: encrypted data is unreadable',
+        });
       }
+    }
+
+    if (unreadable.length > 0) {
+      const existingRaw = await AsyncStorage.getItem(QUARANTINE_STORAGE_KEY);
+      const existing = existingRaw
+        ? (JSON.parse(existingRaw) as EncryptedQueueItem[])
+        : [];
+      const byId = new Map(existing.map((item) => [item.id, item]));
+      for (const item of unreadable) {
+        byId.set(item.id, item);
+      }
+      await AsyncStorage.setItem(
+        QUARANTINE_STORAGE_KEY,
+        JSON.stringify([...byId.values()])
+      );
+      const unreadableIds = new Set(unreadable.map((item) => item.id));
+      await AsyncStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(queue.filter((item) => !unreadableIds.has(item.id)))
+      );
     }
 
     return decrypted;
@@ -381,7 +447,29 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   }
 
   try {
-    return await response.json();
+    const body = (await response.json()) as {
+      data?: {
+        synced?: unknown;
+        conflicted?: unknown;
+        failed?: unknown;
+      };
+      synced?: unknown;
+      conflicted?: unknown;
+      failed?: unknown;
+    };
+    const result = body.data ?? body;
+    if (
+      !Array.isArray(result.synced) ||
+      !Array.isArray(result.conflicted) ||
+      !Array.isArray(result.failed)
+    ) {
+      throw new Error('Sync failed: malformed server response');
+    }
+    return {
+      synced: result.synced as string[],
+      conflicted: result.conflicted as Array<{ id: string; reason: string }>,
+      failed: result.failed as Array<{ id: string; error: string }>,
+    };
   } catch {
     throw new Error(
       `Sync failed: server returned non-JSON response (status ${response.status})`

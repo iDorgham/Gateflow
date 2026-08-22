@@ -162,6 +162,7 @@ describe('Encryption Module', () => {
 
       const encrypted = await encryption.encrypt(originalData);
       expect(encrypted).not.toEqual(originalData);
+      expect(encrypted).toMatch(/^v3:[0-9a-f]{32}:/);
       expect(encrypted.length).toBeGreaterThan(0);
 
       const decrypted = await encryption.decrypt(encrypted);
@@ -181,12 +182,13 @@ describe('Encryption Module', () => {
     });
   });
 
-  describe('Encryption with Token-based Key', () => {
-    it('should derive key from token when available', async () => {
+  describe('Encryption with stable device key', () => {
+    it('should remain decryptable after the access token rotates', async () => {
       mockStore['auth_token'] = MOCK_TOKEN;
 
       const data = 'sensitive_scan_data';
       const encrypted = await encryption.encrypt(data);
+      mockStore['auth_token'] = 'rotated_jwt_token_67890';
 
       const decrypted = await encryption.decrypt(encrypted);
       expect(decrypted).toBe(data);
@@ -232,6 +234,32 @@ describe('Scan Queue Module', () => {
 
       const pending = await scanQueue.getPendingScans();
       expect(pending.length).toBe(2);
+    });
+  });
+
+  describe('unreadable queue quarantine', () => {
+    it('removes unreadable legacy items from the active queue without throwing', async () => {
+      mockStore['auth_token'] = MOCK_TOKEN;
+      mockAsyncStore['scan_queue'] = JSON.stringify([
+        {
+          id: 'scan_legacy_unreadable',
+          scanUuid: 'legacy-uuid',
+          encryptedData: 'v2:00000000000000000000000000000000:corrupted',
+          scannedAt: '2026-08-22T17:00:00.000Z',
+          synced: false,
+          retryCount: 0,
+        },
+      ]);
+
+      await expect(scanQueue.getPendingScans()).resolves.toEqual([]);
+      expect(JSON.parse(mockAsyncStore['scan_queue'])).toEqual([]);
+      expect(
+        JSON.parse(mockAsyncStore['scan_queue_quarantine'])[0]
+      ).toMatchObject({
+        id: 'scan_legacy_unreadable',
+        synced: true,
+        error: 'Quarantined: encrypted data is unreadable',
+      });
     });
   });
 

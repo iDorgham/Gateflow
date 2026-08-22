@@ -1,0 +1,10 @@
+qrId=ee9aae3e-224f-4929-9319-59150c5928e8
+payloadQrId=ee9aae3e-224f-4929-9319-59150c5928e8
+scanId=cmt4mohkj0004xvymd0gmxtfv
+scanStatus=SUCCESS
+scannedAt=2026-08-22T17:02:34.646Z
+gateId=gate-school-1
+scanUuid=6dbbbc93-f5ae-40e6-aecb-8ca36dc554a6
+currentUses=0
+maxUses=1
+grantInvariantVerified=true
