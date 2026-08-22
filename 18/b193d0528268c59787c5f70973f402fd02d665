@@ -1,0 +1,19 @@
+apps/scanner-app/jest.config.js
+  s_6db1019832042c::t_07b72524ffa71a 9-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "18b193d0528268c59787c5f70973f402fd02d665",
+  "prompts": {},
+  "sessions": {
+    "s_6db1019832042c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a029c3-bfb3-76a3-b7ee-67b67c69ad73",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
