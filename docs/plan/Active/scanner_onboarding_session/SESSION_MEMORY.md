@@ -44,6 +44,15 @@
 - Phase 05 remaining: owned pilot steps still `partial` in `docs/audits/scanner-app/PILOT_GATE_2026-07-30.json`. `/dev` 2026-08-14 did not change product code or the gate file.
 - Resume-from: after SDK 57 Expo Go is on the iPhone **and** Node is allowed through the firewall, connect to `exp://192.168.1.7:8081`, login `admin@school.demo`, start Gate 1, capture the two owned proofs. Do not attempt `expo run:ios` on 26.1.1.
 
+## 2026-08-23 offline bulk-sync QR usage invariant fix
+
+- Physical-device proof exposed a backend invariant violation: offline bulk sync could create a `SUCCESS` `ScanLog` while leaving a single-use QR at `currentUses = 0` and active.
+- Root cause: `processBulkScans` trusted the device-reported `SUCCESS` and wrote scan logs without reserving QR usage.
+- Fix is isolated on branch `fix/scanner-offline-qr-usage`: successful offline scans now revalidate QR active/expiry/gate/use state and atomically reserve usage inside the route transaction before writing the scan log. A lost concurrent reservation fails closed. Idempotent `scanUuid` retries do not consume usage twice, and two successes in one batch cannot exceed a bounded QR limit.
+- Verification: focused Jest `22/22`; complete client-dashboard Jest `515/515`; client-dashboard typecheck and lint pass (existing warnings only); tenant scan valid with no findings; workflow-v2 checks `61/61`.
+- Scanner suite remains independently blocked by the existing `offline-queue.test.ts` Jest initialization error (`Cannot access 'asyncStorageMock' before initialization`); all runnable scanner tests passed (`114/114`). This fix does not touch scanner-app test code.
+- Device evidence remains open. Re-run the offline flow with a newly issued dashboard QR and prove queue `1 → 0`, `ScanLog.status = SUCCESS`, and the matching QR row `currentUses = 1` / inactive or exhausted as appropriate. Do not certify from unit tests.
+
 ## Context budget
 
 - Loaded: L0, L1, L2, L3 (phase 05), L5, L6 (phase 05 log)

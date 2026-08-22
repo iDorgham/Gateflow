@@ -9,6 +9,7 @@ type MockTx = {
   };
   qRCode: {
     findMany: jest.Mock<any, any>;
+    updateMany: jest.Mock<any, any>;
   };
   shiftLog: {
     findMany: jest.Mock<any, any>;
@@ -27,6 +28,7 @@ describe('processBulkScans', () => {
       },
       qRCode: {
         findMany: jest.fn(() => Promise.resolve([])),
+        updateMany: jest.fn(() => Promise.resolve({ count: 1 })),
       },
       shiftLog: {
         findMany: jest.fn(() => Promise.resolve([])),
@@ -52,7 +54,17 @@ describe('processBulkScans', () => {
     ];
 
     mockTx.qRCode.findMany.mockResolvedValue([
-      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+      {
+        id: 'qr-id-1',
+        code: 'qr-1',
+        type: 'SINGLE',
+        currentUses: 0,
+        maxUses: 1,
+        isActive: true,
+        expiresAt: new Date(Date.now() + 60_000),
+        gateId: 'gate-1',
+        scanLogs: [],
+      },
     ]);
     mockTx.shiftLog.findMany.mockResolvedValue([
       {
@@ -79,6 +91,204 @@ describe('processBulkScans', () => {
     expect(createdData[0].qrCodeId).toBe('qr-id-1');
     expect(createdData[0].auditTrail).toHaveLength(1);
     expect(createdData[0].auditTrail[0].action).toBe('sync_create');
+    expect(mockTx.qRCode.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: 'qr-id-1',
+        organizationId: 'org_1',
+        deletedAt: null,
+        isActive: true,
+        currentUses: { lt: 1 },
+      },
+      data: { currentUses: { increment: 1 } },
+    });
+  });
+
+  it('does not consume QR usage again for an idempotent scanUuid retry', async () => {
+    mockTx.scanLog.findMany.mockResolvedValue([
+      { id: 'db-scan-1', scanUuid: 'uuid-existing' },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60_000),
+        endTime: null,
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-retry',
+          scanUuid: 'uuid-existing',
+          qrCode: 'qr-1',
+          scannedAt: new Date().toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-1',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual(['scan-retry']);
+    expect(mockTx.qRCode.updateMany).not.toHaveBeenCalled();
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('fails closed when the atomic QR usage reservation loses a race', async () => {
+    mockTx.qRCode.findMany.mockResolvedValue([
+      {
+        id: 'qr-id-1',
+        code: 'qr-1',
+        type: 'SINGLE',
+        currentUses: 0,
+        maxUses: 1,
+        isActive: true,
+        expiresAt: new Date(Date.now() + 60_000),
+        gateId: 'gate-1',
+        scanLogs: [],
+      },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60_000),
+        endTime: null,
+      },
+    ]);
+    mockTx.qRCode.updateMany.mockResolvedValue({ count: 0 });
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-race',
+          scanUuid: 'uuid-race',
+          qrCode: 'qr-1',
+          scannedAt: new Date().toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-1',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual([]);
+    expect(result.failed).toEqual([
+      { id: 'scan-race', error: 'QR usage limit reached during sync' },
+    ]);
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects a device-reported SUCCESS when QR usage is already exhausted', async () => {
+    mockTx.qRCode.findMany.mockResolvedValue([
+      {
+        id: 'qr-id-1',
+        code: 'qr-1',
+        type: 'SINGLE',
+        currentUses: 1,
+        maxUses: 1,
+        isActive: true,
+        expiresAt: new Date(Date.now() + 60_000),
+        gateId: 'gate-1',
+        scanLogs: [],
+      },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60_000),
+        endTime: null,
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-exhausted',
+          scanUuid: 'uuid-exhausted',
+          qrCode: 'qr-1',
+          scannedAt: new Date().toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-1',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual([]);
+    expect(result.failed).toEqual([
+      { id: 'scan-exhausted', error: 'QR usage limit reached' },
+    ]);
+    expect(mockTx.qRCode.updateMany).not.toHaveBeenCalled();
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('does not allow two successful scans to exceed a single-use QR within one batch', async () => {
+    const now = Date.now();
+    mockTx.qRCode.findMany.mockResolvedValue([
+      {
+        id: 'qr-id-1',
+        code: 'qr-1',
+        type: 'SINGLE',
+        currentUses: 0,
+        maxUses: 1,
+        isActive: true,
+        expiresAt: new Date(now + 60_000),
+        gateId: 'gate-1',
+        scanLogs: [],
+      },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(now - 60_000),
+        endTime: null,
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-first',
+          scanUuid: 'uuid-first',
+          qrCode: 'qr-1',
+          scannedAt: new Date(now).toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-1',
+        },
+        {
+          id: 'scan-second',
+          scanUuid: 'uuid-second',
+          qrCode: 'qr-1',
+          scannedAt: new Date(now + 1).toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-1',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual(['scan-first']);
+    expect(result.failed).toEqual([
+      { id: 'scan-second', error: 'QR usage limit reached' },
+    ]);
+    expect(mockTx.qRCode.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: { currentUses: { increment: 1 } },
+      })
+    );
   });
 
   it('scopes the scanUuid idempotency lookup to the calling organization', async () => {
@@ -551,7 +761,11 @@ describe('processBulkScans', () => {
 
     expect(mockTx.qRCode.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { code: { in: ['qr-1'] }, organizationId: 'org_1' },
+        where: {
+          code: { in: ['qr-1'] },
+          organizationId: 'org_1',
+          deletedAt: null,
+        },
         include: {
           scanLogs: expect.objectContaining({
             where: { deletedAt: null },

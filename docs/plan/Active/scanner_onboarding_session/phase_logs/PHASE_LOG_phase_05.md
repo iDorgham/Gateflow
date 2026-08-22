@@ -293,3 +293,11 @@ Additional host facts, not recorded in the earlier `/dev` re-check:
 - Native `expo run:ios` on this machine remains the wrong next step.
   Unblockers: physical iPhone + Expo Go, another Tahoe/Xcode 26.4 Mac, or
   EAS with an Xcode 26.4 image.
+
+## 2026-08-23 — Offline bulk-sync QR usage invariant
+
+- Device run found a real blocker: offline sync drained the queue and created a successful scan, but did not consume the QR's usage allowance.
+- Added server-authoritative QR checks and an atomic conditional `qRCode.updateMany` reservation before scan-log writes in `apps/client-dashboard/src/lib/scans/bulk-sync.ts`.
+- Added regression coverage for successful consumption, idempotent retry, exhausted QR, concurrent reservation loss, and two successful claims for one single-use QR in the same batch.
+- Automated evidence is green: focused tests `22/22`, client-dashboard tests `515/515`, typecheck, lint, tenant scan, and workflow-v2 checks.
+- Pilot evidence is intentionally not marked passed. Next physical proof must use a fresh dashboard-created QR whose payload `qrId` matches the database row, then verify both the scan row and the QR usage mutation after offline sync.

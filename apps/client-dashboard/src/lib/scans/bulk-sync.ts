@@ -42,6 +42,39 @@ export interface SyncResult {
   failed: Array<{ id: string; error: string }>;
 }
 
+interface QrUsageState {
+  type?: string;
+  currentUses?: number;
+  maxUses?: number | null;
+  isActive?: boolean;
+  expiresAt?: Date | null;
+  gateId?: string | null;
+}
+
+function qrUsageLimit(qr: QrUsageState): number | null {
+  if (qr.type === 'SINGLE') return 1;
+  return qr.maxUses ?? null;
+}
+
+function validateSuccessfulQrScan(
+  qr: QrUsageState,
+  scan: ScanInput
+): string | null {
+  if (qr.isActive === false) return 'QR code is inactive';
+  if (qr.gateId && qr.gateId !== scan.gateId) {
+    return 'QR code is not valid for this gate';
+  }
+
+  const scannedAt = new Date(scan.scannedAt);
+  if (qr.expiresAt && scannedAt > qr.expiresAt) return 'QR code expired';
+
+  const limit = qrUsageLimit(qr);
+  if (limit !== null && (qr.currentUses ?? 0) >= limit) {
+    return 'QR usage limit reached';
+  }
+  return null;
+}
+
 // Scanner timestamps come from device clocks. This tolerance applies only
 // while a shift is open; closed shifts retain their exact historical endTime.
 const OPEN_SHIFT_CLOCK_SKEW_MS = 5 * 60 * 1000;
@@ -176,6 +209,7 @@ export async function processBulkScans(
             where: {
               code: { in: qrCodes },
               organizationId: context.organizationId,
+              deletedAt: null,
             },
             include: {
               scanLogs: {
@@ -217,6 +251,7 @@ export async function processBulkScans(
   // Map qrCode -> Latest Scan State
   interface QrState {
     qrCodeId: string;
+    qr: QrUsageState;
     // Current logical state of the latest scan for this QR
     latestScan: {
       id?: string; // Only if exists in DB
@@ -228,6 +263,8 @@ export async function processBulkScans(
     // Pending operations
     pendingCreate?: Prisma.ScanLogCreateManyInput;
     pendingUpdate?: { id: string; data: Prisma.ScanLogUpdateInput };
+    pendingUsageReservations: number;
+    pendingSyncedIds: string[];
   }
 
   const qrStateMap = new Map<string, QrState>();
@@ -236,6 +273,16 @@ export async function processBulkScans(
     const latest = qr.scanLogs[0];
     qrStateMap.set(qr.code, {
       qrCodeId: qr.id,
+      qr: {
+        type: qr.type,
+        currentUses: qr.currentUses,
+        maxUses: qr.maxUses,
+        isActive: qr.isActive,
+        expiresAt: qr.expiresAt,
+        gateId: qr.gateId,
+      },
+      pendingSyncedIds: [],
+      pendingUsageReservations: 0,
       latestScan: latest
         ? {
             id: latest.id,
@@ -282,6 +329,21 @@ export async function processBulkScans(
         error: 'QR code not found',
       });
       continue;
+    }
+
+    if (scan.status === 'SUCCESS') {
+      const qrError = validateSuccessfulQrScan(
+        {
+          ...state.qr,
+          currentUses:
+            (state.qr.currentUses ?? 0) + state.pendingUsageReservations,
+        },
+        scan
+      );
+      if (qrError) {
+        failed.push({ id: scan.id, error: qrError });
+        continue;
+      }
     }
 
     // C. Resolve Conflicts / Create
@@ -345,6 +407,8 @@ export async function processBulkScans(
         }
 
         synced.push(scan.id);
+        state.pendingSyncedIds.push(scan.id);
+        if (scan.status === 'SUCCESS') state.pendingUsageReservations += 1;
         conflicted.push({
           id: scan.id,
           reason: 'LWW resolved - incoming newer, existing updated',
@@ -433,15 +497,55 @@ export async function processBulkScans(
       };
 
       synced.push(scan.id);
+      state.pendingSyncedIds.push(scan.id);
+      if (scan.status === 'SUCCESS') state.pendingUsageReservations += 1;
     }
   }
 
   // 5. Commit Writes
-  const creates = Array.from(qrStateMap.values())
+  const statesWithWrites = Array.from(qrStateMap.values()).filter(
+    (state) => state.pendingCreate || state.pendingUpdate
+  );
+
+  for (const state of statesWithWrites) {
+    if (state.pendingUsageReservations === 0) continue;
+
+    const limit = qrUsageLimit(state.qr);
+    const maximumCurrentUses =
+      limit === null ? null : limit - state.pendingUsageReservations + 1;
+    const reservation = await tx.qRCode.updateMany({
+      where: {
+        id: state.qrCodeId,
+        organizationId: context.organizationId,
+        deletedAt: null,
+        isActive: true,
+        ...(maximumCurrentUses === null
+          ? {}
+          : { currentUses: { lt: maximumCurrentUses } }),
+      },
+      data: {
+        currentUses: { increment: state.pendingUsageReservations },
+      },
+    });
+
+    if (reservation.count === 1) continue;
+
+    const rejectedIds = new Set(state.pendingSyncedIds);
+    for (let index = synced.length - 1; index >= 0; index -= 1) {
+      if (rejectedIds.has(synced[index])) synced.splice(index, 1);
+    }
+    for (const id of rejectedIds) {
+      failed.push({ id, error: 'QR usage limit reached during sync' });
+    }
+    state.pendingCreate = undefined;
+    state.pendingUpdate = undefined;
+  }
+
+  const creates = statesWithWrites
     .map((s) => s.pendingCreate)
     .filter((c): c is Prisma.ScanLogCreateManyInput => !!c);
 
-  const updates = Array.from(qrStateMap.values())
+  const updates = statesWithWrites
     .filter((s) => !!s.pendingUpdate && !s.pendingCreate)
     .map(
       (s) => s.pendingUpdate as { id: string; data: Prisma.ScanLogUpdateInput }
