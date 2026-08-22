@@ -1,0 +1,33 @@
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_6db1019832042c::t_5d4d3aef6a8094 212
+  s_6db1019832042c::t_728929cf34664b 45-77,254,267,276-284,334,343-348,410,500,506-510,512-513,516-521,525,529-544,548
+  s_6db1019832042c::t_88f23983f8f196 266,285,335-342,411,501,511,514-515,522-524,526-528
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_6db1019832042c::t_82773dc0061c3c 296-303
+apps/client-dashboard/src/lib/scans/bulk-sync.test.ts
+  s_6db1019832042c::t_88f23983f8f196 234-291
+  s_6db1019832042c::t_38ab19eb33e57a 12,31,57-67,94-109,118-184
+  s_6db1019832042c::t_f34b2ea1a70676 219
+  s_6db1019832042c::t_bae59bf02b62e6 201-208
+  s_6db1019832042c::t_5d4d3aef6a8094 185,187-200,209-218,220-233,764-768
+  s_6db1019832042c::t_728929cf34664b 110-117
+  s_6db1019832042c::t_b63f81770ec4f0 186
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_6db1019832042c::t_82773dc0061c3c 47-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "130cb656503e536506e45b0fb0b88049566a8ef6",
+  "prompts": {},
+  "sessions": {
+    "s_6db1019832042c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a029c3-bfb3-76a3-b7ee-67b67c69ad73",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
