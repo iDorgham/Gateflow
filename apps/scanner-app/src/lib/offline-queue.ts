@@ -157,9 +157,7 @@ export const encryption = {
       }
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       if (!decrypted) {
-        throw new Error('Decryption failed - invalid key or corrupted data', {
-          cause: err,
-        });
+        throw new Error('Decryption failed - invalid key or corrupted data');
       }
       return decrypted;
     } catch (err) {
