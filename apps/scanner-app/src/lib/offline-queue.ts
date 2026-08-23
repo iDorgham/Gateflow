@@ -224,13 +224,35 @@ let queueMutationLock: Promise<void> = Promise.resolve();
 async function atomicQueueUpdate(
   mutator: (queue: EncryptedQueueItem[]) => EncryptedQueueItem[]
 ): Promise<void> {
-  queueMutationLock = queueMutationLock.then(async () => {
-    const data = await AsyncStorage.getItem(STORAGE_KEY);
-    const queue = data ? JSON.parse(data) : [];
-    const updated = mutator(queue);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  // Chain the new operation, but recover the lock to a resolved state even if
+  // the current operation fails, so subsequent mutations can still execute.
+  const currentOp = queueMutationLock.then(
+    async () => {
+      const data = await AsyncStorage.getItem(STORAGE_KEY);
+      const queue = data ? JSON.parse(data) : [];
+      const updated = mutator(queue);
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    },
+    // Recover from previous operation failure without blocking the chain
+    () => {
+      // Previous operation failed; proceed with this one anyway
+      return AsyncStorage.getItem(STORAGE_KEY).then((data) => {
+        const queue = data ? JSON.parse(data) : [];
+        const updated = mutator(queue);
+        return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      });
+    }
+  );
+
+  // Update the shared lock to the current operation, but wrap it so that
+  // failures don't permanently poison the lock
+  queueMutationLock = currentOp.catch(() => {
+    // Absorb the error at the lock level; it will still propagate to the
+    // caller via `await currentOp` below
   });
-  await queueMutationLock;
+
+  // Await the current operation and propagate its result/error to the caller
+  await currentOp;
 }
 
 export const scanQueue = {
@@ -484,6 +506,32 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
       !Array.isArray(result.failed)
     ) {
       throw new Error('Sync failed: malformed server response');
+    }
+    // Validate every entry has the required string fields before casting
+    for (const entry of result.synced) {
+      if (typeof entry !== 'string') {
+        throw new Error('Sync failed: malformed server response');
+      }
+    }
+    for (const entry of result.conflicted) {
+      if (
+        typeof entry !== 'object' ||
+        entry === null ||
+        typeof (entry as { id?: unknown }).id !== 'string' ||
+        typeof (entry as { reason?: unknown }).reason !== 'string'
+      ) {
+        throw new Error('Sync failed: malformed server response');
+      }
+    }
+    for (const entry of result.failed) {
+      if (
+        typeof entry !== 'object' ||
+        entry === null ||
+        typeof (entry as { id?: unknown }).id !== 'string' ||
+        typeof (entry as { error?: unknown }).error !== 'string'
+      ) {
+        throw new Error('Sync failed: malformed server response');
+      }
     }
     return {
       synced: result.synced as string[],

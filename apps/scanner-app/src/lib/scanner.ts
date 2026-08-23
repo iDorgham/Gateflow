@@ -48,15 +48,15 @@ export async function validateOnServer(
 ): Promise<ScanResult> {
   const token = await getValidAccessToken();
 
+  // Without a token, the device-key queue can still encrypt and persist scans,
+  // but they require a token to sync. Offline scans without auth are rejected
+  // to prevent queue buildup that can never sync without a re-login.
   if (!token) {
-    const queued = await enqueueOfflineScan(qrPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
-      status: queued ? 'pending' : 'rejected',
-      reason: queued ? 'pending_server_validation' : 'queue_failed',
-      message: queued
-        ? 'Validation pending — do not grant entry'
-        : 'Cannot validate or securely queue this scan',
+      status: 'rejected',
+      reason: 'queue_failed',
+      message: 'Authentication required — sign in to scan offline',
       offline: true,
     };
   }

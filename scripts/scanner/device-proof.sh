@@ -41,7 +41,7 @@ write_metadata() {
     echo "gitBranch=$(git -C "$ROOT" branch --show-current)"
     echo "device=Test Device (redacted)"
     echo "metroPort=$METRO_PORT"
-    xcodebuild -version | tr '\n' ' ' | sed 's/[[:space:]]*$//' | sed 's/^/toolchain=/'
+    printf "toolchain=%s\n" "$(xcodebuild -version | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
   } >"$EVIDENCE_DIR/run-metadata.txt"
 
   # Use raw xcrun devicectl output only for availability checking
@@ -104,28 +104,61 @@ stop_metro() {
   fi
 }
 
+start_metro() {
+  require_command pnpm
+  local metro_log="$EVIDENCE_DIR/metro-$RUN_DATE.log"
+  echo "Starting Metro on port $METRO_PORT (logging to $metro_log)..."
+  (
+    cd "$ROOT/apps/scanner-app"
+    pnpm start --port "$METRO_PORT" >"$metro_log" 2>&1
+  ) &
+  METRO_PID=$!
+  echo "Metro started with PID $METRO_PID"
+  echo "$METRO_PID" >"$EVIDENCE_DIR/metro.pid"
+
+  echo -n "Waiting for Metro to be ready on port $METRO_PORT..."
+  local count=0
+  until curl -s "http://127.0.0.1:$METRO_PORT/status" 2>/dev/null | rg "packager-status:running" >/dev/null; do
+    sleep 1
+    count=$((count + 1))
+    if [[ $count -ge 30 ]]; then
+      echo " ERROR: Metro did not become ready in 30 seconds" >&2
+      kill "$METRO_PID" 2>/dev/null || true
+      exit 1
+    fi
+    echo -n "."
+  done
+  echo " ready!"
+}
+
 run() {
   prepare
   trap stop_metro EXIT INT TERM
 
   open -a "Expo Orbit"
+  start_metro
   echo "Expo Orbit opened. Metro will be reachable on the trusted LAN."
   echo "No environment values are copied into the evidence packet."
-
-  (
-    cd "$APP"
-    pnpm exec expo start --go --lan --port "$METRO_PORT" -c 2>&1 | tee "$EVIDENCE_DIR/metro.log"
-  ) &
-  METRO_PID=$!
   wait "$METRO_PID"
 }
 
 finalize() {
   require_command shasum
   local missing=0
+  # All artifacts that will be hashed — validation must cover all of them
   local required=(
+    "run-metadata.txt"
+    "devices.txt"
+    "CAPTURE_CHECKLIST.md"
+    "scan-proof-qr.png"
+    "scan-proof-qr-meta.txt"
+    "scan-proof-scan-meta.txt"
     "scan-access-granted.png"
+    "offline-proof-4-qr.png"
+    "offline-proof-4-qr-meta.txt"
+    "offline-proof-4-scan-meta.txt"
     "offline-pending.png"
+    "offline-proof-4-queued.png"
     "offline-synced.png"
   )
 

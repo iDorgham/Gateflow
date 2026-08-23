@@ -268,7 +268,7 @@ describe('offline fallback', () => {
     expect(mockAddScan).toHaveBeenCalledWith(QR_STRING, 'gate_1');
   });
 
-  it('returns pending and queues when no auth token', async () => {
+  it('returns rejected when no auth token (unauthenticated scans not supported)', async () => {
     mockGetToken.mockResolvedValue(null);
 
     const result = await validateOnServer(
@@ -278,10 +278,12 @@ describe('offline fallback', () => {
       'gate_1'
     );
 
-    expect(result.status).toBe('pending');
+    expect(result.status).toBe('rejected');
+    expect(result.reason).toBe('queue_failed');
     expect(result.offline).toBe(true);
-    // Queue is attempted (addScan will throw if not auth — swallowed)
-    expect(mockAddScan).toHaveBeenCalled();
+    expect(result.message).toContain('Authentication required');
+    // Queue is not attempted when token is missing
+    expect(mockAddScan).not.toHaveBeenCalled();
   });
 
   it('returns pending and queues on non-OK HTTP response (503)', async () => {

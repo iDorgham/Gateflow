@@ -529,6 +529,12 @@ export function ScannerScreen({
       };
       lastRejectedResult.current = invalidResult;
       lastRejectedQRData.current = qrData;
+      addHistoryEntry({
+        outcome: 'rejected',
+        qrPrefix: qrData.slice(0, 24),
+        gateName: selectedGate.name,
+        message: invalidResult.message,
+      }).catch(() => {});
       showResult(invalidResult);
       return;
     }
