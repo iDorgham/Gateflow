@@ -1,0 +1,64 @@
+apps/scanner-app/ios/scannerapp.xcodeproj/project.pbxproj
+  s_f689345fc7abbf::t_d8db97f735361f 437,513
+package.json
+  s_b56e5a06a294f5::t_a79a97f590d635 137
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_4fcd1b5949eb8f::t_a279ec012e29bf 14-21,65-69,82-84
+  s_4fcd1b5949eb8f::t_2d2f7b5490c3b2 22-27,70-72
+  s_4fcd1b5949eb8f::t_7607d051b2d95e 28-32,73-76
+apps/scanner-app/app.json
+  s_d91dd5f90959a6::t_ef7dae66148f62 9-15,35-41
+apps/scanner-app/package.json
+  s_d91dd5f90959a6::t_83a64a105087fb 25,32,34,36,38
+  s_d91dd5f90959a6::t_e7ec3b575a135d 63-76
+  s_b56e5a06a294f5::t_a79a97f590d635 56
+  s_d91dd5f90959a6::t_d465c32b9d1a36 24
+  s_b56e5a06a294f5::t_8247c97a200977 41-42
+  s_d91dd5f90959a6::t_51ed23f8c81ce2 28
+  s_d91dd5f90959a6::t_ee65fff5ab4e8e 26
+  s_b56e5a06a294f5::t_4c9497253fc6f4 43-45
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_4fcd1b5949eb8f::t_7607d051b2d95e 45-56
+  s_4fcd1b5949eb8f::t_a279ec012e29bf 9-26
+  s_4fcd1b5949eb8f::t_2d2f7b5490c3b2 27-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "99d109e680c7b9c87dc856e19dec4103e3a0e5a7",
+  "prompts": {},
+  "sessions": {
+    "s_4fcd1b5949eb8f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02673-6771-76f1-b6db-f471f9a63892",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_b56e5a06a294f5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a023d1-b097-79d2-9d19-bfc2ed4bd15f",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d91dd5f90959a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02025-6fb1-78c0-9438-f646bcdcfd68",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_f689345fc7abbf": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a02453-b78e-77e2-b518-241144102976",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
