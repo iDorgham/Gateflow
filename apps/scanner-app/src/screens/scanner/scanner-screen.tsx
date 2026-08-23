@@ -505,10 +505,10 @@ export function ScannerScreen({
       return;
     }
 
-    // Offline / no scanId → record as offline and show result directly
-    if (result.offline || !result.scanId) {
+    // Pending/offline results are evidence capture only and never authorize entry.
+    if (result.status === 'pending') {
       addHistoryEntry({
-        outcome: 'offline',
+        outcome: 'pending',
         qrPrefix: qrData.slice(0, 24),
         gateName: selectedGate.name,
         message: result.message,
@@ -516,6 +516,20 @@ export function ScannerScreen({
       if (prefs.hapticsEnabled)
         haptic(Haptics.NotificationFeedbackType.Warning).catch(() => {});
       showResult(result);
+      return;
+    }
+
+    // An accepted server response must carry its persisted ScanLog id.
+    if (!result.scanId) {
+      const invalidResult: ScanResult = {
+        status: 'rejected',
+        reason: 'invalid_server_response',
+        message: 'Validation incomplete — do not grant entry',
+        offline: false,
+      };
+      lastRejectedResult.current = invalidResult;
+      lastRejectedQRData.current = qrData;
+      showResult(invalidResult);
       return;
     }
 

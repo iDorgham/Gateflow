@@ -40,7 +40,13 @@ const OUTCOME_CONFIG: Record<
     Icon: X,
   },
   offline: {
-    label: 'Offline',
+    label: 'Offline (legacy)',
+    bg: nativeTokens.colors.warningSubtle,
+    text: nativeTokens.colors.warning,
+    Icon: CloudOff,
+  },
+  pending: {
+    label: 'Pending',
     bg: nativeTokens.colors.warningSubtle,
     text: nativeTokens.colors.warning,
     Icon: CloudOff,

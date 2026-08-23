@@ -1,4 +1,12 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import CryptoJS from 'crypto-js';
+import {
+  encryption,
+  scanQueue,
+  generateScanUuid,
+  deriveEncryptionKey,
+  getOrCreateSalt,
+} from './offline-queue';
 
 // @ts-expect-error - Jest mock for global fetch
 global.fetch = jest.fn().mockImplementation(() =>
@@ -74,7 +82,7 @@ function flushOperations(): Promise<void> {
   });
 }
 
-const asyncStorageMock = {
+jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(async (key: string): Promise<string | null> => {
     let result: string | null = null;
     operationQueue.push(() => {
@@ -101,9 +109,7 @@ const asyncStorageMock = {
     });
     await flushOperations();
   }),
-};
-
-jest.mock('@react-native-async-storage/async-storage', () => asyncStorageMock);
+}));
 
 beforeEach(() => {
   operationQueue = [];
@@ -131,14 +137,6 @@ jest.mock('./offline-queue', () => {
   };
 });
 
-import {
-  encryption,
-  scanQueue,
-  generateScanUuid,
-  deriveEncryptionKey,
-  getOrCreateSalt,
-} from './offline-queue';
-
 function clearMockStore() {
   Object.keys(mockStore).forEach((key) => delete mockStore[key]);
   Object.keys(mockAsyncStore).forEach((key) => delete mockAsyncStore[key]);
@@ -162,6 +160,7 @@ describe('Encryption Module', () => {
 
       const encrypted = await encryption.encrypt(originalData);
       expect(encrypted).not.toEqual(originalData);
+      expect(encrypted).toMatch(/^v3:[0-9a-f]{32}:/);
       expect(encrypted.length).toBeGreaterThan(0);
 
       const decrypted = await encryption.decrypt(encrypted);
@@ -181,12 +180,13 @@ describe('Encryption Module', () => {
     });
   });
 
-  describe('Encryption with Token-based Key', () => {
-    it('should derive key from token when available', async () => {
+  describe('Encryption with stable device key', () => {
+    it('should remain decryptable after the access token rotates', async () => {
       mockStore['auth_token'] = MOCK_TOKEN;
 
       const data = 'sensitive_scan_data';
       const encrypted = await encryption.encrypt(data);
+      mockStore['auth_token'] = 'rotated_jwt_token_67890';
 
       const decrypted = await encryption.decrypt(encrypted);
       expect(decrypted).toBe(data);
@@ -232,6 +232,32 @@ describe('Scan Queue Module', () => {
 
       const pending = await scanQueue.getPendingScans();
       expect(pending.length).toBe(2);
+    });
+  });
+
+  describe('unreadable queue quarantine', () => {
+    it('removes unreadable legacy items from the active queue without throwing', async () => {
+      mockStore['auth_token'] = MOCK_TOKEN;
+      mockAsyncStore['scan_queue'] = JSON.stringify([
+        {
+          id: 'scan_legacy_unreadable',
+          scanUuid: 'legacy-uuid',
+          encryptedData: 'v2:00000000000000000000000000000000:corrupted',
+          scannedAt: '2026-08-22T17:00:00.000Z',
+          synced: false,
+          retryCount: 0,
+        },
+      ]);
+
+      await expect(scanQueue.getPendingScans()).resolves.toEqual([]);
+      expect(JSON.parse(mockAsyncStore['scan_queue'])).toEqual([]);
+      expect(
+        JSON.parse(mockAsyncStore['scan_queue_quarantine'])[0]
+      ).toMatchObject({
+        id: 'scan_legacy_unreadable',
+        synced: true,
+        error: 'Quarantined: encrypted data is unreadable',
+      });
     });
   });
 
@@ -450,6 +476,57 @@ describe('Encryption Failure Fallback', () => {
     await expect(
       encryption.decrypt('not_valid_ciphertext_at_all')
     ).rejects.toThrow(/Decryption failed|Malformed UTF-8 data/);
+  });
+});
+
+describe('Legacy Ciphertext Decryption', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    clearMockStore();
+  });
+
+  it('should decrypt valid pre-upgrade unprefixed ciphertext with token and salt', async () => {
+    const testToken = 'test_token_for_legacy';
+    mockStore['auth_token'] = testToken;
+
+    // Generate a salt
+    const salt = await getOrCreateSalt();
+    expect(salt).toBeTruthy();
+
+    // Derive the key from the token
+    const key = await deriveEncryptionKey(testToken);
+
+    // Manually encrypt data using the passphrase-based API to simulate legacy format
+    const originalData = JSON.stringify({
+      qrCode: 'LEGACY_QR_CODE',
+      gateId: 'legacy_gate',
+      scannedAt: '2026-01-01T12:00:00.000Z',
+    });
+    const legacyCiphertext = CryptoJS.AES.encrypt(originalData, key).toString();
+
+    // Verify it's unprefixed (legacy format)
+    expect(legacyCiphertext).not.toMatch(/^v[23]:/);
+
+    // Now decrypt using the module's decrypt function
+    const decrypted = await encryption.decrypt(legacyCiphertext);
+    const parsed = JSON.parse(decrypted);
+
+    expect(parsed.qrCode).toBe('LEGACY_QR_CODE');
+    expect(parsed.gateId).toBe('legacy_gate');
+    expect(parsed.scannedAt).toBe('2026-01-01T12:00:00.000Z');
+  });
+
+  it('should require token for legacy unprefixed ciphertext', async () => {
+    // Create legacy ciphertext without storing a token
+    const key = await deriveEncryptionKey('temp_token');
+    const legacyCiphertext = CryptoJS.AES.encrypt('test_data', key).toString();
+
+    // Clear token
+    clearMockStore();
+
+    await expect(encryption.decrypt(legacyCiphertext)).rejects.toThrow(
+      'token required for legacy ciphertext'
+    );
   });
 });
 

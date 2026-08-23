@@ -9,8 +9,8 @@ import { QRCodeType } from '@gate-access/types';
  *  2. Invalid signature — server returns "rejected"  → status rejected, offline false
  *                         (locally invalid QRs are caught by verifyScanQR before this
  *                          function is ever called; here we test server-side rejection)
- *  3. Offline fallback  — fetch throws / no token   → optimistic accepted, offline true,
- *                         scan enqueued
+ *  3. Offline fallback  — fetch throws / no token   → pending, offline true,
+ *                         scan enqueued without authorizing entry
  */
 
 // ─── Hoist mocks before any imports ──────────────────────────────────────────
@@ -172,6 +172,26 @@ describe('scan success', () => {
 
     expect(mockAddScan).not.toHaveBeenCalled();
   });
+
+  it('fails closed when server responds accepted without scanId', async () => {
+    mockGetToken.mockResolvedValue('valid-access-token');
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          status: 'accepted',
+          message: 'Welcome!',
+          // scanId is missing
+        }),
+    });
+
+    const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
+
+    expect(result.status).toBe('rejected');
+    expect(result.reason).toBe('invalid_server_response');
+    expect(result.message).toContain('do not grant entry');
+    expect(result.offline).toBe(false);
+  });
 });
 
 // ─── 2. Invalid signature / server rejection ──────────────────────────────────
@@ -229,35 +249,42 @@ describe('server rejection (invalid_signature / other reasons)', () => {
 // ─── 3. Offline fallback ──────────────────────────────────────────────────────
 
 describe('offline fallback', () => {
-  it('returns optimistic accepted and queues scan when fetch throws (no network)', async () => {
+  it('returns pending and queues scan when fetch throws (no network)', async () => {
     mockGetToken.mockResolvedValue('valid-access-token');
     (global.fetch as jest.Mock).mockRejectedValue(
       new Error('Network request failed')
     );
 
-    const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
-
-    expect(result.status).toBe('accepted');
-    expect(result.offline).toBe(true);
-    expect(result.message).toMatch(/queue/i);
-    expect(mockAddScan).toHaveBeenCalledWith(
+    const result = await validateOnServer(
       QR_STRING,
-      VALID_PAYLOAD.organizationId
+      VALID_PAYLOAD,
+      undefined,
+      'gate_1'
     );
+
+    expect(result.status).toBe('pending');
+    expect(result.offline).toBe(true);
+    expect(result.message).toMatch(/pending/i);
+    expect(mockAddScan).toHaveBeenCalledWith(QR_STRING, 'gate_1');
   });
 
-  it('returns optimistic accepted and queues when no auth token', async () => {
+  it('returns pending and queues when no auth token', async () => {
     mockGetToken.mockResolvedValue(null);
 
-    const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
+    const result = await validateOnServer(
+      QR_STRING,
+      VALID_PAYLOAD,
+      undefined,
+      'gate_1'
+    );
 
-    expect(result.status).toBe('accepted');
+    expect(result.status).toBe('pending');
     expect(result.offline).toBe(true);
     // Queue is attempted (addScan will throw if not auth — swallowed)
     expect(mockAddScan).toHaveBeenCalled();
   });
 
-  it('returns offline accepted and queues on non-OK HTTP response (503)', async () => {
+  it('returns pending and queues on non-OK HTTP response (503)', async () => {
     mockGetToken.mockResolvedValue('valid-access-token');
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
@@ -265,29 +292,49 @@ describe('offline fallback', () => {
       json: () => Promise.resolve({ error: 'Service Unavailable' }),
     });
 
-    const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
+    const result = await validateOnServer(
+      QR_STRING,
+      VALID_PAYLOAD,
+      undefined,
+      'gate_1'
+    );
 
-    expect(result.status).toBe('accepted');
+    expect(result.status).toBe('pending');
     expect(result.offline).toBe(true);
     expect(result.message).toContain('503');
-    expect(mockAddScan).toHaveBeenCalledWith(
-      QR_STRING,
-      VALID_PAYLOAD.organizationId
-    );
+    expect(mockAddScan).toHaveBeenCalledWith(QR_STRING, 'gate_1');
   });
 
-  it('swallows queue error silently and still returns accepted when queue throws', async () => {
+  it('fails closed when the secure queue write fails', async () => {
     mockGetToken.mockResolvedValue('valid-access-token');
     (global.fetch as jest.Mock).mockRejectedValue(
       new Error('Network request failed')
     );
     mockAddScan.mockRejectedValue(new Error('Authentication required'));
 
+    const result = await validateOnServer(
+      QR_STRING,
+      VALID_PAYLOAD,
+      undefined,
+      'gate_1'
+    );
+
+    expect(result.status).toBe('rejected');
+    expect(result.reason).toBe('queue_failed');
+    expect(result.offline).toBe(true);
+  });
+
+  it('fails closed when no gate is selected for queue ownership', async () => {
+    mockGetToken.mockResolvedValue('valid-access-token');
+    (global.fetch as jest.Mock).mockRejectedValue(
+      new Error('Network request failed')
+    );
+
     const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
 
-    // Result must still be optimistic accepted even if queue fails
-    expect(result.status).toBe('accepted');
-    expect(result.offline).toBe(true);
+    expect(result.status).toBe('rejected');
+    expect(result.reason).toBe('queue_failed');
+    expect(mockAddScan).not.toHaveBeenCalled();
   });
 });
 

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Check, CloudOff, Flag, X } from 'lucide-react-native';
+import { Check, Clock3, CloudOff, Flag, X } from 'lucide-react-native';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 import type { ScanResult } from '../../lib/scanner';
 import { feedbackStyles } from './feedback-styles';
@@ -17,6 +17,7 @@ export function ResultOverlay({
   onReportIssue?: () => void;
 }) {
   const ok = result.status === 'accepted';
+  const pending = result.status === 'pending';
   return (
     <View
       style={[
@@ -24,7 +25,9 @@ export function ResultOverlay({
         {
           backgroundColor: ok
             ? nativeTokens.colors.success
-            : nativeTokens.colors.danger,
+            : pending
+              ? nativeTokens.colors.warningSubtle
+              : nativeTokens.colors.danger,
         },
       ]}
     >
@@ -34,6 +37,12 @@ export function ResultOverlay({
           strokeWidth={1.5}
           color={nativeTokens.colors.textHeading}
         />
+      ) : pending ? (
+        <Clock3
+          size={72}
+          strokeWidth={1.5}
+          color={nativeTokens.colors.warning}
+        />
       ) : (
         <X
           size={72}
@@ -42,12 +51,16 @@ export function ResultOverlay({
         />
       )}
       <Text style={feedbackStyles.feedbackTitle}>
-        {ok ? 'Access Granted' : 'Access Denied'}
+        {ok
+          ? 'Access Granted'
+          : pending
+            ? 'Validation Pending'
+            : 'Access Denied'}
       </Text>
       {!!result.message && (
         <Text style={feedbackStyles.feedbackSub}>{result.message}</Text>
       )}
-      {result.offline && (
+      {pending && result.offline && (
         <View style={styles.offlineRow}>
           <CloudOff
             size={16}

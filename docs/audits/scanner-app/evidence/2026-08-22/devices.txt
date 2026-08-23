@@ -1,0 +1,3 @@
+Name                          Hostname                                      Identifier                             State                Model
+---------------------------   -------------------------------------------   ------------------------------------   ------------------   ------------------------------
+Test Device (redacted)        redacted.local                                00000000-0000-0000-0000-000000000000   available (paired)   iPhone (model redacted)
