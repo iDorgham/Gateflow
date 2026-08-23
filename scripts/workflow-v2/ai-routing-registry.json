@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "agents": [
+    "gateflow-guide",
+    "gateflow-conductor",
+    "evidence-verifier",
+    "ci-fixer",
+    "pr-reviewer",
+    "runtime-proof-coordinator"
+  ],
+  "skills": [
+    "gf-guide",
+    "cli-limits",
+    "security",
+    "testing",
+    "visual-qa",
+    "github-pr-review",
+    "pre-push-verification"
+  ]
+}

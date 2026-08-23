@@ -507,7 +507,6 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
     ) {
       throw new Error('Sync failed: malformed server response');
     }
-
     // Validate every entry has the required string fields before casting
     for (const entry of result.synced) {
       if (typeof entry !== 'string') {
@@ -534,7 +533,6 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
         throw new Error('Sync failed: malformed server response');
       }
     }
-
     return {
       synced: result.synced as string[],
       conflicted: result.conflicted as Array<{ id: string; reason: string }>,

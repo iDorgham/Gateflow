@@ -34,6 +34,13 @@ Phase: <!-- e.g. Phase 3 of 7 -->
 - [ ] All existing tests pass (`pnpm preflight`)
 - [ ] No test snapshots blindly updated
 
+### Runtime proof
+
+- [ ] `pnpm pr:ready` reviewed for this exact HEAD
+- [ ] Required browser/device/API/database/access-flow artifacts are fresh
+- [ ] `.ai/runtime-proof.json` passes `pnpm proof:check`, or no runtime proof is required
+- [ ] Static checks, deployments, and manual checkboxes were not used as runtime proof
+
 ### Database
 
 - [ ] If `schema.prisma` changed → `pnpm prisma db push` run locally

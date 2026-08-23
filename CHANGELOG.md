@@ -10,6 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Workspace]** automate runtime proof and PR readiness
+- **[CI]** require head-bound runtime proof, prevent duplicate PR runs, and block on deterministic performance and AI validation while Lighthouse remains soft-pass
+
 - **[Git]** only auto-bump version for feat merges in ORIG_HEAD..HEAD
 
 - **[Deps]** override deepmerge-ts to 8.x for GHSA-ggr8-5vv4-36mx
