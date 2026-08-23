@@ -530,15 +530,34 @@ export async function processBulkScans(
 
     if (reservation.count === 1) continue;
 
-    const rejectedIds = new Set(state.pendingSyncedIds);
+    // Reservation failed — release the pending reservation and reject only the
+    // scans that actually reserved usage (SUCCESS writes). Scans that replaced
+    // a SUCCESS write with a non-SUCCESS result should retain their record and
+    // not be marked failed due to a reservation they never attempted.
+    const rejectedIds = new Set<string>();
+
+    // Walk the pendingSyncedIds in reverse to identify which were SUCCESS
+    for (const id of state.pendingSyncedIds) {
+      const scan = scans.find((s) => s.id === id);
+      if (scan?.status === 'SUCCESS') {
+        rejectedIds.add(id);
+      }
+    }
+
+    // Remove only the rejected (SUCCESS) scan IDs from synced
     for (let index = synced.length - 1; index >= 0; index -= 1) {
       if (rejectedIds.has(synced[index])) synced.splice(index, 1);
     }
     for (const id of rejectedIds) {
       failed.push({ id, error: 'QR usage limit reached during sync' });
     }
-    state.pendingCreate = undefined;
-    state.pendingUpdate = undefined;
+
+    // If no SUCCESS scans were pending (all were replaced by non-SUCCESS), keep
+    // the pendingCreate/pendingUpdate so the non-SUCCESS scan is still written.
+    if (rejectedIds.size === state.pendingSyncedIds.length) {
+      state.pendingCreate = undefined;
+      state.pendingUpdate = undefined;
+    }
   }
 
   const creates = statesWithWrites

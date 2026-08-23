@@ -41,7 +41,7 @@ write_metadata() {
     echo "gitBranch=$(git -C "$ROOT" branch --show-current)"
     echo "device=Test Device (redacted)"
     echo "metroPort=$METRO_PORT"
-    xcodebuild -version | tr '\n' ' ' | sed 's/[[:space:]]*$//' | sed 's/^/toolchain=/'
+    printf "toolchain=%s\n" "$(xcodebuild -version | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
   } >"$EVIDENCE_DIR/run-metadata.txt"
 
   # Use raw xcrun devicectl output only for availability checking
@@ -123,9 +123,20 @@ run() {
 finalize() {
   require_command shasum
   local missing=0
+  # All artifacts that will be hashed — validation must cover all of them
   local required=(
+    "run-metadata.txt"
+    "devices.txt"
+    "CAPTURE_CHECKLIST.md"
+    "scan-proof-qr.png"
+    "scan-proof-qr-meta.txt"
+    "scan-proof-scan-meta.txt"
     "scan-access-granted.png"
+    "offline-proof-4-qr.png"
+    "offline-proof-4-qr-meta.txt"
+    "offline-proof-4-scan-meta.txt"
     "offline-pending.png"
+    "offline-proof-4-queued.png"
     "offline-synced.png"
   )
 
