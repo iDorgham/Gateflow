@@ -171,10 +171,7 @@ export const encryption = {
       return decrypted;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (
-        msg.includes('Malformed UTF-8') ||
-        msg.includes('Decryption failed')
-      ) {
+      if (msg.includes('Malformed UTF-8')) {
         throw new Error('Decryption failed - invalid key or corrupted data', {
           cause: err,
         });
