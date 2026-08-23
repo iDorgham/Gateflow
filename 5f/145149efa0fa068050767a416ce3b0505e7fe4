@@ -1,0 +1,77 @@
+scripts/scanner/create-proof-qr.ts
+  s_6db1019832042c::t_add0bc98ece132 1-7,10-12,14-21,26-35,42-67,69-90,92-95
+  s_6db1019832042c::t_e3a68d47fae486 8-9,96-105
+  s_6db1019832042c::t_bbeec228864483 13,68,91
+  s_6db1019832042c::t_75e83c766b04d1 106-120
+docs/audits/scanner-app/evidence/2026-08-22/CAPTURE_CHECKLIST.md
+  s_6db1019832042c::t_7221e2393b075b 1-5,7-9,11-15
+  s_6db1019832042c::t_bd78eb0ca6b5ef 6,10
+scripts/scanner/verify-proof-scan.ts
+  s_6db1019832042c::t_bbeec228864483 1-26,41-42,44-57,59-60,64-92
+  s_6db1019832042c::t_4aa6a9786f9c41 93-95
+apps/scanner-app/src/lib/offline-queue.ts
+  s_6db1019832042c::t_ea4835b4039eb0 180-182
+  s_6db1019832042c::t_92f84c8382ed47 104,169-171
+  s_6db1019832042c::t_15f861c2b2b075 118-124,136,140-156,165-166
+  s_6db1019832042c::t_b9f5c019219fb6 329
+  s_6db1019832042c::t_6bcd6a43a5ce7d 475-497
+  s_6db1019832042c::t_2dd4f95749ca30 109-112,130,137
+  s_6db1019832042c::t_c8f3d30669d49e 31,310,330-349,351-355,358
+  s_6db1019832042c::t_47ff4902818f5c 125-129
+docs/audits/scanner-app/evidence/2026-08-22/offline-proof-4-scan-meta.txt
+  s_6db1019832042c::t_fa2fe7d3c7217c 1-10
+apps/scanner-app/src/components/scanner/result-overlay.tsx
+  s_6db1019832042c::t_8a691a23799396 63
+apps/scanner-app/src/lib/offline-queue.test.ts
+  s_6db1019832042c::t_2dd4f95749ca30 165,185-186,191
+  s_6db1019832042c::t_c8f3d30669d49e 240-265
+docs/audits/scanner-app/evidence/2026-08-22/run-metadata.txt
+  s_6db1019832042c::t_f905bfdae396fc 2
+  s_6db1019832042c::t_cfa13de9dee047 7
+  s_6db1019832042c::t_863fc1a391953f 8
+  s_6db1019832042c::t_c8ddbd0efa3f36 9
+  s_6db1019832042c::t_6942dac38300ec 1,3-4,6
+  s_6db1019832042c::t_e3b86f64f212db 10
+docs/audits/scanner-app/evidence/2026-08-22/devices.txt
+  s_6db1019832042c::t_c8ddbd0efa3f36 1
+  s_6db1019832042c::t_6942dac38300ec 2
+docs/audits/scanner-app/evidence/2026-08-22/offline-proof-4-qr-meta.txt
+  s_6db1019832042c::t_ebfd0c8eeffcf5 1-12
+scripts/scanner/device-proof.sh
+  s_6db1019832042c::t_54ddf5f8f9d01d 1-41,43-46,51-54,62-116,119-139,141-143,149-160
+  s_6db1019832042c::t_4fc9d6c64c5ba3 140
+  s_6db1019832042c::t_bd78eb0ca6b5ef 144-148
+apps/scanner-app/src/lib/scanner.ts
+  s_6db1019832042c::t_d895c3993f78e7 269-278
+  s_6db1019832042c::t_92f84c8382ed47 249
+  s_6db1019832042c::t_8a691a23799396 281,283-287
+  s_6db1019832042c::t_e26596c1ade2b0 282
+scripts/scanner/README.md
+  s_6db1019832042c::t_54ddf5f8f9d01d 1-12,22-34
+  s_6db1019832042c::t_add0bc98ece132 13-17,35-40
+  s_6db1019832042c::t_bbeec228864483 18-21
+docs/audits/scanner-app/evidence/2026-08-22/SHA256SUMS
+  s_6db1019832042c::t_8fdf444e885c3d 3-13
+docs/audits/scanner-app/evidence/2026-08-22/scan-proof-qr-meta.txt
+  s_6db1019832042c::t_d3c33b0b967755 1-12
+docs/audits/scanner-app/evidence/2026-08-22/scan-proof-scan-meta.txt
+  s_6db1019832042c::t_0ba76c5ecae42b 1-10
+apps/scanner-app/jest.config.js
+  s_6db1019832042c::t_07b72524ffa71a 9-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "5f145149efa0fa068050767a416ce3b0505e7fe4",
+  "prompts": {},
+  "sessions": {
+    "s_6db1019832042c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a029c3-bfb3-76a3-b7ee-67b67c69ad73",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
