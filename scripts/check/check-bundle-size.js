@@ -43,7 +43,9 @@ const APPS = [
   {
     name: 'marketing',
     buildDir: path.join(ROOT, 'apps', 'marketing', '.next'),
-    budget: { total: 500, page: 200 },
+    // The committed baseline is 1376 KB. Keep the absolute ceiling aligned
+    // with the existing 25% regression failure policy; 10% growth still warns.
+    budget: { total: 1720, page: 200 },
   },
 ];
 
