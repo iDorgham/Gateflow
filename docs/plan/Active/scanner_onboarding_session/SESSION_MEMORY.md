@@ -11,6 +11,25 @@
 - Exact next action: Expo CLI logged in as **dorgham**. In Expo Go, sign in as **dorgham**, then tap **Try again** on `exp://192.168.1.7:8081`. If Metro was started before login, restart it first.
 - **Do not `/certify`** — blocked on device evidence for Phase 05's two owned pilot steps (signed-QR scan, offline enqueue+sync).
 - Phase 04 is merged: PR [#208](https://github.com/iDorgham/Gateflow/pull/208).
+- `/dev` 2026-08-22 checkpoint: branch `feat/scanner-runtime-proof` at
+  `bf5ad401`; workflow remains `checking`. Fresh checks confirmed Xcode
+  26.1.1 / Swift 6.2.1 and five latest EAS iOS builds all errored. Execution
+  stopped before mutation because the dirty scanner runtime slice overlaps the
+  phase and includes the explicitly forbidden AppDelegate compatibility
+  workaround. Exact next action: establish ownership, restore the AppDelegate
+  workaround to the SDK 57 template, then queue a physical-device development
+  build with interactive Apple credentials.
+- Follow-up 2026-08-22: user authorized restoring the AppDelegate workaround;
+  that file now exactly matches `HEAD`. A physical EAS development build could
+  not be queued because the locally available Apple ID has no Developer team,
+  while the remote credential store lacks the credentials needed for internal
+  distribution. Resume with a paid-team Apple account or a valid local
+  `credentials.json`; do not store credentials or secrets in this plan.
+- No-paid-account path completed 2026-08-22: SDK 57 Expo Go was signed with
+  Apple Personal Team `U56S63Y79Q` through `sign.expo.dev` and installed on the
+  connected iPhone over USB. Certificate expiry is 2026-08-29. Metro is running
+  at `exp://192.168.1.11:8081`; next action is to open that URL in Expo Go and
+  capture the two owned P0 flows without PII.
 
 ## Durable decisions
 
@@ -43,8 +62,23 @@
 - Phase 05 code: shipped and merged (PR [#210](https://github.com/iDorgham/Gateflow/pull/210)).
 - Phase 05 remaining: owned pilot steps still `partial` in `docs/audits/scanner-app/PILOT_GATE_2026-07-30.json`. `/dev` 2026-08-14 did not change product code or the gate file.
 - Resume-from: after SDK 57 Expo Go is on the iPhone **and** Node is allowed through the firewall, connect to `exp://192.168.1.7:8081`, login `admin@school.demo`, start Gate 1, capture the two owned proofs. Do not attempt `expo run:ios` on 26.1.1.
+- 2026-08-22 resume guard: do not continue from the current uncommitted
+  `AppDelegate.swift` access-level/binding edits. They reproduce the failed
+  workaround documented above. Resolve ownership before restoring them, and do
+  not refresh `PILOT_GATE_OWNED` until a signed physical-device build captures
+  both owned P0 flows.
+- The AppDelegate guard is now resolved: `AppDelegate.swift` is clean against
+  `HEAD`. The active blocker is Apple signing authority, not source code. No EAS
+  physical build was queued on 2026-08-22.
+- The free Expo Go route supersedes the paid EAS-build blocker for this pilot
+  session. Installation is complete, but no runtime access-decision evidence
+  has been captured yet; keep both owned pilot steps partial until the app is
+  opened from Metro and the live flows are proven.
 
 ## Context budget
 
 - Loaded: L0, L1, L2, L3 (phase 05), L5, L6 (phase 05 log)
 - Not loaded: L4 schema dump (no DB/API changes this session)
+- 2026-08-22 `/dev`: loaded L0, L1, L2, L3 (Phase 05), L5, and L6; L4
+  remained unloaded because no DB/API/schema work was needed. Phase 05 log was
+  updated with the blocked checkpoint.

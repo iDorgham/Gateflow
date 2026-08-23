@@ -82,7 +82,7 @@ function flushOperations(): Promise<void> {
   });
 }
 
-const asyncStorageMock = {
+jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(async (key: string): Promise<string | null> => {
     let result: string | null = null;
     operationQueue.push(() => {
@@ -109,9 +109,7 @@ const asyncStorageMock = {
     });
     await flushOperations();
   }),
-};
-
-jest.mock('@react-native-async-storage/async-storage', () => asyncStorageMock);
+}));
 
 beforeEach(() => {
   operationQueue = [];

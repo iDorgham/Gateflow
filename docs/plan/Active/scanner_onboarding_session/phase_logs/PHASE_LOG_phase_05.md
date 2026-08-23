@@ -6,6 +6,54 @@ PR [#208](https://github.com/iDorgham/Gateflow/pull/208) merged. PR
 [#210](https://github.com/iDorgham/Gateflow/pull/210), open/draft.
 **App:** `scanner-app`
 
+## 2026-08-22 `/dev` checkpoint (blocked before mutation)
+
+- Workflow v2 still focuses `scanner-app` at stage `checking`; Phase 05 is the
+  only incomplete phase.
+- Fresh local toolchain check: Xcode `26.1.1` (`17B100`), Swift `6.2.1`, and
+  macOS `15.7.1`. The documented SDK 57 native-build floor remains unmet.
+- Expo account `dorgham` is authenticated. The five latest iOS EAS builds are
+  all `ERRORED`; the newest two are simulator builds for commit `bf5ad401` and
+  fail in the Xcode build step.
+- The current dirty scanner runtime slice overlaps this phase. In particular,
+  `AppDelegate.swift` contains the same access-level and
+  `bindReactNativeFactory` compatibility edits that this plan records as an
+  invalid workaround. Focused-diff ownership therefore stopped execution
+  before edits; no pre-existing runtime file was overwritten.
+- No product code or pilot-gate artifact was changed. Device-backed ACCESS
+  GRANTED and offline reconnect-sync evidence remain missing, so Phase 05 stays
+  incomplete and `/certify` remains blocked.
+
+### Authorized AppDelegate restore and physical-build attempt
+
+- After explicit user authorization, restored only
+  `apps/scanner-app/ios/scannerapp/AppDelegate.swift` to the committed SDK 57
+  template. `git diff --exit-code` confirmed that file is clean; all other
+  pre-existing dirty files were preserved.
+- Started `eas build --platform ios --profile development` from
+  `apps/scanner-app`. EAS resolved the development environment and remote iOS
+  credential store, but the Apple ID available in the local Keychain has no
+  associated Apple Developer team.
+- Retried without Apple login to test whether the remote credentials were
+  complete. EAS reported that internal-distribution credentials still need to
+  be generated and require either an Apple Developer account or a supplied
+  `credentials.json`. The retry was stopped at the repeated Apple ID prompt.
+- No physical-device build was queued. Resume requires an Apple ID associated
+  with the paid team or a valid local credentials file; never record either in
+  repository documentation.
+
+### Free Personal Team Expo Go installation
+
+- Used `sign.expo.dev` in Chrome to select SDK 57, reuse the authenticated Expo
+  account, detect the connected iPhone, and create free Personal Team
+  provisioning for team `U56S63Y79Q` after explicit user confirmation.
+- The browser signed and installed the SDK 57 Expo Go app over USB. The free
+  provisioning expires after seven days (2026-08-29) and must be renewed for
+  later device sessions.
+- Started `pnpm --filter scanner-app dev`; Metro is serving on the LAN at
+  `exp://192.168.1.11:8081`. This proves installation and dev-server readiness
+  only. It is not ACCESS GRANTED or offline-sync evidence.
+
 ## Scope split (agreed with user before starting)
 
 Two of this phase's steps — "scan a signed QR on-device" and "offline
