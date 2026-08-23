@@ -1,0 +1,16 @@
+apps/scanner-app/src/lib/offline-queue.test.ts
+  h_220d66b2244819 85,112
+apps/scanner-app/src/lib/offline-queue.ts
+  h_220d66b2244819 174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "91002561237043fd903d39ed02fc0dfd7395043b",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
