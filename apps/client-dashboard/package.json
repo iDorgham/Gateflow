@@ -75,7 +75,7 @@
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@jest/globals": "^30.2.0",
-    "@next/bundle-analyzer": "^16.2.1",
+    "@next/bundle-analyzer": "^16.3.2",
     "@types/jest": "^30.0.0",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^26.1.2",
