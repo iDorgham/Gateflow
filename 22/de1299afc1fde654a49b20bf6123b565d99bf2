@@ -1,0 +1,64 @@
+docs/NOTEBOOKLM_09_DEVELOPMENT_STATUS_AND_PROBLEMS.md
+  h_220d66b2244819 5-9,14,16-19,23,25,27-29,31,33-35,37,39-40,44,46,48-50,52,54,58-70
+docs/audits/GATEFLOW_AUDIT_2026-08-19.md
+  h_220d66b2244819 1-247
+docs/audits/GATEFLOW_LAST_CHANGES_AUDIT_2026-08-19.md
+  h_220d66b2244819 1-145
+docs/audits/GATEFLOW_MASTER_AUDIT_2026-08-24.md
+  h_220d66b2244819 1-94
+docs/audits/admin-dashboard/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-53
+docs/audits/client-dashboard/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-54
+docs/audits/design-system/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-49
+docs/audits/integrated-pilot/evidence/2026-08-23/INTEGRATED_PILOT_EVIDENCE.json
+  h_220d66b2244819 1-28
+docs/audits/marketing/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-51
+docs/audits/resident-mobile/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-49
+docs/audits/resident-portal/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-53
+docs/audits/scanner-app/AUDIT_2026-08-24.md
+  h_220d66b2244819 1-58
+docs/audits/scanner-app/evidence/2026-08-21/NOTES.md
+  h_220d66b2244819 1-90
+docs/audits/scanner-app/evidence/2026-08-22/CERTIFICATION_PACKET.json
+  h_220d66b2244819 1-33
+docs/audits/scanner-app/evidence/2026-08-22/offline-proof-2-qr-meta.txt
+  h_220d66b2244819 1-12
+docs/audits/scanner-app/evidence/2026-08-22/offline-proof-3-qr-meta.txt
+  h_220d66b2244819 1-12
+docs/audits/scanner-app/evidence/2026-08-22/offline-proof-qr-meta.txt
+  h_220d66b2244819 1-12
+docs/audits/scanner-app/evidence/2026-08-23/CAPTURE_CHECKLIST.md
+  h_220d66b2244819 1-11
+docs/audits/scanner-app/evidence/2026-08-23/devices.txt
+  h_220d66b2244819 1-4
+docs/audits/scanner-app/evidence/2026-08-23/offline-proof-4-qr-meta.txt
+  h_220d66b2244819 1-12
+docs/audits/scanner-app/evidence/2026-08-23/run-metadata.txt
+  h_220d66b2244819 1-7
+docs/audits/scanner-app/evidence/2026-08-23/scan-proof-qr-meta.txt
+  h_220d66b2244819 1-12
+docs/reference/apps/SCANNER_APP_REFERENCE.md
+  h_220d66b2244819 9,13,17-19,23-28,32,40,44,49-50,54-56,66,68-72,78-90,93,96,102-105,115,120-122
+docs/tasks.md
+  h_220d66b2244819 3,7,9-15,19,23-26,28,30-32,34,36-38,40,42-44
+packages/theme/package.json
+  h_220d66b2244819 34
+packages/theme/tsup.config.ts
+  h_220d66b2244819 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "22de1299afc1fde654a49b20bf6123b565d99bf2",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
