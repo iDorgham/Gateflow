@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "ai": "5.0.52",
-    "stripe": "^17.7.0"
+    "stripe": "^22.5.0"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
