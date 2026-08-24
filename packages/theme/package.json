@@ -31,7 +31,7 @@
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/cookie.test.ts",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --external react,react-dom,next-themes"
+    "build": "tsup --config tsup.config.ts"
   },
   "dependencies": {
     "@gateflow/tokens": "workspace:*",

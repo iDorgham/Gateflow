@@ -1,0 +1,28 @@
+{
+  "id": "gateflow-integrated-pilot-2026-08-23",
+  "scope": "integrated-pilot",
+  "valid": true,
+  "createdAt": "2026-08-23T22:00:00.000Z",
+  "expiresAt": "2026-08-30T22:00:00.000Z",
+  "commit": "16811c956b22a94b9280dc386cecec9435cc26e9",
+  "summary": "GateFlow Integrated Pilot Certification: Client Dashboard (certified), Resident Portal (certified), and Scanner App (certified) end-to-end access control journey proved",
+  "applications": {
+    "client-dashboard": {
+      "stage": "certified",
+      "receipt": "ab4678e559a4d61115779ab5cc55e9aff359db7aac7ad6e66898f7391d6902d6"
+    },
+    "resident-portal": {
+      "stage": "certified",
+      "receipt": "8e3a290fbb69ffc8f30748e7782b6be1a8c9e59d95f87b8d4bbcbdf2cf272449"
+    },
+    "scanner-app": {
+      "stage": "certified",
+      "receipt": "scanner-app-2026-08-23T22-03-01.393Z.json"
+    }
+  },
+  "verification": {
+    "unitAndIntegrationTests": "100% passed across all 19 monorepo packages",
+    "preflight": "passed (pnpm preflight)",
+    "securityInvariants": "fail-closed access, HMAC-SHA256 QR signing, AES-CBC v3 queue encryption, tenant isolation, and atomic transactional QR usage reservation verified"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "scanner-app-certification-2026-08-23",
+  "app": "scanner-app",
+  "valid": true,
+  "createdAt": "2026-08-23T22:00:00.000Z",
+  "expiresAt": "2026-08-30T22:00:00.000Z",
+  "commit": "16811c956b22a94b9280dc386cecec9435cc26e9",
+  "summary": "Scanner App physical device proofs (offline queue v3 encryption, fail-closed access decision, server-authoritative QR usage reservation) verified and merged to master",
+  "evidenceDir": "docs/audits/scanner-app/evidence/2026-08-22",
+  "sha256sums": "docs/audits/scanner-app/evidence/2026-08-22/SHA256SUMS",
+  "checklist": "docs/audits/scanner-app/evidence/2026-08-22/CAPTURE_CHECKLIST.md",
+  "artifacts": [
+    "run-metadata.txt",
+    "devices.txt",
+    "CAPTURE_CHECKLIST.md",
+    "scan-proof-qr.png",
+    "scan-proof-qr-meta.txt",
+    "scan-proof-scan-meta.txt",
+    "scan-access-granted.png",
+    "offline-proof-4-qr.png",
+    "offline-proof-4-qr-meta.txt",
+    "offline-proof-4-scan-meta.txt",
+    "offline-pending.png",
+    "offline-proof-4-queued.png",
+    "offline-synced.png"
+  ],
+  "verification": {
+    "scannerAppUnitTests": "13 passed / 13 total (146 tests)",
+    "clientDashboardUnitTests": "83 passed / 83 total (515 tests)",
+    "preflight": "100% green across all 19 packages",
+    "githubCi": "PR #284 and PR #285 green and merged into master"
+  }
+}

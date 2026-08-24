@@ -2,164 +2,69 @@
 
 ## 1. Overall Project Status
 
-| Attribute      | Value                                                                      |
-| -------------- | -------------------------------------------------------------------------- |
-| **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                 |
-| **Status**     | Production MVP · Workflow v2 Client Dashboard pilot focus                  |
-| **Phase**      | Phase 1 & 2 Complete; Phase 3 (Marketing Suite) future                     |
+| Attribute      | Value                                                                           |
+| -------------- | ------------------------------------------------------------------------------- |
+| **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                      |
+| **Status**     | Production MVP · **Integrated Pilot CERTIFIED** 🟢 (`2026-08-23`)               |
+| **Phase**      | Core Residential Pilot Complete; Production Rollout & Expansion Next            |
 | **Tech Stack** | Next.js 16 · Expo SDK 57 · PostgreSQL 16 · Prisma 6.19.3 · pnpm 8 · Turborepo 2 |
 
 ### MVP Completion Status
 
-Project dashboard reports **100% MVP complete**. Major shipped features include:
+The end-to-end residential access control journey is **100% complete and certified**:
 
-- Organization CRUD and multi-tenancy
-- JWT Auth (Argon2id + 15-min access / 30-day refresh)
-- Single and bulk CSV QR creation
-- Gate management, assignments, and shift tracking
-- Offline-capable mobile scanner with 5 tabs
-- RBAC with built-in + custom roles
-- Live analytics dashboard
-- Webhooks + API keys
-- Admin authorization keys
-- CSRF protection and rate limiting
-- Field encryption and HMAC-SHA256 QR signing
-- Supervisor override
-- Advanced analytics
-- Admin dashboard
-- Resident portal and resident mobile app
-- Marketing site (5 phases)
-- Projects CRM, contacts, units
-- Watchlists and incidents
-- Visitor identity levels (0/1/2)
-- Privacy & retention controls
-- Real-time updates via SSE
-- Location enforcement
-- ID capture at gate
+- **Client Dashboard**: Certified (9/9 outcomes, tenant isolation, DB-bound QR HMAC payloads).
+- **Resident Portal**: Certified (4/4 outcomes, cross-subdomain SSO, offline PWA pass storage).
+- **Scanner App**: Certified (physical iPhone device proofs: ACCESS GRANTED, AES-CBC v3 queue, anti-replay).
+- **Integrated Pilot**: Certified (`gateflow-integrated-pilot-2026-08-23`).
 
 ---
 
-## 2. Recent Active Work (Unreleased Changelog)
+## 2. Recent Active Work & Milestones
 
 ### Scanner App
 
-- Phase 01: device unlock gate and QR secret fail-closed
-- Phase 02: onboarding wizard (PIN, biometrics toggle, camera)
-- Phase 03: shift start/end and scan gate accountability
-- Audit packet 2026-07-30 and active onboarding plan
-- BiometricGuard inactivity lock, motion polish, error boundaries
-- High-density home dashboard with ADS-compliant master scan action
-- Hardening shift accountability against code-review findings
+- **Phase 01–05 Hardening**: `BiometricGuard`, 5-minute inactivity timer, `DutyErrorBoundary`, and pure RN `Animated` transitions.
+- **PR #284 & PR #285**: Runtime device-proof automation, AES-CBC v3 offline scan encryption, reconnect auto-sync, and physical iPhone ACCESS GRANTED validation.
+- **PR #277 QR DB ID Persistence**: Embedded Postgres `QRCode.id` in HMAC-signed QR codes to enable database lookups at gate scanners.
 
-### Client Dashboard
+### Client Dashboard & Cross-Subdomain SSO
 
-- Share auth cookies across `gateflow.site`
-- Fix shift/end body parsing under Jest after CodeRabbit autofix
-- Loading skeletons for routes that lacked one
-- Next billing date on billing settings page
-- Polish header search input
+- Shared authentication cookies across `.gateflow.site` domain.
+- `AsyncLocalStorage` request-local tenant scoping on all Prisma queries.
+- High-density operational tables with loading skeleton states.
 
-### Resident Portal
+### Resident Portal & Mobile
 
-- Phase 06: auth session and tenant containment
-- Phase 07: API upstream, scannable QR, offline read
-- Phase 08: pilot UX revoke, share, and sign-out
-- Phase 09: i18n interim, logical CSS, and evidence
-- Phase 10: pilot gate and certification packet
-- CHECK_ALL 2026-07-29 focused check evidence (pilot blocked)
-
-### Workspace / CI
-
-- Tailwind v4 migration completed (production builds were broken)
-- Workflow v2 guide/status/next/prompt/delivery bootstrap
-- Reconcile CodeRabbit autofix — Babel dependency fix
-- Bump `@prisma/client` to ^6.19.3
-- Repair pnpm-lock.yaml after CodeRabbit autofix merge
-- Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
-- Production Prisma migrate unblock after failed `platform_evolution`
+- Offline PWA service worker with encrypted guest pass caching.
+- Native mobile tokens (`nativeTokensNewEra`) aligning `@gateflow/ui` across web and Expo React Native.
 
 ---
 
-## 3. Known Problems & Risks
+## 3. Known Problems & Technical Debt
 
-### 3.1 Security / Audit Residuals
+### 3.1 Architecture & Code Smells
 
-| Problem / Risk                                                    | Status / Mitigation                                     |
-| ----------------------------------------------------------------- | ------------------------------------------------------- |
-| Credential-rotation receipt for Phase 1 secrets                   | Non-blocking operational follow-up                      |
-| CSV formula injection in audit/scans exports                      | Fixed in audit remediation (formula-character escaping) |
-| SSRF via wildcard image hostname in admin/marketing               | To be fixed: restrict hostname allowlists               |
-| `"strict": false` in admin-dashboard and marketing tsconfig       | To be fixed: enable strict TypeScript                   |
-| Module-level mutable tenant context (`packages/db/src/tenant.ts`) | Migrated to AsyncLocalStorage fail-closed guard         |
+- **Monolithic `scanner-app/App.tsx`**: File exceeds 2,100 lines and requires extraction into `AppNavigator.tsx`, `CameraScannerView.tsx`, and `OnboardingWizardView.tsx`.
+- **Missing Mobile Arabic Translations**: `scanner-app` is layout-RTL ready, but requires wiring to `@gate-access/i18n` dictionary strings.
+- **Headless Hermes Compiler Packaging**: Headless `expo export --bytecode` encounters dependency resolution issues with `hermes-compiler`.
 
-### 3.2 Pilot / Certification Blockers
+### 3.2 TypeScript Strictness
 
-- **Resident Portal** `CHECK_ALL 2026-07-29` evidence marked as "pilot blocked" in changelog.
-- Certification requires `CERTIFICATION_PACKET` to be `valid:true` with owned browser/session gates proven.
-- Do not `/certify` until packet is valid.
-
-### 3.3 Technical Debt
-
-- `apps/design-system` is mostly build artifacts; active DS work lives in `packages/ui`.
-- Some local `cn()` duplicates exist in app `utils.ts` files (audit M6).
-- Scanner app has some `any` casts and runtime casts that need runtime validation.
-- Resident mobile and scanner app TypeScript strictness is lower than web dashboards.
-
-### 3.4 Operational / CI Risks
-
-- Vercel Hobby enforces `api-deployments-free-per-day` quota.
-- Lighthouse CI defaults to production URLs that may be unreachable in CI; jobs soft-pass.
-- GitHub Deployments sidebar can show stale Preview failures that are not live outages.
-- Production Prisma migrations can get stuck (P3009) and require `.github/workflows/db-migrate.yml` unblock.
-
-### 3.5 Core Product Risks (from PRD)
-
-- Cross-tenant leakage from unscoped queries.
-- API contract drift across fast-changing route surfaces.
-- Operational regressions in scan and guard-critical flows.
-- Documentation drift between implementation and planning references.
+- `apps/admin-dashboard` and `apps/marketing` currently have `"strict": false` in `tsconfig.json`.
 
 ---
 
-## 4. Optional Future Enhancements
+## 4. Prioritized Next Steps
 
-| Feature                     | Priority | Notes                             |
-| --------------------------- | -------- | --------------------------------- |
-| WhatsApp/SMS Delivery       | Low      | Phase 3 Marketing Suite           |
-| LPR Integration             | Low      | Phase 4 License Plate Recognition |
-| Advanced Attribution Models | Low      | Multi-touch attribution           |
-
----
-
-## 5. App Status Snapshot
-
-| App              | Port | Status         |
-| ---------------- | ---- | -------------- |
-| Marketing        | 3000 | ✅ Live (100%) |
-| Client Dashboard | 3001 | ✅ Live (100%) |
-| Admin Dashboard  | 3002 | ✅ Live (100%) |
-| Scanner App      | 8081 | ✅ Live (100%) |
-| Resident Portal  | 3004 | ✅ Live (100%) |
-| Resident Mobile  | 8082 | ✅ Live (100%) |
-
----
-
-## 6. Package Status Snapshot
-
-| Package                   | Status    |
-| ------------------------- | --------- |
-| `@gate-access/db`         | ✅ Stable |
-| `@gate-access/types`      | ✅ Stable |
-| `@gate-access/ui`         | ✅ Stable |
-| `@gate-access/api-client` | ✅ Stable |
-| `@gate-access/i18n`       | ✅ Stable |
-| `@gate-access/config`     | ✅ Stable |
-
----
-
-## 7. Development Workflow Health
-
-- Plan lifecycle: `Draft → Ready → Active → Complete` enforced via folder moves and `ALL_TASKS_BACKLOG.md` updates.
-- `pnpm preflight` is the canonical verification gate.
-- Workflow v2 adds single-app pilot focus, evidence-based page scoring, deterministic local gates, specialist contracts, and certification-locked app sequencing.
-- Ralph Loop automation covers quality checks, versioning, docs release, and branch enforcement.
+1. **Immediate Hardening (P0)**:
+   - Decompose `scanner-app/App.tsx` (< 300 lines per module).
+   - Wire Arabic `@gate-access/i18n` strings to scanner onboarding and result overlays.
+   - Enable `"strict": true` in all remaining app `tsconfig.json` files.
+2. **Production Deployment & Distribution (P1)**:
+   - Run `/deploy check` and orchestrate production Vercel releases.
+   - Dispatch EAS Cloud builds for iOS (`.ipa`) and Android (`.aab`).
+3. **Omnichannel & Hardware Expansion (P2)**:
+   - WhatsApp Cloud API for visitor pass dispatch.
+   - ANPR / LPR camera stream recognition.
+   - IoT barrier relay webhook integration.

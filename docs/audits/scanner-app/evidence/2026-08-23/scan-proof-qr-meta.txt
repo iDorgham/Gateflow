@@ -1,0 +1,12 @@
+qrId=d88a08b9-ded2-4bba-8f2c-f3e2f69924cc
+payloadQrId=d88a08b9-ded2-4bba-8f2c-f3e2f69924cc
+organizationId=cmoldsofx000512u212hyptqf
+gateId=gate-school-1
+type=SINGLE
+maxUses=1
+issuedAt=2026-08-23T18:37:31.501Z
+expiresAt=2026-08-23T19:07:31.501Z
+nonceSha256=0b72c304c52a608e31d69d91b1926a505daf5be295473f93d84c4e640791e156
+databasePersisted=true
+signatureVerified=true
+generator=canonical GateFlow signQRPayload + Prisma QRCode persistence

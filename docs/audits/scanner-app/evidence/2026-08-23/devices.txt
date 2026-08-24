@@ -1,0 +1,4 @@
+Name                          Hostname                                      Identifier                             State                Model                         
+---------------------------   -------------------------------------------   ------------------------------------   ------------------   ------------------------------
+Dorgham?s iPhone 12 Pro Max   Dorghams-iPhone-12-Pro-Max.coredevice.local   790341E2-C484-5BF5-B709-0775E747008E   available (paired)   iPhone 12 Pro Max (iPhone13,4)
+iPhone                        iPhone.coredevice.local                       5ACAA421-B1CD-5461-A70C-FB3C507F02B6   unavailable          iPhone 13 mini (iPhone14,4)   

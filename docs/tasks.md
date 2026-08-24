@@ -1,158 +1,44 @@
 # GateFlow — Task Tracking & Feature Inventory
 
-This document tracks unfinished tasks and a complete feature inventory across the GateFlow ecosystem.
+This document tracks completed milestones, active tasks, and future feature expansion across the GateFlow ecosystem.
 
 ---
 
-## 🛠️ Unfinished Tasks
+## 🟢 Completed Milestones (August 2026)
 
-### 🏢 Client Dashboard (`apps/client-dashboard`)
-
-#### 🖥️ Client Frontend
-
-- [ ] Implement advanced analytics charts for cost-per-visit (CPV).
-- [ ] Add bulk import for residents via CSV/Excel.
-- [ ] Refine the interactive map for multi-project overview.
-
-#### ⚙️ Client Backend
-
-- [ ] Implement rate limiting for public-facing guest invite links.
-- [ ] Optimize the `ScanLog` aggregation query for large datasets.
-- [ ] Add webhook support for 3rd-party CRM integrations.
+- [x] **Integrated Pilot Certification**: End-to-end residential flow certified across Client Dashboard, Resident Portal, and Scanner App (`gateflow-integrated-pilot-2026-08-23`).
+- [x] **Client Dashboard QR Persistence (PR #277)**: Embedded database `QRCode.id` in HMAC-signed QR codes.
+- [x] **Scanner Physical Device Proof (PR #284 & PR #285)**: ACCESS GRANTED, AES-CBC v3 offline scan queue encryption, and automatic sync verified on physical iPhone hardware.
+- [x] **Tenant Isolation**: Migrated all Prisma queries to fail-closed `AsyncLocalStorage` request-local context.
+- [x] **Cross-Subdomain SSO**: Live session sharing across `.gateflow.site` (`app.gateflow.site` and `portal.gateflow.site`).
+- [x] **Admin Evolution (Phases 1–9)**: Traffic emulation hub, AI blog and landing page generator, and platform CRM.
+- [x] **Tailwind v4 & ADS Design System**: Monorepo token migration, OKLCH color palettes, and dark mode engine.
 
 ---
 
-### 🛡️ Admin Dashboard (`apps/admin-dashboard`)
-
-#### 🖥️ Admin Frontend
-
-- [x] Finalize the dark mode contrast pass and alignment with Client Dashboard aesthetics.
-- [x] Refine the Admin AI UI/UX with premium animations and hybrid message parts.
-- [ ] Implement the organization-level usage quota visualization.
-- [x] Add a global search for projects and users across the platform (placeholder).
-
-#### ⚙️ Admin Backend
-
-- [ ] Harden the `ADMIN_ACCESS_KEY` validation logic.
-- [ ] Implement automated backups for the organization configuration.
-- [ ] Refine the multi-tenant isolation middleware performance.
-
-- [x] **Admin Dashboard Redesign** — Alignment with Client Dashboard aesthetics
-      (Radius, Tokens, Shell, Sidebar).
-
----
-
-### 🚀 Evolution & Growth
-
-#### 🛡️ Admin Dashboard Evolution
-
-- [ ] Phase 1: Reorganize side menu with dynamic token-based icons.
-- [ ] Phase 1: Rebuild Organization management with nested hierarchy support.
-- [ ] Phase 2: Scaffold CMS Shell and settings for gateflow.site.
-- [ ] Phase 3: Core implementation of the Webflow-like page builder.
-
----
+## 🛠️ Active & Prioritized Tasks
 
 ### 🤳 Scanner App (`apps/scanner-app`)
 
-#### 🖥️ Scanner Frontend
+- [ ] **P0: Monolith Decomposition**: Refactor `App.tsx` (2,100+ lines) into `AppNavigator.tsx`, `CameraScannerView.tsx`, and `OnboardingWizardView.tsx`.
+- [ ] **P0: Arabic Localization Wiring**: Connect `@gate-access/i18n` dictionary strings into the scanner onboarding wizard, shift tracking, and scan overlays.
+- [ ] **P1: Headless Hermes Export Alignment**: Ensure `expo export --bytecode` passes cleanly without `hermes-compiler` packaging issues.
+- [ ] **P2: Optical Character Recognition (OCR)**: Add national ID and driver's license photo capture at guard booths.
 
-- [ ] Add haptic feedback for successful and failed scans.
-- [ ] Implement a low-light "Torch" toggle in the camera view.
-- [ ] Refine the offline sync status indicator.
+### 🏢 Client Dashboard (`apps/client-dashboard`)
 
-#### ⚙️ Scanner Backend
+- [ ] **P1: Guard Shift Visual Map**: Real-time visual monitoring of active guard shifts and gate terminals.
+- [ ] **P1: WhatsApp Pass Dispatch**: Automatically send QR pass links to visitor WhatsApp numbers upon creation.
+- [ ] **P2: Live ANPR Ingestion Feed**: Display camera license plate recognition events directly in scan log tables.
 
-- [ ] Optimize the offline HMAC signature rotation queue.
-- [ ] Implement background sync for scan logs while the app is in the background.
+### 🌐 Resident Portal & Mobile (`apps/resident-portal` / `apps/resident-mobile`)
 
----
+- [ ] **P1: WhatsApp Share Template**: Pre-formatted bilingual visitor invitations via Web Share API.
+- [ ] **P1: EAS Mobile Build Workflow**: Automated GitHub Action dispatch for `.ipa` and `.aab` production builds.
+- [ ] **P2: Apple Wallet / Google Wallet Integration**: Export passes directly into native device wallets.
 
-### 📱 Resident Mobile (`apps/resident-mobile`)
+### 🛡️ Admin Dashboard & Marketing (`apps/admin-dashboard` / `apps/marketing`)
 
-#### 🖥️ Mobile Frontend
-
-- [ ] Add a "Quick Pass" widget for iOS and Android home screens.
-- [ ] Implement real-time push notification history view.
-- [ ] Refine the WhatsApp sharing template UI.
-
-#### ⚙️ Mobile Backend
-
-- [ ] Integrate with the localized WhatsApp Business API for MENA.
-- [ ] Implement biometric session persistence across app restarts.
-
----
-
-### 🌐 Resident Portal (`apps/resident-portal`)
-
-#### 🖥️ Portal Frontend
-
-- [ ] Implement the responsive multi-column layout for desktop.
-- [ ] Add a visitor history timeline with filtering.
-- [ ] Refine the loading skeletons for slow connections.
-
-#### ⚙️ Portal Backend
-
-- [ ] Optimize the pass creation API for low-latency web access.
-- [ ] Implement session hijacking protection for web residents.
-
----
-
-### 📣 Marketing Website (`apps/marketing`)
-
-#### 🖥️ Marketing Frontend
-
-- [ ] Add the interactive "Pricing Calculator" for enterprise deals.
-- [ ] Finalize the "Resilience" campaign landing page.
-- [ ] Optimize the mega-menu for mobile devices.
-
-#### ⚙️ Marketing Backend
-
-- [ ] Integrate with the internal CRM for automated lead scoring.
-- [ ] Implement server-side tracking for UTM attribution.
-
----
-
-## ✨ Feature Inventory
-
-### 🏢 Client Dashboard
-
-- **CRM Hub**: Full resident and unit management.
-- **Analytics Hub**: Physical-to-digital attribution tracking.
-- **Project Gallery**: HQ asset management for property listings.
-- **RBAC**: Fine-grained role-based access control.
-
-### 🛡️ Admin Dashboard
-
-- **Organization Management**: Multi-tenant infrastructure control.
-- **Emulation Hub**: Platform-wide traffic and seeding simulation.
-- **Admin AI**: Refined premium assistant with hybrid UI and tool-calling visualization.
-- **Security Hub**: Global key rotation and audit logs.
-
-### 🤳 Scanner App
-
-- **High-Speed OCR**: Instant government ID scanning.
-- **Offline HMAC**: Zero-latency verification without internet.
-- **Watchlist Alerts**: Real-time security notifications for flagged guests.
-
-### 📱 Resident Mobile
-
-- **One-Tap Invite**: Instant WhatsApp/SMS pass sharing.
-- **GateAI Assistant**: Natural language guest management.
-- **Biometric Lock**: Secure access via FaceID/TouchID.
-
-### 🌐 Resident Portal
-
-- **Desktop Management**: Full guest logs controllable via web.
-- **Service Requests**: Direct communication with property management.
-
-### 📣 Marketing Website
-
-- **Attribution Engine**: Capturing the source of every physical visit.
-- **Solution Verticals**: Tailored landing pages for different industries.
-
----
-
-<div align="center">
-  <sub>Updated automatically by the <b>Ralph Loop</b>.</sub>
-</div>
+- [ ] **P0: TypeScript Strictness**: Transition remaining `"strict": false` apps to `"strict": true`.
+- [ ] **P1: Interactive ROI Calculator**: Embed compound savings calculator on `www.gateflow.site`.
+- [ ] **P2: Multi-Region Database Sharding**: Global compute scaling via Neon PostgreSQL.
