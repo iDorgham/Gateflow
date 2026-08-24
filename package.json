@@ -100,14 +100,14 @@
     "@types/node": "^26.1.2",
     "ai": "6.0.246",
     "autoprefixer": "^10.4.24",
-    "eslint": "9.39.5",
+    "eslint": "10.9.0",
     "globals": "^16.4.0",
     "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.11",
     "turbo": "^2.10.9",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "yaml": "^2.9.0"
   },
   "packageManager": "pnpm@8.15.0",
@@ -137,7 +137,7 @@
       "expo-modules-core@57.0.11": "patches/expo-modules-core@57.0.10.patch"
     },
     "overrides": {
-      "eslint": "9.39.5",
+      "eslint": "10.9.0",
       "typescript@<6.0.0": "5.9.3",
       "lodash": "4.18.1",
       "lodash-es": "4.18.1",
