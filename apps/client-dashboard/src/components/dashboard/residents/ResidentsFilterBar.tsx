@@ -57,7 +57,7 @@ export function ResidentsFilterBar({
   const { currentProjectId } = useProjectFilter();
   const [customFrom, setCustomFrom] = useState(filters.from);
   const [customTo, setCustomTo] = useState(filters.to);
-  const [gates] = useState<Gate[]>(initialGates);
+  const [_gates, setGates] = useState<Gate[]>(initialGates);
   const [searchInput, setSearchInput] = useState(filters.search);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
