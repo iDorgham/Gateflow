@@ -5,8 +5,11 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { getRepoRoot } = require('./repo-root');
+const { assertNonZeroScan } = require('./non-zero-scan');
 
-const APPS_ROOT = path.join(process.cwd(), 'apps');
+const ROOT = getRepoRoot(__dirname);
+const APPS_ROOT = path.join(ROOT, 'apps');
 const IGNORE_DIRS = new Set([
   'node_modules',
   '.next',
@@ -31,6 +34,7 @@ const FORBIDDEN_PATTERNS = [
 ];
 
 const violations = [];
+let filesScanned = 0;
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return;
@@ -43,6 +47,8 @@ function walk(dir) {
     }
 
     if (!/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) continue;
+
+    filesScanned++;
 
     // Match path fragments against forward-slash normalized paths.
     const posixPath = fullPath.split(path.sep).join('/');
@@ -66,6 +72,11 @@ function walk(dir) {
 
 walk(APPS_ROOT);
 
+assertNonZeroScan(filesScanned, {
+  scannerName: 'check-bootstrap-routes',
+  context: { root: APPS_ROOT },
+});
+
 if (violations.length > 0) {
   console.error('\x1b[31mBootstrap route / credential guard failed:\x1b[0m');
   for (const violation of violations) {
@@ -74,5 +85,7 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log('\x1b[32mBootstrap route guard: clean\x1b[0m');
+console.log(
+  `\x1b[32mBootstrap route guard: clean (scanned ${filesScanned} files)\x1b[0m`
+);
 process.exit(0);

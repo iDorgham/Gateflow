@@ -146,10 +146,14 @@ function isBinary(filePath) {
 
 function scanContent(content, filePath) {
   const findings = [];
+  // Fast pre-filter: only inspect lines if at least one pattern matches file content
+  const matchingPatterns = PATTERNS.filter(({ re }) => re.test(content));
+  if (matchingPatterns.length === 0) return findings;
+
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    for (const { name, severity, re } of PATTERNS) {
+    for (const { name, severity, re } of matchingPatterns) {
       if (re.test(line)) {
         const redacted = line
           .trim()
@@ -173,6 +177,7 @@ function gitLines(args) {
       cwd: ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: 3000,
       maxBuffer: 64 * 1024 * 1024,
     })
       .trim()
@@ -187,8 +192,73 @@ function getStagedFiles() {
   return gitLines(['diff', '--cached', '--name-only', '--diff-filter=ACMR']);
 }
 
+const SKIP_DIRS = new Set([
+  'node_modules',
+  '.git',
+  '.next',
+  '.turbo',
+  'dist',
+  'build',
+  'coverage',
+  'ios',
+  'android',
+  'Pods',
+  'vendor',
+  '.gemini',
+  '.cursor',
+  '.claude',
+  '.lighthouseci',
+  '.ai',
+  '.agents',
+  '.antigravity',
+  'artifacts',
+  'reference',
+  '__tests__',
+  '__mocks__',
+]);
+
+const BINARY_EXTS = new Set([
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.ico',
+  '.webp',
+  '.mp4',
+  '.webm',
+  '.mov',
+  '.pdf',
+  '.woff',
+  '.woff2',
+  '.ttf',
+  '.eot',
+  '.zip',
+  '.tar',
+  '.gz',
+]);
+
+function walkRepoFiles(dir = ROOT, fileList = []) {
+  if (!fs.existsSync(dir)) return fileList;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (SKIP_DIRS.has(entry.name)) continue;
+    const full = path.join(dir, entry.name);
+    const rel = path.relative(ROOT, full);
+    if (entry.isDirectory()) {
+      walkRepoFiles(full, fileList);
+    } else {
+      const ext = path.extname(entry.name).toLowerCase();
+      if (BINARY_EXTS.has(ext)) continue;
+      if (shouldSkip(rel)) continue;
+      fileList.push(rel);
+    }
+  }
+  return fileList;
+}
+
 function getAllFiles() {
-  return gitLines(['ls-files']);
+  const scanRoots = ['apps', 'packages', 'scripts', '.github'];
+  return scanRoots.flatMap((r) => walkRepoFiles(path.join(ROOT, r)));
 }
 
 function reportAndExit(mode, considered, scanned, allFindings) {

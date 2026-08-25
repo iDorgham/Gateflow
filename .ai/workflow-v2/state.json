@@ -1,10 +1,16 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": "scanner-app",
+  "focusedApp": null,
   "integratedPilot": {
-    "stage": "parked",
-    "certificationReceipt": null
+    "stage": "certified",
+    "certificationReceipt": {
+      "id": "gateflow-integrated-pilot-2026-08-23",
+      "evidenceHash": "6683150e20fc11936b979069c384dd18863757efd3f86930ca4aaaf3e92c707d",
+      "certifiedAt": "2026-08-23T22:04:43.216Z",
+      "confirmedBy": "user",
+      "evidenceArtifact": "docs/audits/integrated-pilot/evidence/2026-08-23/INTEGRATED_PILOT_EVIDENCE.json"
+    }
   },
   "apps": {
     "client-dashboard": {
@@ -223,7 +229,7 @@
       }
     },
     "scanner-app": {
-      "stage": "checking",
+      "stage": "certified",
       "currentPlan": "scanner_onboarding_session",
       "baseline": null,
       "evidence": [
@@ -344,8 +350,15 @@
           "note": "Ready plan refreshed against AUDIT_2026-07-30; 5 phases"
         }
       ],
-      "certificationReceipt": null,
-      "updatedAt": "2026-08-19T01:29:01.000Z",
+      "certificationReceipt": {
+        "version": 1,
+        "app": "scanner-app",
+        "certifiedAt": "2026-08-23T22:03:01.393Z",
+        "evidenceId": "scanner-app-certification-2026-08-23",
+        "evidenceCommit": "16811c956b22a94b9280dc386cecec9435cc26e9",
+        "sha256": "581ad0523e6c310a5dd4bd4eb79e34884d061ade519327caeb2841289125e37e"
+      },
+      "updatedAt": "2026-08-23T22:03:01.393Z",
       "pageScoresFile": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
       "pilotFlowCoverage": {
         "covered": 0,
@@ -368,5 +381,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-08-22T23:32:26.129Z"
+  "updatedAt": "2026-08-23T22:04:43.216Z"
 }

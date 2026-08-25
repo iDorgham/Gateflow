@@ -28,3 +28,5 @@ export { MarketingFunnel } from './MarketingFunnel';
 export { CampaignFirstScanLinkage } from './CampaignFirstScanLinkage';
 export { AnalyticsAudienceExportButton } from './AnalyticsAudienceExportButton';
 export { AnalyticsPDFExportButton } from './AnalyticsPDFExportButton';
+export { OperationalSecurityHealthGauge } from './OperationalSecurityHealthGauge';
+export { GateThroughputTrendsChart } from './GateThroughputTrendsChart';

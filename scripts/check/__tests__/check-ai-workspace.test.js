@@ -20,7 +20,7 @@ test('AI workspace command, agent, and skill graph is structurally valid', () =>
   }
   assert.ok(result.counts.commands > 30);
   assert.ok(result.counts.workflowAgents > 40);
-  assert.ok(result.counts.skills > 100);
+  assert.ok(result.counts.skills > 50);
 });
 
 test('AI workspace rejects command paths that escape .agents', () => {

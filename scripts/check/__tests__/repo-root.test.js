@@ -6,14 +6,20 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { spawnSync } = require('child_process');
 
 const CHECK_DIR = path.resolve(__dirname, '..');
 const REPO_ROOT = path.resolve(CHECK_DIR, '..', '..');
 
 describe('getRepoRoot', () => {
+  const {
+    getRepoRoot,
+    resolveFromRoot,
+    hasMonorepoMarkers,
+  } = require('../repo-root');
+
   it('resolves to the monorepo root, not scripts/', () => {
-    const { getRepoRoot } = require('../repo-root');
     const root = getRepoRoot(CHECK_DIR);
     assert.equal(root, REPO_ROOT);
     assert.ok(fs.existsSync(path.join(root, 'pnpm-lock.yaml')));
@@ -21,9 +27,40 @@ describe('getRepoRoot', () => {
     assert.notEqual(path.basename(root), 'scripts');
   });
 
+  it('resolves from nested app directory depths', () => {
+    const nestedAppDir = path.join(
+      REPO_ROOT,
+      'apps',
+      'client-dashboard',
+      'src'
+    );
+    const root = getRepoRoot(nestedAppDir);
+    assert.equal(root, REPO_ROOT);
+  });
+
+  it('resolves from deeply nested package directory depths', () => {
+    const nestedPkgDir = path.join(REPO_ROOT, 'packages', 'ui', 'src');
+    const root = getRepoRoot(nestedPkgDir);
+    assert.equal(root, REPO_ROOT);
+  });
+
+  it('resolves using default cwd', () => {
+    const root = getRepoRoot();
+    assert.equal(root, REPO_ROOT);
+  });
+
+  it('resolveFromRoot returns correct joined paths from repository root', () => {
+    const appsPath = resolveFromRoot('apps', 'client-dashboard');
+    assert.equal(appsPath, path.join(REPO_ROOT, 'apps', 'client-dashboard'));
+  });
+
+  it('hasMonorepoMarkers returns true for root and false for temp directory', () => {
+    assert.equal(hasMonorepoMarkers(REPO_ROOT), true);
+    assert.equal(hasMonorepoMarkers(os.tmpdir()), false);
+  });
+
   it('throws when markers are missing', () => {
-    const { getRepoRoot } = require('../repo-root');
-    assert.throws(() => getRepoRoot('/tmp'), /monorepo markers/);
+    assert.throws(() => getRepoRoot(os.tmpdir()), /monorepo markers/);
   });
 });
 

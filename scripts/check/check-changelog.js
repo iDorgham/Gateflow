@@ -2,8 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getRepoRoot } = require('./repo-root');
 
-const changelogPath = path.join(process.cwd(), 'CHANGELOG.md');
+const ROOT = getRepoRoot(__dirname);
+const changelogPath = path.join(ROOT, 'CHANGELOG.md');
 
 function fail(message) {
   console.error(`❌ changelog check failed: ${message}`);
