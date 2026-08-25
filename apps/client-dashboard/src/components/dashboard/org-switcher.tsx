@@ -16,10 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Button,
   cn,
-  Avatar,
-  AvatarFallback,
 } from '@gateflow/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
@@ -52,14 +49,6 @@ export function OrgSwitcher({
   const handleOrgSwitch = (orgId: string) => {
     router.push(`/${locale}/dashboard/organizations/${orgId}`);
   };
-
-  const initials = currentOrg.name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <DropdownMenu>

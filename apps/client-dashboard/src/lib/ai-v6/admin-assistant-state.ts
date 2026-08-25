@@ -1,13 +1,5 @@
-import {
-  UIMessageV6,
-  StreamChunk,
-  applyStreamChunkToMessage,
-} from './ui-message-adapter';
-import {
-  AgenticToolCall,
-  createAgenticToolCall,
-  ToolExecutionState,
-} from './tool-lifecycle-engine';
+import { UIMessageV6 } from './ui-message-adapter';
+import { AgenticToolCall, ToolExecutionState } from './tool-lifecycle-engine';
 import { AssistantConnectionStatus } from './client-assistant-state';
 
 export interface EmulationScenarioConfig {

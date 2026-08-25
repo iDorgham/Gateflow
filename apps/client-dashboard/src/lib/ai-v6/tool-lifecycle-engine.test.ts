@@ -3,7 +3,6 @@ import {
   approveToolCall,
   rejectToolCall,
   executeToolCall,
-  AgenticToolCall,
 } from './tool-lifecycle-engine';
 
 describe('tool-lifecycle-engine', () => {

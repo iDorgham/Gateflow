@@ -49,15 +49,15 @@ export function ResidentsFilterBar({
   tags = [],
   className,
   onCustomizerOpen,
-  totalCount,
-  selectedCount,
+  totalCount: _totalCount,
+  selectedCount: _selectedCount,
   searchPlaceholder,
 }: ResidentsFilterBarProps) {
   const { t } = useTranslation('dashboard');
-  const { projects, currentProjectId } = useProjectFilter();
+  const { currentProjectId } = useProjectFilter();
   const [customFrom, setCustomFrom] = useState(filters.from);
   const [customTo, setCustomTo] = useState(filters.to);
-  const [gates, setGates] = useState<Gate[]>(initialGates);
+  const [gates] = useState<Gate[]>(initialGates);
   const [searchInput, setSearchInput] = useState(filters.search);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -133,7 +133,7 @@ export function ResidentsFilterBar({
     COMMERCIAL: t('units.types.COMMERCIAL', 'Commercial'),
   };
 
-  const projectValue = filters.projectId || currentProjectId || '';
+  const _projectValue = filters.projectId || currentProjectId || '';
   const is7d = (() => {
     if (!filters.from || !filters.to) return false;
     const from = new Date(filters.from + 'T00:00:00');

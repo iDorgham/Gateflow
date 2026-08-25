@@ -2,8 +2,6 @@ import {
   isValidStatusTransition,
   calculateSlaStatus,
   validateWorkOrderCreation,
-  WorkOrderStatus,
-  WorkOrderPriority,
 } from './work-order-state';
 
 describe('work-order-state', () => {
