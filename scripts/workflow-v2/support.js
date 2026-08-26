@@ -39,10 +39,28 @@ function routeFrom(relative) {
 }
 
 function inventoryRoutes(root, appPath, type) {
-  const base =
-    type === 'expo'
-      ? path.join(root, appPath, 'app')
-      : path.join(root, appPath, 'src', 'app');
+  const srcApp = path.join(root, appPath, 'src', 'app');
+  const rootApp = path.join(root, appPath, 'app');
+
+  // For nextjs apps, prefer the directory with more page files
+  let base = rootApp;
+  if (type !== 'expo') {
+    const srcExists = fs.existsSync(srcApp);
+    const rootExists = fs.existsSync(rootApp);
+
+    if (srcExists && rootExists) {
+      // Both exist - count page files and use the one with more
+      const srcPages = walk(srcApp).filter((file) =>
+        /^page\.(tsx|ts|jsx|js)$/.test(path.basename(file))
+      ).length;
+      const rootPages = walk(rootApp).filter((file) =>
+        /^page\.(tsx|ts|jsx|js)$/.test(path.basename(file))
+      ).length;
+      base = rootPages >= srcPages ? rootApp : srcApp;
+    } else if (srcExists) {
+      base = srcApp;
+    }
+  }
   return walk(base)
     .filter((file) =>
       type === 'expo'

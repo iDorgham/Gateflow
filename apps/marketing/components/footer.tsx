@@ -250,8 +250,10 @@ export async function Footer({ locale }: { locale: Locale }) {
 
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {t('header.logo')}. All Rights
-            Reserved.
+            © {new Date().getFullYear()} {t('header.logo')}.{' '}
+            {locale === 'ar-EG'
+              ? 'جميع الحقوق محفوظة.'
+              : 'All Rights Reserved.'}
           </p>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">

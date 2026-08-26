@@ -18,6 +18,7 @@ export interface PricingCardProps {
   description: string;
   features: string[];
   isPopular?: boolean;
+  popularBadgeText?: string;
   actionText: string;
   onAction?: () => void;
   className?: string;
@@ -29,6 +30,7 @@ export function PricingCard({
   description,
   features,
   isPopular,
+  popularBadgeText = 'Popular',
   actionText,
   onAction,
   className,
@@ -42,16 +44,19 @@ export function PricingCard({
       )}
     >
       {isPopular && (
-        <div className="absolute -top-4 left-0 right-0 mx-auto w-32 rounded-full bg-primary px-3 py-1 text-center text-xs font-semibold text-primary-foreground shadow-sm">
-          Most Popular
+        <div className="absolute -top-4 inset-x-0 mx-auto w-32 rounded-full bg-primary px-3 py-1 text-center text-xs font-semibold text-primary-foreground shadow-sm">
+          {popularBadgeText}
         </div>
       )}
       <CardHeader>
         <CardTitle className="text-2xl font-bold">{tier}</CardTitle>
         <CardDescription className="pt-1">{description}</CardDescription>
-        <div className="mt-4 flex items-baseline text-5xl font-extrabold">
+        <div
+          className="mt-4 flex items-baseline text-5xl font-extrabold"
+          dir="ltr"
+        >
           {price}
-          <span className="ml-1 text-xl font-medium text-muted-foreground">
+          <span className="ms-1 text-xl font-medium text-muted-foreground">
             /mo
           </span>
         </div>
@@ -60,7 +65,7 @@ export function PricingCard({
         <ul className="space-y-3">
           {features.map((feature, i) => (
             <li key={i} className="flex items-start">
-              <Check className="mr-3 h-5 w-5 shrink-0 text-primary" />
+              <Check className="me-3 h-5 w-5 shrink-0 text-primary" />
               <span className="text-muted-foreground">{feature}</span>
             </li>
           ))}

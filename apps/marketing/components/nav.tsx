@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@gateflow/ui';
-import { GateFlowLogo } from '../../../packages/ui/src/components/ui/gateflow-logo';
+import { Button, GateFlowLogo } from '@gateflow/ui';
 import {
   Menu,
   X,
@@ -75,7 +74,7 @@ export function Nav({ locale }: { locale: Locale }) {
   };
 
   const navLinks = [
-    { href: '/', label: 'Home', isHome: true, icon: Home },
+    { href: '/', label: isRtl ? 'الرئيسية' : 'Home', isHome: true, icon: Home },
     {
       href: '/solutions',
       label: t('header.menu.solutions'),
@@ -95,25 +94,44 @@ export function Nav({ locale }: { locale: Locale }) {
         },
         {
           href: '/solutions/education',
-          label: 'Education Campus',
-          description: 'Campus security for students and staff.',
+          label: isRtl ? 'المدارس والجامعات' : 'Education Campus',
+          description: isRtl
+            ? 'تأمين الحرم التعليمي وإدارة استلام الطلاب بأمان.'
+            : 'Campus security for students and staff.',
           icon: BookOpen,
         },
         {
           href: '/solutions/events',
-          label: 'Event Management',
-          description: 'Temporary QR access for massive crowds.',
+          label: isRtl ? 'الفعاليات والمؤتمرات' : 'Event Management',
+          description: isRtl
+            ? 'دخول خاطف وسلس للحشود الكبيرة دون أي اختناق.'
+            : 'Temporary QR access for massive crowds.',
           icon: Users,
         },
       ],
       quickLinks: {
-        title: 'Our Hardware',
+        title: isRtl ? 'حلول العتاد والبوابات' : 'Our Hardware',
         links: [
-          { label: 'Smart Pro Scanners', href: '/hardware/scanners' },
-          { label: 'Biometric Wall Readers', href: '/hardware/biometrics' },
-          { label: 'LPR ANPR Cameras', href: '/hardware/lpr' },
-          { label: 'Cloud Access Controllers', href: '/hardware/controller' },
-          { label: 'NFC Access Cards', href: '/hardware/cards' },
+          {
+            label: isRtl ? 'أجهزة مسح ذكية' : 'Smart Pro Scanners',
+            href: '/hardware/scanners',
+          },
+          {
+            label: isRtl ? 'قارئات حائط حيوية' : 'Biometric Wall Readers',
+            href: '/hardware/biometrics',
+          },
+          {
+            label: isRtl ? 'كاميرات قراءة لوحات (LPR)' : 'LPR ANPR Cameras',
+            href: '/hardware/lpr',
+          },
+          {
+            label: isRtl ? 'وحدات تحكم سحابية' : 'Cloud Access Controllers',
+            href: '/hardware/controller',
+          },
+          {
+            label: isRtl ? 'بطاقات NFC الذكية' : 'NFC Access Cards',
+            href: '/hardware/cards',
+          },
         ],
       },
       sliderElements: [

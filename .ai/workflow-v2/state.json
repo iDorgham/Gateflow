@@ -35,7 +35,7 @@
           "valid": true,
           "createdAt": "2026-07-26T14:13:02Z",
           "commit": "901631d621284975359ac12d171c95f6eeba6bbb",
-          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json"
+          "artifact": "docs/plan/Complete/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json"
         }
       ],
       "externalGates": [
@@ -44,7 +44,7 @@
           "status": "complete",
           "summary": "Credential rotation, production activation, and session invalidation verification are recorded",
           "owner": "operations",
-          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/CREDENTIAL_ROTATION_RECEIPT_2026-07-26.json",
+          "artifact": "docs/plan/Complete/client_dashboard_readiness_2026/evidence/CREDENTIAL_ROTATION_RECEIPT_2026-07-26.json",
           "lastCheckedAt": "2026-07-26T13:52:43Z",
           "affectedCredentialNames": [
             "SETUP_SECRET",
@@ -74,7 +74,7 @@
         "covered": 0,
         "total": 9,
         "status": "blocked",
-        "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/PILOT_GATE_2026-07-26.json",
+        "artifact": "docs/plan/Complete/client_dashboard_readiness_2026/evidence/PILOT_GATE_2026-07-26.json",
         "lastCheckedAt": "2026-07-26T14:30:05Z"
       },
       "delivery": null,
@@ -346,7 +346,7 @@
           "createdAt": "2026-07-30T04:30:00.000Z",
           "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
           "reviewMode": "static-review-only",
-          "artifact": "docs/plan/Ready/scanner_onboarding_session/PLAN_scanner_onboarding_session.md",
+          "artifact": "docs/plan/Active/scanner_onboarding_session/PLAN_scanner_onboarding_session.md",
           "note": "Ready plan refreshed against AUDIT_2026-07-30; 5 phases"
         }
       ],

@@ -4,6 +4,22 @@
 
 ## 🚀 Active & Ready Initiatives (Q3 2026)
 
+### marketing_egypt_uiux_polish — Marketing App Egyptian Arabic (ar-EG) Content, UI/UX & CWV Performance
+
+**PLAN:** `docs/plan/Complete/marketing_egypt_uiux_polish/`  
+`PLAN_marketing_egypt_uiux_polish.md`  
+**Status:** 🟢 Complete — All 4 Phases Certified  
+**Priority:** P1 — Egyptian B2B Market Acquisition, UI/UX ADS Polish & Performance Optimization  
+**Target:** Egyptian compound security vernacular, B2B conversion layout, ADS token alignment, Hero LCP/CLS optimization  
+**App:** `apps/marketing`
+
+- [x] Phase 1 — Code Hygiene & Package Normalization
+- [x] Phase 2 — Egyptian Arabic (`ar-EG`) Localization Upgrade
+- [x] Phase 3 — UI/UX & Responsive RTL Polish
+- [x] Phase 4 — Core Web Vitals & Performance Verification
+
+---
+
 ### gateflow_readiness_market_leadership_2026 — GateFlow Readiness and Egypt/MENA Market Leadership 2026
 
 **PLAN:** `docs/plan/Complete/gateflow_readiness_market_leadership_2026/`  
