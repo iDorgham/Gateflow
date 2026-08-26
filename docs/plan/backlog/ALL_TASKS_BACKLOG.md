@@ -4,6 +4,22 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### lighthouse_perf_mobile_desktop — Lighthouse & Performance (Mobile + Desktop)
+
+**PLAN:** `docs/plan/Complete/lighthouse_perf_mobile_desktop/PLAN_lighthouse_perf_mobile_desktop.md`  
+**Status:** 🟢 Complete — All 5 Phases Certified  
+**Priority:** P0 — Lighthouse CI Scheduled Regression Hard-Gate & Core Web Vitals  
+**Target:** Pass scheduled Lighthouse CI on `master` for Marketing (Mobile + Desktop) & Dashboard (Desktop), resolve hero LCP delay, font loading, image allowlisting, and dynamic charting  
+**App:** `apps/marketing`, `apps/client-dashboard`
+
+- [x] Phase 1 — Diagnose & Baseline Matrix
+- [x] Phase 2 — Marketing Mobile Core Web Vitals
+- [x] Phase 3 — Marketing Desktop CWV & Best Practices
+- [x] Phase 4 — Dashboard Desktop Target & Performance Optimization
+- [x] Phase 5 — Verification, Documentation & Hard Schedule Gate
+
+---
+
 ### gateflow_security_readiness_mena — GateFlow Enterprise Security Readiness & MENA Compliance
 
 **PLAN:** `docs/plan/Complete/gateflow_security_readiness_mena/PLAN_gateflow_security_readiness_mena.md`  

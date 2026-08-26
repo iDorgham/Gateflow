@@ -902,7 +902,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
   return (
     <section
       ref={containerRef}
-      className="relative py-20 lg:py-32 bg-ds-surface min-h-[100vh] flex flex-col justify-center"
+      className="relative py-20 lg:py-32 bg-ds-surface min-h-dvh flex flex-col justify-center"
     >
       {/* ── Backgrounds ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -936,24 +936,19 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
           {/* ── Left: Text content ── */}
           <div className="lg:col-span-12 xl:col-span-5 flex flex-col items-start gap-1">
             {/* Trust badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-ds-background-brand-subtle text-ds-text-brand text-[11px] font-black tracking-[0.3em] uppercase mb-10 w-fit ms-0 me-auto border border-ds-border-brand/20"
-            >
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-ds-background-brand-subtle text-ds-text-brand text-[11px] font-black tracking-[0.3em] uppercase mb-10 w-fit ms-0 me-auto border border-ds-border-brand/20">
               <Shield size={15} fill="currentColor" fillOpacity={0.2} />
               {t('trust.badge')}
-            </motion.div>
+            </div>
 
-            {/* Slide headline */}
-            <AnimatePresence mode="wait">
+            {/* Slide headline — initial={false} ensures immediate LCP visibility on first paint */}
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={slide.id}
-                initial={{ opacity: 0, y: 32, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -24, filter: 'blur(10px)' }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0, filter: 'none' }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h1 className="text-4xl lg:text-5xl font-black leading-[0.94] mb-8 tracking-tighter text-ds-text-heading">
                   <span className="block mb-2 text-ds-text-heading">
