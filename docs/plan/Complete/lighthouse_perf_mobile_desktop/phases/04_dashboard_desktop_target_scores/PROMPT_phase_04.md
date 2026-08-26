@@ -54,8 +54,8 @@ Ensure the Client Dashboard desktop audit target (`app.gateflow.site`) is delibe
 
 ### Acceptance Criteria
 
-- [ ] Dashboard login page loads with fast LCP and no blocking SSR waterfalls.
-- [ ] `next.config.js` image `remotePatterns` restrict domains and allow image pre-optimization.
-- [ ] Recharts and non-critical dashboard dependencies are lazy-loaded.
-- [ ] `pnpm turbo lint typecheck test --filter=@gateflow/client-dashboard` passes cleanly.
-- [ ] Dashboard desktop LHCI run passes all assertion floors.
+- [x] Dashboard login page loads with fast LCP and no blocking SSR waterfalls.
+- [x] `next.config.js` image `remotePatterns` restrict domains and allow image pre-optimization.
+- [x] Recharts and non-critical dashboard dependencies are lazy-loaded.
+- [x] `pnpm turbo lint typecheck test --filter=@gateflow/client-dashboard` passes cleanly.
+- [x] Dashboard desktop LHCI run passes all assertion floors (verified in LIGHTHOUSE_PERF_CERTIFICATION.md).

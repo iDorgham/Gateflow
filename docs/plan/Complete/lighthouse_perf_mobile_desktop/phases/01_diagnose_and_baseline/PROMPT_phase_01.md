@@ -48,10 +48,18 @@ Extract and document the comprehensive baseline performance matrix across target
 ### Steps (ordered)
 
 1. Load context and investigate `ANALYSIS_performance_killers.md` alongside `.lighthouserc.js` and `.github/workflows/lighthouse.yml`.
-2. Analyze LHCI output or execute a baseline diagnostic run via `npx --yes @lhci/cli@0.14.0 collect`.
+2. Analyze LHCI output or execute a baseline diagnostic run via `pnpm dlx @lhci/cli@0.14.0 collect`.
 3. Construct the comprehensive baseline matrix table covering all audited URLs and form factors.
 4. Record key failure causes, redirect penalties, and LCP element identities in `docs/guides/performance/BASELINE_lighthouse_matrix.md`.
 5. Verify that `docs/guides/performance/BASELINE_lighthouse_matrix.md` is complete and clear.
+
+### Exit Conditions (EC Rules)
+
+This phase must satisfy **EC-phase** criteria from `docs/archive/legacy-plans/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`:
+
+- All acceptance criteria below are checked off.
+- Changes are committed to git.
+- Required checks pass (lint/typecheck/test for affected workspaces, or as specified).
 
 ### Acceptance Criteria
 

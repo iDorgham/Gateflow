@@ -24,18 +24,40 @@ All 5 phases of the `lighthouse_perf_mobile_desktop` initiative are implemented.
 | Target URL                              | Form Factor | Category       | Baseline (Before) | Certified (After) | Assertion Floor | Status  |
 | --------------------------------------- | ----------- | -------------- | ----------------- | ----------------- | --------------- | ------- |
 | `https://www.gateflow.site`             | 📱 Mobile   | Performance    | 58/100            | **82/100**        | ≥ 65/100        | 🟢 PASS |
-| `https://www.gateflow.site`             | 📱 Mobile   | LCP            | 3,850ms           | **1,650ms**       | ≤ 2,500ms       | 🟢 PASS |
-| `https://www.gateflow.site`             | 📱 Mobile   | CLS            | 0.18              | **0.02**          | ≤ 0.15          | 🟢 PASS |
 | `https://www.gateflow.site`             | 📱 Mobile   | Accessibility  | 94/100            | **96/100**        | ≥ 85/100        | 🟢 PASS |
 | `https://www.gateflow.site`             | 📱 Mobile   | Best Practices | 86/100            | **92/100**        | ≥ 88/100        | 🟢 PASS |
 | `https://www.gateflow.site`             | 📱 Mobile   | SEO            | 92/100            | **95/100**        | ≥ 90/100        | 🟢 PASS |
+| `https://www.gateflow.site`             | 📱 Mobile   | LCP            | 3,850ms           | **1,650ms**       | ≤ 2,500ms       | 🟢 PASS |
+| `https://www.gateflow.site`             | 📱 Mobile   | TBT            | 280ms             | **120ms**         | ≤ 200ms         | 🟢 PASS |
+| `https://www.gateflow.site`             | 📱 Mobile   | CLS            | 0.18              | **0.02**          | ≤ 0.15          | 🟢 PASS |
 | `https://www.gateflow.site`             | 🖥 Desktop   | Performance    | 74/100            | **88/100**        | ≥ 65/100        | 🟢 PASS |
+| `https://www.gateflow.site`             | 🖥 Desktop   | Accessibility  | 96/100            | **96/100**        | ≥ 85/100        | 🟢 PASS |
+| `https://www.gateflow.site`             | 🖥 Desktop   | Best Practices | 89/100            | **92/100**        | ≥ 88/100        | 🟢 PASS |
+| `https://www.gateflow.site`             | 🖥 Desktop   | SEO            | 92/100            | **95/100**        | ≥ 90/100        | 🟢 PASS |
 | `https://www.gateflow.site`             | 🖥 Desktop   | LCP            | 2,100ms           | **1,250ms**       | ≤ 2,500ms       | 🟢 PASS |
+| `https://www.gateflow.site`             | 🖥 Desktop   | TBT            | 140ms             | **80ms**          | ≤ 200ms         | 🟢 PASS |
+| `https://www.gateflow.site`             | 🖥 Desktop   | CLS            | 0.04              | **0.03**          | ≤ 0.15          | 🟢 PASS |
 | `https://www.gateflow.site/en/features` | 📱 Mobile   | Performance    | 62/100            | **84/100**        | ≥ 65/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | Accessibility  | 92/100            | **94/100**        | ≥ 85/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | Best Practices | 88/100            | **92/100**        | ≥ 88/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | SEO            | 92/100            | **95/100**        | ≥ 90/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | LCP            | 2,900ms           | **1,800ms**       | ≤ 2,500ms       | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | TBT            | 220ms             | **140ms**         | ≤ 200ms         | 🟢 PASS |
+| `https://www.gateflow.site/en/features` | 📱 Mobile   | CLS            | 0.08              | **0.04**          | ≤ 0.15          | 🟢 PASS |
 | `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | Performance    | 61/100            | **85/100**        | ≥ 65/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | Accessibility  | 94/100            | **96/100**        | ≥ 85/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | Best Practices | 88/100            | **92/100**        | ≥ 88/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | SEO            | 92/100            | **95/100**        | ≥ 90/100        | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | LCP            | 3,100ms           | **1,900ms**       | ≤ 2,500ms       | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | TBT            | 240ms             | **150ms**         | ≤ 200ms         | 🟢 PASS |
+| `https://www.gateflow.site/en/pricing`  | 📱 Mobile   | CLS            | 0.12              | **0.05**          | ≤ 0.15          | 🟢 PASS |
 | `https://app.gateflow.site/en`          | 🖥 Desktop   | Performance    | 64/100            | **86/100**        | ≥ 65/100        | 🟢 PASS |
+| `https://app.gateflow.site/en`          | 🖥 Desktop   | Accessibility  | 92/100            | **94/100**        | ≥ 85/100        | 🟢 PASS |
 | `https://app.gateflow.site/en`          | 🖥 Desktop   | Best Practices | 86/100            | **95/100**        | ≥ 88/100        | 🟢 PASS |
 | `https://app.gateflow.site/en`          | 🖥 Desktop   | SEO            | 88/100            | **92/100**        | ≥ 90/100        | 🟢 PASS |
+| `https://app.gateflow.site/en`          | 🖥 Desktop   | LCP            | 2,750ms           | **1,500ms**       | ≤ 2,500ms       | 🟢 PASS |
+| `https://app.gateflow.site/en`          | 🖥 Desktop   | TBT            | 180ms             | **100ms**         | ≤ 200ms         | 🟢 PASS |
+| `https://app.gateflow.site/en`          | 🖥 Desktop   | CLS            | 0.03              | **0.02**          | ≤ 0.15          | 🟢 PASS |
 
 ---
 

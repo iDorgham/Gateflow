@@ -1,7 +1,7 @@
 # Tasks: Lighthouse & Performance (Mobile + Desktop) (`lighthouse_perf_mobile_desktop`)
 
-**Plan:** [`PLAN_lighthouse_perf_mobile_desktop.md`](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Complete/lighthouse_perf_mobile_desktop/PLAN_lighthouse_perf_mobile_desktop.md)  
-**Status:** Planned  
+**Plan:** [`PLAN_lighthouse_perf_mobile_desktop.md`](./PLAN_lighthouse_perf_mobile_desktop.md)
+**Status:** Complete — All 5 Phases Certified (see `docs/guides/performance/LIGHTHOUSE_PERF_CERTIFICATION.md`)
 **Branch:** `feat/lighthouse-perf-mobile-desktop`
 
 ---

@@ -16,7 +16,7 @@ Scheduled Lighthouse CI on `master` must pass for **marketing (mobile + desktop)
 
 - Daily cron Lighthouse CI hard-passes with all assertions met.
 - `apps/marketing` achieves Performance ≥ 0.65 (target 0.85+), Accessibility ≥ 0.85, Best Practices ≥ 0.88, SEO ≥ 0.90 on mobile & desktop.
-- `apps/client-dashboard` achieves Performance ≥ 0.65, Accessibility ≥ 0.85, Best Practices ≥ 0.88 on desktop.
+- `apps/client-dashboard` achieves Performance ≥ 0.65, Accessibility ≥ 0.85, Best Practices ≥ 0.88, SEO ≥ 0.90 on desktop.
 - LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 across audited routes.
 - Full evidence matrix published to `docs/guides/performance/`.
 

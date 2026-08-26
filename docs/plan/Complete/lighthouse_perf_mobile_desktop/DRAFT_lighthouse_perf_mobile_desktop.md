@@ -14,7 +14,7 @@
 1. **Marketing Site Hero LCP (Mobile & Desktop):**
    `apps/marketing/components/sections/hero-animated-content.tsx` sets initial animation state to `opacity: 0, y: 30`. The primary headline (LCP candidate) remains hidden until client hydration and Framer Motion execution complete, penalizing LCP by 400ms+.
 2. **Web Fonts Render Delay:**
-   Poppins font configuration in `apps/marketing/app/[locale]/layout.tsx` and `apps/client-dashboard/src/app/[locale]/layout.tsx` loads unused weights without explicit `display: 'swap'`, causing text rendering blocks during font retrieval on mobile networks.
+   Poppins/Inter font configuration in `apps/marketing/app/[locale]/layout.tsx` loads unused weights without explicit `display: 'swap'`, causing text rendering blocks during font retrieval on mobile networks. Note: `apps/client-dashboard` already uses `display: 'swap'` correctly.
 3. **Image Optimization & Sizing:**
    Image tags missing explicit aspect ratios or using raw format assets cause layout shifts (CLS) and extra payload size.
 4. **Client Dashboard Target & Hydration:**
@@ -24,10 +24,11 @@
 
 ## 2. Target Matrix & Assertions
 
-| Job       | URLs                                                       | Form Factors     | Floor Assertions                                                                       |
-| --------- | ---------------------------------------------------------- | ---------------- | -------------------------------------------------------------------------------------- |
-| Marketing | `https://www.gateflow.site`, `/en/features`, `/en/pricing` | Mobile & Desktop | Perf ≥ 0.65, A11y ≥ 0.85, BP ≥ 0.88, SEO ≥ 0.90, LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 |
-| Dashboard | `https://app.gateflow.site/en` (→ `/en/login`)             | Desktop Only     | Perf ≥ 0.65, A11y ≥ 0.85, BP ≥ 0.88, SEO ≥ 0.90, LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 |
+| Job       | URLs                                                   | Form Factors                                      | Floor Assertions                                                                       |
+| --------- | ------------------------------------------------------ | ------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Marketing | `https://www.gateflow.site`                            | Mobile & Desktop                                  | Perf ≥ 0.65, A11y ≥ 0.85, BP ≥ 0.88, SEO ≥ 0.90, LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 |
+| Marketing | `https://www.gateflow.site/en/features`, `/en/pricing` | Mobile only (Desktop excluded from certification) | Perf ≥ 0.65, A11y ≥ 0.85, BP ≥ 0.88, SEO ≥ 0.90, LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 |
+| Dashboard | `https://app.gateflow.site/en` (→ `/en/login`)         | Desktop only                                      | Perf ≥ 0.65, A11y ≥ 0.85, BP ≥ 0.88, SEO ≥ 0.90, LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.15 |
 
 ---
 

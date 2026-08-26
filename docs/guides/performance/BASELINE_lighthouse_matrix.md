@@ -3,7 +3,7 @@
 **Initiative:** `lighthouse_perf_mobile_desktop`  
 **Date:** 2026-08-26  
 **Reference CI Run:** GitHub Actions run `32938556944`  
-**Configuration:** `.lighthouserc.js` (Throttling: simulated, 3 runs)
+**Configuration:** `.lighthouserc.js` (Throttling: simulated, 3 runs). Desktop collection uses `pnpm dlx @lhci/cli@0.14.0 collect --settings.emulatedFormFactor=desktop` with 3 runs per URL.
 
 ---
 
