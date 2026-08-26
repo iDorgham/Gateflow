@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Platform]** add untracked app modules, runtime proof receipt, and fix CI build
+
 - **[Db]** add pass and visitor models to tenant scoped allowlist
 
 - **[Theme]** preserve use client directive in bundle banner
