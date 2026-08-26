@@ -282,7 +282,7 @@ Standalone app is a future revival candidate.
 | ------------------------- | --------------------- | -------------------------------------------------- |
 | `@gate-access/db`         | `packages/db`         | Prisma schema, client, migrations, seed utilities  |
 | `@gate-access/types`      | `packages/types`      | Shared TypeScript contracts and enums              |
-| `@gateflow/ui`         | `packages/ui`         | Shared UI component library and design tokens      |
+| `@gateflow/ui`            | `packages/ui`         | Shared UI component library and design tokens      |
 | `@gate-access/i18n`       | `packages/i18n`       | Arabic/English dictionaries and locale hooks       |
 | `@gate-access/api-client` | `packages/api-client` | Typed HTTP client wrappers                         |
 | `@gate-access/config`     | `packages/config`     | Shared ESLint, TypeScript, Tailwind configurations |

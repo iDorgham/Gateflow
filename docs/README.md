@@ -18,15 +18,17 @@ _Enterprise-grade architecture with 6 interconnected applications_
 
 ## Where things live (fewer top-level folders)
 
-| Area                          | Path                                           | What                                                                                      |
-| ----------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **Reference**                 | [`reference/`](reference/README.md)            | Product PRD, workspace config (`GATEFLOW_CONFIG`), architecture, cache snapshots          |
-| **Guides**                    | [`guides/`](guides/)                           | Security, env vars, UI, automation, performance, marketing creative, design drafts        |
-| **Development & AI workflow** | [`development/`](development/README.md)        | Plan templates, guidelines, learning logs, `initiatives/` (`IDEA_*.md`), brainstorming    |
-| **Plans**                     | [`plan/`](plan/README.md)                      | **Draft / Ready / Active / Complete** + `backlog/` only                                   |
-| **NotebookLM Sources**        | [`NOTEBOOKLM_README.md`](NOTEBOOKLM_README.md) | Dedicated structured sources for Google NotebookLM AI ingestion (`NOTEBOOKLM_01` to `09` + README) |
-| **Archive**                   | [`archive/`](archive/)                         | Legacy PRDs, old plans, logs                                                              |
-| **Tools**                     | [`tools/`](tools/)                             | Antigravity / tooling notes                                                               |
+| Area                          | Path                                             | What                                                                                   |
+| ----------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| **Reference**                 | [`reference/`](reference/README.md)              | Master AI knowledge base, Product PRD, architecture, cache snapshots, app specs        |
+| **Audits**                    | [`audits/`](audits/)                             | Multi-app ecosystem audits, situation audits, security reviews, and pilot gates        |
+| **NotebookLM Sources**        | [`notebooklm/`](notebooklm/NOTEBOOKLM_README.md) | Dedicated structured sources for Google NotebookLM ingestion (`01` to `11` + Ultimate) |
+| **Guides**                    | [`guides/`](guides/)                             | Developer setup, security, env vars, UI design, analytics, and automation guides       |
+| **Workspace**                 | [`workspace/`](workspace/README.md)              | Workspace-facing tool mirrors, command guides, and AI sync logs                        |
+| **Development & AI workflow** | [`development/`](development/README.md)          | Plan templates, guidelines, learning logs, `initiatives/` (`IDEA_*.md`), brainstorming |
+| **Plans & Roadmap**           | [`plan/`](plan/README.md)                        | **Draft / Ready / Active / Complete** + `backlog/` and `tasks.md`                      |
+| **Tools**                     | [`tools/`](tools/)                               | Tooling references and configurations                                                  |
+| **Archive**                   | [`archive/`](archive/)                           | Legacy PRDs, old plans, historical logs                                                |
 
 ---
 
