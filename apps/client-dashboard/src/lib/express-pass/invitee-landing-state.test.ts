@@ -27,9 +27,9 @@ describe('invitee-landing-state', () => {
     signedUrl: 'https://gateflow.site/s/pass-exp-999?sig=abc',
     rawPayload: 'exp|pass-exp-999|...',
     signature: 'abc12345',
-    validFrom: '2026-08-24T12:00:00.000Z',
-    validUntil: '2026-08-25T12:00:00.000Z',
-    createdAt: '2026-08-24T12:00:00.000Z',
+    validFrom: '2026-01-01T00:00:00.000Z',
+    validUntil: '2099-12-31T23:59:59.000Z',
+    createdAt: '2026-01-01T00:00:00.000Z',
     qrToken: 'GF-EXP:pass-exp-999:Karim Mansour:abc12345',
   };
 

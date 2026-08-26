@@ -1,5 +1,3 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert/strict';
 import {
   computeSecurityHealthScore,
   calculateHourlyTraffic,
@@ -17,9 +15,9 @@ describe('computeSecurityHealthScore', () => {
       criticalIncidents: 0,
       activeShifts: 4,
     });
-    assert.equal(health.score, 100);
-    assert.equal(health.grade, 'OPTIMAL');
-    assert.equal(health.denialRate, 0);
+    expect(health.score).toBe(100);
+    expect(health.grade).toBe('OPTIMAL');
+    expect(health.denialRate).toBe(0);
   });
 
   it('penalizes health score appropriately when denials and incidents occur', () => {
@@ -30,9 +28,9 @@ describe('computeSecurityHealthScore', () => {
       criticalIncidents: 0,
       activeShifts: 2,
     });
-    assert.equal(health.score, 70);
-    assert.equal(health.grade, 'WARNING');
-    assert.equal(health.denialRate, 15);
+    expect(health.score).toBe(70);
+    expect(health.grade).toBe('WARNING');
+    expect(health.denialRate).toBe(15);
   });
 
   it('marks grade as CRITICAL when critical incidents exist regardless of base score', () => {
@@ -43,8 +41,8 @@ describe('computeSecurityHealthScore', () => {
       criticalIncidents: 1, // 1 critical -> -25 pts
       activeShifts: 5,
     });
-    assert.equal(health.grade, 'CRITICAL');
-    assert.ok(health.score <= 75);
+    expect(health.grade).toBe('CRITICAL');
+    expect(health.score).toBeLessThanOrEqual(75);
   });
 
   it('handles zero scans gracefully without division by zero', () => {
@@ -55,41 +53,46 @@ describe('computeSecurityHealthScore', () => {
       criticalIncidents: 0,
       activeShifts: 0,
     });
-    assert.equal(health.score, 100);
-    assert.equal(health.grade, 'OPTIMAL');
+    expect(health.score).toBe(100);
+    expect(health.grade).toBe('OPTIMAL');
   });
 });
 
 describe('calculateHourlyTraffic', () => {
   it('aggregates scans into 24 hourly buckets', () => {
+    const d1 = new Date();
+    d1.setHours(8, 15, 0, 0);
+    const d2 = new Date();
+    d2.setHours(8, 45, 0, 0);
+    const d3 = new Date();
+    d3.setHours(14, 30, 0, 0);
+
     const scans: ScanRecord[] = [
       {
         id: '1',
         status: 'GRANTED',
-        scannedAt: new Date('2026-08-25T08:15:00Z'),
+        scannedAt: d1,
       },
       {
         id: '2',
         status: 'DENIED',
-        scannedAt: new Date('2026-08-25T08:45:00Z'),
+        scannedAt: d2,
       },
       {
         id: '3',
         status: 'GRANTED',
-        scannedAt: new Date('2026-08-25T14:30:00Z'),
+        scannedAt: d3,
       },
     ];
 
     const buckets = calculateHourlyTraffic(scans);
-    assert.equal(buckets.length, 24);
+    expect(buckets.length).toBe(24);
 
-    const bucket8 = buckets.find(
-      (b) =>
-        b.hourLabel.startsWith('08') ||
-        b.hour === new Date('2026-08-25T08:15:00Z').getHours()
-    );
-    assert.ok(bucket8);
-    assert.ok(bucket8.total >= 2);
+    const bucket8 = buckets[8];
+    expect(bucket8).toBeDefined();
+    expect(bucket8.total).toBe(2);
+    expect(bucket8.granted).toBe(1);
+    expect(bucket8.denied).toBe(1);
   });
 });
 
@@ -127,13 +130,13 @@ describe('calculateGateThroughput', () => {
     ];
 
     const stats = calculateGateThroughput(scans);
-    assert.equal(stats.length, 2);
+    expect(stats.length).toBe(2);
 
     const northGate = stats.find((g) => g.gateId === 'gate-a');
-    assert.ok(northGate);
-    assert.equal(northGate.scansCount, 3);
-    assert.equal(northGate.percentage, 75);
-    assert.equal(northGate.denialRate, 33.3);
+    expect(northGate).toBeDefined();
+    expect(northGate?.scansCount).toBe(3);
+    expect(northGate?.percentage).toBe(75);
+    expect(northGate?.denialRate).toBe(33.3);
   });
 });
 
@@ -161,9 +164,9 @@ describe('computeOperationalMetrics', () => {
       [],
       [{ id: 's1', userId: 'u1', gateId: 'g1', status: 'ACTIVE' }]
     );
-    assert.equal(summary.totalTraffic, 2);
-    assert.equal(summary.securityHealth.score, 100);
-    assert.equal(summary.securityHealth.activeShiftsCount, 1);
-    assert.equal(summary.topGates.length, 1);
+    expect(summary.totalTraffic).toBe(2);
+    expect(summary.securityHealth.score).toBe(100);
+    expect(summary.securityHealth.activeShiftsCount).toBe(1);
+    expect(summary.topGates.length).toBe(1);
   });
 });
