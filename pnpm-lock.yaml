@@ -616,6 +616,9 @@ importers:
       '@gate-access/db':
         specifier: workspace:^0.1.0
         version: link:../../packages/db
+      '@gate-access/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@gate-access/types':
         specifier: workspace:^0.1.0
         version: link:../../packages/types

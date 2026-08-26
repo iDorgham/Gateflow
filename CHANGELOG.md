@@ -10,8 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Theme]** fix ThemeCookieSync race condition and state loop in ThemeProvider
+- **[I18n]** add shared locale cookie helpers with parent domain resolution for cross-app synchronization
 - **[Security]** implement enterprise MENA security readiness & compliance suite
-
 - **[Security]** implement enterprise security readiness, AES-256-GCM PII field encryption, SHA-256 tamper-evident audit ledger, and automated route fuzzer
 - **[Db]** dual-key envelope rotation and cryptographic hash-chained audit logs
 - **[Scanner]** CCITT-CRC16 hardware barrier frame validator, anti-replay nonce quarantine, and offline emergency override tokens
@@ -20,6 +21,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** read shared gf_locale cookie in middleware and standardize theme/language toggles
+- **[Client]** sync language preference and fix theme switcher mounted states
+- **[Admin]** sync language preference and fix theme switcher mounted states
 - **[Client]** step-up MFA challenge modal, security audit integrity seal, and Egyptian Law 151 / Saudi PDPL export package
 - **[Marketing]** egyptian arabic copy upgrade, ads ui/ux polish, and performance optimization
 

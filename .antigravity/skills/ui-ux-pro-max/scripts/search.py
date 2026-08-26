@@ -28,7 +28,16 @@ if sys.stderr.encoding and sys.stderr.encoding.lower() != 'utf-8':
 
 
 def format_output(result):
-    """Format results for Claude consumption (token-optimized)"""
+    """
+    Format search results for Claude consumption in a token-optimized markdown format.
+
+    Args:
+        result: Dictionary containing search results with keys like 'domain', 'query',
+                'file', 'count', 'results', or 'error' if search failed
+
+    Returns:
+        str: Formatted markdown string with search results or error message
+    """
     if "error" in result:
         return f"Error: {result['error']}"
 

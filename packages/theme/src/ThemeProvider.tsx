@@ -20,15 +20,22 @@ export interface ThemeProviderProps extends NextThemesProviderProps {
 
 function ThemeCookieSync() {
   const { theme, setTheme } = useNextTheme();
+  const isInitialMount = React.useRef(true);
 
   React.useEffect(() => {
-    const cookieTheme = readThemeCookie();
-    if (cookieTheme && cookieTheme !== theme) {
-      setTheme(cookieTheme);
-      return;
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      const cookieTheme = readThemeCookie();
+      if (cookieTheme && cookieTheme !== theme) {
+        setTheme(cookieTheme);
+        return;
+      }
     }
+
     const parsed = parseTheme(theme);
-    if (parsed) persistThemeCookie(parsed);
+    if (parsed) {
+      persistThemeCookie(parsed);
+    }
   }, [theme, setTheme]);
 
   React.useEffect(() => {

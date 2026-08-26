@@ -11,7 +11,8 @@
   },
   "scripts": {
     "lint": "eslint src/",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "tsx --test src/cookie.test.ts"
   },
   "dependencies": {
     "ai": "5.0.52",

@@ -307,7 +307,9 @@ export function Nav({ locale }: { locale: Locale }) {
             <ThemeToggle />
 
             <div className={`hidden items-center gap-3 md:flex`}>
-              <Link href={`https://app.gateflow.site/${locale}/login`}>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_APP_URL || 'https://app.gateflow.site'}/${locale}/login`}
+              >
                 <Button
                   variant="subtle"
                   className="font-bold rounded-full hover:bg-ds-surface-raised hover:shadow-sm"
