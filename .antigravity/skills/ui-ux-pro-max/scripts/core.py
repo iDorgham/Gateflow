@@ -97,6 +97,13 @@ class BM25:
     """BM25 ranking algorithm for text search"""
 
     def __init__(self, k1=1.5, b=0.75):
+        """
+        Initialize the BM25 ranker with tuning parameters.
+
+        Args:
+            k1: Term frequency saturation parameter (default: 1.5)
+            b: Length normalization parameter (default: 0.75)
+        """
         self.k1 = k1
         self.b = b
         self.corpus = []
