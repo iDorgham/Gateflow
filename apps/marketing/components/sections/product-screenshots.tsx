@@ -48,7 +48,7 @@ function MockupPanel({
         {/* Mobile Dynamic Island */}
         {isMobile && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-ds-surface-overlay rounded-full z-20 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold animate-pulse opacity-40 ml-auto mr-4" />
+            <div className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold animate-pulse opacity-40 ms-auto me-4" />
           </div>
         )}
 

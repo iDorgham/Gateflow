@@ -23,7 +23,10 @@ test_qr.ts
 test_qr.js
 .kiro
 .crush
-.antigravity
+# .antigravity is the canonical tracked AI configuration slice
+!.antigravity
+.antigravity/**/.DS_Store
+.antigravity/hooks/state/
 .opencode
 .kilocode
 .orchids

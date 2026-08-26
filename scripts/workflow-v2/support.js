@@ -39,10 +39,10 @@ function routeFrom(relative) {
 }
 
 function inventoryRoutes(root, appPath, type) {
+  const srcApp = path.join(root, appPath, 'src', 'app');
+  const rootApp = path.join(root, appPath, 'app');
   const base =
-    type === 'expo'
-      ? path.join(root, appPath, 'app')
-      : path.join(root, appPath, 'src', 'app');
+    type === 'expo' ? rootApp : fs.existsSync(srcApp) ? srcApp : rootApp;
   return walk(base)
     .filter((file) =>
       type === 'expo'

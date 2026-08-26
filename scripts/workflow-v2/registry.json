@@ -18,6 +18,30 @@
       "package": "scanner-app",
       "type": "expo",
       "order": 3
+    },
+    "marketing": {
+      "path": "apps/marketing",
+      "package": "marketing",
+      "type": "nextjs",
+      "order": 4
+    },
+    "admin-dashboard": {
+      "path": "apps/admin-dashboard",
+      "package": "admin-dashboard",
+      "type": "nextjs",
+      "order": 5
+    },
+    "resident-mobile": {
+      "path": "apps/resident-mobile",
+      "package": "resident-mobile",
+      "type": "expo",
+      "order": 6
+    },
+    "design-system": {
+      "path": "apps/design-system",
+      "package": "design-system",
+      "type": "nextjs",
+      "order": 7
     }
   }
 }

@@ -132,13 +132,13 @@ export function TrustBar({ locale: _locale }: { locale: Locale }) {
         onFocus={pause}
         onBlur={resume}
       >
-        {/* Fade masks — both sides */}
-        <div className="pointer-events-none absolute inset-y-0 start-0 w-28 z-10 bg-gradient-to-r from-ds-surface-sunken to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 end-0 w-28 z-10 bg-gradient-to-l from-ds-surface-sunken to-transparent" />
+        {/* Fade masks — both sides with directional start/end gradients */}
+        <div className="pointer-events-none absolute inset-y-0 start-0 w-28 z-10 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-ds-surface-sunken to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 end-0 w-28 z-10 ltr:bg-gradient-to-l rtl:bg-gradient-to-r from-ds-surface-sunken to-transparent" />
 
         <motion.div
           animate={controls}
-          className="flex items-center gap-x-16 md:gap-x-24 w-max pr-16 md:pr-24"
+          className="flex items-center gap-x-16 md:gap-x-24 w-max pe-16 md:pe-24"
           style={{ willChange: 'transform' }}
         >
           {TRACK.map((p, i) => (
