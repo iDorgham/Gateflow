@@ -24,6 +24,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Marketing]** read shared gf_locale cookie in middleware and standardize theme/language toggles
 - **[Client]** sync language preference and fix theme switcher mounted states
 - **[Admin]** sync language preference and fix theme switcher mounted states
+- **[Resident]** network-first service worker with graceful offline fallback preventing ERR_FAILED navigations
 - **[Client]** step-up MFA challenge modal, security audit integrity seal, and Egyptian Law 151 / Saudi PDPL export package
 - **[Marketing]** egyptian arabic copy upgrade, ads ui/ux polish, and performance optimization
 
