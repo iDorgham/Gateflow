@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { i18n, type Locale } from '../i18n-config';
+import { persistLocaleCookie } from '@gate-access/i18n';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,12 +42,8 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
   const handleLocaleChange = (newLocale: Locale) => {
     if (!pathname) return;
 
-    // Sync across apps using a top-level cookie if on subdomains
-    const domain = window.location.hostname.includes('.')
-      ? `.${window.location.hostname.split('.').slice(-2).join('.')}`
-      : undefined;
-
-    document.cookie = `gf_locale=${newLocale}; path=/; max-age=31536000${domain ? `; domain=${domain}` : ''}`;
+    // Sync across apps using top-level domain cookie in production / host in dev
+    persistLocaleCookie(newLocale);
 
     const segments = pathname.split('/');
     segments[1] = newLocale;

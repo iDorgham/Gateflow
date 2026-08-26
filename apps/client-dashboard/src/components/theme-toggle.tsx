@@ -2,18 +2,26 @@
 
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@gateflow/theme';
 import { Button } from '@gateflow/ui';
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === 'dark';
 
   return (
     <Button
       variant="ghost"
       size="icon"
       className="h-9 w-9 rounded-xl border border-ds-border bg-ds-background-neutral-subtle text-ds-text-subtle hover:text-ds-text-brand hover:border-ds-border-brand hover:bg-ds-background-brand-subtle transition-all"
-      onClick={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      aria-label="Toggle theme"
     >
       <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

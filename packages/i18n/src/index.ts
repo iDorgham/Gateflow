@@ -3,3 +3,5 @@ import { initReactI18next } from 'react-i18next';
 
 export const i18n = i18next;
 export { initReactI18next };
+
+export * from './cookie';
