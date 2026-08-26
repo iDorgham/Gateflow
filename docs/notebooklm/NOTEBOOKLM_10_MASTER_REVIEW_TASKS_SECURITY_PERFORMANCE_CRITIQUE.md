@@ -87,7 +87,6 @@ gitGraph
    pnpm docs:changelog:check && pnpm check:ads && pnpm check:bootstrap-routes && pnpm turbo lint && pnpm turbo typecheck && pnpm turbo test
    ```
 
-
 ### 2.2 Phased Development Framework (`docs/plan/`)
 
 Every non-trivial initiative follows a strict lifecycle across four state directories:
@@ -111,8 +110,6 @@ The repository maintains synchronized instruction sets across multiple AI engine
 
 - **CLI Limit Tracking & The 80% Rule:** Usage across high-token CLIs is tracked in `docs/development/learning/CLI_LIMITS_TRACKING.md`. When usage crosses 80%, agents fail-closed and request explicit user confirmation.
 - **Ralph Perspectives:** Automated scripts (`ralph-prioritize.js`, `ralph-skill-discover.js`, `ralph-git.js`) continuously audit task backlog priority, discover architectural patterns, and automate atomic git phase branching.
-
-
 
 ---
 

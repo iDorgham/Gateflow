@@ -10,14 +10,27 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Theme]** fix ThemeCookieSync race condition and state loop in ThemeProvider
-- **[I18n]** add shared locale cookie helpers with parent domain resolution for cross-app synchronization
-- **[Security]** implement enterprise MENA security readiness & compliance suite
-- **[Security]** implement enterprise security readiness, AES-256-GCM PII field encryption, SHA-256 tamper-evident audit ledger, and automated route fuzzer
-- **[Db]** dual-key envelope rotation and cryptographic hash-chained audit logs
-- **[Scanner]** CCITT-CRC16 hardware barrier frame validator, anti-replay nonce quarantine, and offline emergency override tokens
+- **[Docs]** comprehensive update of README, PRD v13.0, feature log, and category documentation
 
 ### AI Tools
+
+### Apps
+
+---
+
+## [0.5.1] — 2026-08-27
+
+### Workspace
+
+- **[Docs]** clean docs root into 9 structured category folders and update master index
+- **[AI Knowledge]** publish universal master AI knowledge base and NotebookLM ultimate context
+- **[Audits]** generate multi-app master ecosystem audit covering performance, security, and invariants
+- **[PRD]** upgrade master product requirements document to v13.0
+- **[Theme]** fix ThemeCookieSync race condition and state loop in ThemeProvider
+- **[I18n]** add shared locale cookie helpers with parent domain resolution for cross-app synchronization
+- **[Security]** implement enterprise MENA security readiness & compliance suite, AES-256-GCM PII field encryption, and SHA-256 tamper-evident audit ledger
+- **[DB]** dual-key envelope rotation and cryptographic hash-chained audit logs
+- **[Scanner]** CCITT-CRC16 hardware barrier frame validator, anti-replay nonce quarantine, and offline emergency override tokens
 
 ### Apps
 
@@ -39,7 +52,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Deps]** bump next to 16.3.2, framer-motion to 13.1.1, and dev dependencies across workspaces
 - **[Platform]** add untracked app modules, runtime proof receipt, and fix CI build
 
-- **[Db]** add pass and visitor models to tenant scoped allowlist
+- **[DB]** add pass and visitor models to tenant scoped allowlist
 
 - **[Theme]** preserve use client directive in bundle banner
 

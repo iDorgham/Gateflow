@@ -4,12 +4,17 @@ Chronological record of shipped features.
 
 ---
 
-| Date       | Feature                                         | Status                | Notes                                                                                            |
-| ---------- | ----------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------ |
-| 2026-08-07 | **NotebookLM Knowledge Hub & Doc Suite Update** | ✅ Shipped            | Comprehensive NotebookLM source suite (01–09 + README) and workspace docs overhaul.              |
-| 2026-08-07 | **Data Retention & Legal Hold Executor**        | ✅ Phase 1 Shipped    | Compliance retention policy executor, legal hold model, and ScanLog soft-deletes.                |
-| 2026-07-24 | **Repo Hygiene & Baseline (v0.3.0)**            | ✅ Shipped            | Dependency security overrides, design system blueprint alignment, root hygiene rules.            |
-| 2026-07-21 | **Audit Remediation 2026**                      | ✅ Phases 1–4 Shipped | P0 containment, fail-closed tenancy, CI scanners, API guards + security headers (PRs #153–#155). |
-| 2026-04-05 | **Platform Evolution**                          | ✅ Phase 1 Shipped    | Nested organizational hierarchy & scoped routing implemented.                                    |
-| 2026-04-05 | **Gateflow Design System**                      | ✅ Phase 1 Shipped    | Foundational tokens and theme architecture.                                                      |
-| 2026-04-05 | **Org Types Dashboard**                         | ✅ Phase 1 Shipped    | Backend foundation and JWT claims updated.                                                       |
+| Date       | Feature                                                  | Status                | Notes                                                                                                         |
+| :--------- | :------------------------------------------------------- | :-------------------- | :------------------------------------------------------------------------------------------------------------ |
+| 2026-08-27 | **Universal Master AI Knowledge Base & Ecosystem Audit** | ✅ Shipped            | Comprehensive NotebookLM source suite (01–11 + Ultimate), Grok/Claude knowledge base, 6-app audit.            |
+| 2026-08-26 | **Network-First PWA & Service Worker Resilience**        | ✅ Shipped (PR #305)  | Upgraded resident portal service worker to network-first navigation with graceful offline fallback.           |
+| 2026-08-26 | **Cross-App Language & Theme Persistence**               | ✅ Shipped (PR #304)  | Synchronous `@gateflow/theme` cookie sync and shared `@gate-access/i18n` `.gateflow.site` locale persistence. |
+| 2026-08-25 | **Enterprise MENA Security & Encryption Suite**          | ✅ Shipped            | AES-256-GCM PII field encryption, SHA-256 tamper-evident audit ledger, Law 151 / Saudi PDPL export.           |
+| 2026-08-24 | **Lighthouse & Mobile/Desktop Optimization**             | ✅ Shipped (PR #303)  | Next.js performance tuning, 98+ Desktop / 95+ Mobile scores, zero CLS Arabic typography.                      |
+| 2026-08-07 | **NotebookLM Knowledge Hub & Doc Suite Update**          | ✅ Shipped            | Initial NotebookLM structured sources (01–09 + README) and workspace docs overhaul.                           |
+| 2026-08-07 | **Data Retention & Legal Hold Executor**                 | ✅ Phase 1 Shipped    | Compliance retention policy executor, legal hold model, and ScanLog soft-deletes.                             |
+| 2026-07-24 | **Repo Hygiene & Baseline (v0.3.0)**                     | ✅ Shipped            | Dependency security overrides, design system blueprint alignment, root hygiene rules.                         |
+| 2026-07-21 | **Audit Remediation 2026**                               | ✅ Phases 1–4 Shipped | P0 containment, fail-closed tenancy, CI scanners, API guards + security headers (PRs #153–#155).              |
+| 2026-04-05 | **Platform Evolution**                                   | ✅ Phase 1 Shipped    | Nested organizational hierarchy & scoped routing implemented.                                                 |
+| 2026-04-05 | **Gateflow Design System**                               | ✅ Phase 1 Shipped    | Foundational tokens and theme architecture.                                                                   |
+| 2026-04-05 | **Org Types Dashboard**                                  | ✅ Phase 1 Shipped    | Backend foundation and JWT claims updated.                                                                    |

@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square&color=22c55e" alt="CI status"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square&color=3b82f6" alt="CodeQL status"></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/release-v0.4.0-6366f1?style=flat-square" alt="Release 0.4.0"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/release-v0.5.1-6366f1?style=flat-square" alt="Release 0.5.1"></a>
   <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 20 or later">
   <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm 8.15">
   <img src="https://img.shields.io/badge/license-proprietary-lightgrey?style=flat-square" alt="Proprietary license">
@@ -318,16 +318,19 @@ For details, view the [Automation Tooling Guide](docs/guides/AUTOMATION_GUIDE.md
 
 ## 📚 Documentation Index
 
-| Category           | Reference Document                                                | Purpose                                                  |
-| :----------------- | :---------------------------------------------------------------- | :------------------------------------------------------- |
-| **Product**        | **[PRD Specification](docs/reference/product/PRD.md)**            | Technical product requirements & feature matrix          |
-| **Setup**          | **[Developer Setup Guide](docs/developer-setup.md)**              | Step-by-step local environment & database setup          |
-| **Environment**    | **[Environment Variables](docs/guides/ENVIRONMENT_VARIABLES.md)** | Complete environment variable matrix per application     |
-| **Attribution**    | **[Marketing Suite](docs/reference/product/MARKETING_SUITE.md)**  | Physical attribution, CAPI integration, & growth funnels |
-| **Automation**     | **[Automation Guide](docs/guides/AUTOMATION_GUIDE.md)**           | Ralph Loop automation scripts, hooks, & CLI tooling      |
-| **Infrastructure** | **[Infrastructure Guide](infra/README.md)**                       | Vercel, Expo EAS, and deployment workflows               |
-| **History**        | **[CHANGELOG](CHANGELOG.md)**                                     | Version history and audit remediation outcomes           |
-| **Full Index**     | **[Docs Index](docs/INDEX.md)**                                   | Complete map of all repository documentation             |
+| Category           | Reference Document                                                                         | Purpose                                                       |
+| :----------------- | :----------------------------------------------------------------------------------------- | :------------------------------------------------------------ |
+| **Product**        | **[PRD Specification (v13.0)](docs/reference/product/PRD.md)**                             | Technical product requirements & feature matrix               |
+| **AI Knowledge**   | **[Master AI Knowledge Base](docs/reference/GATEFLOW_MASTER_AI_KNOWLEDGE_BASE.md)**        | Definitive system context for Grok, Claude & external LLMs    |
+| **NotebookLM**     | **[NotebookLM Ultimate Context](docs/notebooklm/NOTEBOOKLM_GATEFLOW_ULTIMATE_CONTEXT.md)** | Single-source source for Google NotebookLM                    |
+| **Audits**         | **[Master Ecosystem Audit](docs/audits/GATEFLOW_MASTER_ECOSYSTEM_AUDIT_2026-08-27.md)**    | 6-app audit, security, performance, pros/cons, and invariants |
+| **Setup**          | **[Developer Setup Guide](docs/guides/developer-setup.md)**                                | Step-by-step local environment & database setup               |
+| **Environment**    | **[Environment Variables](docs/guides/ENVIRONMENT_VARIABLES.md)**                          | Complete environment variable matrix per application          |
+| **Attribution**    | **[Marketing Suite](docs/reference/product/MARKETING_SUITE.md)**                           | Physical attribution, CAPI integration, & growth funnels      |
+| **Automation**     | **[Automation Guide](docs/guides/AUTOMATION_GUIDE.md)**                                    | Automation scripts, hooks, & CLI tooling                      |
+| **Infrastructure** | **[Infrastructure Guide](infra/README.md)**                                                | Vercel, Expo EAS, and deployment workflows                    |
+| **History**        | **[CHANGELOG](CHANGELOG.md)**                                                              | Version history and audit remediation outcomes                |
+| **Full Index**     | **[Docs Index](docs/INDEX.md)**                                                            | Complete map of all repository documentation                  |
 
 ---
 
