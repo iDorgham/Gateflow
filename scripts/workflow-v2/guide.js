@@ -346,10 +346,12 @@ function statusLabel(snapshot) {
 
 function copyPrompt(snapshot) {
   const app = snapshot.activeApplication || 'integrated pilot';
+  const command = snapshot.nextCommand || '/guide';
   return [
-    `Continue GateFlow Workflow v2 for ${app}.`,
-    `Current stage: ${snapshot.currentStage}.`,
-    `Run ${snapshot.nextCommand} as the only next workflow command.`,
+    `${command}`,
+    '',
+    `Continue GateFlow Workflow v2 for ${app} at stage ${snapshot.currentStage}.`,
+    `Execute ${command} as the only next workflow command.`,
     `Read live workspace state first. Preserve the fixed pilot order: ${PILOT_ORDER}.`,
     'Use dated evidence, report blockers honestly, do not claim browser/device verification from static review, and do not perform remote mutations without explicit authorization.',
     'Return artifacts, verification, risks/blockers, and exactly one next command.',
