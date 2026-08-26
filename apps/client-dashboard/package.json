@@ -52,7 +52,7 @@
     "framer-motion": "^13.1.1",
     "html2canvas": "^1.4.1",
     "i18next": "^23.16.8",
-    "jose": "4.15.9",
+    "jose": "6.2.10",
     "json2csv": "6.0.0-alpha.2",
     "lucide-react": "^1.31.0",
     "negotiator": "^1.0.0",
