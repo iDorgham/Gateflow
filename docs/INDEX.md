@@ -4,6 +4,14 @@
 
 ---
 
+## 🧠 [Master AI Knowledge Base & Audits](./reference/GATEFLOW_MASTER_AI_KNOWLEDGE_BASE.md)
+
+_Comprehensive system knowledge base for Grok, NotebookLM, external LLMs, and multi-app ecosystem audits_
+
+- [GATEFLOW MASTER AI KNOWLEDGE BASE](./reference/GATEFLOW_MASTER_AI_KNOWLEDGE_BASE.md) — Definitive context document for external AI engines
+- [NOTEBOOKLM ULTIMATE SYSTEM CONTEXT](./NOTEBOOKLM_GATEFLOW_ULTIMATE_CONTEXT.md) — Single-source NotebookLM knowledge base
+- [MASTER ECOSYSTEM AUDIT (2026-08-27)](./audits/GATEFLOW_MASTER_ECOSYSTEM_AUDIT_2026-08-27.md) — 6-app audit, security, performance, pros/cons, invariants
+
 ## 🏗️ [Architecture](./reference/architecture/)
 
 _System design, project structure, code quality audits_
