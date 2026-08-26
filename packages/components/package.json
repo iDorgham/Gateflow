@@ -43,7 +43,7 @@
     "@gateflow/tokens": "workspace:*",
     "@gateflow/ui": "workspace:*",
     "clsx": "^2.1.1",
-    "framer-motion": "^13.0.0",
+    "framer-motion": "^13.1.1",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
