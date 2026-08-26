@@ -10,6 +10,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Workspace]** tracking next changes
+
+### AI Tools
+
+### Apps
+
+---
+
+## [0.5.0] Pilot — 2026-08-26
+
+### Workspace
+
+- **[Workflow]** slash command ready prompts and named releases
+
 - **[Deps]** bump next to 16.3.2, framer-motion to 13.1.1, and dev dependencies across workspaces
 - **[Platform]** add untracked app modules, runtime proof receipt, and fix CI build
 
