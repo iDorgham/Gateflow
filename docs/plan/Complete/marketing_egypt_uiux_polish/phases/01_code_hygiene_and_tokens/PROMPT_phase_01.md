@@ -17,7 +17,7 @@ Clean up orphan directory artifacts in `apps/marketing`, eliminate deep cross-pa
 ## Context & Files to Touch
 
 - `apps/marketing/app/[locale` (Delete orphan typo directory)
-- `apps/marketing/components/nav.tsx` (Replace `../../../packages/ui/...` with `@gate-access/ui` or `@gateflow/ui`)
+- `apps/marketing/components/nav.tsx` (Replace `../../../packages/ui/...` with `@gate-access/ui`)
 - `apps/marketing/components/sections/*.tsx` (Audit token usages)
 
 ---
@@ -25,7 +25,7 @@ Clean up orphan directory artifacts in `apps/marketing`, eliminate deep cross-pa
 ## Steps
 
 1. Delete the orphan directory `apps/marketing/app/[locale` and any nested sub-directories.
-2. In `apps/marketing/components/nav.tsx`, update the `GateFlowLogo` import from `../../../packages/ui/src/components/ui/gateflow-logo` to use `@gate-access/ui` workspace package exports.
+2. In `apps/marketing/components/nav.tsx`, update the `GateFlowLogo` import from `../../../packages/ui/src/components/ui/gateflow-logo` to use the canonical `@gate-access/ui` workspace package exports.
 3. Audit all component styles in `apps/marketing/components/` to ensure consistency with ADS CSS variables (`--ds-background-brand-bold`, `--ds-text-subtle`, `--ds-border-selected`).
 4. Run `pnpm turbo lint typecheck --filter=marketing` to verify zero errors.
 

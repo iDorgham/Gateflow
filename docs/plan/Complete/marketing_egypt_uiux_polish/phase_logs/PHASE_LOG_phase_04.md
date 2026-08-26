@@ -23,9 +23,12 @@
 
 ## 2. Verification & Acceptance Criteria
 
-- [x] Device mockups and illustrations maintain zero layout shifts (CLS < 0.02).
-- [x] Critical hero copy and CTA buttons paint immediately without render-blocking animation overhead.
-- [x] All 4 phases of `marketing_egypt_uiux_polish` verified and checked off.
+- [x] Device mockups and illustrations specify explicit aspect ratios to prevent layout shifts.
+- [x] Critical hero copy and CTA buttons use non-blocking client telemetry.
+- [x] JSON dictionaries validated across all locales.
+- [x] All 4 phases of `marketing_egypt_uiux_polish` code changes completed.
+
+**Note:** Performance metrics (LCP, CLS) and full build verification (lint, typecheck) were not measured during this phase. Future plan iterations should include automated performance testing and CI verification before marking phases complete.
 
 ---
 

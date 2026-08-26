@@ -30,7 +30,7 @@ export function PricingCard({
   description,
   features,
   isPopular,
-  popularBadgeText = 'الأكثر طلباً',
+  popularBadgeText = 'Popular',
   actionText,
   onAction,
   className,

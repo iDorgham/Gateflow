@@ -22,7 +22,7 @@
 
 # 3) GateFlow canonical sync is governed strictly by `scripts/ai-sync/sync-ai-tools.sh`.
 
-# ============================================================
+<!-- ============================================================ -->
 
 ---
 
@@ -64,6 +64,9 @@
 | `/memory load`                            | memory-manager                  | `.ai/memory/context-cache/`                                                                                                             | Restored session context                                                                                                                                                               | No                      |
 | `/memory clear`                           | memory-manager                  | Active session                                                                                                                          | Cleared temp context                                                                                                                                                                   | No                      |
 | `/budget check`                           | guide-agent                     | Current token usage                                                                                                                     | Usage report + recommendations                                                                                                                                                         | No                      |
+
+## FACTORY SUBCOMMANDS
+
 | Command                                   | Subcommand                      | Agent                                                                                                                                   | Purpose                                                                                                                                                                                |
 | :---                                      | :---                            | :---                                                                                                                                    | :---                                                                                                                                                                                   |
 | **`/plan`**                               | `content`                       | content-planner                                                                                                                         | Structured discovery interview                                                                                                                                                         |
@@ -425,11 +428,11 @@ _Multi-tool rankings version: 1.0 · Owner: guide-agent · Merged into `commands
 
 Use these command templates for each content blueprint:
 
-- Blog Post: `.ai/commands/templates/blog_post.md`
-- Website Page: `.ai/commands/templates/website_page.md`
-- Project Page: `.ai/commands/templates/project_page.md`
-- Landing Page: `.ai/commands/templates/landing_page.md`
-- Opportunity Gap Blog: `.ai/commands/templates/opportunity_gap_blog.md`
-- Competitor Comparison Page: `.ai/commands/templates/competitor_comparison_page.md`
-- Campaign Landing Variant: `.ai/commands/templates/campaign_landing_variant.md`
-- Design Catalog: `.ai/commands/templates/design.md`
+- Blog Post: `.ai/commands/factory/templates/blog_post.md`
+- Website Page: `.ai/commands/factory/templates/website_page.md`
+- Project Page: `.ai/commands/factory/templates/project_page.md`
+- Landing Page: `.ai/commands/factory/templates/landing_page.md`
+- Opportunity Gap Blog: `.ai/commands/factory/templates/opportunity_gap_blog.md`
+- Competitor Comparison Page: `.ai/commands/factory/templates/competitor_comparison_page.md`
+- Campaign Landing Variant: `.ai/commands/factory/templates/campaign_landing_variant.md`
+- Design Catalog: `.ai/commands/factory/templates/design.md`

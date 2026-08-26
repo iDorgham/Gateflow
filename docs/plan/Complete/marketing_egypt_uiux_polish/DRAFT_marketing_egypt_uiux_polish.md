@@ -1,11 +1,11 @@
 # Draft — marketing_egypt_uiux_polish
 
-**Slug:** `marketing_egypt_uiux_polish`  
-**Application:** `apps/marketing`  
-**Last updated:** 2026-08-26  
-**Status:** Ready for `/plan marketing_egypt_uiux_polish`
+**Slug:** `marketing_egypt_uiux_polish`
+**Application:** `apps/marketing`
+**Last updated:** 2026-08-26
+**Status:** Complete
 
-> Generated [`FOR_PLAN_PROMPT.md`](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Draft/marketing_egypt_uiux_polish/FOR_PLAN_PROMPT.md). Run **`/plan marketing_egypt_uiux_polish`** to produce the phased plan and prompts.
+> Generated [`FOR_PLAN_PROMPT.md`](../../Complete/marketing_egypt_uiux_polish/FOR_PLAN_PROMPT.md). Run **`/plan marketing_egypt_uiux_polish`** to produce the phased plan and prompts.
 
 ---
 
@@ -65,7 +65,7 @@ Transform GateFlow's marketing website (`apps/marketing`) into a market-leading 
    - Normalize package imports in `nav.tsx` to workspace packages.
    - Audit and enforce ADS tokens across primary layouts.
 2. **Phase 2 — Egyptian Arabic (`ar-EG`) Copy & Localization Upgrade**:
-   - Overhaul `landing.json`, `solutions.json`, `pricing.json`, `navigation.json`, and `contact.json`.
+   - Overhaul `landing.json`, `solutions.json`, `pricing.json`, `product.json`, `navigation.json`, and `contact.json`.
    - Update compound and commercial proof anchors (+50 كمبوند سكني وإداري، +1 مليون حركة دخول).
 3. **Phase 3 — UI/UX & Responsive RTL Polish**:
    - Polish hero section animations, trust badges, and interactive pricing toggles.

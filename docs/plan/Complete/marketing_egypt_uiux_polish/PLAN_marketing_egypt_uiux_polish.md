@@ -20,7 +20,7 @@ Transform GateFlow's marketing website (`apps/marketing`) into an elite, high-co
 
 | #   | Phase                                              | Primary Role | Preferred Tool    | Scope & Deliverables                                                                                                         | Status |
 | --- | -------------------------------------------------- | ------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 1   | **Code Hygiene & Package Normalization**           | FRONTEND     | Cursor / OpenCode | Remove orphan dir `app/[locale`, replace deep relative import in `nav.tsx` with `@gateflow/ui`, enforce ADS tokens.          | [x]    |
+| 1   | **Code Hygiene & Package Normalization**           | FRONTEND     | Cursor / OpenCode | Remove orphan dir `app/[locale`, replace deep relative import in `nav.tsx` with `@gate-access/ui`, enforce ADS tokens.       | [x]    |
 | 2   | **Egyptian Arabic (`ar-EG`) Localization Upgrade** | i18n         | Cursor / Gemini   | Overhaul `landing.json`, `solutions.json`, `pricing.json`, `navigation.json`, `contact.json` for Egyptian compound security. | [x]    |
 | 3   | **UI/UX & Responsive RTL Polish**                  | FRONTEND     | Cursor            | Framer Motion micro-interactions, responsive mobile drawer layout, trust anchors, pricing toggle.                            | [x]    |
 | 4   | **Core Web Vitals & Performance Verification**     | QA           | Cursor / Claude   | Hero bundle size optimization, lazy-loading heavy visual components, LCP/CLS testing, preflight verification.                | [x]    |

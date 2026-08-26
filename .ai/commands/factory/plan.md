@@ -31,7 +31,7 @@ The planning engine now operates across three distinct industrial streams in `.a
 ### 🛡️ Industrial Rules (OMEGA-Tier)
 
 - **MVP Priority**: New projects **MUST** initiate with phase `00-mvp`.
-- **Density Gate**: Each phase must materialize at least **5 to 10 specifications** (API, State, Security, etc.).
+- **Density Gate**: Each phase must materialize at least **12 specifications** (requirements.spec.md, design.md, domain_model.md, tasks.json, phase.spec.json, c4-context.mmd, c4-containers.mmd, and others). When the project handles MENA-region personal data or content, `regional_compliance.md` is required for Law 151/2020 compliance.
 
 ## 🛡️ Sovereign Protocol
 

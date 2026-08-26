@@ -15,7 +15,7 @@ The `/factory` command suite governs the project and workspace lifecycle, from d
 | Subcommand    | Purpose                           | Usage                                         |
 | ------------- | --------------------------------- | --------------------------------------------- |
 | `start`       | Begin new project discovery       | `/factory start [client]`                     |
-| `profile`     | List/show composition templates   | `/factory profile [list                       | show]` |
+| `profile`     | List/show composition templates   | `/factory profile [list\|show]`               |
 | `build`       | Assemble project blueprint        | `/factory build [client]`                     |
 | `make`        | Materialize workspace             | `/factory make [client]`                      |
 | `test`        | Verify structure & compliance     | `/factory test [client]`                      |

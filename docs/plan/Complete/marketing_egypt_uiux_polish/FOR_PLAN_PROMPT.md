@@ -56,7 +56,7 @@ Elevate GateFlow's marketing website (`apps/marketing`) into an elite, high-conv
 
 ## 6. References
 
-- **Draft Document**: `docs/plan/Draft/marketing_egypt_uiux_polish/DRAFT_marketing_egypt_uiux_polish.md`
+- **Draft Document**: `docs/plan/Complete/marketing_egypt_uiux_polish/DRAFT_marketing_egypt_uiux_polish.md`
 - **Application**: `apps/marketing/`
 - **Design Tokens**: `@gate-access/ui/tokens`, `.antigravity/skills/ads-foundations/`
 - **RTL & A11y Guidelines**: `.antigravity/skills/ads-a11y-rtl/`
