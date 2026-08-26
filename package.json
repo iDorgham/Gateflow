@@ -1,6 +1,6 @@
 {
   "name": "gate-access",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -21,6 +21,7 @@
     "check:workspace-ai": "node scripts/check/check-ai-workspace.js",
     "check:test-budgets": "node scripts/check/check-test-budgets.js",
     "check:secrets:history": "node scripts/check/scan-secrets.js --history 100",
+    "check:security-readiness": "node scripts/check/fuzz-security-routes.js && node scripts/check/enforce-security-invariants.js",
     "check:ads": "node scripts/check/enforce-ads-design.js packages/ui packages/components",
     "db:generate": "pnpm --filter @gate-access/db db:generate",
     "db:studio": "pnpm --filter @gate-access/db db:studio",

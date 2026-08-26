@@ -2,12 +2,17 @@ import {
   encryptField,
   decryptField,
   isEncryptedField,
+  rotateEncryptionField,
   generateSecret,
   ENCRYPTED_PREFIX,
 } from './encryption';
 
 describe('encryption.ts', () => {
   const PLAIN_TEXT = 'Hello, World! 🌍';
+  const KEY_A =
+    '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+  const KEY_B =
+    'fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210';
 
   describe('encryptField', () => {
     it('should encrypt data and include the version prefix', () => {
@@ -49,12 +54,9 @@ describe('encryption.ts', () => {
 
     it('should throw error for corrupted data (auth tag mismatch)', () => {
       const encrypted = encryptField(PLAIN_TEXT);
-      // Decode, flip a bit in the ciphertext (last byte), re-encode
       const b64 = encrypted.slice(ENCRYPTED_PREFIX.length);
       const data = Buffer.from(b64, 'base64');
 
-      // Data layout: IV (12) | Tag (16) | Ciphertext (N)
-      // Modify the last byte (part of ciphertext)
       data[data.length - 1] ^= 1;
 
       const corrupted = ENCRYPTED_PREFIX + data.toString('base64');
@@ -64,17 +66,43 @@ describe('encryption.ts', () => {
     });
 
     it('should throw error for corrupted tag', () => {
-        const encrypted = encryptField(PLAIN_TEXT);
-        const b64 = encrypted.slice(ENCRYPTED_PREFIX.length);
-        const data = Buffer.from(b64, 'base64');
+      const encrypted = encryptField(PLAIN_TEXT);
+      const b64 = encrypted.slice(ENCRYPTED_PREFIX.length);
+      const data = Buffer.from(b64, 'base64');
 
-        // Modify a byte in the tag (index 12 to 27)
-        data[15] ^= 1;
+      data[15] ^= 1;
 
-        const corrupted = ENCRYPTED_PREFIX + data.toString('base64');
-         expect(() => decryptField(corrupted)).toThrow(
-          '[encryption] Decryption failed — wrong key or corrupted data'
-        );
+      const corrupted = ENCRYPTED_PREFIX + data.toString('base64');
+      expect(() => decryptField(corrupted)).toThrow(
+        '[encryption] Decryption failed — wrong key or corrupted data'
+      );
+    });
+
+    it('should support dual-key fallback during rotation', () => {
+      const originalEnvMaster = process.env.ENCRYPTION_MASTER_KEY;
+      const originalEnvFallback = process.env.ENCRYPTION_FALLBACK_KEY;
+
+      process.env.ENCRYPTION_MASTER_KEY = KEY_B;
+      const historicalEncrypted = encryptField(PLAIN_TEXT);
+
+      process.env.ENCRYPTION_MASTER_KEY = KEY_A;
+      process.env.ENCRYPTION_FALLBACK_KEY = KEY_B;
+
+      const decrypted = decryptField(historicalEncrypted);
+      expect(decrypted).toBe(PLAIN_TEXT);
+
+      process.env.ENCRYPTION_MASTER_KEY = originalEnvMaster;
+      process.env.ENCRYPTION_FALLBACK_KEY = originalEnvFallback;
+    });
+  });
+
+  describe('rotateEncryptionField', () => {
+    it('should decrypt with old key and re-encrypt with new key', () => {
+      const encryptedWithB = encryptField(PLAIN_TEXT, KEY_B);
+      const rotated = rotateEncryptionField(encryptedWithB, KEY_A, KEY_B);
+
+      expect(isEncryptedField(rotated)).toBe(true);
+      expect(decryptField(rotated, KEY_A)).toBe(PLAIN_TEXT);
     });
   });
 
