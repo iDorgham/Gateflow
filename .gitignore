@@ -1,47 +1,51 @@
-node_modules
-.next
-dist
-build
-.turbo
+# ── Build & Distribution ───────────────────────────────────────────────────────
+node_modules/
+.next/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+scripts/.bundle-baseline.json
+
+# ── Environment & Secrets ──────────────────────────────────────────────────────
 .env
 .env.local
 .env.production
-*.log
+.env*.local
+
+# ── Operating System & Editors ────────────────────────────────────────────────
 .DS_Store
-coverage
-.vscode
-.idea
-*.tsbuildinfo
-scripts/.bundle-baseline.json
-.expo
-apps/scanner-app/.metro
-.claude
-.cursor
-.vscode
-trash
-test_qr.ts
-test_qr.js
-.kiro
-.crush
+*.log
+coverage/
+.vscode/
+.idea/
+
+# ── Mobile & Metro ─────────────────────────────────────────────────────────────
+.expo/
+apps/scanner-app/.metro/
+
+# ── AI Tool Directories & Workspace Noise ─────────────────────────────────────
 # .antigravity is the canonical tracked AI configuration slice
 !.antigravity
 .antigravity/**/.DS_Store
 .antigravity/hooks/state/
-.opencode
-.kilocode
-.orchids
-.agent
-.kilocode
 .agents
-.vscode
-.superdesign
 .ai-memory
-docs/cache
-.vscode
-.qwen
-.lighthouseci
-.vscode
-.gemini
+.claude/
+.cursor/
+.kiro/
+.opencode/
+.kilo/
+.kilocode/
+.orchids/
+.agent/
+.superdesign/
+.qwen/
+.gemini/
+.crush/
+.lighthouseci/
+.worktrees/
+.vercel/
 
 # Keep template AI workspace assets versioned
 !docs/workspace/template-project/.cursor/
@@ -50,18 +54,21 @@ docs/cache
 !docs/workspace/template-project/.claude/**
 !docs/workspace/template-project/.antigravity/
 !docs/workspace/template-project/.antigravity/**
-.worktrees
-.vercel
-.pnpm-store/
-.env*.local
 
-# Repo hygiene — prevent root dumps / accidental app folders
+# ── Profiling, Caches & Temporary Artifacts ───────────────────────────────────
+*.profraw
+.temp_home/
+.remember/
+.cache/
+.pnpm-store/
+trash/
+test_qr.ts
+test_qr.js
+
+# ── Repo Hygiene — Prevent Root Dumps ─────────────────────────────────────────
 /scan_results.txt
 /lint_output.txt
 /scratch/
 /admin-dashboard/
 /check-users.ts
 /test_server_only.ts
-
-# Local AI tools sync stamp (24h success cache)
-.cache/
