@@ -251,9 +251,8 @@ export default function LoginPage() {
                     {isRtl ? 'كلمة المرور' : 'Password'}
                   </Label>
                   <a
-                    href="#"
+                    href="mailto:support@gateflow.site?subject=Password%20Reset%20Request"
                     className="text-xs font-medium text-primary hover:underline hover:text-primary/80 transition-colors"
-                    tabIndex={-1}
                   >
                     {isRtl ? 'نسيت كلمة المرور؟' : "Can't log in?"}
                   </a>
