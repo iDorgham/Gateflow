@@ -9,11 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {
-  CameraView,
-  useCameraPermissions,
-  type BarcodeScanningResult,
-} from 'expo-camera';
+import { type BarcodeScanningResult, useCameraPermissions } from 'expo-camera';
 import {
   useForegroundPermissions,
   getLastKnownPositionAsync,
@@ -27,7 +23,6 @@ import {
   type LocationContext,
 } from '../../lib/scanner';
 import { getValidAccessToken } from '../../lib/auth-client';
-import { IDCaptureModal } from '../../components/IDCaptureModal';
 import { MaintenanceReportModal } from '../../components/MaintenanceReportModal';
 import { resolveRuntimeQrSecret } from '../../lib/security/qr-secret';
 import { useShiftSession } from '../../hooks/use-shift-session';
@@ -38,23 +33,18 @@ import {
 } from '../../components/GateSelector';
 import { addHistoryEntry } from '../../lib/scan-history';
 import { getPreferences } from '../../lib/preferences';
-import {
-  ArrowUpDown,
-  Calendar,
-  ClipboardList,
-  Home,
-  MapPin,
-  MessageCircle,
-  Play,
-  ScanLine,
-  Settings,
-  Square,
-} from 'lucide-react-native';
+import { ScanLine } from 'lucide-react-native';
 import { haptic } from '../../lib/haptics';
-import { Viewfinder } from '../../components/scanner/viewfinder';
-import { DecisionDialog } from '../../components/scanner/decision-dialog';
-import { ResultOverlay } from '../../components/scanner/result-overlay';
-import { feedbackStyles } from '../../components/scanner/feedback-styles';
+import {
+  CameraScannerView,
+  type ScannerPhase,
+} from '../../components/views/camera-scanner-view';
+import {
+  ScannerTabBar,
+  type ScannerTabKey,
+} from '../../components/views/scanner-tab-bar';
+import { ScannerTopBar } from '../../components/views/scanner-top-bar';
+import type { SupportedLocale } from '../../lib/i18n';
 
 const HomeScreen = lazy(() =>
   import('../main/home-screen').then((m) => ({
@@ -115,18 +105,6 @@ function NavIcon({
   );
 }
 
-/**
- * Camera/verification sub-phase, only active while the scanner tab is active.
- *
- * 'decision' — QR validated successfully; operator must choose Pass or Deny.
- */
-type ScannerPhase =
-  | { phase: 'scanning' }
-  | { phase: 'processing' }
-  | { phase: 'id_capture'; result: ScanResult }
-  | { phase: 'decision'; result: ScanResult }
-  | { phase: 'result'; result: ScanResult };
-
 function localRejectMessage(reason: string): string {
   const map: Record<string, string> = {
     EXPIRED: 'QR code has expired',
@@ -171,9 +149,8 @@ export function ScannerScreen({
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
 
   // ── Tab state ─────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<
-    'home' | 'scanner' | 'today' | 'log' | 'chat' | 'settings'
-  >('home');
+  const [activeTab, setActiveTab] = useState<ScannerTabKey>('home');
+  const [locale, setLocale] = useState<SupportedLocale>('en');
 
   const lastScanAt = useRef<number>(0);
   const resultTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -181,11 +158,16 @@ export function ScannerScreen({
   const lastRejectedResult = useRef<ScanResult | null>(null);
   const lastRejectedQRData = useRef<string | null>(null);
 
-  // Load persisted selected gate on mount
+  // Load persisted selected gate and preferences on mount
   useEffect(() => {
     loadSelectedGate().then((g) => {
       if (g) setSelectedGate(g);
     });
+    getPreferences()
+      .then((p) => {
+        if (p.locale) setLocale(p.locale);
+      })
+      .catch(() => {});
   }, []);
 
   // Silently request location once camera is granted.
@@ -687,206 +669,51 @@ export function ScannerScreen({
 
       {activeTab === 'scanner' && (
         <>
-          {/* Keep the preview mounted while shift state hydrates; only scanning is gated. */}
-          <CameraView
-            style={StyleSheet.absoluteFill}
-            facing="back"
-            barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
-            onBarcodeScanned={
-              canScan(selectedGate?.id) && ui.phase === 'scanning'
-                ? onBarcodeScanned
+          <CameraScannerView
+            canScan={canScan(selectedGate?.id)}
+            uiPhase={ui}
+            selectedGate={selectedGate}
+            onBarcodeScanned={onBarcodeScanned}
+            onPass={handleDecisionPass}
+            onDeny={handleDecisionDeny}
+            onScanAgain={handleScanAgain}
+            onRequestOverride={
+              ui.phase === 'result' &&
+              ui.result.status === 'rejected' &&
+              !ui.result.offline &&
+              ui.result.reason !== 'no_active_shift'
+                ? handleRequestOverride
                 : undefined
             }
+            onReportIssue={() => setShowMaintenanceModal(true)}
+            onIdCaptured={(result) => setUi({ phase: 'decision', result })}
+            locale={locale}
           />
 
-          {/* Decorative overlay — non-interactive */}
-          <View style={styles.overlay} pointerEvents="none">
-            <Text style={styles.scannerHeader}>GateFlow Scanner</Text>
-            <Viewfinder
-              frameSize={FRAME_SIZE}
-              processing={
-                ui.phase === 'processing' ||
-                ui.phase === 'decision' ||
-                ui.phase === 'id_capture'
+          {/* Top action bar (Gate, Shift, Queue, Sign out) */}
+          <ScannerTopBar
+            selectedGate={selectedGate}
+            onOpenGateSelector={() => setShowGateSelector(true)}
+            shiftLoading={shiftLoading}
+            shiftBusy={shiftBusy}
+            isShiftActive={canScan(selectedGate?.id)}
+            onToggleShift={() => {
+              if (!selectedGate) {
+                setShowGateSelector(true);
+                return;
               }
-            />
-            <Text style={styles.scannerHint}>
-              {!selectedGate
-                ? 'Select a gate to begin scanning'
-                : !canScan(selectedGate.id)
-                  ? 'Start your shift to unlock scanning'
-                  : `Gate: ${selectedGate.name} · On duty`}
-            </Text>
-          </View>
-
-          {/* Top-left controls (gate + queue + shift) */}
-          <View style={styles.topBarLeft} pointerEvents="box-none">
-            {/* Gate selector button */}
-            <Pressable
-              style={styles.topBarBtn}
-              onPress={() => setShowGateSelector(true)}
-              accessibilityRole="button"
-              accessibilityLabel={
-                selectedGate
-                  ? `Gate: ${selectedGate.name}. Change gate`
-                  : 'Select gate'
+              if (canScan(selectedGate.id)) {
+                void endShift();
+                return;
               }
-            >
-              <View style={styles.topBarBtnInner}>
-                <MapPin
-                  size={14}
-                  strokeWidth={1.5}
-                  color={nativeTokens.colors.textHeading}
-                />
-                <Text style={styles.topBarBtnText} numberOfLines={1}>
-                  {selectedGate ? selectedGate.name : 'Select Gate'}
-                </Text>
-              </View>
-            </Pressable>
-
-            {/* Shift start / end */}
-            <Pressable
-              style={styles.topBarBtn}
-              disabled={shiftLoading || shiftBusy}
-              onPress={() => {
-                if (!selectedGate) {
-                  setShowGateSelector(true);
-                  return;
-                }
-                if (canScan(selectedGate.id)) {
-                  void endShift();
-                  return;
-                }
-                void startShift(selectedGate.id, selectedGate.name);
-              }}
-              accessibilityRole="button"
-              accessibilityLabel={
-                canScan(selectedGate?.id) ? 'End shift' : 'Start shift'
-              }
-              accessibilityState={{ disabled: shiftLoading || shiftBusy }}
-            >
-              <View style={styles.topBarBtnInner}>
-                {shiftLoading || shiftBusy ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={nativeTokens.colors.textHeading}
-                  />
-                ) : canScan(selectedGate?.id) ? (
-                  <Square
-                    size={14}
-                    strokeWidth={1.5}
-                    color={nativeTokens.colors.textHeading}
-                  />
-                ) : (
-                  <Play
-                    size={14}
-                    strokeWidth={1.5}
-                    color={nativeTokens.colors.textHeading}
-                  />
-                )}
-                <Text style={styles.topBarBtnText} numberOfLines={1}>
-                  {shiftLoading || shiftBusy
-                    ? 'Please wait'
-                    : canScan(selectedGate?.id)
-                      ? 'End shift'
-                      : 'Start shift'}
-                </Text>
-              </View>
-            </Pressable>
-
-            {/* Queue status button */}
-            <Pressable
-              style={styles.topBarBtn}
-              onPress={() => setShowQueueStatus(true)}
-              accessibilityRole="button"
-              accessibilityLabel="Offline sync queue status"
-            >
-              <View style={styles.topBarBtnInner}>
-                <ArrowUpDown
-                  size={14}
-                  strokeWidth={1.5}
-                  color={nativeTokens.colors.textHeading}
-                />
-                <Text style={styles.topBarBtnText}>Queue</Text>
-              </View>
-            </Pressable>
-
-            {shiftError ? (
-              <View style={styles.shiftErrorBanner} pointerEvents="none">
-                <Text style={styles.shiftErrorText}>{shiftError}</Text>
-              </View>
-            ) : null}
-          </View>
-
-          {/* Top-right: Sign-out */}
-          <View style={styles.topBarRight} pointerEvents="box-none">
-            <Pressable
-              style={styles.logoutButton}
-              onPress={handleLogout}
-              disabled={isLoggingOut || shiftBusy}
-              accessibilityRole="button"
-              accessibilityLabel="Sign out"
-              accessibilityState={{
-                disabled: isLoggingOut || shiftBusy,
-                busy: isLoggingOut,
-              }}
-            >
-              {isLoggingOut ? (
-                <ActivityIndicator
-                  size="small"
-                  color={nativeTokens.colors.textSubtle}
-                />
-              ) : (
-                <Text style={styles.logoutText}>Sign out</Text>
-              )}
-            </Pressable>
-          </View>
-
-          {/* ID capture (when gate requires identity level 1+) */}
-          {ui.phase === 'id_capture' && (
-            <IDCaptureModal
-              visible
-              scanLogId={ui.result.scanId!}
-              onSuccess={() => setUi({ phase: 'decision', result: ui.result })}
-              required
-            />
-          )}
-
-          {/* Processing spinner */}
-          {ui.phase === 'processing' && (
-            <View style={feedbackStyles.feedbackLayer}>
-              <ActivityIndicator
-                size="large"
-                color={nativeTokens.colors.textInverse}
-              />
-              <Text style={feedbackStyles.feedbackTitle}>Verifying…</Text>
-            </View>
-          )}
-
-          {/* Pass / Deny decision dialog */}
-          {ui.phase === 'decision' && (
-            <DecisionDialog
-              result={ui.result}
-              onPass={() => handleDecisionPass(ui.result)}
-              onDeny={() => handleDecisionDeny(ui.result)}
-            />
-          )}
-
-          {/* Result overlay */}
-          {ui.phase === 'result' && (
-            <ResultOverlay
-              result={ui.result}
-              onScanAgain={handleScanAgain}
-              onRequestOverride={
-                ui.result.status === 'rejected' &&
-                !ui.result.offline &&
-                ui.result.reason !== 'no_active_shift'
-                  ? handleRequestOverride
-                  : undefined
-              }
-              onReportIssue={() => setShowMaintenanceModal(true)}
-            />
-          )}
+              void startShift(selectedGate.id, selectedGate.name);
+            }}
+            onOpenQueue={() => setShowQueueStatus(true)}
+            shiftError={shiftError}
+            onLogout={handleLogout}
+            isLoggingOut={isLoggingOut}
+            locale={locale}
+          />
         </>
       )}
 
@@ -1019,127 +846,11 @@ export function ScannerScreen({
       )}
 
       {/* ── Bottom navigation ────────────────────────────────────────────── */}
-      <View style={styles.bottomNav} pointerEvents="box-none">
-        {/* Home */}
-        <Pressable
-          style={[styles.navTab, activeTab === 'home' && styles.navTabActive]}
-          onPress={() => setActiveTab('home')}
-          accessibilityRole="tab"
-          accessibilityLabel="Home"
-          accessibilityState={{ selected: activeTab === 'home' }}
-        >
-          <NavIcon icon={Home} active={activeTab === 'home'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'home' && styles.navTabLabelActive,
-            ]}
-          >
-            Home
-          </Text>
-        </Pressable>
-
-        {/* Scanner */}
-        <Pressable
-          style={[
-            styles.navTab,
-            activeTab === 'scanner' && styles.navTabActive,
-          ]}
-          onPress={() => setActiveTab('scanner')}
-          accessibilityRole="tab"
-          accessibilityLabel="Scan"
-          accessibilityState={{ selected: activeTab === 'scanner' }}
-        >
-          <NavIcon icon={ScanLine} active={activeTab === 'scanner'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'scanner' && styles.navTabLabelActive,
-            ]}
-          >
-            Scan
-          </Text>
-        </Pressable>
-
-        {/* Today */}
-        <Pressable
-          style={[styles.navTab, activeTab === 'today' && styles.navTabActive]}
-          onPress={() => setActiveTab('today')}
-          accessibilityRole="tab"
-          accessibilityLabel="Today's visitors"
-          accessibilityState={{ selected: activeTab === 'today' }}
-        >
-          <NavIcon icon={Calendar} active={activeTab === 'today'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'today' && styles.navTabLabelActive,
-            ]}
-          >
-            Today
-          </Text>
-        </Pressable>
-
-        {/* Log */}
-        <Pressable
-          style={[styles.navTab, activeTab === 'log' && styles.navTabActive]}
-          onPress={() => setActiveTab('log')}
-          accessibilityRole="tab"
-          accessibilityLabel="Activity log"
-          accessibilityState={{ selected: activeTab === 'log' }}
-        >
-          <NavIcon icon={ClipboardList} active={activeTab === 'log'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'log' && styles.navTabLabelActive,
-            ]}
-          >
-            Log
-          </Text>
-        </Pressable>
-
-        {/* Chat */}
-        <Pressable
-          style={[styles.navTab, activeTab === 'chat' && styles.navTabActive]}
-          onPress={() => setActiveTab('chat')}
-          accessibilityRole="tab"
-          accessibilityLabel="Chat"
-          accessibilityState={{ selected: activeTab === 'chat' }}
-        >
-          <NavIcon icon={MessageCircle} active={activeTab === 'chat'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'chat' && styles.navTabLabelActive,
-            ]}
-          >
-            Chat
-          </Text>
-        </Pressable>
-
-        {/* Settings */}
-        <Pressable
-          accessibilityRole="tab"
-          accessibilityLabel="Settings"
-          accessibilityState={{ selected: activeTab === 'settings' }}
-          style={[
-            styles.navTab,
-            activeTab === 'settings' && styles.navTabActive,
-          ]}
-          onPress={() => setActiveTab('settings')}
-        >
-          <NavIcon icon={Settings} active={activeTab === 'settings'} />
-          <Text
-            style={[
-              styles.navTabLabel,
-              activeTab === 'settings' && styles.navTabLabelActive,
-            ]}
-          >
-            Settings
-          </Text>
-        </Pressable>
-      </View>
+      <ScannerTabBar
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        locale={locale}
+      />
     </View>
   );
 }

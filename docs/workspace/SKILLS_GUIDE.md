@@ -1,133 +1,91 @@
 # GateFlow Workspace — Skills Guide
 
-Index of skills under **`.agents/skills/`** (synced via **`pnpm sync`**). Each skill is a directory with `SKILL.md` and YAML frontmatter (`name`, `description`).
+Index of skills under **`.antigravity/skills/`** (mirrored to **`.agents/skills/`** and synchronized to all IDE tools via **`pnpm sync`**). Each skill is a directory with a `SKILL.md` file and YAML frontmatter (`name`, `description`).
 
-> **Note:** `.agents/` (symlink to `.antigravity/`) is local AI config and is gitignored. After clone, ensure the tree exists (or restore from your machine backup) then run `pnpm sync`. Count below is approximate — re-list with `ls .agents/skills | wc -l`.
+**Total active skills:** 69 (exact count matching disk).
 
-**Approx. skill folders:** ~95 (verify on disk after sync).
-
-For commands see [COMMAND_GUIDE.md](./COMMAND_GUIDE.md). For `/guide` behavior see **`gf-guide`**.
+For command documentation see [COMMAND_GUIDE.md](./COMMAND_GUIDE.md). For workspace guide behavior see **`gf-guide`**.
 
 ---
 
-## How skills work
+## Active Skills Registry (69)
 
-1. Agents match tasks to skill **descriptions** in frontmatter.
-2. Matched skill instructions load into context (patterns, checklists, templates).
-3. **`source-command-*`** skills wrap slash workflows — pair with `.agents/workflows/<name>.md`.
-
-Discovery helpers: `find-skills`, domain grep under `.agents/skills/`.
-
----
-
-## Tier 1 — Workflow & safety (load often)
-
-Workflow v2 skills use a shared result/evidence contract and cover app focus,
-audits, page inventory/scoring, pilot certification, product/domain modeling,
-frontend/API/database/security, testing, observability, GitHub, Vercel, and
-release rollback. Load only the smallest set needed for the focused task.
-
-Bounded-loop delivery skills cover branch/worktree lifecycle, focused diff
-ownership, atomic conventional commits, draft PRs, CI and review repairs,
-hash-bound merge approval, version/release planning, deployment readiness,
-post-release verification, and rollback. They never independently grant merge,
-tag, release, deploy, or migration authority.
-
-| Folder                     | Description                                                        |
-| -------------------------- | ------------------------------------------------------------------ |
-| **`gf-guide`**             | Workspace guide — pre-flight, coach format, “what should I do now” |
-| **`source-command-guide`** | `/guide` workflow entry                                            |
-| **`source-command-dev`**   | `/dev` — one phase end-to-end                                      |
-| **`source-command-ship`**  | `/ship` — full plan execution                                      |
-| **`cli-limits`**           | 80% CLI quota rule; prefer free-tier when near limit               |
-| **`one-man`**              | `/man` — seven-domain orchestrator                                 |
-| **`security`**             | Auth, RBAC, QR, data protection                                    |
-| **`api`**                  | Next.js App Router API patterns                                    |
-| **`database`**             | Prisma, migrations, multi-tenancy                                  |
-| **`testing`**              | Jest / test patterns                                               |
-| **`gf-strategist`**        | Roadmap and strategic planning                                     |
-
----
-
-## Tier 2 — `source-command-*` (slash workflow helpers)
-
-| Folder                      | Command       |
-| --------------------------- | ------------- |
-| `source-command-brainstorm` | `/brainstorm` |
-| `source-command-creative`   | `/creative`   |
-| `source-command-deploy`     | `/deploy`     |
-| `source-command-docs`       | `/docs`       |
-| `source-command-draft`      | `/draft`      |
-| `source-command-man`        | `/man`        |
-| `source-command-organize`   | `/organize`   |
-| `source-command-prompt`     | `/prompt`     |
-| `source-command-version`    | `/version`    |
-| `source-command-clis-team`  | `/clis-team`  |
-
-_(Add `source-command-plan` / `source-command-idea` when created — after local sync, workflows live at `.agents/workflows/plan.md` and `idea.md`.)_
-
----
-
-## Tier 3 — Design & UI (ADS)
-
-| Folder                  | Focus                |
-| ----------------------- | -------------------- |
-| `ads-ui-styling`        | Core ADS styling     |
-| `ads-typography`        | Type scale           |
-| `ads-spacing`           | Spacing tokens       |
-| `ads-color-tokens`      | Color tokens         |
-| `ads-dynamic-tables`    | Data grids           |
-| `ads-accessibility-rtl` | RTL / a11y           |
-| `uiux-animator`         | Motion patterns      |
-| `framer-motion`         | Framer Motion        |
-| `responsive-design`     | Breakpoints / layout |
-| `shadcn-ads`            | shadcn + ADS         |
-
----
-
-## Tier 4 — Backend, mobile, ops
-
-| Folder                         | Focus             |
-| ------------------------------ | ----------------- |
-| `api-gateway`                  | Rate limits, CORS |
-| `rbac`                         | Permissions       |
-| `qr-crypto`                    | QR signing        |
-| `prisma-performance`           | Query tuning      |
-| `mobile` / `expo-offline-sync` | Expo / offline    |
-| `github-ci-cd`                 | CI/CD             |
-| `deploy` / `vercel`            | Deployment        |
-| `redis`                        | Cache patterns    |
-| `observability`                | Logging / metrics |
+| Skill Folder               | Description                                                                                                                                                                                                                                                                      |
+| :------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ads-a11y-rtl`             | Accessibility (WCAG 2.2 AA) and Arabic RTL/Bidi localization rules for GateFlow web and mobile interfaces in the MENA region.                                                                                                                                                    |
+| `ads-data`                 | High-density operational data display standards for GateFlow, covering data tables, dynamic charts, metrics badges, and dense control layouts.                                                                                                                                   |
+| `ads-foundations`          | Foundational design tokens and styling rules for the Atlassian/GateFlow Design System (ADS), including color palettes, typography scale, spacing grid, border radii, shadows, and iconography.                                                                                   |
+| `ai-ux-patterns`           | Hybrid Text/Chart/Action UI patterns for the GateAI chat interface.                                                                                                                                                                                                              |
+| `analytics-animation`      | Specialized workflows and patterns for analytics-animation.                                                                                                                                                                                                                      |
+| `animejs`                  | Specialized workflows and patterns for animejs.                                                                                                                                                                                                                                  |
+| `api`                      | Next.js App Router API routes and patterns for GateFlow. Use when adding or modifying API endpoints, handling auth, validation, or rate limiting.                                                                                                                                |
+| `api-gateway`              | Specialized workflows and patterns for api-gateway.                                                                                                                                                                                                                              |
+| `architecture`             | Monorepo structure, tech stack, and development patterns for GateFlow. Use when making codebase changes, architectural decisions, or debugging cross-app issues.                                                                                                                 |
+| `backend-services`         | Specialized workflows and patterns for backend-services.                                                                                                                                                                                                                         |
+| `cli-limits`               | Track CLI usage limits (paid and free) and steer tool choice so paid quotas are not exhausted. Use when suggesting which CLI to use, before /dev phase execution, or when the user asks about limits. Ensures agents prefer free-tier CLIs or Cursor when limits are close.      |
+| `cli-memory`               | Update CLI tool memory from usage logs. Use when reviewing CLI outcomes, updating the scoreboard, or when the guide/orchestrator should prefer a tool based on past results. Summarizes CLI_USAGE_AND_RESULTS.md into CLI_TOOL_MEMORY.md; Claude entries go to Escalations only. |
+| `content-creation`         | Create and structure content for websites, marketing, docs, and blogs. Use when writing landing copy, documentation, blog posts, or user-facing text.                                                                                                                            |
+| `creative-animation`       | CSS/Tailwind animations, micro-interactions, motion design, prefers-reduced-motion, performance. Use when adding or refining animations, transitions, or advanced UI motion.                                                                                                     |
+| `creative-director`        | Senior Creative Director for GateFlow social media and video                                                                                                                                                                                                                     |
+| `data-privacy`             | Specialized workflows and patterns for data-privacy.                                                                                                                                                                                                                             |
+| `data-viz`                 | Recharts in chat, CLS prevention, and responsive data visualization for AI responses.                                                                                                                                                                                            |
+| `database`                 | Prisma schema, migrations, and query patterns for GateFlow. Use when creating/modifying models, writing queries, creating migrations, or debugging data issues.                                                                                                                  |
+| `deploy`                   | Specialized workflows and patterns for deploy.                                                                                                                                                                                                                                   |
+| `design-guide`             | Web app design — colors, typography, grid systems, responsive layout, spacing, dashboard/analytics patterns, RTL. Use when designing interfaces, layouts, flows, or improving UI/UX. Covers prototyping, design systems, and app design.                                         |
+| `excel-spreadsheets`       | Create, read, and edit Excel (.xlsx) and spreadsheet files. Use when working with .xlsx, .xls, spreadsheets, Excel exports, Google Sheets, or when the user mentions Excel, sheets, or tabular data files.                                                                       |
+| `expo-mobile-optimization` | Specialized workflows and patterns for expo-mobile-optimization.                                                                                                                                                                                                                 |
+| `expo-offline-sync`        | Specialized workflows and patterns for expo-offline-sync.                                                                                                                                                                                                                        |
+| `framer-motion`            | Specialized workflows and patterns for framer-motion.                                                                                                                                                                                                                            |
+| `gemini`                   | Specialized workflows and patterns for gemini.                                                                                                                                                                                                                                   |
+| `gf-guide`                 | GateFlow workspace guide — pre-flight, state assessment, coach format (Situation→Teach→Ask→Action→Motivate), post-task summary. Use for /guide, "what should I do now", and optional task bookends.                                                                              |
+| `github-ci-cd`             | Specialized workflows and patterns for github-ci-cd.                                                                                                                                                                                                                             |
+| `i18n`                     | Arabic/English internationalization and RTL layout for GateFlow. Use when adding translations, locale switching, RTL/LTR layout, or MENA market support.                                                                                                                         |
+| `mcp-guide`                | When and how to use MCP servers in GateFlow development. Use when schema work, migrations, docs lookup, E2E verification, or GitHub automation is needed.                                                                                                                        |
+| `mobile`                   | Expo SDK 54, React Native, and mobile patterns for GateFlow scanner and resident apps. Use when working on scanner-app, resident-mobile, offline sync, or mobile features.                                                                                                       |
+| `mobile-design`            | Mobile app design for Expo and React Native. Use when designing scanner app, resident app, or mobile-specific UI/UX.                                                                                                                                                             |
+| `mobile-hardware-access`   | Specialized workflows and patterns for mobile-hardware-access.                                                                                                                                                                                                                   |
+| `motion-philosophy`        | Specialized workflows and patterns for motion-philosophy.                                                                                                                                                                                                                        |
+| `motion-primitives`        | Specialized workflows and patterns for motion-primitives.                                                                                                                                                                                                                        |
+| `nextjs-performance`       | Server vs Client components, caching strategies, streaming/suspense, image/font optimization for GateFlow.                                                                                                                                                                       |
+| `one-man`                  | One Man orchestrator — seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite). Subcommands give more power. Tasks, settings, run, ship, mindset, inspire. Use when user says /man.                                                                           |
+| `pdf-analytics`            | Specialized workflows and patterns for pdf-analytics.                                                                                                                                                                                                                            |
+| `pdf-tables`               | Specialized workflows and patterns for pdf-tables.                                                                                                                                                                                                                               |
+| `prisma-performance`       | Specialized workflows and patterns for prisma-performance.                                                                                                                                                                                                                       |
+| `pro-prd-writer`           | Use when creating, updating, or refactoring Product Requirements Documents (PRDs) for GateFlow or any of its apps.                                                                                                                                                               |
+| `property-domain`          | Specialized workflows and patterns for property-domain.                                                                                                                                                                                                                          |
+| `qr-branding`              | Specialized workflows and patterns for qr-branding.                                                                                                                                                                                                                              |
+| `qr-crypto`                | Cryptographic QR payload signing (HMAC-SHA256), verification, replay prevention, and nonce handling for GateFlow.                                                                                                                                                                |
+| `rbac`                     | Specialized workflows and patterns for rbac.                                                                                                                                                                                                                                     |
+| `redis`                    | Specialized workflows and patterns for redis.                                                                                                                                                                                                                                    |
+| `responsive-design`        | Specialized workflows and patterns for responsive-design.                                                                                                                                                                                                                        |
+| `safety-interaction`       | Mutation confirmation, audit trails, and multi-step safety flows for GateAI.                                                                                                                                                                                                     |
+| `security`                 | Security architecture, auth, RBAC, and data protection for GateFlow. Use when implementing auth, handling sensitive data, adding APIs, or reviewing security-critical code.                                                                                                      |
+| `seo-content`              | Write SEO-optimized content for web pages, blogs, and landing pages. Use when creating content that must rank in search and convert.                                                                                                                                             |
+| `seo-core`                 | Specialized workflows and patterns for seo-core.                                                                                                                                                                                                                                 |
+| `seo-international`        | Specialized workflows and patterns for seo-international.                                                                                                                                                                                                                        |
+| `seo-planning`             | Plan SEO strategy, content calendars, and on-page structure. Use when creating content plans, site architecture, or SEO roadmaps.                                                                                                                                                |
+| `seo-research`             | Research keywords, competitors, and search intent for SEO. Use when planning content, analyzing SERPs, or identifying target keywords.                                                                                                                                           |
+| `shadcn-ads`               | Specialized workflows and patterns for shadcn-ads.                                                                                                                                                                                                                               |
+| `shadcn-composable`        | Patterns for building complex, composite UI widgets (Drawers, Comboboxes, Multi-step Forms) in GateFlow.                                                                                                                                                                         |
+| `shadcn-mcp`               | Using Model Context Protocol (MCP) tools to scaffold and customize Shadcn components in the GateFlow monorepo.                                                                                                                                                                   |
+| `sse-streaming`            | Specialized workflows and patterns for sse-streaming.                                                                                                                                                                                                                            |
+| `strategist`               | Strategic ideation, market research, and roadmap planning for GateFlow. Use when planning releases, auditing feature gaps, or analyzing Sass markets.                                                                                                                            |
+| `svg-animation`            | Specialized workflows and patterns for svg-animation.                                                                                                                                                                                                                            |
+| `system-invariants`        | Specialized workflows and patterns for system-invariants.                                                                                                                                                                                                                        |
+| `tailwind`                 | Tailwind CSS utilities and theming for GateFlow. Use when styling components, layouts, or extending theme.                                                                                                                                                                       |
+| `testing`                  | Jest configuration and testing patterns for GateFlow. Use when writing unit/integration tests, debugging test failures, or mocking dependencies.                                                                                                                                 |
+| `theme-auditor`            | Specialized workflows and patterns for theme-auditor.                                                                                                                                                                                                                            |
+| `tokens-design`            | Design token architecture for consistent theming. Use when defining colors, spacing, typography, or aligning UI with the design system.                                                                                                                                          |
+| `ui-ux-pro-max`            | UI/UX design intelligence. 50 styles, 21 palettes, 50 font pairings, 20 charts, 9 stacks.                                                                                                                                                                                        |
+| `uiux-animator`            | Senior SaaS UI/UX + Animation Specialist for GateFlow. Use for Framer Motion, Tailwind/shadcn, dark mode, RTL, layout morphs, and premium dashboard animations.                                                                                                                  |
+| `vercel`                   | Deploy and configure Next.js apps on Vercel. Use when setting up deployment, env vars, or Vercel-specific config.                                                                                                                                                                |
+| `vercel-deployment`        | Specialized workflows and patterns for vercel-deployment.                                                                                                                                                                                                                        |
+| `workflow-v2-contract`     | Shared output and evidence contract for Workflow v2 skills.                                                                                                                                                                                                                      |
 
 ---
 
-## Tier 5 — Content, SEO, specialty
+## How Skills Work
 
-| Folder                                    | Focus                |
-| ----------------------------------------- | -------------------- |
-| `seo-content`, `seo-core`, `seo-planning` | SEO                  |
-| `creative-director`, `content-creation`   | Brand / content      |
-| `i18n`                                    | Arabic / English     |
-| `pdf-analytics`, `excel-spreadsheets`     | Documents            |
-| `gemini`, `mcp-guide`                     | Tool-specific guides |
-
----
-
-## Compliance checklist (any skill)
-
-- [ ] Tenant queries use **`organizationId`** and **`deletedAt: null`**
-- [ ] QR payloads **HMAC-SHA256** signed
-- [ ] No secrets committed; **pnpm** only
-- [ ] **`pnpm preflight`** green before ship when code changed
-
----
-
-## Adding a skill
-
-1. Create `.agents/skills/<folder>/SKILL.md` with `name` and `description` frontmatter.
-2. Run **`pnpm sync`**.
-3. Optionally add a row to this guide (or regenerate from frontmatter).
-
----
-
-> **`/guide`** loads **`gf-guide`** for workspace-aware recommendations. Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`.
+1. Agents match incoming tasks to skill **descriptions** in frontmatter.
+2. The matched skill instructions load into context (patterns, checklists, templates, constraints).
+3. Workflows directly reference relevant domain skills by their directory folder name.

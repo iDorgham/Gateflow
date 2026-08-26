@@ -145,8 +145,13 @@ Delivery authorization is cumulative but narrow:
 - `approve-release`: release-plan ID and target commit only.
 - Deployment, promotion, and database migration are always separate commands.
 
-`/ralph <slug>` is now a compatibility alias for a bounded local all-phase run.
-The Workflow v2 loop never calls the legacy `ralph-git.js` mutation paths.
+### Unified Loop Taxonomy
+
+- **`/dev loop`**: Bounded writer loop for phase/task implementation (local or draft-pr).
+- **`/pilot loop`**: Same bounded execution controller + strict pilot certification gates.
+- **`/ralph <slug>`**: Compatibility alias routing to `/dev loop` (legacy mutation paths removed).
+- **`pnpm ralph`**: Local developer telemetry & metrics dashboard only; never executes migrations or git mutations.
+- **Cursor `/loop`**: IDE session keep-alive mechanism; independent of GateFlow workflow state.
 
 Controller help:
 

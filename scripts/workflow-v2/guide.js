@@ -138,8 +138,11 @@ function summarizeEvidence(
 function nextCommandFor(state, evidence) {
   const app = state.focusedApp;
   if (!app) {
+    if (state.integratedPilot?.stage === 'certified') {
+      return '/progress';
+    }
     const certified = state.sequence.filter(
-      (id) => state.apps[id].stage === 'certified'
+      (id) => state.apps[id]?.stage === 'certified'
     );
     return certified.length === state.sequence.length
       ? '/certify integrated-pilot'

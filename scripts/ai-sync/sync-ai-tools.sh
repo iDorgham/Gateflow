@@ -16,6 +16,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SRC="$ROOT/.agents"
+
+# Auto-heal .agents symlink to .antigravity if missing
+if [[ ! -e "$SRC" && -d "$ROOT/.antigravity" ]]; then
+  ln -sfn .antigravity "$SRC"
+fi
+
 CACHE_DIR="$ROOT/.cache"
 STAMP_FILE="$CACHE_DIR/ai-tools-sync.json"
 TTL_SECONDS=$((24 * 60 * 60))
@@ -56,22 +62,21 @@ show_status() {
     echo "  Stamp: $STAMP_FILE"
     return 0
   fi
-  python3 - <<'PY'
-import json, time, os
-from pathlib import Path
-p = Path(os.environ["STAMP_FILE"])
-ttl = int(os.environ["TTL_SECONDS"])
-d = json.loads(p.read_text())
-ts = float(d.get("ok_at", 0))
-age = time.time() - ts
-remain = max(0, ttl - age)
-print(f"AI tools sync: last OK at {d.get('ok_at_iso', '?')}")
-print(f"  tool scope : {d.get('only_tool') or 'all'}")
-print(f"  agents mtime: {d.get('agents_mtime', '?')}")
-print(f"  age        : {int(age // 3600)}h {int((age % 3600) // 60)}m")
-print(f"  remaining  : {int(remain // 3600)}h {int((remain % 3600) // 60)}m of {ttl // 3600}h TTL")
-print(f"  stamp      : {p}")
-PY
+  node -e '
+const fs = require("fs");
+const stampFile = process.env.STAMP_FILE;
+const ttl = parseInt(process.env.TTL_SECONDS || "86400", 10);
+const d = JSON.parse(fs.readFileSync(stampFile, "utf8"));
+const ts = Number(d.ok_at || 0);
+const age = (Date.now() / 1000) - ts;
+const remain = Math.max(0, ttl - age);
+console.log(`AI tools sync: last OK at ${d.ok_at_iso || "?"}`);
+console.log(`  tool scope : ${d.only_tool || "all"}`);
+console.log(`  agents mtime: ${d.agents_mtime || "?"}`);
+console.log(`  age        : ${Math.floor(age / 3600)}h ${Math.floor((age % 3600) / 60)}m`);
+console.log(`  remaining  : ${Math.floor(remain / 3600)}h ${Math.floor((remain % 3600) / 60)}m of ${Math.floor(ttl / 3600)}h TTL`);
+console.log(`  stamp      : ${stampFile}`);
+'
 }
 
 cache_is_fresh() {
@@ -80,22 +85,20 @@ cache_is_fresh() {
   [[ -f "$STAMP_FILE" ]] || return 1
   export CURRENT_AGENTS_MTIME
   CURRENT_AGENTS_MTIME="$(agents_mtime)"
-  python3 - <<'PY'
-import json, time, os, sys
-from pathlib import Path
-p = Path(os.environ["STAMP_FILE"])
-ttl = int(os.environ["TTL_SECONDS"])
-cur = str(os.environ.get("CURRENT_AGENTS_MTIME", "0"))
-try:
-    d = json.loads(p.read_text())
-except Exception:
-    sys.exit(1)
-if time.time() - float(d.get("ok_at", 0)) > ttl:
-    sys.exit(1)
-if str(d.get("agents_mtime", "")) != cur:
-    sys.exit(1)
-sys.exit(0)
-PY
+  node -e '
+const fs = require("fs");
+const stampFile = process.env.STAMP_FILE;
+const ttl = parseInt(process.env.TTL_SECONDS || "86400", 10);
+const cur = String(process.env.CURRENT_AGENTS_MTIME || "0");
+try {
+  const d = JSON.parse(fs.readFileSync(stampFile, "utf8"));
+  if ((Date.now() / 1000) - Number(d.ok_at || 0) > ttl) process.exit(1);
+  if (String(d.agents_mtime || "") !== cur) process.exit(1);
+  process.exit(0);
+} catch {
+  process.exit(1);
+}
+'
 }
 
 write_stamp() {
@@ -103,21 +106,19 @@ write_stamp() {
   mkdir -p "$CACHE_DIR"
   export AGENTS_MTIME ONLY_TOOL
   AGENTS_MTIME="$(agents_mtime)"
-  python3 - <<'PY'
-import json, time, os
-from pathlib import Path
-from datetime import datetime, timezone
-p = Path(os.environ["STAMP_FILE"])
-p.parent.mkdir(parents=True, exist_ok=True)
-now = time.time()
-p.write_text(json.dumps({
-    "ok_at": now,
-    "ok_at_iso": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-    "only_tool": os.environ.get("ONLY_TOOL") or None,
-    "agents_mtime": os.environ.get("AGENTS_MTIME", "0"),
-    "ttl_seconds": int(os.environ.get("TTL_SECONDS", "86400")),
-}, indent=2) + "\n")
-PY
+  node -e '
+const fs = require("fs");
+const stampFile = process.env.STAMP_FILE;
+const now = Date.now() / 1000;
+const data = {
+  ok_at: now,
+  ok_at_iso: new Date().toISOString(),
+  only_tool: process.env.ONLY_TOOL || null,
+  agents_mtime: process.env.AGENTS_MTIME || "0",
+  ttl_seconds: parseInt(process.env.TTL_SECONDS || "86400", 10)
+};
+fs.writeFileSync(stampFile, JSON.stringify(data, null, 2) + "\n");
+'
 }
 
 ensure_impl() {

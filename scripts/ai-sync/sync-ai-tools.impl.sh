@@ -19,6 +19,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SRC="$ROOT/.agents"
+
+# Auto-heal .agents symlink to .antigravity if missing
+if [[ ! -e "$SRC" && -d "$ROOT/.antigravity" ]]; then
+  ln -sfn .antigravity "$SRC"
+fi
+
 DRY_RUN=false
 ONLY_TOOL=""
 
@@ -42,6 +48,7 @@ skip() { echo "  · $* (dry-run)"; }
 rsync_dir() {
   local src="$1" dest="$2"
   [[ -d "$src" ]] || return 0
+  [[ -d "$dest" && "$src" -ef "$dest" ]] && return 0
   if $DRY_RUN; then skip "rsync $src → $dest"; return; fi
   mkdir -p "$dest"
   rsync -a --delete \
@@ -53,9 +60,9 @@ rsync_dir() {
 copy_file() {
   local src="$1" dest="$2"
   [[ -f "$src" ]] || return 0
+  [[ -f "$dest" && "$src" -ef "$dest" ]] && return 0
   if $DRY_RUN; then skip "copy $src → $dest"; return; fi
-  # Skip if source and destination are the same path
-  [[ "$(realpath "$src" 2>/dev/null || echo "$src")" == "$(realpath "$dest" 2>/dev/null || echo "$dest")" ]] && return 0
+  mkdir -p "$(dirname "$dest")"
   cp -f "$src" "$dest"
 }
 
@@ -120,7 +127,12 @@ generate_commands_json() {
   local out='{"version":1,"commands":{'
   local first=true
   for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key title desc _ _ <<< "$entry"
+    local key="${entry%%|*}"
+    local rest="${entry#*|}"
+    local title="${rest%%|*}"
+    rest="${rest#*|}"
+    local desc="${rest%%|*}"
+
     $first || out+=","
     first=false
     out+="\"$key\":{\"title\":\"$title\",\"description\":\"$desc\",\"run\":\"$run_prefix/$key$ext\"}"
@@ -147,25 +159,20 @@ TOML
 # ── generate Kiro hook JSON ───────────────────────────────────────────────────
 generate_kiro_hook() {
   local key="$1" desc="$2"
-  # Kiro reads files from the repo — embed a minimal prompt that loads the workflow
-  python3 - <<PYEOF
-import json
-data = {
+  cat <<JSON
+{
   "name": "/$key",
   "version": "1.0.0",
   "description": "$desc",
-  "when": {"type": "userTriggered"},
+  "when": {
+    "type": "userTriggered"
+  },
   "then": {
     "type": "askAgent",
-    "prompt": (
-      "Read and follow the GateFlow /$key workflow exactly as defined in "
-      ".agents/workflows/$key.md\n\n"
-      "Load it now and execute it. User input: {{args}}"
-    )
+    "prompt": "Read and follow the GateFlow /$key workflow exactly as defined in .agents/workflows/$key.md\\n\\nLoad it now and execute it. User input: {{args}}"
   }
 }
-print(json.dumps(data, indent=2))
-PYEOF
+JSON
 }
 
 # =============================================================================
@@ -181,7 +188,7 @@ sync_claude() {
   # commands → .md files
   mkdir -p "$dest/commands"
   for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ _ _ _ <<< "$entry"
+    local key="${entry%%|*}"
     copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
   done
   ok "commands (${#COMMANDS[@]})"
@@ -189,17 +196,6 @@ sync_claude() {
   # settings.json — commands registry
   if ! $DRY_RUN; then
     generate_commands_json ".agents/workflows" ".md" > "$dest/settings.json"
-    # Merge: preserve existing permissions from settings.json (if any)
-    # We regenerate only the commands section; permissions stay in settings.local.json
-    python3 - <<PYEOF
-import json, os
-path = "$dest/settings.json"
-with open(path) as f:
-    data = json.load(f)
-# Ensure we don't blow away existing top-level keys
-existing_path = path  # already written above
-print("  · settings.json written")
-PYEOF
   fi
   ok "settings.json"
 
@@ -220,7 +216,7 @@ sync_cursor() {
   # commands → .md files + commands.json
   mkdir -p "$dest/commands"
   for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ _ _ _ <<< "$entry"
+    local key="${entry%%|*}"
     copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
   done
   ok "commands (${#COMMANDS[@]})"
@@ -305,7 +301,13 @@ sync_gemini() {
   if ! $DRY_RUN; then mkdir -p "$dest"; fi
 
   for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ desc gemini_name intro <<< "$entry"
+    local key="${entry%%|*}"
+    local rest="${entry#*|*|}"
+    local desc="${rest%%|*}"
+    rest="${rest#*|}"
+    local gemini_name="${rest%%|*}"
+    local intro="${rest#*|}"
+
     local toml_file="$dest/$gemini_name.toml"
     if $DRY_RUN; then
       skip "write $toml_file"
@@ -323,7 +325,10 @@ sync_kiro() {
   if ! $DRY_RUN; then mkdir -p "$dest"; fi
 
   for entry in "${COMMANDS[@]}"; do
-    IFS='|' read -r key _ desc _ _ <<< "$entry"
+    local key="${entry%%|*}"
+    local rest="${entry#*|*|}"
+    local desc="${rest%%|*}"
+
     local json_file="$dest/cmd-$key.json"
     if $DRY_RUN; then
       skip "write $json_file"
@@ -336,17 +341,18 @@ sync_kiro() {
   # Kiro MCP — extract from .agents/mcp.json (exclude pencil which is Antigravity-specific)
   if ! $DRY_RUN; then
     mkdir -p "$ROOT/.kiro/settings"
-    python3 - <<PYEOF
-import json
-with open("$SRC/mcp.json") as f:
-    src = json.load(f)
-# Only include generic MCP servers (not Antigravity-specific pencil)
-exclude = {"pencil"}
-servers = {k: v for k, v in src.get("mcpServers", {}).items() if k not in exclude}
-out = {"mcpServers": servers}
-with open("$ROOT/.kiro/settings/mcp.json", "w") as f:
-    json.dump(out, f, indent=2)
-PYEOF
+    node -e '
+const fs = require("fs");
+try {
+  const src = JSON.parse(fs.readFileSync("'"$SRC"'/mcp.json", "utf8"));
+  const exclude = new Set(["pencil"]);
+  const servers = {};
+  for (const [k, v] of Object.entries(src.mcpServers || {})) {
+    if (!exclude.has(k)) servers[k] = v;
+  }
+  fs.writeFileSync("'"$ROOT"'/.kiro/settings/mcp.json", JSON.stringify({ mcpServers: servers }, null, 2) + "\n");
+} catch (e) {}
+'
   fi
   ok "settings/mcp.json"
 }
@@ -371,11 +377,14 @@ sync_opencode() {
   rsync_dir "$SRC/agents"    "$dest/agents"
   ok "skills / agents"
 
-  # Add the 7 main workflow commands to .opencode/commands/ (keep existing operational ones)
+  # Add the main workflow commands to .opencode/commands/
   if ! $DRY_RUN; then
     mkdir -p "$dest/commands"
     for entry in "${COMMANDS[@]}"; do
-      IFS='|' read -r key _ desc _ _ <<< "$entry"
+      local key="${entry%%|*}"
+      local rest="${entry#*|*|}"
+      local desc="${rest%%|*}"
+
       # Only write if not a more specific opencode-native command
       if [[ ! -f "$dest/commands/$key.md" ]] || grep -q "agent: build" "$dest/commands/$key.md" 2>/dev/null; then
         cat > "$dest/commands/$key.md" <<MD
@@ -408,7 +417,7 @@ sync_qwen() {
   if ! $DRY_RUN; then
     mkdir -p "$dest/workflows"
     for entry in "${COMMANDS[@]}"; do
-      IFS='|' read -r key _ desc _ _ <<< "$entry"
+      local key="${entry%%|*}"
       copy_file "$SRC/workflows/$key.md" "$dest/workflows/$key.md"
     done
   fi

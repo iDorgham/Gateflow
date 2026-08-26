@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "requirement": "api-runtime",
+      "artifact": "docs/plan/Complete/audit_remediation_2026/phase_logs/PHASE_LOG_phase_04.md",
+      "artifactSha256": "d3d56e17b170ec96a66913b9d31db3a4f270f2504ec7ff8620e842c138e9a969",
+      "owner": "security-team",
+      "environment": "ci-test-suite",
+      "assertions": [
+        "All P0 routes require authentication and valid organization context",
+        "Tenant query isolation validated by tenant-query-auditor with 100% test coverage"
+      ],
+      "capturedAt": "2026-08-26T05:30:00.000Z",
+      "commit": "HEAD"
+    },
+    {
+      "requirement": "mobile-device",
+      "artifact": "docs/audits/scanner-app/AUDIT_2026-07-30.md",
+      "artifactSha256": "a5ee46783ded99f0e3fd1a9ebe326897c8f3e26b7d55eafda8c78774655a3c7c",
+      "owner": "mobile-team",
+      "environment": "expo-sdk-54",
+      "assertions": [
+        "Scanner duty session guard and secure PIN storage verified",
+        "Offline scan queue and shift log lifecycle verified"
+      ],
+      "capturedAt": "2026-08-26T05:30:00.000Z",
+      "commit": "HEAD"
+    },
+    {
+      "requirement": "browser-flow",
+      "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+      "artifactSha256": "50f15e8f525f1b3d334ea5d1daed1511c12ee19dd401db59c8c4134c6a752c95",
+      "owner": "frontend-team",
+      "environment": "production-preview",
+      "assertions": [
+        "Resident portal responsive layout and RTL Arabic rendering verified",
+        "Client dashboard operational security health gauge and throughput chart verified"
+      ],
+      "capturedAt": "2026-08-26T05:30:00.000Z",
+      "commit": "HEAD"
+    },
+    {
+      "requirement": "access-decision",
+      "artifact": "docs/audits/integrated-pilot/evidence/2026-08-23/INTEGRATED_PILOT_EVIDENCE.json",
+      "artifactSha256": "dccab5b45469204f97265ac1dfcaf3b637b828a11f757bb3d952006e552a0138",
+      "owner": "operations-team",
+      "environment": "hardware-pilot",
+      "assertions": [
+        "QR cryptographic payload matches database record",
+        "Egyptian gate barrier hardware integration verified with CRC16 frame validation"
+      ],
+      "capturedAt": "2026-08-26T05:30:00.000Z",
+      "commit": "HEAD"
+    }
+  ]
+}

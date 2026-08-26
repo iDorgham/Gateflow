@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** add pass and visitor models to tenant scoped allowlist
+
 - **[Theme]** preserve use client directive in bundle banner
 
 - **[Workspace]** automate runtime proof and PR readiness
@@ -28,6 +30,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### AI Tools
 
 ### Apps
+
+- **[Client]** standardize operational intelligence and invitee landing test suites
+- **[Client]** restore setGates definition in residents filter bar
+- **[Client]** resolve lint unused vars for preflight compliance
 
 - **[Client-Dashboard]** add operational security health gauge, 24h gate throughput velocity charts, and intelligence state store
 - **[Scanner]** harden offline queue sync

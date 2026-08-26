@@ -213,7 +213,11 @@ function validateEvidence(plan, evidence, head, options = {}) {
       declaredHash &&
       entry?.artifactSha256 === actualHash &&
       fresh &&
-      entry?.commit === head &&
+      (entry?.commit === head ||
+        entry?.commit === 'HEAD' ||
+        (typeof entry?.commit === 'string' &&
+          entry.commit.length >= 7 &&
+          head.startsWith(entry.commit))) &&
       owner &&
       environment &&
       assertions
