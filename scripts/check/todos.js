@@ -88,7 +88,7 @@ function gitBlame(relFile, lineNum) {
   try {
     const out = execSync(
       `git blame -L ${lineNum},${lineNum} --porcelain "${relFile}"`,
-      { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' }
+      { cwd: ROOT, encoding: 'utf8', stdio: 'pipe', timeout: 1000 }
     );
     const authorLine = out.match(/^author (.+)/m);
     const timestampLine = out.match(/^author-time (\d+)/m);
@@ -162,7 +162,10 @@ for (const relFile of files) {
 
     if (typeFilter && tag !== typeFilter) continue;
 
-    const blame = gitBlame(relFile, i + 1);
+    const withBlame = Boolean(oldDays || args.includes('--blame'));
+    const blame = withBlame
+      ? gitBlame(relFile, i + 1)
+      : { author: 'dev', date: null, ageDays: null };
     if (oldDays && (blame.ageDays === null || blame.ageDays < oldDays))
       continue;
 

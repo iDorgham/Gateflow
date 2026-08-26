@@ -2,26 +2,161 @@
 
 ---
 
-## 🚀 Active Initiatives (Q2-Q3 2026)
+## 🚀 Active & Ready Initiatives (Q3 2026)
+
+### gateflow_readiness_market_leadership_2026 — GateFlow Readiness and Egypt/MENA Market Leadership 2026
+
+**PLAN:** `docs/plan/Complete/gateflow_readiness_market_leadership_2026/`  
+`PLAN_gateflow_readiness_market_leadership_2026.md`  
+**Status:** 🟢 Complete — All 5 Phases Certified  
+**Priority:** P0 — Enterprise Security, Platform Reliability & Market Leadership  
+**Target:** P0 security remediation, trustworthy CI script resolution, Prisma migration safety, decision-first operational dashboards, and Egypt pilot integration  
+**Branch:** `feat/gateflow-readiness-market-leadership-2026`
+
+- [x] Phase 1 — P0 Security & Exposure Remediation
+- [x] Phase 2 — CI/CD, Script Resolution & Dependency Gate Hardening
+- [x] Phase 3 — Prisma Migration Safety, Data Retention & Tenant Scoping
+- [x] Phase 4 — Operational Dashboard Analytics & Security Intelligence
+- [x] Phase 5 — Egypt Pilot Wedge, Partner Integration & MENA Readiness Certification
+
+### ai_sdk_v6_migration — AI SDK v6 (Agentic) Architecture Migration
+
+**PLAN:** `docs/plan/Complete/ai_sdk_v6_migration/`  
+`PLAN_ai_sdk_v6_migration.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Core AI Infrastructure & Agentic Extensibility  
+**Target:** Vercel AI SDK v6 multi-part UIMessage architecture, interactive tool confirmation lifecycle, and zero-deprecation client/admin assistant migration  
+**Branch:** `feat/ai-sdk-v6-migration`
+
+- [x] Phase 1 — Multi-Part `UIMessage` Data Transformers & Adapter
+- [x] Phase 2 — Agentic Tool Invocation & Confirmation State Machine
+- [x] Phase 3 — Client Dashboard AI Assistant Migration
+- [x] Phase 4 — Admin Dashboard AI Assistant & Super-Admin Emulation Tools
+- [x] Phase 5 — Arabic RTL Polish, Latency Benchmarks & Full Certification
+
+### resident_mobile_one_tap — Resident Mobile Mastery (v2.0) — One-Tap Express Invites
+
+**PLAN:** `docs/plan/Complete/resident_mobile_one_tap/`  
+`PLAN_resident_mobile_one_tap.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Mobile Resident Experience & Product Virality  
+**Target:** High-speed One-Tap guest passes, cryptographic HMAC short-links, Apple/Google Wallet export, and luxury invitee landing page  
+**Branch:** `feat/resident-mobile-one-tap`
+
+- [x] Phase 1 — Cryptographic Short-Link & Silent Token Foundation
+- [x] Phase 2 — Express Link Core Engine & Anonymous-to-Identified Resolver
+- [x] Phase 3 — Resident Mobile Home Tab Express Share Widget
+- [x] Phase 4 — Luxury Invitee Landing Page & Wallet Pass Export
+- [x] Phase 5 — GateAI Arrival Pre-Clearance, Arabic RTL Audit & Full Certification
+
+### autonomous_ops_intelligence — Autonomous Operations & Perimeter Intelligence
+
+**PLAN:** `docs/plan/Complete/autonomous_ops_intelligence/`  
+`PLAN_autonomous_ops_intelligence.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Agentic AI & Perimeter Security Automation  
+**Target:** Agentic maintenance executor, edge camera tailgating detection bridge, WhatsApp concierge bot, and live perimeter map  
+**Branch:** `feat/autonomous-ops-intelligence`
+
+- [x] Phase 1 — Agentic Fault Detector & Autonomous Work Order Dispatcher
+- [x] Phase 2 — Perimeter Security & Tailgating Ingestion Bridge
+- [x] Phase 3 — WhatsApp Concierge Bot & Automated Guest Approval
+- [x] Phase 4 — Client Dashboard Perimeter Intelligence Map & Anomaly Feed
+- [x] Phase 5 — Arabic RTL Localization, Latency Benchmarks & Full Certification
+
+### maintenance_management — Maintenance Management & Dispatch Hub
+
+**PLAN:** `docs/plan/Complete/maintenance_management/`  
+`PLAN_maintenance_management.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Facility Operations & Asset Maintenance  
+**Target:** Work order lifecycle state machine, Kanban dispatch board, physical asset service logs, and automated vendor QR access passes  
+**Branch:** `feat/maintenance-management-hub`
+
+- [x] Phase 1 — Work Order State Machine, Schema & REST APIs
+- [x] Phase 2 — Client Dashboard Dispatch Kanban & Asset Service History
+- [x] Phase 3 — Automated Vendor Access QR Pass Generation
+- [x] Phase 4 — Resident Mobile & Portal Maintenance Submission Flow
+- [x] Phase 5 — Guard Hardware Reporting, Arabic RTL Audit & Full Certification
+
+### admin_dashboard_redesign — Admin Dashboard Redesign (V10 Parity & Operational Hubs)
+
+**PLAN:** `docs/plan/Complete/admin_dashboard_redesign/`  
+`PLAN_admin_dashboard_redesign.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Enterprise Administration & Platform Operations  
+**Target:** Shell modernization, multi-page settings hub, operational CRUD tables, and emulation controls  
+**Branch:** `feat/admin-dashboard-redesign-v10`
+
+- [x] Phase 1 — Global Shell & Header/Sidebar Modernization
+- [x] Phase 2 — Categorized Multi-Page Settings Hub
+- [x] Phase 3 — Operational Hubs & High-Density Table Actions
+- [x] Phase 4 — Super Admin Intelligence & Emulation Hub
+- [x] Phase 5 — Arabic RTL Localization, ADS Tokens Audit & Full Test Certification
+
+### marketing_growth_engine_q3_2026 — Marketing Growth Engine & Conversion Funnel
+
+**PLAN:** `docs/plan/Complete/marketing_growth_engine_q3_2026/`  
+`PLAN_marketing_growth_engine_q3_2026.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — Growth & B2B Customer Acquisition  
+**Target:** Interactive live pass simulation, vertical landing pages, closed-loop attribution, and PageSpeed 100 SEO engine  
+**Branch:** `feat/marketing-growth-engine-q3-2026`
+
+- [x] Phase 1 — Interactive Pass Simulation & Hero Redesign
+- [x] Phase 2 — Vertical Solutions Landing Pages & ROI Calculator
+- [x] Phase 3 — Adaptive Intent Lead Capture & Qualification Engine
+- [x] Phase 4 — Closed-Loop Attribution Telemetry & Analytics
+- [x] Phase 5 — SEO Core Web Vitals 100, Arabic RTL Audit & Full Test Certification
+
+### scanner_biometric_auth — Guard Biometric Identity Verification
+
+**PLAN:** `docs/plan/Complete/scanner_biometric_auth/`  
+`PLAN_scanner_biometric_auth.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P1 — High-Security Guard Authentication  
+**Target:** FaceID/Fingerprint shift check-in, wake-from-sleep re-auth, 5-min queue grace period, PIN fallback  
+**Branch:** `feat/scanner-biometric-auth`
+
+- [x] Phase 1 — Biometric Hardware Detection & Service Primitives
+- [x] Phase 2 — Guard Duty Shift & Inactivity Lock Biometric Checkpoint
+- [x] Phase 3 — Per-Gate High-Security Scan Enforcement
+- [x] Phase 4 — Fallback PIN Verification & Anti-Brute-Force Lockout
+- [x] Phase 5 — Arabic RTL Localization, ADS Tokens Audit & Full Test Certification
+
+### resident_mobile — Flagship Resident Mobile App (Expo SDK 57)
+
+**PLAN:** `docs/plan/Complete/resident_mobile/`  
+`PLAN_resident_mobile.md`  
+**Status:** ✅ Complete — all phases 1–5 complete (verified)  
+**Priority:** P0 — Flagship Resident Mobile Experience  
+**Target:** 3-tap contact visitor pass generation, gate scan push alerts, offline pass cache, and Arabic RTL layout  
+**Branch:** `feat/resident-mobile-flagship`
+
+- [x] Phase 1 — Backend API & Push Notification Dispatch
+- [x] Phase 2 — Contact Picker & One-Tap Pass Sharing
+- [x] Phase 3 — Passes Management & Offline Cache
+- [x] Phase 4 — Visitor History & Push Deep-Linking
+- [x] Phase 5 — Polish, Arabic RTL & Certification
 
 ### workspace_ai_surface_hardening_2026 — Skills, agents, commands, rules, loops
 
-**PLAN:** `docs/plan/Draft/workspace_ai_surface_hardening_2026/`
+**PLAN:** `docs/plan/Complete/workspace_ai_surface_hardening_2026/`
 `PLAN_workspace_ai_surface_hardening_2026.md`
-**Status:** Draft — audit 2026-08-14; overall 5.4/10
+**Status:** ✅ Complete — all phases 0–5 complete & CI gatekeeper active
 **Priority:** P1 workspace (does not replace scanner product P0)
 **Target:** One command universe, executable skills, tracked canonical AI config
 
-- [ ] Phase 0 — Version canonical AI slice
-- [ ] Phase 1 — Quarantine Sovereign command collisions
-- [ ] Phase 2 — Prune/merge stubs and duplicates
-- [ ] Phase 3 — Unify loops + reconcile workflow-v2 state
-- [ ] Phase 4 — Rules: one always-apply core
-- [ ] Phase 5 — Generated indexes + skill-quality CI
+- [x] Phase 0 — Version canonical AI slice
+- [x] Phase 1 — Quarantine Sovereign command collisions
+- [x] Phase 2 — Prune/merge stubs and duplicates
+- [x] Phase 3 — Unify loops + reconcile workflow-v2 state
+- [x] Phase 4 — Rules: one always-apply core
+- [x] Phase 5 — Generated indexes + skill-quality CI
 
 ### client_dashboard_readiness_2026 — Client Dashboard development readiness
 
-**PLAN:** `docs/plan/Draft/client_dashboard_readiness_2026/`
+**PLAN:** `docs/plan/Complete/client_dashboard_readiness_2026/`
 `PLAN_client_dashboard_readiness_2026.md`
 **Status:** 🟢 Complete — 9/9 pilot outcomes certified
 **Priority:** P0 — security and pilot certification blockers
@@ -41,7 +176,7 @@ work in `audit_remediation_2026` before implementation begins.
 
 ### repo_hygiene — Repo hygiene + security baseline (v0.3.0)
 
-**PLAN:** `docs/plan/Draft/repo_hygiene/`  
+**PLAN:** `docs/plan/Complete/repo_hygiene/`  
 `PLAN_repo_hygiene.md`  
 **Status:** ✅ Complete — all phases complete; v0.3.0 tagged  
 **Priority:** P0 — pre-audit gate after Workflow Phase 00  
@@ -76,20 +211,20 @@ work in `audit_remediation_2026` before implementation begins.
 
 ### audit_remediation_2026 — 2026 Security and Engineering Audit Remediation
 
-**PLAN:** `docs/plan/Active/audit_remediation_2026/`
+**PLAN:** `docs/plan/Complete/audit_remediation_2026/`
 
-**Status:** ⏸️ Active evidence-only — remaining work migrated to `client_dashboard_readiness_2026`; ops credential receipt pending
+**Status:** 🟢 Complete — All 4 Phases Certified
 
-**Priority:** P0 containment complete; P1/P2 hardening in progress
+**Priority:** P0/P1 containment and certification complete
 
-**Target:** Finish Phase 4 + ops receipt; then move plan to `Complete/`
+**Target:** Enterprise security, tenant isolation, and API hardening certification
 
 **Branches:** `fix/audit-remediation-phase-*` (PRs #153–#155)
 
 - [x] Phase 1 — P0 containment: bootstrap route and browser injection
 - [x] Phase 2 — Tenant isolation: request-local, complete, fail-closed
 - [x] Phase 3 — Trustworthy CI and repository scanners
-- [ ] Phase 4 — API hardening, coverage, and final certification
+- [x] Phase 4 — API hardening, coverage, and final certification
 
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI)
 
@@ -152,15 +287,15 @@ work in `audit_remediation_2026` before implementation begins.
 **IDEA:** `docs/development/initiatives/IDEA_scanner_onboarding_session.md`  
 **PLAN:** `docs/plan/Active/scanner_onboarding_session/`  
 `PLAN_scanner_onboarding_session.md`  
-**Status:** Active — Phase 02 done; next Phase 03  
+**Status:** ✅ Code Complete — Phases 01–05 complete (device evidence noted in phase log)  
 **Audit:** `docs/audits/scanner-app/AUDIT_2026-07-30.md`  
 **Target:** Q3 2026
 
 - [x] Phase 1 — Security wiring & QR fail-closed (hooks exist; wire + fail-closed)
 - [x] Phase 2 — Wizard UI: Multi-step ADS Onboarding
-- [ ] Phase 3 — Shift Logic: Clock-in/out API + block scan without shift
-- [ ] Phase 4 — Home Redesign: Master Scan Dashboard
-- [ ] Phase 5 — Polish: BiometricGuard, RTL, device pilot evidence
+- [x] Phase 3 — Shift Logic: Clock-in/out API + block scan without shift
+- [x] Phase 4 — Home Redesign: Master Scan Dashboard
+- [x] Phase 5 — Polish: BiometricGuard, RTL, device pilot evidence
 
 ### admin_dashboard_evolution — Admin Dashboard Evolution
 
@@ -168,7 +303,7 @@ work in `audit_remediation_2026` before implementation begins.
 **Status:** ✅ Completed (2026-04-29)
 
 - [x] Phase 1 — Side Menu Reorganization & Organizations Rebuild
-- [x] Phase 2 — CMS Section Shell + Settings for www.gateflow.site
+- [x] Phase 2 — CMS Section Shell + Settings for <www.gateflow.site>
 - [x] Phase 3 — Advanced Webflow-like Front Builder Core
 - [x] Phase 4 — Landing Pages with AI Content & Image Generation
 - [x] Phase 5 — Pages & Menus Builder

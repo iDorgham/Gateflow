@@ -6,15 +6,15 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 ## AI tooling layout
 
-| What               | Where                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------- |
-| Canonical source   | `.agents/` (local symlink → `.antigravity/`; gitignored)                                    |
-| IDE slash commands | `.cursor/commands/` and synced tool surfaces (from `pnpm sync`)                             |
-| Skills             | `.agents/skills/` (~95 skills after local sync)                                             |
-| Agents             | `.agents/agents/roles/`                                                                     |
+| What               | Where                                                                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| Canonical source   | `.antigravity/` (tracked in git) with `.agents` (auto-symlink)                                        |
+| IDE slash commands | `.cursor/commands/` and synced tool surfaces (from `pnpm sync`)                                       |
+| Skills             | `.antigravity/skills/` (~80+ curated executable skills)                                               |
+| Agents             | `.antigravity/agents/roles/`                                                                          |
 | Sync               | `pnpm sync` → Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kilo CLI, and Qwen CLI |
 
-> A bare clone does not include `.agents/` / `.antigravity/` (gitignored). Restore the local AI tree on the machine, then run `pnpm sync` so all synced tool mirrors match.
+> `.antigravity/` is tracked in version control as the canonical source. Fresh clones automatically restore the `.agents` symlink and sync all tools on `pnpm sync` (or automatically via CI).
 
 **Sovereign / AIWF (separate):** `.ai/commands/` — content-factory commands; not the GateFlow `/dev` loop.
 

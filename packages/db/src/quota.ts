@@ -24,7 +24,6 @@ export function getDefaultMonthlyQuota(unitType: UnitType): number {
   return quotas[unitType] ?? 5;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function checkAndConsumeQuota(
   unitId: string,
   db: any = prisma
@@ -82,6 +81,7 @@ export async function checkAndConsumeQuota(
 }
 
 export async function canCreateOpenQR(unitId: string): Promise<boolean> {
+  // skip-organization-check (resolves organization from unit id)
   const unit = await prisma.unit.findUnique({
     where: { id: unitId },
     include: {

@@ -106,10 +106,7 @@ export {
   scanLogWhereForOrganization,
 } from './lib/relational-chain-seed';
 export type { BuildVisitorSignedCodeInput } from './lib/relational-chain-seed';
-export {
-  executeRetention,
-  RETENTION_ORDER,
-} from './lib/retention-executor';
+export { executeRetention, RETENTION_ORDER } from './lib/retention-executor';
 export type {
   RetentionAdapter,
   RetentionBatchResult,
@@ -150,3 +147,6 @@ export type {
   WeekendAccent,
 } from './lib/rush-hour';
 export { encryptField, decryptField } from './lib/crypto';
+export * from './migration-safety';
+export * from './tenant-query-auditor';
+export * from './data-retention';

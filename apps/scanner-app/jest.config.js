@@ -13,6 +13,7 @@ module.exports = {
           module: 'commonjs',
           esModuleInterop: true,
           target: 'es2019',
+          jsx: 'react-jsx',
           rootDir: '.',
         },
       },

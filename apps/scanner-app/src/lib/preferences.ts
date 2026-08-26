@@ -11,6 +11,8 @@ export interface AppPreferences {
   hapticsEnabled: boolean;
   /** Whether location capture is enabled (default: true) */
   locationEnabled: boolean;
+  /** Active UI locale (default: 'en') */
+  locale: 'en' | 'ar';
 }
 
 const STORAGE_KEY = 'app_preferences_v1';
@@ -18,6 +20,7 @@ const STORAGE_KEY = 'app_preferences_v1';
 const DEFAULTS: AppPreferences = {
   hapticsEnabled: true,
   locationEnabled: true,
+  locale: 'en',
 };
 
 export async function getPreferences(): Promise<AppPreferences> {
@@ -32,7 +35,7 @@ export async function getPreferences(): Promise<AppPreferences> {
 
 export async function setPreference<K extends keyof AppPreferences>(
   key: K,
-  value: AppPreferences[K],
+  value: AppPreferences[K]
 ): Promise<void> {
   const current = await getPreferences();
   const updated: AppPreferences = { ...current, [key]: value };

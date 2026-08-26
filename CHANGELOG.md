@@ -10,7 +10,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Platform]** add untracked app modules, runtime proof receipt, and fix CI build
+
+- **[Db]** add pass and visitor models to tenant scoped allowlist
+
+- **[Theme]** preserve use client directive in bundle banner
+
 - **[Workspace]** automate runtime proof and PR readiness
+- **[CI]** standardize repository root resolution across all directory depths and enforce non-zero scan assertions
+- **[Database]** add Prisma migration safety verifier, DIRECT_DATABASE_URL contract, tenant query auditor, and data retention policies
+- **[Hardware]** add Egyptian gate controller protocols (BFT, Came, Nice), CRC16 checksums, and offline sync verification
 - **[CI]** require head-bound runtime proof, prevent duplicate PR runs, and block on deterministic performance and AI validation while Lighthouse remains soft-pass
 
 - **[Git]** only auto-bump version for feat merges in ORIG_HEAD..HEAD
@@ -23,6 +32,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### AI Tools
 
 ### Apps
+
+- **[Client]** standardize operational intelligence and invitee landing test suites
+- **[Client]** restore setGates definition in residents filter bar
+- **[Client]** resolve lint unused vars for preflight compliance
+
+- **[Client-Dashboard]** add operational security health gauge, 24h gate throughput velocity charts, and intelligence state store
+- **[Scanner]** harden offline queue sync
 
 - **[Scanner]** fail closed for offline scans
 

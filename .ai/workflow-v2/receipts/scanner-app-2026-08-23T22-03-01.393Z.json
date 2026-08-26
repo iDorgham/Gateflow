@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "app": "scanner-app",
+  "certifiedAt": "2026-08-23T22:03:01.393Z",
+  "evidenceId": "scanner-app-certification-2026-08-23",
+  "evidenceCommit": "16811c956b22a94b9280dc386cecec9435cc26e9",
+  "sha256": "581ad0523e6c310a5dd4bd4eb79e34884d061ade519327caeb2841289125e37e"
+}

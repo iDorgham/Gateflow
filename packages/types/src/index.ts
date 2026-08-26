@@ -14,3 +14,4 @@ export * from './maintenance';
 export * from './organization-features';
 export * from './base';
 export * from './security';
+export * from './hardware/egypt-gate-integrator';

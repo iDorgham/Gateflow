@@ -81,31 +81,47 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 
 ### `/guide` shorthand
 
-| You type          | Routes to                                   |
-| ----------------- | ------------------------------------------- |
-| `/guide ready`    | `/ready` (preflight; not `/plan ready`)     |
-| `/guide plan X`   | `/plan X`                                   |
-| `/guide phase 2`  | `/prompt phase 2`                           |
-| `/guide develop`  | develop workflow                            |
-| `/guide test`     | `pnpm preflight`                            |
-| `/guide github`   | GitHub flow                                 |
-| `/guide security` | security review                             |
-| `/guide all`      | `/ralph` (recursive phases; not `/run all`) |
+| You type          | Routes to                                  |
+| ----------------- | ------------------------------------------ |
+| `/guide check`    | `/check` (preflight and evidence check)    |
+| `/guide plan X`   | `/plan X`                                  |
+| `/guide dev X N`  | `/dev X N` (phase execution)               |
+| `/guide test`     | `/test` or `pnpm preflight`                |
+| `/guide github`   | `/github` flow                             |
+| `/guide security` | `/security` review                         |
+| `/guide all`      | `/dev ralph` / `/ship` (sequential phases) |
 
 Bare **`/guide`** or **“what should I do now”** loads **`gf-guide`** skill: Situation → Teach → Ask → Action → Motivate, plus Must do / Recommended / Critical.
 
 ---
 
+## Conductor Routing Table
+
+| User Intent                      | Command           | Primary Role                | Active Skills (≤ 3)                               |
+| :------------------------------- | :---------------- | :-------------------------- | :------------------------------------------------ |
+| Workspace guidance / "what next" | `/guide`          | Orchestrator                | `gf-guide`, `cli-limits`                          |
+| Implement single phase           | `/dev <slug> <n>` | Domain Role                 | `gf-guide`, `testing`, `<domain>`                 |
+| Execute full plan sequentially   | `/ship <slug>`    | Orchestrator                | `gf-guide`, `testing`, `architecture`             |
+| Security / Auth / QR review      | `/security`       | `roles/security.md`         | `security`, `qr-crypto`, `data-privacy`           |
+| API design & contract review     | `/api`            | `roles/backend-api.md`      | `api`, `api-gateway`, `security`                  |
+| Database schema & migrations     | `/database`       | `roles/backend-database.md` | `database`, `prisma-performance`                  |
+| UI/UX & Design system tokens     | `/design`         | `roles/frontend.md`         | `ads-foundations`, `ads-data`, `ads-a11y-rtl`     |
+| Mobile Expo / Scanner app        | `/pilot` / `/dev` | `roles/mobile.md`           | `mobile`, `expo-mobile-optimization`, `qr-crypto` |
+| App audit & score evidence       | `/audit`          | `roles/qa.md`               | `testing`, `workflow-v2-contract`                 |
+| Certification receipt creation   | `/certify`        | `roles/qa.md`               | `workflow-v2-contract`, `testing`                 |
+
+---
+
 ## Subcommand refs
 
-Detailed sub-steps (ready, develop, test, github, …): `.agents/commands-ref/`.
+Detailed sub-steps: `.agents/commands-ref/`.
 
 ---
 
 ## Rules always in effect
 
 - **pnpm only**
-- **`organizationId`** on tenant queries; **`deletedAt: null`**
+- **`organizationId`** on tenant queries; **`deletedAt: null`** (when model defines `deletedAt`)
 - **QR** payloads HMAC-SHA256 signed
 - **CLI 80% rule** — load `cli-limits` before suggesting paid CLIs
 - **Orchestrator is master** — CLIs propose; the active IDE/orchestrator (usually Cursor) applies and verifies (`pnpm preflight`)
@@ -114,6 +130,7 @@ Detailed sub-steps (ready, develop, test, github, …): `.agents/commands-ref/`.
 
 ## Related docs
 
+- [GOALS.md](./GOALS.md) — strategic pilot roadmap and metrics
 - [WORKSPACE_GUIDE.md](./WORKSPACE_GUIDE.md) — lifecycle and agents overview
 - [SKILLS_GUIDE.md](./SKILLS_GUIDE.md) — skill index
 - [GUIDE_PREFERENCES.md](../development/learning/GUIDE_PREFERENCES.md) — how `/guide` adapts to you
