@@ -38,6 +38,7 @@ class DesignSystemGenerator:
     """Generates design system recommendations from aggregated searches."""
 
     def __init__(self):
+        """Initialize the DesignSystemGenerator and load reasoning rules from CSV."""
         self.reasoning_data = self._load_reasoning()
 
     def _load_reasoning(self) -> list:

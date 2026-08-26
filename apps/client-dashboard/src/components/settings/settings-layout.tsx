@@ -68,6 +68,12 @@ const SETTINGS_TABS_DEFS: SettingsTabDef[] = [
   },
   { id: 'team', icon: Users, slug: 'team', permission: 'users:view' },
   { id: 'rbac', icon: ShieldCheck, slug: 'rbac', permission: 'roles:manage' },
+  {
+    id: 'security',
+    icon: ShieldCheck,
+    slug: 'security',
+    permission: 'settings:manage',
+  },
   { id: 'gates', icon: DoorOpen, slug: 'gates', permission: 'gates:view' },
   { id: 'notifications', icon: Bell, slug: 'notifications' },
   { id: 'api', icon: Code, slug: 'api', permission: 'api_keys:manage' },

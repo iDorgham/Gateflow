@@ -1,4 +1,4 @@
-import { prisma } from '@gate-access/db';
+import { prisma, createChainedAuditLog } from '@gate-access/db';
 
 interface AuditLogOptions {
   action: string;
@@ -15,21 +15,20 @@ export async function logAuditAction({
   entityId,
   userId,
   orgId,
-  metadata
+  metadata,
 }: AuditLogOptions) {
   try {
-    await prisma.auditLog.create({
-      data: {
-        action,
-        entityType,
-        entityId,
-        userId,
-        organizationId: orgId,
-        metadata: metadata ? JSON.parse(JSON.stringify(metadata)) : undefined,
-      }
+    return await createChainedAuditLog(prisma, {
+      action,
+      entityType,
+      entityId,
+      userId,
+      organizationId: orgId,
+      metadata,
     });
   } catch (error) {
     // We don't want to throw an error back to the user if logging fails
     console.error('[AuditLog] Failed to record action:', error);
+    return null;
   }
 }
