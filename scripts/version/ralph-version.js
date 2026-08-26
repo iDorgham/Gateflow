@@ -100,7 +100,13 @@ switch (cmd) {
   case 'tag': {
     const ver = current();
     const tagName = `v${ver}`;
-    const msg = arg1 ? [arg1, ...rest].join(' ') : `Release ${tagName}`;
+    const rawMsg = arg1 ? [arg1, ...rest].join(' ').trim() : '';
+    let msg = `Release ${tagName}`;
+    if (rawMsg) {
+      msg = rawMsg.toLowerCase().startsWith('release')
+        ? rawMsg
+        : `Release ${tagName} — ${rawMsg}`;
+    }
     try {
       git(`git tag -a ${tagName} -m "${msg}"`);
       console.log(`✓ Created annotated tag: ${tagName}`);

@@ -205,7 +205,7 @@ function addChangelogEntry(type, description, slug) {
   console.log(`✓ Changelog updated [${type}]: ${description}`);
 }
 
-function closeUnreleased(newVersion) {
+function closeUnreleased(newVersion, releaseName) {
   ensureChangelog();
   let content = fs.readFileSync(CHANGELOG, 'utf8');
   const hasUnreleased = content.includes('## [Unreleased]');
@@ -222,20 +222,25 @@ function closeUnreleased(newVersion) {
     '',
   ].join('\n');
 
+  const headerTitle =
+    releaseName && releaseName.trim()
+      ? `[${newVersion}] ${releaseName.trim()}`
+      : `[${newVersion}]`;
+
   if (!hasUnreleased) {
     content = content.replace(
       /^(# Changelog[\s\S]*?---\n)/,
-      `$1\n${emptyUnreleased}\n---\n\n## [${newVersion}] — ${today()}\n\n*(See commits for full details)*\n\n---\n`
+      `$1\n${emptyUnreleased}\n---\n\n## ${headerTitle} — ${today()}\n\n*(See commits for full details)*\n\n---\n`
     );
   } else {
     // Close current Unreleased body under the new version header, keep required stubs.
     content = content.replace(
       '## [Unreleased]',
-      `${emptyUnreleased}\n---\n\n## [${newVersion}] — ${today()}`
+      `${emptyUnreleased}\n---\n\n## ${headerTitle} — ${today()}`
     );
   }
   fs.writeFileSync(CHANGELOG, content);
-  console.log(`✓ CHANGELOG.md: closed [Unreleased] → [${newVersion}]`);
+  console.log(`✓ CHANGELOG.md: closed [Unreleased] → ${headerTitle}`);
 }
 
 // ── README helpers ────────────────────────────────────────────────────────────
@@ -498,10 +503,14 @@ switch (cmd) {
       fromCommit();
     } else if (sub === 'release') {
       const ver = args[2] || version();
-      closeUnreleased(ver);
+      const name = args
+        .slice(3)
+        .filter((a) => !a.startsWith('--'))
+        .join(' ');
+      closeUnreleased(ver, name);
     } else {
       console.log(
-        'Usage: ralph-docs changelog [add <slug> "<desc>" | from-commit | release <version>]'
+        'Usage: ralph-docs changelog [add <slug> "<desc>" | from-commit | release <version> [name]]'
       );
     }
     break;
@@ -572,17 +581,31 @@ switch (cmd) {
   // ── Full release flow ─────────────────────────────────────────────────────
   case 'release': {
     const dryRun = args.includes('--dry-run') || args.includes('--dry');
-    const newVer = args.slice(1).find((a) => !a.startsWith('--'));
+    const positional = args.slice(1).filter((a) => !a.startsWith('--'));
+    const newVer = positional[0];
+    const releaseName = positional.slice(1).join(' ').trim();
     if (!newVer) {
-      console.error('Usage: ralph-docs release <version> [--dry-run]');
+      console.error('Usage: ralph-docs release <version> [name] [--dry-run]');
       process.exit(1);
     }
 
     const currentVer = version();
+    const displayName = releaseName
+      ? `v${newVer} (${releaseName})`
+      : `v${newVer}`;
+    const headerTitle = releaseName
+      ? `[${newVer}] ${releaseName}`
+      : `[${newVer}]`;
+    const commitMsg = releaseName
+      ? `chore(release): v${newVer} (${releaseName})`
+      : `chore(release): v${newVer}`;
+    const tagMsg = releaseName
+      ? `Release v${newVer} — ${releaseName}`
+      : `Release v${newVer}`;
 
     // ── DRY RUN: show exactly what would happen, write nothing ───────────────
     if (dryRun) {
-      console.log(`\n🔍 Release dry-run: v${currentVer} → v${newVer}\n`);
+      console.log(`\n🔍 Release dry-run: v${currentVer} → ${displayName}\n`);
       console.log('The following changes would be made:\n');
       console.log(
         `  1. package.json     version: "${currentVer}" → "${newVer}"`
@@ -594,14 +617,14 @@ switch (cmd) {
         const unreleased = match ? match[1].trim() : '';
         if (unreleased && unreleased !== '*(next release notes go here)*') {
           console.log(
-            `\n  2. CHANGELOG.md     [Unreleased] → [${newVer}] — ${today()}`
+            `\n  2. CHANGELOG.md     [Unreleased] → ## ${headerTitle} — ${today()}`
           );
           console.log(`\n     ┌─ Release notes preview ──────────────────────`);
           unreleased.split('\n').forEach((l) => console.log(`     │ ${l}`));
           console.log(`     └──────────────────────────────────────────────`);
         } else {
           console.log(
-            `  2. CHANGELOG.md     [Unreleased] is empty — header close only`
+            `  2. CHANGELOG.md     [Unreleased] is empty — header close only (${headerTitle})`
           );
         }
       } else {
@@ -611,8 +634,8 @@ switch (cmd) {
       console.log(
         `\n  3. README.md        version badge updated to v${newVer}`
       );
-      console.log(`  4. git commit       "chore(release): v${newVer}"`);
-      console.log(`  5. git tag          v${newVer} (annotated)`);
+      console.log(`  4. git commit       "${commitMsg}"`);
+      console.log(`  5. git tag          v${newVer} ("${tagMsg}")`);
       console.log(`\n  After release:`);
       console.log(`    git push origin HEAD && git push origin v${newVer}`);
       console.log(
@@ -631,7 +654,7 @@ switch (cmd) {
       const unreleased = match ? match[1].trim() : '';
       if (unreleased && unreleased !== '*(next release notes go here)*') {
         console.log(
-          `\n📋 Changelog preview — what will close as [${newVer}]:\n`
+          `\n📋 Changelog preview — what will close as ## ${headerTitle}:\n`
         );
         console.log(unreleased);
         console.log('\n────────────────────────────────────────');
@@ -642,7 +665,7 @@ switch (cmd) {
       }
     }
 
-    console.log(`\n🚀 Releasing v${newVer}...\n`);
+    console.log(`\n🚀 Releasing ${displayName}...\n`);
 
     // 1. Bump version in package.json
     execSync(
@@ -664,7 +687,7 @@ switch (cmd) {
     console.log(`✓ package.json → v${newVer}`);
 
     // 2. Close CHANGELOG unreleased section
-    closeUnreleased(newVer);
+    closeUnreleased(newVer, releaseName);
 
     // 3. Refresh README
     refreshReadme();
@@ -674,18 +697,18 @@ switch (cmd) {
       cwd: ROOT,
       stdio: 'inherit',
     });
-    execSync(`git commit -m "chore(release): v${newVer}"`, {
+    execSync(`git commit -m "${commitMsg}"`, {
       cwd: ROOT,
       stdio: 'inherit',
     });
 
     // 5. Tag
-    execSync(`node scripts/version/ralph-version.js tag "Release v${newVer}"`, {
+    execSync(`node scripts/version/ralph-version.js tag "${tagMsg}"`, {
       cwd: ROOT,
       stdio: 'inherit',
     });
 
-    console.log(`\n🎉 Released v${newVer}`);
+    console.log(`\n🎉 Released ${displayName}`);
     console.log(`   Push: git push origin HEAD && git push origin v${newVer}`);
     break;
   }
@@ -697,21 +720,21 @@ ralph-docs — Automated documentation system
 Commands:
   changelog add <slug> "<desc>" [--type feat|fix|perf|security]
   changelog from-commit            Auto-parse latest commit → add entry
-  changelog release <version>      Close [Unreleased] → [version]
+  changelog release <version> [name]  Close [Unreleased] → [version] [name]
   readme refresh                   Update version badge + recent activity
   prd feature <slug> <status>      Update PRD feature status
   feature-log <slug> <status>      Add entry to FEATURE_LOG.md
   upcoming add <slug> "<desc>"     Add to UPCOMING.md
   upcoming shipped <slug>          Move from upcoming → shipped
   tasks update <slug> "<notes>"    Update or add entries in docs/tasks.md
-  release <version>                Full release: bump + changelog + tag + readme
+  release <version> [name]         Full release: bump + changelog + tag + readme
 
 Lifecycle hooks (called automatically):
   on-plan-start <slug>             Called when plan moves to in-progress
   on-plan-done  <slug> "<desc>"    Called when plan:done — updates all docs
 
 Aliases (package.json):
-  pnpm docs:release <version>
+  pnpm docs:release <version> [name]
   pnpm docs:changelog
   pnpm docs:readme
     `);

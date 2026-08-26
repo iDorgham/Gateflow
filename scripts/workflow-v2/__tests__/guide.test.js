@@ -99,6 +99,7 @@ test('renderer includes required fields and exactly one next-command block', () 
     copyPrompt(snapshot),
     /Client Dashboard → Resident Portal → Scanner App/
   );
+  assert.ok(copyPrompt(snapshot).startsWith('/audit all'));
 });
 
 test('guide next renderer prints exactly one next command', () => {

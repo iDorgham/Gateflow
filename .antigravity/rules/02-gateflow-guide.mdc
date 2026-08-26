@@ -1,0 +1,40 @@
+---
+description: GateFlow workspace guide — pre-flight, full guide on /guide or "what should I do now", optional post-task summary. Load gf-guide skill.
+globs: *
+alwaysApply: false
+---
+
+# GateFlow workspace guide
+
+## When to load `gf-guide`
+
+Load **`.agents/skills/gf-guide/SKILL.md`** (skill name `gf-guide`) when:
+
+- The user message is **`/guide`** or starts with `/guide ` (except when you are only echoing a one-line router handoff).
+- The user asks **“what should I do now”**, **“what’s next”**, or equivalent workspace-direction questions.
+- You are giving an **optional post-task summary** after completing non-trivial work (Must do / Recommended / Critical + one next command).
+
+Also read **`docs/development/learning/GUIDE_PREFERENCES.md`** when present.
+
+## Pre-flight (before non-trivial tasks)
+
+Before phase implementation, large refactors, auth/RBAC/QR/tenant work, or when git/plan state looks risky:
+
+1. Run lightweight checks from `gf-guide` § Pre-flight.
+2. If something should happen first, offer **1 — Proceed** / **2 — Do suggestions first**.
+3. Do not block read-only answers or small fixes unless security-critical.
+
+## Coach vs router
+
+- **Coach:** Situation → Teach → Ask → Action → Motivate; Must do / Recommended / Critical; one copy-ready next command.
+- **Router:** `/guide plan|phase|ready|…` → follow `.agents/workflows/guide.md` shorthand; still end with one clear next step when helpful.
+
+**`/guide` does not execute phases** — suggest `/dev`, `/run`, or `/ship` for execution.
+
+## CLI limits
+
+Before suggesting a paid CLI in guide output, apply **`cli-limits`** (80% rule).
+
+## Post-task summary
+
+After completing a substantial task, you may add a **short** guide block (not a full recap). Skip if the user asked for answer-only or the footer already covers next steps.

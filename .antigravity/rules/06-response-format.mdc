@@ -1,0 +1,19 @@
+---
+description: Standard response format — concise technical output matching GUIDE_RESPONSE_CONTRACT
+globs: *
+alwaysApply: false
+---
+
+# Response Format Standard
+
+## Core Rules
+
+- **Concise & Direct**: Start immediately with the action or technical answer. Avoid filler conversational preambles.
+- **No Emoji Banners**: Do not use decorative emoji banners or unicode progress bars. Use clean GitHub markdown headers.
+- **Explicit Sections**:
+  - `### Situation` — What was discovered, root cause, context.
+  - `### Changes` (or `### Accomplishments`) — Specific files and actions taken.
+  - `### Verification` — Exact commands run with test/lint/typecheck outputs.
+  - `### Critical` — Risks, blockers, or "None" explicitly.
+  - `### Next Action` — Clear copy-pasteable slash command or terminal command.
+- **File Links**: Format file references as clickable links `[filename](file:///path/to/file)`.

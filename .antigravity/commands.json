@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "commands": {
+    "focus": {
+      "title": "Focus",
+      "description": "Select or report the single Workflow v2 pilot application.",
+      "run": ".antigravity/workflows/focus.md"
+    },
+    "audit": {
+      "title": "Audit",
+      "description": "Audit the focused application, pages, security, usability, or pilot flow.",
+      "run": ".antigravity/workflows/audit.md"
+    },
+    "progress": {
+      "title": "Progress",
+      "description": "Report focused app stage, scores, coverage, blockers, and one next command.",
+      "run": ".antigravity/workflows/progress.md"
+    },
+    "page-map": {
+      "title": "Page Map",
+      "description": "Inventory and pilot-classify focused application routes.",
+      "run": ".antigravity/workflows/page-map.md"
+    },
+    "page": {
+      "title": "Page",
+      "description": "Create or update a complete evidence-backed P0 page brief.",
+      "run": ".antigravity/workflows/page.md"
+    },
+    "components": {
+      "title": "Components",
+      "description": "Map pages to existing components, variants, and states.",
+      "run": ".antigravity/workflows/components.md"
+    },
+    "usability": {
+      "title": "Usability",
+      "description": "Review usability, accessibility, RTL, and responsive behavior.",
+      "run": ".antigravity/workflows/usability.md"
+    },
+    "check": {
+      "title": "Check",
+      "description": "Run deterministic focused checks and artifact validation.",
+      "run": ".antigravity/workflows/check.md"
+    },
+    "design": {
+      "title": "Design",
+      "description": "Produce GateFlow design contracts and audits.",
+      "run": ".antigravity/workflows/design.md"
+    },
+    "api": {
+      "title": "API",
+      "description": "Plan or review secure typed API resources and flows.",
+      "run": ".antigravity/workflows/api.md"
+    },
+    "database": {
+      "title": "Database",
+      "description": "Plan or audit safe tenant-aware database work.",
+      "run": ".antigravity/workflows/database.md"
+    },
+    "security": {
+      "title": "Security",
+      "description": "Run a read-only focused security review.",
+      "run": ".antigravity/workflows/security.md"
+    },
+    "test": {
+      "title": "Test",
+      "description": "Run focused test scopes with dated evidence.",
+      "run": ".antigravity/workflows/test.md"
+    },
+    "github": {
+      "title": "GitHub",
+      "description": "Inspect or prepare focused GitHub and CI work with mutation hardlocks.",
+      "run": ".antigravity/workflows/github.md"
+    },
+    "vercel": {
+      "title": "Vercel",
+      "description": "Inspect focused Vercel readiness with mutation hardlocks.",
+      "run": ".antigravity/workflows/vercel.md"
+    },
+    "observe": {
+      "title": "Observe",
+      "description": "Audit reliability, observability, and pilot metrics.",
+      "run": ".antigravity/workflows/observe.md"
+    },
+    "release": {
+      "title": "Release",
+      "description": "Prepare a focused release and rollback handoff.",
+      "run": ".antigravity/workflows/release.md"
+    },
+    "pilot": {
+      "title": "Pilot",
+      "description": "Orchestrate the focused pilot or run its bounded loop profile through certification.",
+      "run": ".antigravity/workflows/pilot.md"
+    },
+    "certify": {
+      "title": "Certify",
+      "description": "Certify a pilot-ready application from fresh evidence.",
+      "run": ".antigravity/workflows/certify.md"
+    },
+    "next-app": {
+      "title": "Next App",
+      "description": "Recommend and confirm the next fixed-sequence pilot application.",
+      "run": ".antigravity/workflows/next-app.md"
+    },
+    "idea": {
+      "title": "Idea",
+      "description": "Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries.",
+      "run": ".antigravity/workflows/idea.md"
+    },
+    "draft": {
+      "title": "Draft",
+      "description": "Capture raw planning notes under docs/plan/Draft/<slug>/ before formal /plan.",
+      "run": ".antigravity/workflows/draft.md"
+    },
+    "prompt": {
+      "title": "Prompt",
+      "description": "Build FOR_PLAN_PROMPT.md from draft to feed /plan.",
+      "run": ".antigravity/workflows/prompt.md"
+    },
+    "plan": {
+      "title": "Plan",
+      "description": "Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts.",
+      "run": ".antigravity/workflows/plan.md"
+    },
+    "dev": {
+      "title": "Dev",
+      "description": "Implement one phase or run a bounded approved plan/task loop with explicit delivery gates.",
+      "run": ".antigravity/workflows/dev.md"
+    },
+    "ship": {
+      "title": "Ship",
+      "description": "Execute all remaining phases of a plan sequentially via repeated /dev-style execution.",
+      "run": ".antigravity/workflows/ship.md"
+    },
+    "guide": {
+      "title": "Guide",
+      "description": "Run the GateFlow workspace guide \u2014 router plus coach; what should I do now?",
+      "run": ".antigravity/workflows/guide.md"
+    },
+    "man": {
+      "title": "Man",
+      "description": "One Man \u2014 one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).",
+      "run": ".antigravity/workflows/man.md"
+    },
+    "brainstorm": {
+      "title": "Brainstorm",
+      "description": "Strategic brainstorming for roadmap, gaps, and release planning.",
+      "run": ".antigravity/workflows/brainstorm.md"
+    },
+    "creative": {
+      "title": "Creative",
+      "description": "Creative direction for brand, content, and marketing assets.",
+      "run": ".antigravity/workflows/creative.md"
+    },
+    "deploy": {
+      "title": "Deploy",
+      "description": "Deploy target app or workspace apps per deploy workflow.",
+      "run": ".antigravity/workflows/deploy.md"
+    },
+    "clis-team": {
+      "title": "CLIs Team",
+      "description": "Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.",
+      "run": ".antigravity/workflows/clis-team.md"
+    },
+    "docs": {
+      "title": "Docs",
+      "description": "Automated documentation updates \u2014 changelog, version badge, PRD, feature log, README, release.",
+      "run": ".antigravity/workflows/docs.md"
+    },
+    "version": {
+      "title": "Version",
+      "description": "Semantic versioning \u2014 bump package.json, create annotated git tags, generate versioned branch names.",
+      "run": ".antigravity/workflows/version.md"
+    },
+    "organize": {
+      "title": "Organize",
+      "description": "Docs folder cleanup \u2014 scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.",
+      "run": ".antigravity/workflows/organize.md"
+    },
+    "ralph": {
+      "title": "Ralph",
+      "description": "Compatibility alias for the bounded /dev loop across all approved remaining phases.",
+      "run": ".antigravity/workflows/ralph.md"
+    }
+  }
+}
