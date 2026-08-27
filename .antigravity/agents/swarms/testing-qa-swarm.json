@@ -1,0 +1,22 @@
+{
+  "name": "testing-qa-swarm",
+  "description": "High-velocity automated testing swarm covering unit, integration, security fuzzing, and preflight verification.",
+  "manager": "qa-manager",
+  "testers": [
+    {
+      "role": "qa",
+      "responsibility": "Author Jest and node:test suites for modified routes and components",
+      "skill": "test-suite-accelerator"
+    },
+    {
+      "role": "security",
+      "responsibility": "Execute tenant isolation fuzzing and unauthenticated mutation tests",
+      "skill": "security"
+    },
+    {
+      "role": "devops",
+      "responsibility": "Run Turborepo preflight check (lint, typecheck, test) across workspace",
+      "skill": "github-ci-cd"
+    }
+  ]
+}

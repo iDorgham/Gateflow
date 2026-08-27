@@ -1,0 +1,27 @@
+{
+  "name": "feature-swarm",
+  "description": "Full-lifecycle feature engineering swarm for high-impact capabilities across GateFlow web and mobile apps.",
+  "manager": "swarm-manager",
+  "agents": [
+    {
+      "role": "architecture",
+      "responsibility": "Define schemas, API routes, and tenant security model"
+    },
+    {
+      "role": "backend-api",
+      "responsibility": "Build Next.js API endpoints, database operations, and real-time events"
+    },
+    {
+      "role": "frontend",
+      "responsibility": "Implement UI views, dialogs, responsive tables, and theme synchronization"
+    },
+    {
+      "role": "mobile",
+      "responsibility": "Implement Expo React Native screens, camera scanners, or biometric locks"
+    },
+    {
+      "role": "qa",
+      "responsibility": "Write Jest/node test suites and verify preflight"
+    }
+  ]
+}

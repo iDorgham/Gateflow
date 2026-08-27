@@ -1,0 +1,12 @@
+{
+  "name": "rapid-release-swarm",
+  "description": "Release management swarm for changelog curation, version tagging, production preflight, and Vercel/Expo deployment verification.",
+  "manager": "swarm-manager",
+  "pipeline": [
+    "1. Format & check CHANGELOG.md (pnpm docs:changelog:check)",
+    "2. Bump version in package.json & root README.md",
+    "3. Run 100% preflight across all 19 packages (pnpm preflight)",
+    "4. Create annotated git tag",
+    "5. Trigger production deployment dispatch via /deploy"
+  ]
+}

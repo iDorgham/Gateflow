@@ -1,9 +1,9 @@
 # ── Build & Distribution ───────────────────────────────────────────────────────
-node_modules/
-.next/
-dist/
-build/
-.turbo/
+node_modules
+.next
+dist
+build
+.turbo
 *.tsbuildinfo
 scripts/.bundle-baseline.json
 
@@ -16,13 +16,13 @@ scripts/.bundle-baseline.json
 # ── Operating System & Editors ────────────────────────────────────────────────
 .DS_Store
 *.log
-coverage/
-.vscode/
-.idea/
+coverage
+.vscode
+.idea
 
 # ── Mobile & Metro ─────────────────────────────────────────────────────────────
-.expo/
-apps/scanner-app/.metro/
+.expo
+apps/scanner-app/.metro
 
 # ── AI Tool Directories & Workspace Noise ─────────────────────────────────────
 # .antigravity is the canonical tracked AI configuration slice
@@ -31,21 +31,21 @@ apps/scanner-app/.metro/
 .antigravity/hooks/state/
 .agents
 .ai-memory
-.claude/
-.cursor/
-.kiro/
-.opencode/
-.kilo/
-.kilocode/
-.orchids/
-.agent/
-.superdesign/
-.qwen/
-.gemini/
-.crush/
-.lighthouseci/
-.worktrees/
-.vercel/
+.claude
+.cursor
+.kiro
+.opencode
+.kilo
+.kilocode
+.orchids
+.agent
+.superdesign
+.qwen
+.gemini
+.crush
+.lighthouseci
+.worktrees
+.vercel
 
 # Keep template AI workspace assets versioned
 !docs/workspace/template-project/.cursor/
@@ -57,12 +57,12 @@ apps/scanner-app/.metro/
 
 # ── Profiling, Caches & Temporary Artifacts ───────────────────────────────────
 *.profraw
-.corepack/
-.temp_home/
-.remember/
-.cache/
-.pnpm-store/
-trash/
+.corepack
+.temp_home
+.remember
+.cache
+.pnpm-store
+trash
 test_qr.ts
 test_qr.js
 

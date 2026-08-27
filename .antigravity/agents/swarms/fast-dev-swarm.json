@@ -1,0 +1,35 @@
+{
+  "name": "fast-dev-swarm",
+  "description": "Ultra-fast development and testing swarm that accelerates feature shipping from concept to merge in minimal cycles.",
+  "manager": "swarm-manager",
+  "workers": [
+    {
+      "role": "architecture",
+      "responsibility": "Synthesize minimal, robust technical design and invariants",
+      "preferredTool": "Gemini / Cursor"
+    },
+    {
+      "role": "backend-api",
+      "responsibility": "Implement type-safe API routes, Prisma queries, and validation schemas",
+      "preferredTool": "Opencode / Cursor"
+    },
+    {
+      "role": "frontend",
+      "responsibility": "Build responsive ADS UI components, Cairo typography, and RTL layouts",
+      "preferredTool": "Kiro / Cursor"
+    },
+    {
+      "role": "qa",
+      "responsibility": "Execute tests, typecheck, preflight, and runtime verification",
+      "preferredTool": "Kilo / Cursor"
+    }
+  ],
+  "executionMode": "pipeline",
+  "pipelineSteps": [
+    "1. Synthesize minimal spec & test cases",
+    "2. Parallel implementation of backend contracts and UI views",
+    "3. Run automated verification (pnpm turbo lint typecheck test)",
+    "4. Self-heal any failures without prompting user",
+    "5. Stage clean git commit and open PR"
+  ]
+}

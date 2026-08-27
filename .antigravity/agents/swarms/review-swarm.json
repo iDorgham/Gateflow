@@ -1,0 +1,29 @@
+{
+  "name": "review-swarm",
+  "description": "Multi-agent Pull Request review swarm for automated security, architecture, performance, and proof auditing.",
+  "manager": "qa-manager",
+  "reviewers": [
+    {
+      "role": "security",
+      "focus": "Multi-tenancy scoping (organizationId), AES-256-GCM PII encryption, secret leak detection",
+      "skill": "security"
+    },
+    {
+      "role": "architecture",
+      "focus": "TypeScript strictness, Prisma migration compatibility, clean module boundaries",
+      "skill": "architecture"
+    },
+    {
+      "role": "frontend",
+      "focus": "Atlassian Design System tokens, Arabic RTL layout, Cairo typography, CWV/CLS guard",
+      "skill": "design-guide"
+    },
+    {
+      "role": "qa",
+      "focus": "CI check verification, test coverage, runtime proof validation",
+      "skill": "github-pr-review"
+    }
+  ],
+  "outputFormat": "markdown-summary",
+  "autoMergeCondition": "all-checks-passed-and-user-authorized"
+}

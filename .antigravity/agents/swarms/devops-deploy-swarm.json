@@ -1,0 +1,27 @@
+{
+  "name": "devops-deploy-swarm",
+  "description": "Production release and deployment swarm managing preflight checks, database migrations, and Vercel/EAS deploys.",
+  "manager": "release-deployment-manager",
+  "pipeline": [
+    {
+      "step": 1,
+      "action": "Run full preflight across all workspaces (pnpm preflight)",
+      "responsible": "devops"
+    },
+    {
+      "step": 2,
+      "action": "Verify DIRECT_DATABASE_URL migration safety and drift (pnpm check:db-drift:schema)",
+      "responsible": "backend-database"
+    },
+    {
+      "step": 3,
+      "action": "Trigger GitHub Environment deploy workflow (gh workflow run deploy.yml)",
+      "responsible": "devops"
+    },
+    {
+      "step": 4,
+      "action": "Perform post-deploy live probe (HTTP health & SSO verification)",
+      "responsible": "qa"
+    }
+  ]
+}

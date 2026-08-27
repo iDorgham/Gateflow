@@ -1,0 +1,32 @@
+{
+  "name": "end-to-end-pipeline-swarm",
+  "description": "Full-lifecycle autonomous engineering swarm from idea concept to production deployment.",
+  "manager": "swarm-manager",
+  "phases": [
+    {
+      "phase": "1. Spec & Architecture",
+      "swarm": "feature-swarm",
+      "output": "Minimal design contracts & Prisma models"
+    },
+    {
+      "phase": "2. Implementation & Test Scaffolding",
+      "swarm": "fast-dev-swarm",
+      "output": "Type-safe code + passing unit/integration tests"
+    },
+    {
+      "phase": "3. Quality, Security & PR Review",
+      "swarm": "review-swarm",
+      "output": "5-gate security audit & green CI status"
+    },
+    {
+      "phase": "4. Squash Merge & Sync",
+      "skill": "merge-gatekeeper",
+      "output": "Merged master & updated changelog"
+    },
+    {
+      "phase": "5. Production Deployment",
+      "swarm": "devops-deploy-swarm",
+      "output": "Live Vercel / Expo release verified"
+    }
+  ]
+}

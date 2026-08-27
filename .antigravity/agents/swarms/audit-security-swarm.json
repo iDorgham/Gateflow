@@ -1,0 +1,12 @@
+{
+  "name": "audit-security-swarm",
+  "description": "Autonomous security fuzzing, multi-tenancy audit, and MENA regulatory compliance verification swarm.",
+  "manager": "qa-manager",
+  "auditGates": [
+    "1. Multi-tenant fail-closed boundary testing",
+    "2. PII field encryption & AES-256-GCM integrity",
+    "3. SHA-256 tamper-evident audit ledger verification",
+    "4. HMAC-SHA256 QR code cryptographic validation",
+    "5. Route fuzzer & unauthenticated mutation prevention"
+  ]
+}
