@@ -14,6 +14,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### AI Tools
 
+- **[Ai]** add fast-dev swarms, pr-review skills, and deployment managers
+
 ### Apps
 
 ---
