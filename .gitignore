@@ -57,6 +57,7 @@ apps/scanner-app/.metro/
 
 # ── Profiling, Caches & Temporary Artifacts ───────────────────────────────────
 *.profraw
+.corepack/
 .temp_home/
 .remember/
 .cache/
