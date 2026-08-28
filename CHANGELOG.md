@@ -10,6 +10,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Scanner-App]** add onboarding wizard, biometric guard, shift session manager and master scan fab
+- **[Guard-Patrol]** implement perimeter checkpoints, hmac validation and live map telemetry
+- **[Scanner Onboarding Session]** Completed all phases of Scanner Onboarding Session
+- **[Guard Patrol Checkpoints]** Completed all phases of Guard Patrol Checkpoints
+- **[Guard Patrol Checkpoints]** Started development of Guard Patrol Checkpoints
+
 - **[Security]** sanitize audit ledger payload and rename metadata key to resolve CodeQL alert
 
 - **[Security]** enforce scans bulk auth scoping, native crypto & security headers

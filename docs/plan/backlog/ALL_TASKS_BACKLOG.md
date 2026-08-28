@@ -4,6 +4,36 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### scanner_onboarding_session — Scanner App: Onboarding & Session Management
+
+**PLAN:** `docs/plan/Complete/scanner_onboarding_session/PLAN_scanner_onboarding_session.md`  
+**Status:** ✅ Complete — All 5 Phases Shipped & Verified  
+**Priority:** P1 — Mobile First-Mile Onboarding & Biometric Security  
+**Target:** Guard onboarding wizard, fail-closed biometric/PIN vault, shift clock-in lifecycle, ADS home screen  
+**App:** `apps/scanner-app`, `packages/db`, `packages/types`, `packages/ui`
+
+- [x] Phase 1 — Biometric Security, Secure PIN Vault & Fail-Closed Invariants
+- [x] Phase 2 — Onboarding Wizard UI & Hardware Permission Workflows
+- [x] Phase 3 — Shift Session Management API, State Hooks & Scan Blocking
+- [x] Phase 4 — ADS Master Scan Home Screen Redesign & Real-Time Telemetry
+- [x] Phase 5 — Polish, Biometric Inactivity Guard, Arabic RTL & Full Monorepo Certification
+
+---
+
+### guard_patrol_checkpoints — Guard Patrol Checkpoints & QR Route Scanner
+
+**PLAN:** `docs/plan/Complete/guard_patrol_checkpoints/PLAN_guard_patrol_checkpoints.md`  
+**Status:** ✅ Complete — All 3 Phases Shipped & Verified  
+**Priority:** P1 — Perimeter Guard Patrol Telemetry & Checkpoint Verification  
+**Target:** Perimeter patrol routes, physical HMAC QR checkpoints, real-time map telemetry, and supervisor compliance reporting  
+**App:** `apps/client-dashboard`, `packages/db`, `packages/types`, `packages/security`
+
+- [x] Phase 1 — Schema, Route APIs & Cryptographic Checkpoint Signing (Backend & DB)
+- [x] Phase 2 — Perimeter Visual Map Patrol Telemetry & Real-Time Monitoring (Frontend UI)
+- [x] Phase 3 — Guard Mobile Checkpoint Scanner, Supervisor Alerts & Full Certification (QA & Docs)
+
+---
+
 ### guard_shift_visual_map — Guard Shift Visual Map & Real-Time Gate Monitor
 
 **PLAN:** `docs/plan/Complete/guard_shift_visual_map/PLAN_guard_shift_visual_map.md`  

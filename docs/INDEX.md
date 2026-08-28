@@ -71,8 +71,7 @@ _Plan lifecycle folders, phase prompts, backlog_
 - [Initiatives (IDEA files)](./development/initiatives/README.md)
 - Lifecycle: [PLAN_LIFECYCLE.md](./development/PLAN_LIFECYCLE.md)
 - Example archive plan: [Complete/advanced_seeding_emulation_v3](./plan/Complete/advanced_seeding_emulation_v3/README.md)
-- `Active/` — 35 markdown files
-- `Complete/` — 734 markdown files
+- `Complete/` — 761 markdown files
 - `backlog/` — 3 markdown files
 
 ## 📦 [Product](./reference/product/)

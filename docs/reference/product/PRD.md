@@ -131,3 +131,11 @@ graph TD
 - **Automated CI Checks**: 18 GitHub Actions checks (CodeQL, Lint, Typecheck, Test, Lighthouse CI, Security Scan, Runtime Proof Check).
 - **Preflight Mandate**: `pnpm preflight` must pass 100% cleanly across all 19 workspace packages prior to any release.
 - **Manual Deployment Guard**: Push-to-deploy is disabled. Production releases require explicit `/deploy` workflow dispatch.
+
+### Guard Patrol Checkpoints
+
+**Status:** ✅ Complete | Last updated: 2026-08-28
+
+### Scanner Onboarding Session
+
+**Status:** ✅ Complete | Last updated: 2026-08-28
