@@ -113,14 +113,22 @@ export default async function RootLayout(props: {
   const { children } = props;
   const isRtl = castLocale === 'ar-EG';
 
-  // Pre-load common dictionaries for the global layout and Nav/Footer
-  const commonDict = await fetchTranslations(castLocale, 'common');
-  const navDict = await fetchTranslations(castLocale, 'navigation');
-  const cookiesDict = await fetchTranslations(castLocale, 'cookies');
-  const formsDict = await fetchTranslations(castLocale, 'forms');
-  const componentsDict = await fetchTranslations(castLocale, 'components');
-  // Load landing namespace for all home-page client sections
-  const landingDict = await fetchTranslations(castLocale, 'landing');
+  // Pre-load common dictionaries concurrently for global layout and Nav/Footer
+  const [
+    commonDict,
+    navDict,
+    cookiesDict,
+    formsDict,
+    componentsDict,
+    landingDict,
+  ] = await Promise.all([
+    fetchTranslations(castLocale, 'common'),
+    fetchTranslations(castLocale, 'navigation'),
+    fetchTranslations(castLocale, 'cookies'),
+    fetchTranslations(castLocale, 'forms'),
+    fetchTranslations(castLocale, 'components'),
+    fetchTranslations(castLocale, 'landing'),
+  ]);
 
   const dictionaries = {
     common: commonDict,
@@ -131,26 +139,29 @@ export default async function RootLayout(props: {
     landing: landingDict,
   };
 
+  const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const ga4MeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
+
   return (
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         <ThemeScript />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        {ga4MeasurementId && (
+          <>
+            <link rel="preconnect" href="https://www.googletagmanager.com" />
+            <link rel="preconnect" href="https://www.google-analytics.com" />
+          </>
+        )}
+        {metaPixelId && (
+          <link rel="preconnect" href="https://connect.facebook.net" />
+        )}
         <OrganizationJsonLd locale={castLocale} />
         <WebSiteJsonLd locale={castLocale} />
         <meta name="theme-color" content="var(--ds-primary-accent)" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts
-          metaPixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID}
-          ga4MeasurementId={process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}
+          metaPixelId={metaPixelId}
+          ga4MeasurementId={ga4MeasurementId}
         />
       </head>
       <body

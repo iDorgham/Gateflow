@@ -83,6 +83,10 @@ function TestimonialCard({ item }: { item: Testimonial }) {
             <img
               src={item.avatar}
               alt={item.author}
+              width={56}
+              height={56}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover rounded-[14px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
             />
           </div>
