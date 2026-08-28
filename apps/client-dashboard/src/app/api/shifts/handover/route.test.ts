@@ -132,9 +132,10 @@ describe('POST /api/shifts/handover', () => {
       expect.objectContaining({
         data: expect.objectContaining({
           action: 'SHIFT_HANDOVER',
+          entityType: 'GATE',
+          entityId: 'gate_1',
           organizationId: 'org_1',
           userId: 'user_admin',
-          targetId: 'gate_1',
           metadata: expect.objectContaining({
             gateName: 'Main Gate',
             previousShiftId: 'shift_active_1',

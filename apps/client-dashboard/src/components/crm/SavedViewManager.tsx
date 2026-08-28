@@ -5,9 +5,9 @@ import { Button, cn } from '@gateflow/ui';
 import { LayoutTemplate, Save, ChevronDown, Trash2, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-interface SavedView {
-  id: string;
-  name: string;
+export interface SavedView {
+  id?: string;
+  name?: string;
   columnOrder?: string[];
   columnVisibility?: Record<string, boolean>;
   filters?: Record<string, unknown>;

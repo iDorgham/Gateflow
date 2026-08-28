@@ -99,9 +99,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       await tx.auditLog.create({
         data: {
           action: 'SHIFT_HANDOVER',
+          entityType: 'GATE',
+          entityId: gateId,
           organizationId: orgId,
           userId: claims.sub,
-          targetId: gateId,
           metadata: {
             gateName: gate.name,
             previousShiftId: activeShift?.id ?? null,

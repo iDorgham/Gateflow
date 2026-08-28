@@ -86,7 +86,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
         },
         include: {
           guard: {
-            select: { id: true, name: true, avatar: true },
+            select: { id: true, name: true, avatarUrl: true },
           },
         },
       }),
@@ -97,7 +97,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
         },
         include: {
           user: {
-            select: { id: true, name: true, avatar: true },
+            select: { id: true, name: true, avatarUrl: true },
           },
         },
       }),
@@ -111,6 +111,12 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
         _max: { scannedAt: true },
       }),
     ]);
+
+    const recentScans = recentScansRaw as unknown as Array<{
+      gateId: string | null;
+      _count: number;
+      _max: { scannedAt: Date | null };
+    }>;
 
     // Map scans for quick O(1) lookup
     const scanCountMap = new Map<string, number>();
@@ -174,7 +180,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
           id: shift.id,
           guardId: shift.guardId,
           guardName: shift.guard.name || 'Guard',
-          guardAvatar: shift.guard.avatar,
+          guardAvatar: shift.guard.avatarUrl,
           startTime: shift.startTime.toISOString(),
           elapsedMinutes,
         };

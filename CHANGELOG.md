@@ -22,6 +22,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Client]** guard shift visual map, live telemetry & handover drawer
+
 - **[Client]** add guard shift visual map, live telemetry polling, interactive gate terminal cards, and supervisor emergency handover drawer
 
 - **[Client]** add export audit logging and rate limiting on contacts/units CSV exports, plus density controls and saved views in QR Codes table
