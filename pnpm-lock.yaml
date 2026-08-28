@@ -395,9 +395,6 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.20.4
         version: 3.30.2
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@upstash/ratelimit':
         specifier: ^2.0.5
         version: 2.0.8(@upstash/redis@1.38.2)
@@ -413,9 +410,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
       date-fns:
         specifier: ^4.1.0
         version: 4.4.0
@@ -1215,9 +1209,6 @@ importers:
       ai:
         specifier: 5.0.52
         version: 5.0.52(zod@4.4.3)
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
       date-fns:
         specifier: ^4.1.0
         version: 4.4.0
@@ -1243,9 +1234,6 @@ importers:
       '@gate-access/config':
         specifier: workspace:*
         version: link:../config
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@types/node':
         specifier: ^26.1.2
         version: 26.2.0
@@ -1354,9 +1342,6 @@ importers:
       ai:
         specifier: 5.0.52
         version: 5.0.52(zod@4.4.3)
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
       xss:
         specifier: ^1.0.15
         version: 1.0.15
@@ -1367,12 +1352,12 @@ importers:
       '@gate-access/config':
         specifier: workspace:*
         version: link:../config
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
+      '@types/node':
+        specifier: ^26.1.2
+        version: 26.2.0
       jest:
         specifier: ^30.3.0
         version: 30.4.2(@types/node@26.2.0)
@@ -8153,6 +8138,7 @@ packages:
 
   /@types/crypto-js@4.2.2:
     resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
+    dev: true
 
   /@types/d3-array@3.2.2:
     resolution: {integrity: sha512-hOLWVbm7uRza0BYXpIIW5pxfrKe0W+D5lrFiAEYR+pb6w3N2SwSMaJbXdUfSEv+dT4MfHBLtn5js0LAWaO6otw==}
