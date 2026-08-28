@@ -33,7 +33,18 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
   `ship-phase` gate authorize it.
 - **Lifecycle transitions:**
   - **When starting a phase:** If plan is in `Ready/<slug>/`, move it to `Active/<slug>/` before executing.
-  - **When completing the last phase:** Move `Active/<slug>/` → `Complete/<slug>/`.
+  - **When completing intermediate phases (< N):** Update `TASKS_<slug>.md`, write `phase_logs/PHASE_LOG_phase_NN.md`. Next command is `/dev <slug> <N+1>`.
+  - **When completing the last phase (N of N):**
+    - Move `Active/<slug>/` → `Complete/<slug>/`.
+    - Update `TASKS_<slug>.md`, `PLAN_<slug>.md`, and `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
+    - **DevOps Transition Protocol**: When all plan phases are finished, **Next command MUST advance to the GitHub & PR review lifecycle**:
+      1. `/github` (or `/github ready`) — Verify diff, stage, commit on feature branch, and push.
+      2. `/review` — Open PR and run 5-gate audit (Security/Tenant, Types, ADS/RTL, CLS/Perf, CI checks).
+      3. **Fix CI** — Inspect `gh pr checks`, resolve any failing jobs.
+      4. **Merge** — `/review <pr_number> --merge` — safe merge into master.
+      5. **Post-Merge Release** — `/docs` (sync changelog & docs), then `/version`.
+      6. **Audit/Certify** — `/audit` or `/certify` with deterministic evidence.
+      7. **Deploy** — `/deploy <app>` only after the audit or certification gate passes.
 - Determines which phase to execute:
   - Next incomplete phase for the active `PLAN_<slug>.md`, or
   - A specific phase number/slug if provided.

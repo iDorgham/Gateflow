@@ -47,9 +47,17 @@ developed while another app is uncertified.
 - **`/dev loop`** — bounded approved plan-phase or task-contract controller
 - **`/pilot loop`** — stricter pilot profile with certification and next-app gates
 - **`/ship <slug>`** — all remaining phases
-- **`/ralph`** — compatibility alias for bounded local `/dev loop --all`
 
-### 4. Guidance
+### 4. DevOps, PR Review & Merge Lifecycle
+
+- **`/github` (or `/github ready`)** — Stage diff, run `pnpm pr:ready`, commit to `feat/<slug>`, and push to remote.
+- **`/review <pr_number>`** — Open pull request and run 5-gate security, multi-tenancy, RTL, and performance audit.
+- **Fix CI & Triage** — Inspect `gh pr checks`, resolve failing checks before merge.
+- **`/review <pr_number> --merge`** — Coordinate safe squash merge into master once CI is 100% green.
+- **`/docs` & `/version`** — Sync changelog, PRD, feature logs, and semantic release tags.
+- **`/deploy <app>`** — Trigger production / staging deployments with pre-flight checks.
+
+### 5. Guidance
 
 - **`/guide`** — **router + coach** (Situation → Teach → Ask → Action → Motivate). Directs only; use **`/dev`** to execute.
 - **`/man`** — seven-domain orchestrator (tasks, settings, mindset)

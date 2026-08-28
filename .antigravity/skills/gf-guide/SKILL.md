@@ -5,121 +5,80 @@ description: GateFlow workspace guide — pre-flight, state assessment, coach fo
 
 # gf-guide — GateFlow Workspace Guide
 
-You are the **GateFlow workspace guide**. Load this skill for `/guide`, “what should I do now”, pre-flight before non-trivial work, and optional post-task summaries.
+You are the **GateFlow workspace guide & AI coach**. Load this skill for `/guide`, “what should I do now”, pre-flight state assessments, and post-task summaries.
 
-**Read first:** `docs/development/learning/GUIDE_PREFERENCES.md` (tone, Must do / Recommended / Critical, copy-paste commands).
-
-**Workflow command:** `.agents/workflows/guide.md` (router + coach boundary).
+**Read first:** `docs/development/learning/GUIDE_PREFERENCES.md` and `.agents/contracts/GUIDE_RESPONSE_CONTRACT.md`.
 
 ---
 
-## 1. Workspace map
+## 1. Workspace Map & Canonical Architecture
 
-| Area        | Path                                                                       | Purpose                               |
-| ----------- | -------------------------------------------------------------------------- | ------------------------------------- |
-| Plans       | `docs/plan/{Draft,Ready,Active,Complete}/<slug>/`                          | Phased plans and prompts              |
-| Backlog     | `docs/plan/backlog/ALL_TASKS_BACKLOG.md`                                   | Task index — update when moving plans |
-| Initiatives | `docs/development/initiatives/IDEA_<slug>.md`                              | High-level intent before draft        |
-| Commands    | `.agents/workflows/*.md`                                                   | Canonical slash workflows             |
-| Skills      | `.agents/skills/`                                                          | Domain capabilities                   |
-| Agents      | `.agents/agents/roles/`                                                    | Phase personas                        |
-| Contracts   | `.agents/contracts/CONTRACTS.md`                                           | Security/API invariants               |
-| CLI prefs   | `docs/development/learning/GUIDE_PREFERENCES.md`, `CLI_LIMITS_TRACKING.md` | Tool choice, 80% rule                 |
+| Area        | Path                                              | Purpose                               |
+| ----------- | ------------------------------------------------- | ------------------------------------- |
+| Plans       | `docs/plan/{Draft,Ready,Active,Complete}/<slug>/` | Phased plans and prompts              |
+| Backlog     | `docs/plan/backlog/ALL_TASKS_BACKLOG.md`          | Task index — update when moving plans |
+| Initiatives | `docs/development/initiatives/IDEA_<slug>.md`     | High-level intent before draft        |
+| Commands    | `.agents/workflows/*.md`                          | Canonical slash workflows             |
+| Skills      | `.agents/skills/`                                 | Domain capabilities                   |
+| Agents      | `.agents/agents/roles/`                           | Phase personas                        |
+| Contracts   | `.agents/contracts/CONTRACTS.md`                  | Security/API invariants               |
+| Response    | `.agents/contracts/GUIDE_RESPONSE_CONTRACT.md`    | Strict output schema                  |
 
 **Plan lifecycle:** Draft → Ready → Active → Complete (`docs/development/PLAN_LIFECYCLE.md`).
 
-**Sync:** `.agents/` is canonical; `pnpm sync` copies to Cursor, Claude, Antigravity, Gemini, Kiro, etc.
+**Sync:** `.agents/` is canonical; `pnpm sync` (`bash scripts/ai-sync/sync-ai-tools.sh --force`) copies to Cursor, Claude, Antigravity, Gemini, Kiro, OpenCode, KiloCode, and Qwen.
 
 ---
 
-## 2. State assessment (“what should I do now”)
+## 2. Standard Response Format Mandate
 
-Gather (read or shell):
+Every guide and agent response MUST strictly follow the **Smart Guide Response Contract**:
 
-1. **Git** — branch, uncommitted changes, ahead/behind remote
-2. **Plans** — scan `docs/plan/Active/`, then `Ready/`, then `Draft/` for latest `PLAN_*.md` and next incomplete phase (`TASKS_*.md`, `phases/NN_*/PROMPT_*.md`)
-3. **Preflight** — green / unknown / red (`pnpm preflight` when appropriate; do not run long jobs without user consent unless super-power mode)
-4. **Backlog** — open items in `ALL_TASKS_BACKLOG.md` tied to current work
-5. **CLI limits** — load `cli-limits` before suggesting paid CLIs
-
----
-
-## 3. Coach format
-
-Use **Situation → Teach → Ask → Action → Motivate** for full guide passes.
-
-Under **Action**, always include:
-
-- **Must do** — unblockers only
-- **Recommended** — high-value next steps
-- **Critical** — security/compliance; write `None` if empty
-- **Improvements** — only concrete ideas (skip generic advice)
-
-End with **one copy-ready prompt** leading with the executable slash command (`/audit`, `/dev`, `/plan`, `/prompt`, `/ship`, `/check`, `/certify`, `/release`, etc.) followed by complete scoped context.
-
-Keep tone per GUIDE_PREFERENCES: concise, technical, no filler, no emojis unless asked.
+1. `Status: [READY | BLOCKED | GATE | DONE]`
+2. `Situation` — Formatted high-density telemetry table in this field order:
+   - **Active application** — App under development or audit.
+   - **Current stage** — Current workflow stage and phase status.
+   - **Current plan** — Active plan slug, path, and phase number.
+   - **Pilot-flow coverage** — Completed and outstanding pilot gates with deterministic evidence.
+   - **Page-score summary** — Current focused-page scores and evidence freshness.
+   - **DevOps & GitHub pipeline** — Exact lifecycle position.
+   - **Coverage & test readiness** — Test status, verification logs, and acceptance gates.
+   - **Blockers** — Blocking conditions or invariant constraints.
+3. `Why this is next` — Evidence-based intelligence, dependency rationale, and next strategic target.
+4. `Action`:
+   - **Must do** — Immediate operational or unblocking action (explicitly includes GitHub, Branch, PR, Review, CI, Merge).
+   - **Recommended** — Strategic polish, test expansion, token semantic audits, or RTL checks.
+   - **Critical** — Security invariants (tenant isolation, AES-256-GCM PII encryption), data safety, and breaking migrations.
+5. `Copy-ready prompt` — Fully self-contained prompt block starting with the slash command and scoped context.
+6. `Next command` — Exactly ONE executable slash command in a code block.
 
 ---
 
-## 4. Pre-flight (before non-trivial tasks)
+## 3. Autonomous DevOps & GitHub Pipeline Protocol
 
-When starting phase work, auth/QR/tenant changes, or large refactors:
+When steering user requests, adhere to the deterministic lifecycle progression:
 
-1. Check git cleanliness and active plan alignment
-2. If `packages/ui/` touched recently, note preflight before commit
-3. If security-sensitive, load `security` + `CONTRACTS.md`
-4. If a paid CLI is at **80%+**, load `cli-limits` and warn before suggesting it
+```
+[1. /draft] ➜ [2. /prompt] ➜ [3. /plan] ➜ [4. /dev 1..N] ➜ [5. /github] ➜ [6. /review] ➜ [7. CI Fix] ➜ [8. Merge] ➜ [9. /docs & /version] ➜ [10. /audit or /certify] ➜ [11. /deploy]
+```
 
-If something should happen first, offer:
+### Routing Rules:
 
-- **1 — Proceed**
-- **2 — Do suggestions first**
-
----
-
-## 5. Post-task summary (optional)
-
-After completing a task (when rule applies), give a **short** block:
-
-- Must do / Recommended / Critical
-- One next command
-
-Do not duplicate long implementation summaries.
+- **Phase in progress (`phase < N`)**: Next command is `/dev <slug> <N+1>`.
+- **All phases completed in `/dev` (`phase N of N done`)**: Next command MUST advance to **DevOps delivery**:
+  1. `/github` (or `/github ready`) to verify git status, branch cleanliness, and stage changeset.
+  2. Create/switch to feature branch through `/github branch feat/<slug>`.
+  3. Create Pull Request: `gh pr create --title "..." --body "..."`.
+  4. `/review <pr_number>`: Execute 5-gate audit (Security, Types, ADS tokens, Performance, Tests).
+  5. Fix CI checks if any fail: `pnpm turbo test lint typecheck`.
+  6. Safe Merge: `/review <pr_number> --merge` (squash merge & delete branch).
+  7. Finalize release and deployment: `/docs` ➜ `/version` ➜ `/audit` or `/certify` ➜ `/deploy <app>` ➜ `/draft <next_slug>`.
 
 ---
 
-## 6. Router vs execute
+## 4. Hard Invariants
 
-- **`/guide`** — assess and direct; load this skill fully
-- **`/dev` / `/ship` / `/run`** — execute phases; guide may _suggest_ them but does not replace them
-
-When user says `/guide plan X` or `/guide phase 2`, follow `.agents/workflows/guide.md` router table.
-
----
-
-## 7. Super-power mode
-
-When the user asks the guide to “do it for me” or “follow the plan”:
-
-- Resolve active plan and next phase
-- Run phase via `/dev` workflow (`.agents/workflows/dev.md`) or point to exact prompt file
-- Use shell subagent for `pnpm preflight` when needed
-- Still respect hardlocks (CLI limits, no secrets, tenant scope)
-
----
-
-## 8. Quality checks (when relevant)
-
-- Multi-tenant queries include `organizationId` and `deletedAt: null`
-- QR payloads HMAC-SHA256 signed
-- pnpm only; no npm/yarn
-- After plan folder moves, update `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
-
----
-
-## Related skills & workflows
-
-- `cli-limits` — 80% quota rule
-- `.antigravity/workflows/guide.md` — `/guide` workflow entry
-- `.antigravity/workflows/dev.md` — `/dev` phase execution workflow
-- `one-man` — `/man` orchestrator across seven domains
+- Multi-tenant queries include `organizationId` and `deletedAt: null` (where model supports soft-delete).
+- Zero raw PII in logs, audit metadata, or client feeds.
+- Standardized design system tokens (`@atlaskit/tokens` / `var(--ds-...)`).
+- pnpm only; never npm or yarn.

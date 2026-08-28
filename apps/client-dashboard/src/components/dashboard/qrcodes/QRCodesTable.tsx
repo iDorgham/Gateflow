@@ -6,7 +6,9 @@ import { cn, DynamicTable, type Column } from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { RefreshCw } from 'lucide-react';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
+import type { TableDensity } from '@/lib/residents/use-user-preferences';
 import dynamic from 'next/dynamic';
+
 const QRDetailDrawer = dynamic(
   () => import('./QRDetailDrawer').then((m) => ({ default: m.QRDetailDrawer })),
   { ssr: false }
@@ -55,8 +57,29 @@ interface QRCodesTableProps {
   selectedIds: string[];
   onToggleRow?: (id: string, checked: boolean) => void;
   onSelectionChange?: (ids: (string | number)[]) => void;
+  density?: TableDensity;
+  columnOrder?: string[];
+  columnVisibility?: Record<string, boolean>;
 }
 
+/**
+ * Displays QR-code records in a sortable, selectable table with configurable columns and density.
+ *
+ * @param data - QR-code records to display
+ * @param isLoading - Whether the table is loading
+ * @param error - Error to display instead of the table
+ * @param onRefresh - Callback invoked when retrying after an error
+ * @param locale - Locale used for links and date formatting
+ * @param sortBy - Currently sorted column
+ * @param sortOrder - Current sort direction
+ * @param onSortChange - Callback invoked when the sort changes
+ * @param selectedIds - Identifiers of selected rows
+ * @param onSelectionChange - Callback invoked when row selection changes
+ * @param density - Table row density
+ * @param columnOrder - Optional ordered list of column keys
+ * @param columnVisibility - Optional visibility settings keyed by column
+ * @returns The rendered QR-code table and detail drawer
+ */
 export function QRCodesTable({
   data,
   isLoading,
@@ -68,13 +91,16 @@ export function QRCodesTable({
   onSortChange,
   selectedIds,
   onSelectionChange,
+  density = 'default',
+  columnOrder,
+  columnVisibility,
 }: QRCodesTableProps) {
   const { t } = useTranslation('dashboard');
   const [drawerQR, setDrawerQR] = useState<QRCodeRow | null>(null);
 
-  const columns = useMemo<Column<QRCodeRow>[]>(
-    () => [
-      {
+  const allColumnsMap = useMemo<Record<string, Column<QRCodeRow>>>(
+    () => ({
+      code: {
         key: 'code',
         label: t('qrcodes.code', 'QR Identifier'),
         isSortable: true,
@@ -100,7 +126,7 @@ export function QRCodesTable({
           );
         },
       },
-      {
+      guestName: {
         key: 'guestName',
         label: t('qrcodes.guestName', 'QR Holder'),
         isSortable: true,
@@ -117,7 +143,37 @@ export function QRCodesTable({
           </div>
         ),
       },
-      {
+      guestPhone: {
+        key: 'guestPhone',
+        label: t('qrcodes.guestPhone', 'Phone'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[12px] font-mono text-[var(--ds-text-subtle)] tabular-nums">
+            {item.guestPhone ?? '—'}
+          </span>
+        ),
+      },
+      guestEmail: {
+        key: 'guestEmail',
+        label: t('qrcodes.guestEmail', 'Email'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[12px] text-[var(--ds-text-subtle)] lowercase truncate max-w-[150px]">
+            {item.guestEmail ?? '—'}
+          </span>
+        ),
+      },
+      type: {
+        key: 'type',
+        label: t('qrcodes.type', 'Access Type'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--ds-text-subtle)]">
+            {t(`qrcodes.types.${item.type}`, item.type)}
+          </span>
+        ),
+      },
+      projectName: {
         key: 'projectName',
         label: t('qrcodes.project', 'Property'),
         isSortable: true,
@@ -130,7 +186,17 @@ export function QRCodesTable({
             <span className="text-[var(--ds-text-subtle)]">—</span>
           ),
       },
-      {
+      gateName: {
+        key: 'gateName',
+        label: t('qrcodes.gate', 'Entry Gate'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[12px] font-medium text-[var(--ds-text)]">
+            {item.gateName ?? '—'}
+          </span>
+        ),
+      },
+      status: {
         key: 'status',
         label: t('qrcodes.table.status', 'Access Health'),
         isSortable: true,
@@ -159,7 +225,7 @@ export function QRCodesTable({
           );
         },
       },
-      {
+      createdAt: {
         key: 'createdAt',
         label: t('qrcodes.createdAt', 'Issued'),
         isSortable: true,
@@ -175,7 +241,23 @@ export function QRCodesTable({
           </div>
         ),
       },
-      {
+      expiresAt: {
+        key: 'expiresAt',
+        label: t('qrcodes.expiresAt', 'Expiry Date'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[12px] text-[var(--ds-text-subtle)] tabular-nums">
+            {item.expiresAt
+              ? new Date(item.expiresAt).toLocaleDateString(locale, {
+                  month: 'short',
+                  day: 'numeric',
+                  year: '2-digit',
+                })
+              : t('common.never', 'Never')}
+          </span>
+        ),
+      },
+      scansCount: {
         key: 'scansCount',
         label: t('qrcodes.scansCount', 'Usage'),
         isSortable: true,
@@ -188,9 +270,55 @@ export function QRCodesTable({
           </div>
         ),
       },
-    ],
+      lastScanAt: {
+        key: 'lastScanAt',
+        label: t('qrcodes.lastScanAt', 'Last Scan'),
+        isSortable: true,
+        render: (item) => (
+          <span className="text-[12px] text-[var(--ds-text-subtle)] tabular-nums">
+            {item.lastScanAt
+              ? new Date(item.lastScanAt).toLocaleString(locale, {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : '—'}
+          </span>
+        ),
+      },
+    }),
     [locale, t]
   );
+
+  const defaultOrderedKeys = useMemo(
+    () => [
+      'code',
+      'guestName',
+      'projectName',
+      'status',
+      'createdAt',
+      'scansCount',
+    ],
+    []
+  );
+
+  const columns = useMemo<Column<QRCodeRow>[]>(() => {
+    const order = columnOrder?.length ? columnOrder : defaultOrderedKeys;
+    const result: Column<QRCodeRow>[] = [];
+
+    for (const key of order) {
+      if (key === 'select') continue;
+      if (columnVisibility && columnVisibility[key] === false) continue;
+      if (allColumnsMap[key]) {
+        result.push(allColumnsMap[key]);
+      }
+    }
+
+    return result.length > 0
+      ? result
+      : [allColumnsMap.code, allColumnsMap.guestName, allColumnsMap.status];
+  }, [columnOrder, columnVisibility, allColumnsMap, defaultOrderedKeys]);
 
   if (error) {
     return (
@@ -211,7 +339,14 @@ export function QRCodesTable({
 
   return (
     <>
-      <div className="bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] overflow-hidden shadow-sm transition-all duration-300">
+      <div
+        className={cn(
+          'bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] overflow-hidden shadow-sm transition-all duration-300',
+          density === 'comfortable' && '[&_td]:py-4 [&_th]:py-3.5',
+          density === 'compact' && '[&_td]:py-1.5 [&_th]:py-2',
+          density === 'default' && '[&_td]:py-2.5 [&_th]:py-2.5'
+        )}
+      >
         <DynamicTable
           columns={columns}
           items={data}
@@ -228,7 +363,7 @@ export function QRCodesTable({
           selectedIds={selectedIds}
           onSelectionChange={onSelectionChange}
           onRowClick={(item) => setDrawerQR(item)}
-          density="compact"
+          density={density === 'compact' ? 'compact' : 'default'}
         />
       </div>
       <QRDetailDrawer

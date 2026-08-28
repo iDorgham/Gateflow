@@ -20,9 +20,9 @@ Optional improvements from **PR #38** (feat/projects-crm-ui → master). Refine 
 
 **Acceptance:**
 
-- [ ] AuditLog row created on contacts CSV export (org, user, action, count).
-- [ ] AuditLog row created on units CSV export (org, user, action, count).
-- [ ] No PII in log metadata; document in `AUDIT_tables_security.md`.
+- [x] AuditLog row created on contacts CSV export (org, user, action, count).
+- [x] AuditLog row created on units CSV export (org, user, action, count).
+- [x] No PII in log metadata; document in `AUDIT_tables_security.md`.
 
 **Ref:** `docs/plan/Complete/projects_crm_ui/AUDIT_tables_security.md`, `/api/qrcodes/export` (rate limit + pattern).
 
@@ -39,8 +39,8 @@ Optional improvements from **PR #38** (feat/projects-crm-ui → master). Refine 
 
 **Acceptance:**
 
-- [ ] QR Codes table: density control (e.g. toolbar) with at least two modes (compact, default).
-- [ ] QR Codes column order/visibility stored in user preferences API (or keep localStorage and document).
-- [ ] Optional: TableCustomizerModal or equivalent for QR Codes to match residents UX.
+- [x] QR Codes table: density control (e.g. toolbar) with at least two modes (compact, default).
+- [x] QR Codes column order/visibility stored in user preferences API (or keep localStorage and document).
+- [x] Optional: TableCustomizerModal or equivalent for QR Codes to match residents UX.
 
 **Ref:** `ResidentsFilterBar`, `TableCustomizerModal`, `useUserPreferences`, `lib/residents/table-views.ts`.

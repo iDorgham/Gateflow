@@ -5,9 +5,9 @@ import { Button, cn } from '@gateflow/ui';
 import { LayoutTemplate, Save, ChevronDown, Trash2, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-interface SavedView {
-  id: string;
-  name: string;
+export interface SavedView {
+  id?: string;
+  name?: string;
   columnOrder?: string[];
   columnVisibility?: Record<string, boolean>;
   filters?: Record<string, unknown>;
@@ -29,6 +29,16 @@ interface SavedViewManagerProps {
   disabled?: boolean;
 }
 
+/**
+ * Renders controls for selecting, saving, and deleting saved views.
+ *
+ * @param activeView - The identifier of the currently selected view
+ * @param savedViews - The available saved views keyed by identifier
+ * @param onViewSelect - Callback invoked when a view is selected
+ * @param onViewSave - Callback invoked with the trimmed name when a view is saved
+ * @param onViewDelete - Callback invoked when a view is deleted
+ * @param disabled - Whether the view selector is disabled
+ */
 export function SavedViewManager({
   activeView,
   savedViews = {},
@@ -76,7 +86,7 @@ export function SavedViewManager({
             <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle)]" />
           </Button>
 
-          {isOpen && savedViewsList.length > 0 && (
+          {isOpen && (
             <div className="absolute end-0 top-full mt-1 z-50 min-w-[160px] rounded-md border border-[var(--ds-border)] bg-[var(--ds-background-input)] shadow-lg">
               {savedViewsList.map((view) => (
                 <button

@@ -28,17 +28,21 @@ Workflow v2 adds a single-app pilot gate before this lifecycle. Start with
 All Workflow v2 responses share the status → evidence → action → copy-ready
 prompt → one-next-command contract.
 
-| Stage          | Command              | Output / effect                               |
-| -------------- | -------------------- | --------------------------------------------- |
-| Initiative     | `/idea <slug>`       | `docs/development/initiatives/IDEA_<slug>.md` |
-| Draft          | `/draft <slug>`      | `docs/plan/Draft/<slug>/DRAFT_<slug>.md`      |
-| Handoff prompt | `/prompt <slug>`     | `FOR_PLAN_PROMPT.md`                          |
-| Plan           | `/plan <slug>`       | `PLAN_*.md`, `TASKS_*.md`, phase prompts      |
-| Ready          | `/plan ready <slug>` | Move Draft → Ready                            |
-| Execute phase  | `/dev` or `/dev <n>` | One phase with focused checks                 |
-| Bounded loop   | `/dev loop start …`  | Approved plan phase(s) or task contract       |
-| Execute all    | `/ship <slug>`       | All remaining phases                          |
-| Compatibility  | `/ralph <slug>`      | Bounded local all-phase `/dev loop` alias     |
+| Stage          | Command               | Output / effect                               |
+| -------------- | --------------------- | --------------------------------------------- |
+| Initiative     | `/idea <slug>`        | `docs/development/initiatives/IDEA_<slug>.md` |
+| Draft          | `/draft <slug>`       | `docs/plan/Draft/<slug>/DRAFT_<slug>.md`      |
+| Handoff prompt | `/prompt <slug>`      | `FOR_PLAN_PROMPT.md`                          |
+| Plan           | `/plan <slug>`        | `PLAN_*.md`, `TASKS_*.md`, phase prompts      |
+| Ready          | `/plan ready <slug>`  | Move Draft → Ready                            |
+| Execute phase  | `/dev` or `/dev <n>`  | One phase with focused checks                 |
+| Bounded loop   | `/dev loop start …`   | Approved plan phase(s) or task contract       |
+| Execute all    | `/ship <slug>`        | All remaining phases                          |
+| GitHub stage   | `/github` / `ready`   | Feature branch staging, commit, push, PR list |
+| PR & 5-gate    | `/review <pr_number>` | 5-gate audit (Tenant, Types, ADS, CLS, CI)    |
+| Safe merge     | `/review --merge`     | Squash merge when CI is 100% green            |
+| Docs & Version | `/docs` / `/version`  | Changelog, PRD sync, semantic git tag         |
+| Deploy         | `/deploy <app>`       | Production / staging manual dispatch          |
 
 Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` when moving plans.
 
@@ -60,36 +64,36 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 | `/dev loop`                                       | Run approved phases/tasks in bounded batches                              |
 | `/pilot loop`                                     | Run the bounded controller with pilot gates                               |
 
-| Command           | When to use                                                   |
-| ----------------- | ------------------------------------------------------------- |
-| **`/guide`**      | Router + coach — what to do next; **does not execute phases** |
-| **`/dev`**        | Implement exactly one plan phase                              |
-| **`/ship`**       | Run full plan via repeated `/dev`-style execution             |
-| **`/ralph`**      | Compatibility alias for bounded local all-phase execution     |
-| **`/idea`**       | Capture new initiative                                        |
-| **`/draft`**      | Raw planning notes before `/plan`                             |
-| **`/prompt`**     | Build `FOR_PLAN_PROMPT.md` for `/plan`                        |
-| **`/plan`**       | Generate phased plan + phase prompts                          |
-| **`/man`**        | One Man orchestrator (tasks, settings, seven domains)         |
-| **`/brainstorm`** | Strategic roadmap / gaps / release ideation                   |
-| **`/creative`**   | Creative direction for brand/content                          |
-| **`/deploy`**     | Deploy target app(s)                                          |
-| **`/docs`**       | Changelog, README, doc sync                                   |
-| **`/version`**    | Semver bump and git tags                                      |
-| **`/organize`**   | Docs folder cleanup and index                                 |
-| **`/clis-team`**  | Multi-CLI team run (seo, refactor, audit)                     |
+| Command           | When to use                                                             |
+| ----------------- | ----------------------------------------------------------------------- |
+| **`/guide`**      | Router + coach — what to do next; **does not execute phases**           |
+| **`/dev`**        | Implement exactly one plan phase                                        |
+| **`/ship`**       | Run full plan via repeated `/dev`-style execution                       |
+| **`/ralph`**      | Compatibility alias for `/dev loop start <slug> --all --delivery=local` |
+| **`/idea`**       | Capture new initiative                                                  |
+| **`/draft`**      | Raw planning notes before `/plan`                                       |
+| **`/prompt`**     | Build `FOR_PLAN_PROMPT.md` for `/plan`                                  |
+| **`/plan`**       | Generate phased plan + phase prompts                                    |
+| **`/man`**        | One Man orchestrator (tasks, settings, seven domains)                   |
+| **`/brainstorm`** | Strategic roadmap / gaps / release ideation                             |
+| **`/creative`**   | Creative direction for brand/content                                    |
+| **`/deploy`**     | Deploy target app(s)                                                    |
+| **`/docs`**       | Changelog, README, doc sync                                             |
+| **`/version`**    | Semver bump and git tags                                                |
+| **`/organize`**   | Docs folder cleanup and index                                           |
+| **`/clis-team`**  | Multi-CLI team run (seo, refactor, audit)                               |
 
 ### `/guide` shorthand
 
-| You type          | Routes to                                  |
-| ----------------- | ------------------------------------------ |
-| `/guide check`    | `/check` (preflight and evidence check)    |
-| `/guide plan X`   | `/plan X`                                  |
-| `/guide dev X N`  | `/dev X N` (phase execution)               |
-| `/guide test`     | `/test` or `pnpm preflight`                |
-| `/guide github`   | `/github` flow                             |
-| `/guide security` | `/security` review                         |
-| `/guide all`      | `/dev ralph` / `/ship` (sequential phases) |
+| You type          | Routes to                                                 |
+| ----------------- | --------------------------------------------------------- |
+| `/guide check`    | `/check` (preflight and evidence check)                   |
+| `/guide plan X`   | `/plan X`                                                 |
+| `/guide dev X N`  | `/dev X N` (phase execution)                              |
+| `/guide test`     | `/test` or `pnpm preflight`                               |
+| `/guide github`   | `/github` flow                                            |
+| `/guide security` | `/security` review                                        |
+| `/guide all`      | `/dev loop start <slug> --all --delivery=local` / `/ship` |
 
 Bare **`/guide`** or **“what should I do now”** loads **`gf-guide`** skill: Situation → Teach → Ask → Action → Motivate, plus Must do / Recommended / Critical.
 
