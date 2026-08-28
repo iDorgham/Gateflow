@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { motion, useAnimationControls } from 'framer-motion';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
@@ -83,31 +82,6 @@ function LogoChip({
 
 export function TrustBar({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
-  const controls = useAnimationControls();
-
-  const DURATION = 40; // seconds for one full loop
-
-  const startScroll = React.useCallback(() => {
-    controls.start({
-      x: ['0%', '-33.3333%'],
-      transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: 'loop',
-          duration: DURATION,
-          ease: 'linear',
-        },
-      },
-    });
-  }, [controls]);
-
-  /* Start on mount */
-  React.useEffect(() => {
-    startScroll();
-  }, [startScroll]);
-
-  const pause = () => controls.stop();
-  const resume = () => startScroll();
 
   return (
     <section
@@ -115,36 +89,24 @@ export function TrustBar({ locale: _locale }: { locale: Locale }) {
       aria-label="Trusted by leading communities"
     >
       {/* ── Section label ── */}
-      <motion.p
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center text-[10px] font-black uppercase tracking-[0.5em] text-ds-text-subtlest mb-7"
-      >
+      <p className="text-center text-[10px] font-black uppercase tracking-[0.5em] text-ds-text-subtlest mb-7">
         {t('trust.badge')}
-      </motion.p>
+      </p>
 
       {/* ── Scrolling track ── */}
-      <div
-        className="relative overflow-hidden"
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        onFocus={pause}
-        onBlur={resume}
-      >
+      <div className="relative overflow-hidden">
         {/* Fade masks — both sides with directional start/end gradients */}
         <div className="pointer-events-none absolute inset-y-0 start-0 w-28 z-10 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-ds-surface-sunken to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 end-0 w-28 z-10 ltr:bg-gradient-to-l rtl:bg-gradient-to-r from-ds-surface-sunken to-transparent" />
 
-        <motion.div
-          animate={controls}
-          className="flex items-center gap-x-16 md:gap-x-24 w-max pe-16 md:pe-24"
+        <div
+          className="flex items-center gap-x-16 md:gap-x-24 w-max pe-16 md:pe-24 animate-gf-marquee-slow-left pause-on-hover"
           style={{ willChange: 'transform' }}
         >
           {TRACK.map((p, i) => (
             <LogoChip key={`${p.abbr}-${i}`} {...p} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

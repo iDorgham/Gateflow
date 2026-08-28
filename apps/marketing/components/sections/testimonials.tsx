@@ -181,31 +181,28 @@ function MarqueeRow({
 }) {
   const isRtl = locale.startsWith('ar');
   const tripledItems = [...items, ...items, ...items];
-
-  // Flip directions for RTL to ensure smooth physical translation resets
-  const animX = direction === 'left' ? [0, -33.333 + '%'] : [-33.333 + '%', 0];
-  const rtlAnimX = direction === 'left' ? [0, 33.333 + '%'] : [33.333 + '%', 0];
+  const isLeft = direction === 'left';
+  const animClass = isLeft
+    ? isRtl
+      ? 'animate-gf-marquee-slow-right'
+      : 'animate-gf-marquee-slow-left'
+    : isRtl
+      ? 'animate-gf-marquee-slow-left'
+      : 'animate-gf-marquee-slow-right';
 
   return (
     <div
       className="flex overflow-hidden py-4 -mx-4 group"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
-      <motion.div
-        className="flex"
-        animate={{
-          x: isRtl ? rtlAnimX : animX,
-        }}
-        transition={{
-          duration: 60,
-          ease: 'linear',
-          repeat: Infinity,
-        }}
+      <div
+        className={`flex ${animClass} pause-on-hover`}
+        style={{ willChange: 'transform' }}
       >
         {tripledItems.map((item, i) => (
           <TestimonialCard key={i} item={item} />
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -225,14 +222,9 @@ export function TestimonialsSection({ locale }: { locale: Locale }) {
 
       <div className="container mx-auto px-6 mb-20 lg:mb-32 relative z-10">
         <div className="text-center max-w-4xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[12px] font-black uppercase tracking-[0.45em] text-ds-text-brand mb-8"
-          >
+          <p className="text-[12px] font-black uppercase tracking-[0.45em] text-ds-text-brand mb-8">
             {t('testimonials.badge')}
-          </motion.h2>
+          </p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

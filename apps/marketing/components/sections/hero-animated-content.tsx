@@ -948,7 +948,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0, filter: 'none' }}
                 exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h1 className="text-4xl lg:text-5xl font-black leading-[0.94] mb-8 tracking-tighter text-ds-text-heading">
                   <span className="block mb-2 text-ds-text-heading">
@@ -998,13 +998,18 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
             </div>
 
             {/* Slide nav pills */}
-            <div className="flex gap-3 justify-center lg:justify-start">
+            <div
+              className="flex gap-3 justify-center lg:justify-start"
+              role="group"
+              aria-label="Hero feature showcase"
+            >
               {slides.map((s, i) => (
                 <button
                   key={s.id}
                   onClick={() => setCurrentSlide(i)}
                   className="group flex flex-col gap-1.5 focus:outline-none"
                   aria-label={`Go to slide: ${s.slideLabel}`}
+                  aria-current={i === currentSlide ? 'true' : 'false'}
                 >
                   <div
                     className={`h-1 rounded-full transition-all duration-700 overflow-hidden ${

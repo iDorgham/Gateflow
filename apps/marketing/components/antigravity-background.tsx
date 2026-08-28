@@ -277,16 +277,22 @@ export const AntigravityBackground: React.FC = () => {
   };
 
   useEffect(() => {
+    // Only run on desktop screens (>= 1024px) to preserve mobile battery and prevent TBT spikes
+    if (typeof window === 'undefined' || window.innerWidth < 1024) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const handleResize = () => {
+      if (window.innerWidth < 1024) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       initGrid();
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     handleResize();
 
     const prefersReducedMotion =
@@ -304,11 +310,24 @@ export const AntigravityBackground: React.FC = () => {
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    // Defer the animation loop's start until the browser is idle so this
-    // decorative background never competes with hydration/TTI for main-thread
-    // time — it's below-the-fold-equivalent (pointer-events: none, z-0).
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = Boolean(entry?.isIntersecting);
+        if (!isVisible && requestRef.current) {
+          cancelAnimationFrame(requestRef.current);
+          requestRef.current = undefined;
+        } else if (isVisible && !requestRef.current) {
+          requestRef.current = requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
+    // Defer animation loop start until browser is idle
     const win = window as Window & {
       requestIdleCallback?: (
         cb: () => void,
@@ -317,7 +336,9 @@ export const AntigravityBackground: React.FC = () => {
       cancelIdleCallback?: (id: number) => void;
     };
     const startAnimation = () => {
-      requestRef.current = requestAnimationFrame(animate);
+      if (isVisible && !requestRef.current) {
+        requestRef.current = requestAnimationFrame(animate);
+      }
     };
     let idleId: number | undefined;
     let timeoutId: number | undefined;
@@ -328,9 +349,13 @@ export const AntigravityBackground: React.FC = () => {
     }
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+        requestRef.current = undefined;
+      }
       if (idleId !== undefined) win.cancelIdleCallback?.(idleId);
       if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
@@ -339,7 +364,7 @@ export const AntigravityBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-0"
       style={{
         filter: isDark ? 'contrast(1.1) brightness(1.1)' : 'none',
         opacity: isDark ? 0.9 : 0.7,

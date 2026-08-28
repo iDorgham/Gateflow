@@ -14,6 +14,10 @@
       "language": "اللغة",
       "theme": "تبديل المظهر"
     },
+    "aria": {
+      "searchResources": "البحث في الموارد",
+      "toggleNavigationMenu": "تبديل قائمة التنقل"
+    },
     "dropdowns": {
       "product": {
         "features": {

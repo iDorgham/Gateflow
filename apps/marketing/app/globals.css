@@ -35,4 +35,47 @@
   .ds-radius-circle {
     border-radius: var(--ds-radius-circle, 50%);
   }
+
+  /* Hardware-accelerated compositor-thread marquees */
+  @keyframes gf-marquee-left {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-33.3333%, 0, 0);
+    }
+  }
+
+  @keyframes gf-marquee-right {
+    from {
+      transform: translate3d(-33.3333%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .animate-gf-marquee-left {
+    animation: gf-marquee-left 35s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-gf-marquee-right {
+    animation: gf-marquee-right 35s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-gf-marquee-slow-left {
+    animation: gf-marquee-left 50s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-gf-marquee-slow-right {
+    animation: gf-marquee-right 50s linear infinite;
+    will-change: transform;
+  }
+
+  .pause-on-hover:hover {
+    animation-play-state: paused;
+  }
 }

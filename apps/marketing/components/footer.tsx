@@ -83,30 +83,38 @@ export async function Footer({ locale }: { locale: Locale }) {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-primary"
-                aria-label="Facebook"
+                aria-label="GateFlow on Facebook"
               >
                 <FacebookIcon />
               </a>
               <a
-                href="#"
+                href="https://x.com/gateflow"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-primary"
-                aria-label="Twitter"
+                aria-label="GateFlow on Twitter/X"
               >
                 <TwitterIcon />
               </a>
               <a
-                href="#"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-primary"
-                aria-label="Instagram"
+                aria-label="GateFlow on Instagram"
               >
                 <InstagramIcon />
               </a>
               <a
-                href="#"
+                href="https://linkedin.com/company/gateflow"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-primary"
-                aria-label="Linkedin"
+                aria-label="GateFlow on LinkedIn"
               >
                 <LinkedinIcon />
               </a>
