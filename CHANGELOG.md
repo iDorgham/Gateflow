@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Security]** sanitize audit ledger payload and rename metadata key to resolve CodeQL alert
+
 - **[Security]** enforce scans bulk auth scoping, native crypto & security headers
 
 - **[Docs]** comprehensive update of README, PRD v13.0, feature log, and category documentation
@@ -19,6 +21,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Ai]** add fast-dev swarms, pr-review skills, and deployment managers
 
 ### Apps
+
+- **[Client]** add guard shift visual map, live telemetry polling, interactive gate terminal cards, and supervisor emergency handover drawer
+
+- **[Client]** add export audit logging and rate limiting on contacts/units CSV exports, plus density controls and saved views in QR Codes table
 
 ---
 

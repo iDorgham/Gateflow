@@ -1,15 +1,19 @@
 /**
- * Table view state: column order and visibility.
- * Persisted in User.preferences.tableViews.contacts | .units
+ * Table view state: column order, visibility, active view, and density.
+ * Persisted in User.preferences.tableViews.contacts | .units | .qrcodes
  */
+
+export type TableDensity = 'compact' | 'default' | 'comfortable';
 
 export interface TableViewState {
   columnOrder: string[];
   columnVisibility: Record<string, boolean>;
   activeView?: string;
+  density?: TableDensity;
   savedViews?: Record<
     string,
     {
+      name?: string;
       columnOrder?: string[];
       columnVisibility?: Record<string, boolean>;
     }
@@ -66,7 +70,13 @@ export const QR_COLUMN_IDS = [
 ] as const;
 
 /** Columns that cannot be hidden (id/name) */
-export const CONTACTS_PINNED = new Set(['select', 'avatar', 'firstName', 'lastName', 'actions']);
+export const CONTACTS_PINNED = new Set([
+  'select',
+  'avatar',
+  'firstName',
+  'lastName',
+  'actions',
+]);
 export const UNITS_PINNED = new Set(['select', 'name', 'actions']);
 export const QR_PINNED = new Set(['select', 'code']);
 
@@ -89,11 +99,14 @@ export const PRESET_VIEWS: Record<string, Record<string, boolean>> = {
   },
 };
 
-export function getDefaultTableView(columnIds: readonly string[], _pinned: Set<string>): TableViewState {
+export function getDefaultTableView(
+  columnIds: readonly string[],
+  _pinned: Set<string>
+): TableViewState {
   const columnOrder = [...columnIds];
   const columnVisibility: Record<string, boolean> = {};
   for (const id of columnIds) {
     columnVisibility[id] = true;
   }
-  return { columnOrder, columnVisibility };
+  return { columnOrder, columnVisibility, density: 'default' };
 }

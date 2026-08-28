@@ -84,4 +84,48 @@ describe('/api/users/me/preferences', () => {
       })
     );
   });
+
+  it('PATCH merges tableViews.qrcodes density and saved views', async () => {
+    mockGetSessionClaims.mockResolvedValue({ sub: 'user_2' });
+    mockFindUnique.mockResolvedValue({
+      preferences: { tableViews: {} },
+    });
+    mockUpdate.mockResolvedValue({});
+
+    const req = new NextRequest('http://localhost/api/users/me/preferences', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tableViews: {
+          qrcodes: {
+            density: 'compact',
+            columnOrder: ['code', 'guestName', 'status'],
+            columnVisibility: { guestPhone: false },
+          },
+        },
+      }),
+    });
+
+    const res = await PATCH(req);
+    const payload = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(payload.success).toBe(true);
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'user_2' },
+        data: expect.objectContaining({
+          preferences: expect.objectContaining({
+            tableViews: expect.objectContaining({
+              qrcodes: expect.objectContaining({
+                density: 'compact',
+                columnOrder: ['code', 'guestName', 'status'],
+                columnVisibility: { guestPhone: false },
+              }),
+            }),
+          }),
+        }),
+      })
+    );
+  });
 });

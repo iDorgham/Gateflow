@@ -34,19 +34,45 @@ The `/dev ralph` command triggers a continuous execution loop:
 - No recursion if security enforcers are RED.
 - No recursion if `organizationId` or `deletedAt` invariants are violated.
 
+## 3. DevOps & PR Delivery Lifecycle (When Plan Finishes)
+
+When all phases in a plan are completed (`Phase N of N` finished in `/dev` or `/ship`):
+
+```mermaid
+graph TD
+    DEV[1. Dev Loop Completed<br/>All Phases Green & Documented] --> GH[2. /github<br/>Stage diff, commit on feat/slug & push]
+    GH --> REV[3. /review pr_number<br/>Open PR & run 5-gate audit]
+    REV --> CI[4. CI Check & Triage<br/>Monitor gh pr checks & fix failing jobs]
+    CI --> MERGE[5. Safe Squash Merge<br/>/review pr_number --merge]
+    MERGE --> DOCS[6. /docs & /version<br/>Sync changelog, PRD & semantic tag]
+    DOCS --> DEPLOY[7. /deploy app<br/>Manual production/preview dispatch]
+```
+
+### Steps:
+
+1. **GitHub Delivery (`/github` or `/github ready`)**: Stage changes, run `pnpm pr:ready`, commit to `feat/<slug>`, and push branch to remote.
+2. **Pull Request & 5-Gate Review (`/review <pr_number>`)**: Open PR and audit multi-tenancy/PII, types/schema, ADS/RTL, CLS/perf, and CI status.
+3. **CI Triage & Verification**: Inspect `gh pr checks <pr_number>` and resolve any failing checks until 100% green.
+4. **Safe Merge (`/review <pr_number> --merge`)**: Coordinate squash merge into master and branch cleanup once authorized.
+5. **Documentation & Release (`/docs` -> `/version`)**: Sync changelog, PRD v13.0, and create version tag.
+6. **Deployment (`/deploy <app>`)**: Trigger production release.
+
 ---
 
-## 3. Usage Reference
+## 4. Usage Reference
 
 | Command      | Behavior                                                                       |
 | ------------ | ------------------------------------------------------------------------------ |
 | `/dev`       | Implement next incomplete phase; stop for feedback.                            |
 | `/dev ralph` | Implement next incomplete phase; **auto-start** next phase if prompts exist.   |
 | `/ship`      | Execute entire plan end-to-end (similar to ralph, but for pre-existing plans). |
+| `/github`    | Feature branch staging, commit, push, and PR checklist.                        |
+| `/review`    | PR inspection, 5-gate security audit, and safe-merge execution.                |
+| `/deploy`    | Pre-flight validated production deploy dispatch.                               |
 
 ---
 
-## 4. Exit Conditions (EC)
+## 5. Exit Conditions (EC)
 
-- **EC-Phase (Done)**: GREEN enforcers + GREEN tests + Merged to master.
-- **EC-Plan (Final)**: All phases satisfied EC-Phase + Release tagged via `ralph-git.js tag`.
+- **EC-Phase (Done)**: GREEN enforcers + GREEN tests + Phase log written.
+- **EC-Plan (Final)**: All phases satisfied EC-Phase + PR 5-gate reviewed + CI 100% green + Merged to master + Changelog updated.

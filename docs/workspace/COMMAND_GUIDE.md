@@ -28,17 +28,21 @@ Workflow v2 adds a single-app pilot gate before this lifecycle. Start with
 All Workflow v2 responses share the status → evidence → action → copy-ready
 prompt → one-next-command contract.
 
-| Stage          | Command              | Output / effect                               |
-| -------------- | -------------------- | --------------------------------------------- |
-| Initiative     | `/idea <slug>`       | `docs/development/initiatives/IDEA_<slug>.md` |
-| Draft          | `/draft <slug>`      | `docs/plan/Draft/<slug>/DRAFT_<slug>.md`      |
-| Handoff prompt | `/prompt <slug>`     | `FOR_PLAN_PROMPT.md`                          |
-| Plan           | `/plan <slug>`       | `PLAN_*.md`, `TASKS_*.md`, phase prompts      |
-| Ready          | `/plan ready <slug>` | Move Draft → Ready                            |
-| Execute phase  | `/dev` or `/dev <n>` | One phase with focused checks                 |
-| Bounded loop   | `/dev loop start …`  | Approved plan phase(s) or task contract       |
-| Execute all    | `/ship <slug>`       | All remaining phases                          |
-| Compatibility  | `/ralph <slug>`      | Bounded local all-phase `/dev loop` alias     |
+| Stage          | Command               | Output / effect                               |
+| -------------- | --------------------- | --------------------------------------------- |
+| Initiative     | `/idea <slug>`        | `docs/development/initiatives/IDEA_<slug>.md` |
+| Draft          | `/draft <slug>`       | `docs/plan/Draft/<slug>/DRAFT_<slug>.md`      |
+| Handoff prompt | `/prompt <slug>`      | `FOR_PLAN_PROMPT.md`                          |
+| Plan           | `/plan <slug>`        | `PLAN_*.md`, `TASKS_*.md`, phase prompts      |
+| Ready          | `/plan ready <slug>`  | Move Draft → Ready                            |
+| Execute phase  | `/dev` or `/dev <n>`  | One phase with focused checks                 |
+| Bounded loop   | `/dev loop start …`   | Approved plan phase(s) or task contract       |
+| Execute all    | `/ship <slug>`        | All remaining phases                          |
+| GitHub stage   | `/github` / `ready`   | Feature branch staging, commit, push, PR list |
+| PR & 5-gate    | `/review <pr_number>` | 5-gate audit (Tenant, Types, ADS, CLS, CI)    |
+| Safe merge     | `/review --merge`     | Squash merge when CI is 100% green            |
+| Docs & Version | `/docs` / `/version`  | Changelog, PRD sync, semantic git tag         |
+| Deploy         | `/deploy <app>`       | Production / staging manual dispatch          |
 
 Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` when moving plans.
 

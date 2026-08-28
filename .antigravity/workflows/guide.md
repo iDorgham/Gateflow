@@ -74,12 +74,15 @@ When the user adds text after `/guide` that maps to a known token, **fire the ta
 ### Phased flow (reference)
 
 1. **Check** → `/check` (or `pnpm preflight`) — verify clean workspace before starting
-2. **Plan** → `/plan <slug>` — create or refine phased plan
-3. **Prompt** → `/prompt <slug> <N>` — load phase prompt
-4. **Dev** → `/dev <slug> <N>` — implement, test, and commit phase
-5. **Ship** → `/ship <slug>` — run remaining phases sequentially
-6. **Audit/Certify** → `/audit` / `/certify` — verify pilot gates and evidence
-7. **Deploy** → `/deploy <app>` when changes are ready for staging/prod
+2. **Draft & Plan** → `/draft <slug>` → `/prompt <slug>` → `/plan <slug>` → `/plan ready <slug>`
+3. **Dev (Phases)** → `/dev <slug> <N>` (or `/ship <slug>`) — implement, test, and complete phases
+4. **GitHub Delivery** → `/github` (or `/github ready`) — verify diff, stage, commit on feature branch, and push
+5. **PR & 5-Gate Review** → `/review <pr_number>` — open PR and run 5-gate audit (Tenant/PII, Types, ADS/RTL, CLS/Perf, CI)
+6. **CI Triage & Fix** → Inspect `gh pr checks <pr_number>`, resolve failing checks if any
+7. **Safe Merge** → `/review <pr_number> --merge` (or squash merge via `gh pr merge`)
+8. **Docs & Version** → `/docs` → `/version` — sync changelog, PRD, and tag version
+9. **Audit/Certify** → `/audit` / `/certify` — verify pilot gates and evidence
+10. **Deploy** → `/deploy <app>` — production / staging deployment
 
 ---
 
@@ -90,7 +93,12 @@ When the user runs **`/guide`**, **`/guide what should I do now`**, or asks for 
 1. **Load `gf-guide`** and run state assessment (git, plans under `docs/plan/`, preflight status, backlog).
 2. Reply using **Situation → Teach → Ask → Action → Motivate** (concise; honor GUIDE_PREFERENCES).
 3. Include **Must do**, **Recommended**, **Critical** (write `None` if empty). **Improvements** only when concrete.
-4. End with **one copy-ready** next step: `/dev`, `/plan`, `/prompt`, or a single shell command.
+4. **DevOps Routing Rule**:
+   - If a plan is in progress (Phase `< N`): Next command is `/dev <slug> <N+1>`.
+   - If all phases of a plan just completed: Next command MUST transition to `/github` (stage & push) → `/review` (PR & 5-gate audit) → CI check & merge.
+   - If on an open PR: Next command is `/review <pr_number>` or check CI / merge.
+   - If merged & clean: Next command is `/docs` / `/deploy` or `/draft <next_slug>`.
+5. End with **one copy-ready** next step (`/dev`, `/github`, `/review`, `/plan`, `/prompt`, or single shell command).
 
 ### Coach response template
 

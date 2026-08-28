@@ -4,6 +4,34 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### guard_shift_visual_map — Guard Shift Visual Map & Real-Time Gate Monitor
+
+**PLAN:** `docs/plan/Complete/guard_shift_visual_map/PLAN_guard_shift_visual_map.md`  
+**Status:** 🟢 Complete — All 3 Phases Certified  
+**Priority:** P1 — Perimeter Situational Awareness & Guard Shift Telemetry  
+**Target:** Live gate terminal occupancy, active shift monitoring, terminal health indicators, and shift handover controls on Client Dashboard  
+**App:** `apps/client-dashboard`, `packages/db`, `packages/types`
+
+- [x] Phase 1 — Live Shift & Gate Telemetry API (API & Security)
+- [x] Phase 2 — Guard Shift Visual Map & Interactive Grid UI (Frontend)
+- [x] Phase 3 — Shift Handover Drawer, Real-Time Alerts & Documentation (QA & Docs)
+
+---
+
+### projects_crm_ui_followups — Projects CRM UI Follow-ups & Export Compliance
+
+**PLAN:** `docs/plan/Complete/projects_crm_ui_followups/PLAN_projects_crm_ui_followups.md`  
+**Status:** 🟢 Complete — All 3 Phases Certified  
+**Priority:** P1 — Compliance Parity, Export Rate Limiting & CRM Table Saved Views  
+**Target:** Add AuditLog creation on contacts/units CSV exports, apply export rate-limiting, and add density toggles + user preference saved views to QR Codes table  
+**App:** `apps/client-dashboard`, `packages/db`, `packages/types`
+
+- [x] Phase 1 — Export Audit Logging & Rate Limiting (API & Security)
+- [x] Phase 2 — QR Codes Table Density & User Preferences (UI/UX)
+- [x] Phase 3 — Verification, RTL Testing & Documentation
+
+---
+
 ### security_hotfix_v1 — Scans Bulk Auth & Scoping, Native Crypto & Security Headers
 
 **PLAN:** `docs/plan/Complete/security_hotfix_v1/PLAN_security_hotfix_v1.md`  

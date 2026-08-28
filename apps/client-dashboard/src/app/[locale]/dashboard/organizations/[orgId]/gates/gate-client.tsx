@@ -19,7 +19,18 @@ import {
   PowerOff,
   Trash2,
   Zap,
+  LayoutGrid,
+  Map as MapIcon,
+  Radio,
 } from 'lucide-react';
+import {
+  useLiveShifts,
+  type LiveGateShiftTelemetry,
+} from '@/lib/shifts/use-live-shifts';
+import { ShiftKpiSummary } from '@/components/dashboard/gates/ShiftKpiSummary';
+import { GuardShiftVisualMap } from '@/components/dashboard/gates/GuardShiftVisualMap';
+import { GateTerminalCard } from '@/components/dashboard/gates/GateTerminalCard';
+import { ShiftDetailDrawer } from '@/components/dashboard/gates/ShiftDetailDrawer';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -847,6 +858,14 @@ export function GatesList({
   const [showAdd, setShowAdd] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'terminals'>(
+    'grid'
+  );
+  const [selectedTelemetryGate, setSelectedTelemetryGate] =
+    useState<LiveGateShiftTelemetry | null>(null);
+
+  const liveShifts = useLiveShifts();
+
   // Track when the page was last refreshed
   useEffect(() => {
     setLastRefreshed(new Date());
@@ -856,10 +875,18 @@ export function GatesList({
 
   return (
     <>
-      {/* Toolbar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {/* Live Telemetry Summary Banner */}
+      <ShiftKpiSummary
+        summary={liveShifts.summary}
+        isLoading={liveShifts.isLoading}
+        lastUpdated={liveShifts.lastUpdated}
+        onRefresh={liveShifts.refresh}
+      />
+
+      {/* Toolbar & View Mode Switcher */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
         <div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm font-semibold text-foreground">
             {t('gates.activeTotal', {
               active: activeCount,
               total: gates.length,
@@ -877,14 +904,135 @@ export function GatesList({
             })}
           </p>
         </div>
-        <Button onClick={() => setShowAdd(true)} className="gap-2">
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          {t('gates.addGate', 'New Gate')}
-        </Button>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="inline-flex items-center rounded-lg border border-[var(--ds-border,#dfe1e6)] bg-[var(--ds-surface-subtle,#f4f5f7)] p-1 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-all',
+                viewMode === 'grid'
+                  ? 'bg-[var(--ds-surface,#ffffff)] text-[var(--ds-text,#172b4d)] shadow-xs font-semibold'
+                  : 'text-[var(--ds-text-subtle,#6b778c)] hover:text-[var(--ds-text,#172b4d)]'
+              )}
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              <span>{t('gates.views.list', 'Cards')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setViewMode('map')}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-all',
+                viewMode === 'map'
+                  ? 'bg-[var(--ds-surface,#ffffff)] text-[var(--ds-text,#172b4d)] shadow-xs font-semibold'
+                  : 'text-[var(--ds-text-subtle,#6b778c)] hover:text-[var(--ds-text,#172b4d)]'
+              )}
+            >
+              <MapIcon className="h-3.5 w-3.5" />
+              <span>{t('gates.views.map', 'Shift Map')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setViewMode('terminals')}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-all',
+                viewMode === 'terminals'
+                  ? 'bg-[var(--ds-surface,#ffffff)] text-[var(--ds-text,#172b4d)] shadow-xs font-semibold'
+                  : 'text-[var(--ds-text-subtle,#6b778c)] hover:text-[var(--ds-text,#172b4d)]'
+              )}
+            >
+              <Radio className="h-3.5 w-3.5" />
+              <span>{t('gates.views.terminals', 'Terminals')}</span>
+            </button>
+          </div>
+
+          <Button onClick={() => setShowAdd(true)} className="gap-2">
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            {t('gates.addGate', 'New Gate')}
+          </Button>
+        </div>
       </div>
 
-      {/* Grid or empty state */}
-      {gates.length === 0 ? (
+      {/* Main View Mode Area */}
+      {viewMode === 'map' ? (
+        <div className="space-y-4">
+          <GuardShiftVisualMap
+            gates={liveShifts.gates}
+            selectedGateId={selectedTelemetryGate?.gateId}
+            onSelectGate={setSelectedTelemetryGate}
+          />
+
+          {selectedTelemetryGate && (
+            <div className="p-4 rounded-xl border border-[var(--ds-border,#dfe1e6)] bg-[var(--ds-surface,#ffffff)] shadow-xs flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm">
+                  {selectedTelemetryGate.gateName.charAt(0)}
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-[var(--ds-text,#172b4d)]">
+                    {selectedTelemetryGate.gateName}
+                  </h4>
+                  <p className="text-xs text-[var(--ds-text-subtle,#6b778c)]">
+                    {selectedTelemetryGate.location || 'Perimeter'} •{' '}
+                    <span className="font-medium">
+                      {selectedTelemetryGate.status}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {selectedTelemetryGate.activeShift ? (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="font-medium text-emerald-700 dark:text-emerald-300">
+                      {selectedTelemetryGate.activeShift.guardName}
+                    </span>
+                    <span className="text-[var(--ds-text-subtlest,#8993a4)] font-mono">
+                      (
+                      {Math.floor(
+                        selectedTelemetryGate.activeShift.elapsedMinutes / 60
+                      )}
+                      h {selectedTelemetryGate.activeShift.elapsedMinutes % 60}
+                      m)
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-xs text-rose-600 font-medium">
+                    {t('shifts.unmannedAlert', 'Unmanned')}
+                  </span>
+                )}
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() =>
+                    setSelectedTelemetryGate(selectedTelemetryGate)
+                  }
+                  className="text-xs"
+                >
+                  {t('shifts.inspectTelemetry', 'Inspect & Handover')}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : viewMode === 'terminals' ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {liveShifts.gates.map((g) => (
+            <GateTerminalCard
+              key={g.gateId}
+              gate={g}
+              isSelected={selectedTelemetryGate?.gateId === g.gateId}
+              onSelect={(gate) => setSelectedTelemetryGate(gate)}
+            />
+          ))}
+        </div>
+      ) : gates.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
             <MapPin
@@ -935,6 +1083,17 @@ export function GatesList({
           ))}
         </motion.div>
       )}
+
+      {/* Shift Detail & Handover Drawer */}
+      <ShiftDetailDrawer
+        gate={selectedTelemetryGate}
+        isOpen={Boolean(
+          selectedTelemetryGate &&
+          (viewMode === 'map' || viewMode === 'terminals')
+        )}
+        onClose={() => setSelectedTelemetryGate(null)}
+        onHandoverSuccess={liveShifts.refresh}
+      />
 
       {/* Modals */}
       {showAdd && (
