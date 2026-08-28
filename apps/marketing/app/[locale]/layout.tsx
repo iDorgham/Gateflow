@@ -104,6 +104,12 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ClientWidgets } from '../../components/client-widgets';
 
+/**
+ * Renders the localized application layout with navigation, content, footer, providers, and site-wide integrations.
+ *
+ * @param props - The layout content and route parameters containing the locale.
+ * @returns The localized root layout.
+ */
 export default async function RootLayout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;

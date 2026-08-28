@@ -66,6 +66,12 @@ const CookieConsent = dynamic(
   { ssr: false }
 );
 
+/**
+ * Renders the localized landing page for the requested locale.
+ *
+ * @param params - Route parameters containing the page locale
+ * @returns The localized landing page
+ */
 export default async function HomePage({
   params,
 }: {
