@@ -1,0 +1,16 @@
+.ai/runtime-proof.json
+  h_220d66b2244819 13,26,39,52,57-59,62-63,65,70-71,78,91
+CHANGELOG.md
+  h_220d66b2244819 31-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "99f719ba8f61ab7fc674fbd6ff56e0b4692512e4",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
