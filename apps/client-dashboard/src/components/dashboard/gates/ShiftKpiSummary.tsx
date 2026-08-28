@@ -18,6 +18,14 @@ interface ShiftKpiSummaryProps {
   onRefresh?: () => void;
 }
 
+/**
+ * Displays live perimeter-shift telemetry KPIs and status information.
+ *
+ * @param summary - Optional shift summary used to populate the KPI values
+ * @param isLoading - Whether telemetry data is currently being refreshed
+ * @param lastUpdated - Optional time when the telemetry was last updated
+ * @param onRefresh - Optional callback invoked to refresh the telemetry data
+ */
 export function ShiftKpiSummary({
   summary,
   isLoading,

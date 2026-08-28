@@ -841,7 +841,13 @@ function GateCard({
   );
 }
 
-// ─── Main GatesList ───────────────────────────────────────────────────────────
+/**
+ * Displays organization gates with live telemetry, selectable views, and gate management controls.
+ *
+ * @param gates - The gates to display.
+ * @param orgId - The organization identifier used when creating a gate.
+ * @param isAllProjects - Whether to include project information for gates across all projects.
+ */
 
 export function GatesList({
   gates,

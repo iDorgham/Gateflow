@@ -49,6 +49,12 @@ export interface LiveShiftSummary {
   activeGuardsCount: number;
 }
 
+/**
+ * Retrieves live gate shift telemetry for the authenticated organization.
+ *
+ * @param request - The request containing an optional `project` query parameter used to filter gates.
+ * @returns A JSON response containing per-gate telemetry and aggregate shift statistics, or an error response for unauthorized, forbidden, or failed requests.
+ */
 export async function GET(request?: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();

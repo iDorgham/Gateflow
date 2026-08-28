@@ -62,6 +62,24 @@ interface QRCodesTableProps {
   columnVisibility?: Record<string, boolean>;
 }
 
+/**
+ * Displays QR-code records in a sortable, selectable table with configurable columns and density.
+ *
+ * @param data - QR-code records to display
+ * @param isLoading - Whether the table is loading
+ * @param error - Error to display instead of the table
+ * @param onRefresh - Callback invoked when retrying after an error
+ * @param locale - Locale used for links and date formatting
+ * @param sortBy - Currently sorted column
+ * @param sortOrder - Current sort direction
+ * @param onSortChange - Callback invoked when the sort changes
+ * @param selectedIds - Identifiers of selected rows
+ * @param onSelectionChange - Callback invoked when row selection changes
+ * @param density - Table row density
+ * @param columnOrder - Optional ordered list of column keys
+ * @param columnVisibility - Optional visibility settings keyed by column
+ * @returns The rendered QR-code table and detail drawer
+ */
 export function QRCodesTable({
   data,
   isLoading,

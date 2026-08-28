@@ -11,6 +11,13 @@ interface GuardShiftVisualMapProps {
   onSelectGate?: (gate: LiveGateShiftTelemetry) => void;
 }
 
+/**
+ * Renders an interactive perimeter schematic for live gate telemetry.
+ *
+ * @param gates - Gate telemetry records to display.
+ * @param selectedGateId - Identifier of the currently selected gate.
+ * @param onSelectGate - Callback invoked when a gate node is selected.
+ */
 export function GuardShiftVisualMap({
   gates,
   selectedGateId,

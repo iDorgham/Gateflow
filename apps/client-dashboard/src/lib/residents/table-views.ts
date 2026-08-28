@@ -99,6 +99,12 @@ export const PRESET_VIEWS: Record<string, Record<string, boolean>> = {
   },
 };
 
+/**
+ * Creates the default view configuration for a table's columns.
+ *
+ * @param columnIds - The column identifiers to include in the default order
+ * @returns A table view with all columns visible and default density
+ */
 export function getDefaultTableView(
   columnIds: readonly string[],
   _pinned: Set<string>
