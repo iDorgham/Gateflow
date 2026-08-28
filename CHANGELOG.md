@@ -28,6 +28,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** eliminate TBT with hardware-accelerated CSS marquees, optimize canvas background on mobile, fix heading hierarchy, and add full a11y labels
+
 - **[Marketing]** optimize bundle splitting, layout parallelization, and media loading
 
 - **[Marketing]** prevent middleware edge crash and export i18n cookie submodule

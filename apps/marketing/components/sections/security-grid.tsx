@@ -56,14 +56,14 @@ export function SecurityGrid({ _locale }: { _locale: Locale }) {
     >
       <div className="container px-8 mx-auto relative z-10">
         <div className="max-w-4xl mx-auto text-center mb-24 lg:mb-40">
-          <motion.h2
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
           >
             {t('securityGrid.subtitle')}
-          </motion.h2>
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

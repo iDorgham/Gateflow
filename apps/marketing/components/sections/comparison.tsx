@@ -64,14 +64,14 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
     <section className="py-32 lg:py-48 bg-ds-surface relative overflow-hidden">
       <div className="container px-8 mx-auto relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-32">
-          <motion.h2
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
           >
             {t('comparison.badge')}
-          </motion.h2>
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

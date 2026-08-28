@@ -31,14 +31,14 @@ export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
     <section className="py-32 md:py-64 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden">
       <div className="container mx-auto px-8 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-40">
-          <motion.h2
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
           >
             {t('howItWorks.badge')}
-          </motion.h2>
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
