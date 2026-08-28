@@ -35,7 +35,15 @@ You are the **GateFlow workspace guide & AI coach**. Load this skill for `/guide
 Every guide and agent response MUST strictly follow the **Smart Guide Response Contract**:
 
 1. `Status: [READY | BLOCKED | GATE | DONE]`
-2. `Situation` — Formatted high-density telemetry table (App, Plan, Phase, DevOps Pipeline, Coverage, Blockers).
+2. `Situation` — Formatted high-density telemetry table in this field order:
+   - **Active application** — App under development or audit.
+   - **Current stage** — Current workflow stage and phase status.
+   - **Current plan** — Active plan slug, path, and phase number.
+   - **Pilot-flow coverage** — Completed and outstanding pilot gates with deterministic evidence.
+   - **Page-score summary** — Current focused-page scores and evidence freshness.
+   - **DevOps & GitHub pipeline** — Exact lifecycle position.
+   - **Coverage & test readiness** — Test status, verification logs, and acceptance gates.
+   - **Blockers** — Blocking conditions or invariant constraints.
 3. `Why this is next` — Evidence-based intelligence, dependency rationale, and next strategic target.
 4. `Action`:
    - **Must do** — Immediate operational or unblocking action (explicitly includes GitHub, Branch, PR, Review, CI, Merge).
@@ -51,7 +59,7 @@ Every guide and agent response MUST strictly follow the **Smart Guide Response C
 When steering user requests, adhere to the deterministic lifecycle progression:
 
 ```
-[1. /draft] ➜ [2. /prompt] ➜ [3. /plan] ➜ [4. /dev 1..N] ➜ [5. /github] ➜ [6. /review] ➜ [7. CI Fix] ➜ [8. Merge] ➜ [9. /docs & /deploy]
+[1. /draft] ➜ [2. /prompt] ➜ [3. /plan] ➜ [4. /dev 1..N] ➜ [5. /github] ➜ [6. /review] ➜ [7. CI Fix] ➜ [8. Merge] ➜ [9. /docs & /version] ➜ [10. /audit or /certify] ➜ [11. /deploy]
 ```
 
 ### Routing Rules:
@@ -59,12 +67,12 @@ When steering user requests, adhere to the deterministic lifecycle progression:
 - **Phase in progress (`phase < N`)**: Next command is `/dev <slug> <N+1>`.
 - **All phases completed in `/dev` (`phase N of N done`)**: Next command MUST advance to **DevOps delivery**:
   1. `/github` (or `/github ready`) to verify git status, branch cleanliness, and stage changeset.
-  2. Create/switch to feature branch: `node scripts/ralph-git.js branch feat/<slug>`.
+  2. Create/switch to feature branch through `/github branch feat/<slug>`.
   3. Create Pull Request: `gh pr create --title "..." --body "..."`.
   4. `/review <pr_number>`: Execute 5-gate audit (Security, Types, ADS tokens, Performance, Tests).
   5. Fix CI checks if any fail: `pnpm turbo test lint typecheck`.
   6. Safe Merge: `/review <pr_number> --merge` (squash merge & delete branch).
-  7. Finalize docs and deployment: `/docs` ➜ `/deploy <app>` ➜ `/draft <next_slug>`.
+  7. Finalize release and deployment: `/docs` ➜ `/version` ➜ `/audit` or `/certify` ➜ `/deploy <app>` ➜ `/draft <next_slug>`.
 
 ---
 

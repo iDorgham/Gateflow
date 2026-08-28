@@ -33,6 +33,7 @@ export function ShiftDetailDrawer({
   const { t } = useTranslation('dashboard');
   const [showHandoverForm, setShowHandoverForm] = useState(false);
   const [handoverNotes, setHandoverNotes] = useState('');
+  const [incomingGuardId, setIncomingGuardId] = useState('');
   const [isPending, startTransition] = useTransition();
 
   if (!isOpen || !gate) return null;
@@ -52,6 +53,7 @@ export function ShiftDetailDrawer({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             gateId: gate.gateId,
+            incomingGuardId: incomingGuardId || undefined,
             notes: handoverNotes.trim() || undefined,
           }),
         });
@@ -66,6 +68,7 @@ export function ShiftDetailDrawer({
           );
           setShowHandoverForm(false);
           setHandoverNotes('');
+          setIncomingGuardId('');
           onHandoverSuccess?.();
           onClose();
         } else {
@@ -292,6 +295,36 @@ export function ShiftDetailDrawer({
                         )}
                       </span>
                     </h4>
+                    <div className="space-y-1">
+                      <Label htmlFor="incoming-guard" className="text-xs">
+                        {t('shifts.incomingGuard', 'Incoming Guard (Optional)')}
+                      </Label>
+                      <select
+                        id="incoming-guard"
+                        value={incomingGuardId}
+                        onChange={(event) =>
+                          setIncomingGuardId(event.target.value)
+                        }
+                        className="h-10 w-full rounded-md border border-[var(--ds-border-input,#dfe1e6)] bg-[var(--ds-background-input,#ffffff)] px-3 text-sm text-[var(--ds-text,#172b4d)]"
+                      >
+                        <option value="">
+                          {t(
+                            'shifts.noReplacementGuard',
+                            'End shift without replacement'
+                          )}
+                        </option>
+                        {gate.scheduledGuards
+                          .filter(
+                            (guard) =>
+                              guard.userId !== gate.activeShift?.guardId
+                          )
+                          .map((guard) => (
+                            <option key={guard.userId} value={guard.userId}>
+                              {guard.userName}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
                     <div className="space-y-1">
                       <Label htmlFor="handover-notes" className="text-xs">
                         {t('shifts.handoverNotes', 'Handover Notes (Optional)')}

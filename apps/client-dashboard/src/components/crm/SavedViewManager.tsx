@@ -76,7 +76,7 @@ export function SavedViewManager({
             <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle)]" />
           </Button>
 
-          {isOpen && savedViewsList.length > 0 && (
+          {isOpen && (
             <div className="absolute end-0 top-full mt-1 z-50 min-w-[160px] rounded-md border border-[var(--ds-border)] bg-[var(--ds-background-input)] shadow-lg">
               {savedViewsList.map((view) => (
                 <button

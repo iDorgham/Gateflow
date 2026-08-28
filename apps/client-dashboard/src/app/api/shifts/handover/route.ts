@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { hasPermission } from '@/lib/auth';
 import { prisma } from '@gate-access/db';
+import type { Permission } from '@gate-access/types';
 
 export const dynamic = 'force-dynamic';
+
+const SHIFT_HANDOVER_PERMISSION: Permission = 'gates:manage';
+
+class InvalidIncomingGuardError extends Error {}
+class ConcurrentHandoverError extends Error {}
 
 const HandoverSchema = z.object({
   gateId: z.string().min(1, 'Gate ID is required'),
@@ -18,6 +25,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+    if (!hasPermission(claims, SHIFT_HANDOVER_PERMISSION)) {
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
       );
     }
 
@@ -75,30 +88,44 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Perform transaction: end current shift, optionally start next shift, and log audit trail
     await prisma.$transaction(async (tx) => {
-      if (activeShift) {
-        await tx.shiftLog.update({
-          where: { id: activeShift.id },
-          data: { endTime: now },
-        });
-      }
-
+      let incomingUser: { id: string } | null = null;
       if (incomingGuardId) {
-        // Verify incoming user exists in org
-        const incomingUser = await tx.user.findFirst({
-          where: { id: incomingGuardId, organizationId: orgId },
+        incomingUser = await tx.user.findFirst({
+          where: {
+            id: incomingGuardId,
+            organizationId: orgId,
+            deletedAt: null,
+          },
           select: { id: true },
         });
-
-        if (incomingUser) {
-          await tx.shiftLog.create({
-            data: {
-              guardId: incomingUser.id,
-              gateId,
-              organizationId: orgId,
-              startTime: now,
-            },
-          });
+        if (!incomingUser) {
+          throw new InvalidIncomingGuardError();
         }
+      }
+
+      if (activeShift) {
+        const closedShift = await tx.shiftLog.updateMany({
+          where: {
+            id: activeShift.id,
+            organizationId: orgId,
+            endTime: null,
+          },
+          data: { endTime: now },
+        });
+        if (closedShift.count === 0) {
+          throw new ConcurrentHandoverError();
+        }
+      }
+
+      if (incomingUser) {
+        await tx.shiftLog.create({
+          data: {
+            guardId: incomingUser.id,
+            gateId,
+            organizationId: orgId,
+            startTime: now,
+          },
+        });
       }
 
       // Record compliance audit log (zero raw PII)
@@ -125,6 +152,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       message: 'Shift handover completed successfully',
     });
   } catch (error) {
+    if (error instanceof InvalidIncomingGuardError) {
+      return NextResponse.json(
+        { success: false, message: 'Incoming guard not found in organization' },
+        { status: 400 }
+      );
+    }
+    if (error instanceof ConcurrentHandoverError) {
+      return NextResponse.json(
+        { success: false, message: 'Shift was already handed over' },
+        { status: 409 }
+      );
+    }
     console.error('Error executing shift handover:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error during handover' },

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { hasPermission } from '@/lib/auth';
 import { prisma } from '@gate-access/db';
+import type { Permission } from '@gate-access/types';
 
 export const dynamic = 'force-dynamic';
+
+const LIVE_SHIFTS_PERMISSION: Permission = 'gates:manage';
 
 export type GateShiftStatus =
   'ACTIVE' | 'SCHEDULED' | 'UNMANNED' | 'OVERRUN' | 'OFFLINE';
@@ -52,6 +56,12 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+    if (!hasPermission(claims, LIVE_SHIFTS_PERMISSION)) {
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
       );
     }
 

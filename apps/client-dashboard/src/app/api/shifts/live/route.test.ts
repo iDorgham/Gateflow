@@ -3,6 +3,11 @@ jest.mock('@/lib/auth-cookies', () => ({
   getSessionClaims: (...args: unknown[]) => mockGetSessionClaims(...args),
 }));
 
+const mockHasPermission = jest.fn();
+jest.mock('@/lib/auth', () => ({
+  hasPermission: (...args: unknown[]) => mockHasPermission(...args),
+}));
+
 const mockGateFindMany = jest.fn();
 const mockShiftLogFindMany = jest.fn();
 const mockGateAssignmentFindMany = jest.fn();
@@ -37,12 +42,23 @@ describe('GET /api/shifts/live', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockHasPermission.mockReturnValue(true);
   });
 
   it('returns 401 when caller has no session claims or orgId', async () => {
     mockGetSessionClaims.mockResolvedValue(null);
     const res = await GET();
     expect(res.status).toBe(401);
+  });
+
+  it('returns 403 when the caller lacks gates:manage permission', async () => {
+    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_123' });
+    mockHasPermission.mockReturnValue(false);
+
+    const res = await GET();
+
+    expect(res.status).toBe(403);
+    expect(mockGateFindMany).not.toHaveBeenCalled();
   });
 
   it('aggregates live shift states (ACTIVE, OVERRUN, SCHEDULED, UNMANNED, OFFLINE)', async () => {

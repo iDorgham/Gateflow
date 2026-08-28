@@ -42,7 +42,9 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
       2. `/review` — Open PR and run 5-gate audit (Security/Tenant, Types, ADS/RTL, CLS/Perf, CI checks).
       3. **Fix CI** — Inspect `gh pr checks`, resolve any failing jobs.
       4. **Merge** — `/review <pr_number> --merge` — safe merge into master.
-      5. **Post-Merge** — `/docs` (sync changelog & docs), then `/deploy <app>`.
+      5. **Post-Merge Release** — `/docs` (sync changelog & docs), then `/version`.
+      6. **Audit/Certify** — `/audit` or `/certify` with deterministic evidence.
+      7. **Deploy** — `/deploy <app>` only after the audit or certification gate passes.
 - Determines which phase to execute:
   - Next incomplete phase for the active `PLAN_<slug>.md`, or
   - A specific phase number/slug if provided.

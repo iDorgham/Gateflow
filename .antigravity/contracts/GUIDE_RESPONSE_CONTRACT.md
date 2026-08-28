@@ -19,12 +19,15 @@ Every agent or guide response MUST follow this exact, structured order:
 ### 2. `Situation`
 
 - A clean, high-density markdown table summarizing the live state:
-  - **Focused Application**: App under development or audit (e.g. `client-dashboard`, `resident-mobile`, `packages/db`).
-  - **Active Stage / Initiative**: Active plan slug, phase number, and status (`Planning`, `Draft`, `Active`, `Complete`).
-  - **DevOps & GitHub Pipeline**: Exact position in the lifecycle:
+  - **Active application**: App under development or audit (e.g. `client-dashboard`, `resident-mobile`, `packages/db`).
+  - **Current stage**: Current workflow stage and phase status (`Planning`, `Draft`, `Active`, `Complete`).
+  - **Current plan**: Active plan slug, path, and phase number.
+  - **Pilot-flow coverage**: Completed and outstanding pilot gates with deterministic evidence.
+  - **Page-score summary**: Current focused-page scores and evidence freshness.
+  - **DevOps & GitHub pipeline**: Exact position in the lifecycle:
     `Plan ➜ Dev ➜ GitHub/Branch ➜ PR Create ➜ 5-Gate Review ➜ Fix CI ➜ Merge ➜ Docs/Deploy`
-  - **Coverage & Test Readiness**: Unit test status, verification logs, and acceptance gates.
-  - **Blockers / Invariants**: Any blocking condition or invariant constraints.
+  - **Coverage & test readiness**: Unit test status, verification logs, and acceptance gates.
+  - **Blockers**: Any blocking condition or invariant constraints.
 
 ### 3. `Why this is next`
 
@@ -40,7 +43,7 @@ Divided into three explicit categories:
 - **Must do**:
   - The single mandatory action required to advance the initiative or workflow.
   - Explicitly route to GitHub lifecycle actions where appropriate:
-    - **Create Branch**: `node scripts/ralph-git.js branch feat/<slug>`
+    - **Create Branch**: `/github branch feat/<slug>`
     - **Inspect Repository**: `/github`
     - **Create Pull Request**: `gh pr create --title "..." --body "..."`
     - **5-Gate PR Review**: `/review <pr_number>`
@@ -82,7 +85,9 @@ Divided into three explicit categories:
 |  6. /review             ➜ Run 5-gate audit (Security, Invariants, Perf, Tests)    |
 |  7. Fix CI / Checks     ➜ Resolve any CI or lint errors deterministically         |
 |  8. /review --merge     ➜ Squash merge and delete feature branch                  |
-|  9. /docs & /deploy     ➜ Update CHANGELOG/PRD and dispatch manual Vercel release |
+|  9. /docs & /version    ➜ Update CHANGELOG/PRD and prepare the semantic release   |
+| 10. /audit or /certify  ➜ Verify deterministic pilot and release evidence         |
+| 11. /deploy <app>       ➜ Dispatch the authorized manual Vercel release            |
 +-----------------------------------------------------------------------------------+
 ```
 

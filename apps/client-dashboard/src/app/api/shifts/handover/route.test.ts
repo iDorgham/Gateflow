@@ -3,13 +3,17 @@ jest.mock('@/lib/auth-cookies', () => ({
   getSessionClaims: (...args: unknown[]) => mockGetSessionClaims(...args),
 }));
 
+const mockHasPermission = jest.fn();
+jest.mock('@/lib/auth', () => ({
+  hasPermission: (...args: unknown[]) => mockHasPermission(...args),
+}));
+
 const mockGateFindFirst = jest.fn();
 const mockShiftLogFindFirst = jest.fn();
-const mockShiftLogUpdate = jest.fn();
+const mockShiftLogUpdateMany = jest.fn();
 const mockShiftLogCreate = jest.fn();
 const mockUserFindFirst = jest.fn();
 const mockAuditLogCreate = jest.fn();
-const mockTransaction = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
@@ -18,7 +22,7 @@ jest.mock('@gate-access/db', () => ({
     },
     shiftLog: {
       findFirst: (...args: unknown[]) => mockShiftLogFindFirst(...args),
-      update: (...args: unknown[]) => mockShiftLogUpdate(...args),
+      updateMany: (...args: unknown[]) => mockShiftLogUpdateMany(...args),
       create: (...args: unknown[]) => mockShiftLogCreate(...args),
     },
     user: {
@@ -30,7 +34,7 @@ jest.mock('@gate-access/db', () => ({
     $transaction: (cb: (tx: unknown) => Promise<unknown>) =>
       cb({
         shiftLog: {
-          update: mockShiftLogUpdate,
+          updateMany: mockShiftLogUpdateMany,
           create: mockShiftLogCreate,
         },
         user: {
@@ -55,6 +59,8 @@ describe('POST /api/shifts/handover', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockHasPermission.mockReturnValue(true);
+    mockShiftLogUpdateMany.mockResolvedValue({ count: 1 });
   });
 
   it('returns 401 when unauthorized', async () => {
@@ -65,6 +71,23 @@ describe('POST /api/shifts/handover', () => {
     });
     const res = await POST(req);
     expect(res.status).toBe(401);
+  });
+
+  it('returns 403 when the caller lacks gates:manage permission', async () => {
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'user_admin',
+    });
+    mockHasPermission.mockReturnValue(false);
+
+    const req = new NextRequest('http://localhost/api/shifts/handover', {
+      method: 'POST',
+      body: JSON.stringify({ gateId: 'gate_1' }),
+    });
+    const res = await POST(req);
+
+    expect(res.status).toBe(403);
+    expect(mockGateFindFirst).not.toHaveBeenCalled();
   });
 
   it('returns 404 when gate is not found in the organization', async () => {
@@ -111,9 +134,13 @@ describe('POST /api/shifts/handover', () => {
     expect(res.status).toBe(200);
     expect(payload.success).toBe(true);
 
-    expect(mockShiftLogUpdate).toHaveBeenCalledWith(
+    expect(mockShiftLogUpdateMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: 'shift_active_1' },
+        where: {
+          id: 'shift_active_1',
+          organizationId: 'org_1',
+          endTime: null,
+        },
         data: expect.objectContaining({ endTime: expect.any(Date) }),
       })
     );
@@ -144,5 +171,57 @@ describe('POST /api/shifts/handover', () => {
         }),
       })
     );
+  });
+
+  it('returns 400 and aborts when the incoming guard is not in the organization', async () => {
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'user_admin',
+    });
+    mockGateFindFirst.mockResolvedValue({ id: 'gate_1', name: 'Main Gate' });
+    mockShiftLogFindFirst.mockResolvedValue({
+      id: 'shift_active_1',
+      guardId: 'guard_old',
+      startTime: new Date(),
+    });
+    mockUserFindFirst.mockResolvedValue(null);
+
+    const req = new NextRequest('http://localhost/api/shifts/handover', {
+      method: 'POST',
+      body: JSON.stringify({
+        gateId: 'gate_1',
+        incomingGuardId: 'guard_unknown',
+      }),
+    });
+    const res = await POST(req);
+
+    expect(res.status).toBe(400);
+    expect(mockShiftLogUpdateMany).not.toHaveBeenCalled();
+    expect(mockShiftLogCreate).not.toHaveBeenCalled();
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
+  });
+
+  it('returns 409 when the active shift was concurrently closed', async () => {
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'user_admin',
+    });
+    mockGateFindFirst.mockResolvedValue({ id: 'gate_1', name: 'Main Gate' });
+    mockShiftLogFindFirst.mockResolvedValue({
+      id: 'shift_active_1',
+      guardId: 'guard_old',
+      startTime: new Date(),
+    });
+    mockShiftLogUpdateMany.mockResolvedValue({ count: 0 });
+
+    const req = new NextRequest('http://localhost/api/shifts/handover', {
+      method: 'POST',
+      body: JSON.stringify({ gateId: 'gate_1' }),
+    });
+    const res = await POST(req);
+
+    expect(res.status).toBe(409);
+    expect(mockShiftLogCreate).not.toHaveBeenCalled();
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
   });
 });

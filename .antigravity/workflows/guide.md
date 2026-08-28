@@ -40,6 +40,8 @@ When the user adds text after `/guide` that maps to a known token, **fire the ta
 
 | Command     | When to fire                                          |
 | ----------- | ----------------------------------------------------- |
+| `/focus`    | Inspect or select the active pilot application        |
+| `/draft`    | Capture a new initiative before planning              |
 | `/plan`     | User wants plan, breakdown, or starting new epic      |
 | `/prompt`   | Need phase prompt for implementation                  |
 | `/dev`      | Implementing code for current phase                   |
@@ -51,6 +53,9 @@ When the user adds text after `/guide` that maps to a known token, **fire the ta
 | `/audit`    | Evidence-backed read-only app/system audit            |
 | `/security` | Auth, RBAC, multi-tenant, QR review                   |
 | `/github`   | Branch, commit, push — after phase done               |
+| `/review`   | Open or inspect a PR and run the 5-gate audit         |
+| `/version`  | Sync the semantic version and release tag             |
+| `/certify`  | Verify pilot gates and issue certification evidence   |
 | `/deploy`   | Deploying app changes to environments                 |
 
 ### Shorthand (user types after `/guide`)
@@ -97,8 +102,8 @@ When the user runs **`/guide`**, **`/guide what should I do now`**, or asks for 
    - If a plan is in progress (Phase `< N`): Next command is `/dev <slug> <N+1>`.
    - If all phases of a plan just completed: Next command MUST transition to `/github` (stage & push) → `/review` (PR & 5-gate audit) → CI check & merge.
    - If on an open PR: Next command is `/review <pr_number>` or check CI / merge.
-   - If merged & clean: Next command is `/docs` / `/deploy` or `/draft <next_slug>`.
-5. End with **one copy-ready** next step (`/dev`, `/github`, `/review`, `/plan`, `/prompt`, or single shell command).
+   - If merged & clean: Next command follows `/docs` → `/version` → `/audit` or `/certify` → `/deploy`; route to `/draft <next_slug>` only after release completion.
+5. End with **one copy-ready** next step (`/focus`, `/draft`, `/prompt`, `/plan`, `/dev`, `/ship`, `/pilot`, `/test`, `/check`, `/docs`, `/audit`, `/security`, `/github`, `/review`, `/version`, `/certify`, `/deploy`, or single shell command).
 
 ### Coach response template
 
