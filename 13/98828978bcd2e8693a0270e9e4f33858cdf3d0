@@ -1,0 +1,22 @@
+CHANGELOG.md
+  h_220d66b2244819 31-32
+apps/marketing/app/[locale]/layout.tsx
+  h_220d66b2244819 116-131,142-144,149-157,163-164
+apps/marketing/app/[locale]/page.tsx
+  h_220d66b2244819 1,8-67
+apps/marketing/components/sections/testimonials.tsx
+  h_220d66b2244819 86-89
+apps/marketing/next.config.js
+  h_220d66b2244819 8-10,29-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "1398828978bcd2e8693a0270e9e4f33858cdf3d0",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
