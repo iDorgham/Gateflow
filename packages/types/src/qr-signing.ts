@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import { createHmac, timingSafeEqual } from 'crypto';
 import {
   QR_PREFIX,
   QR_VERSION,
@@ -10,27 +10,17 @@ import {
 // ─── Base64url helpers (no padding by default for compact QR) ─────────────────
 
 function base64urlEncode(str: string): string {
-  const wordArray = CryptoJS.enc.Utf8.parse(str);
-  return CryptoJS.enc.Base64.stringify(wordArray)
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
+  return Buffer.from(str, 'utf8').toString('base64url');
 }
 
 function base64urlDecode(b64url: string): string {
-  let base64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
-  // Re-add padding
-  while (base64.length % 4 !== 0) {
-    base64 += '=';
-  }
-  const wordArray = CryptoJS.enc.Base64.parse(base64);
-  return CryptoJS.enc.Utf8.stringify(wordArray);
+  return Buffer.from(b64url, 'base64url').toString('utf8');
 }
 
 // ─── HMAC-SHA256 ──────────────────────────────────────────────────────────────
 
 function hmacSign(data: string, secret: string): string {
-  return CryptoJS.HmacSHA256(data, secret).toString(CryptoJS.enc.Hex);
+  return createHmac('sha256', secret).update(data).digest('hex');
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -82,25 +72,41 @@ export function verifyQRSignature(
   // 1. Parse format
   const parts = qrString.split(':');
   if (parts.length !== 3 || parts[0] !== QR_PREFIX) {
-    return { valid: false, reason: 'INVALID_FORMAT', details: 'Missing gateflow prefix' };
+    return {
+      valid: false,
+      reason: 'INVALID_FORMAT',
+      details: 'Missing gateflow prefix',
+    };
   }
 
   const version = parseInt(parts[1], 10);
   if (version !== QR_VERSION) {
-    return { valid: false, reason: 'UNKNOWN_VERSION', details: `Version ${parts[1]} not supported` };
+    return {
+      valid: false,
+      reason: 'UNKNOWN_VERSION',
+      details: `Version ${parts[1]} not supported`,
+    };
   }
 
   const payloadAndSig = parts[2];
   const dotIndex = payloadAndSig.lastIndexOf('.');
   if (dotIndex === -1) {
-    return { valid: false, reason: 'INVALID_FORMAT', details: 'Missing signature separator' };
+    return {
+      valid: false,
+      reason: 'INVALID_FORMAT',
+      details: 'Missing signature separator',
+    };
   }
 
   const encodedPayload = payloadAndSig.slice(0, dotIndex);
   const signature = payloadAndSig.slice(dotIndex + 1);
 
   if (!encodedPayload || !signature) {
-    return { valid: false, reason: 'INVALID_FORMAT', details: 'Empty payload or signature' };
+    return {
+      valid: false,
+      reason: 'INVALID_FORMAT',
+      details: 'Empty payload or signature',
+    };
   }
 
   // 2. Verify HMAC
@@ -123,7 +129,11 @@ export function verifyQRSignature(
   if (payload.expiresAt) {
     const expiresAtMs = new Date(payload.expiresAt).getTime();
     if (Date.now() > expiresAtMs) {
-      return { valid: false, reason: 'EXPIRED', details: `Expired at ${payload.expiresAt}` };
+      return {
+        valid: false,
+        reason: 'EXPIRED',
+        details: `Expired at ${payload.expiresAt}`,
+      };
     }
   }
 
@@ -137,11 +147,7 @@ function constantTimeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) {
     return false;
   }
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
+  return timingSafeEqual(Buffer.from(a, 'utf8'), Buffer.from(b, 'utf8'));
 }
 
 export { base64urlEncode, base64urlDecode };

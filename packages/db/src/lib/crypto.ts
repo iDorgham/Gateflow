@@ -6,8 +6,13 @@ import {
 } from 'crypto';
 
 /**
- * Standard field-level encryption for CRM PII data (AE-256-GCM).
+ * Standard field-level encryption for CRM PII data (AES-256-GCM).
  * Requires CRM_ENCRYPTION_KEY and CRM_ENCRYPTION_SALT.
+ *
+ * Payload layout: "iv:tag:encrypted" (hex segments)
+ * - iv: 12-byte initialization vector (24 hex characters)
+ * - tag: 16-byte GCM authentication tag (32 hex characters)
+ * - encrypted: ciphertext (hex characters)
  */
 
 const ALGORITHM = 'aes-256-gcm';
@@ -31,7 +36,7 @@ function getKey(): Buffer {
 }
 
 /**
- * Encrypts a string to a base64-encoded payload (iv:authTag:encryptedContent).
+ * Encrypts a string to a payload string formatted as "iv:tag:encrypted" (hex segments).
  */
 export function encryptField(text: string | null): string | null {
   if (!text) return null;
@@ -50,7 +55,7 @@ export function encryptField(text: string | null): string | null {
 }
 
 /**
- * Decrypts a base64-encoded payload (iv:authTag:encryptedContent).
+ * Decrypts a payload string formatted as "iv:tag:encrypted" (hex segments).
  */
 export function decryptField(payload: string | null): string | null {
   if (!payload) return null;
@@ -67,7 +72,7 @@ export function decryptField(payload: string | null): string | null {
     const decipher = createDecipheriv(ALGORITHM, key, iv);
     decipher.setAuthTag(tag);
 
-    let decrypted = decipher.update(encrypted as any, 'hex', 'utf8');
+    let decrypted = decipher.update(encrypted, undefined, 'utf8');
     decrypted += decipher.final('utf8');
 
     return decrypted;

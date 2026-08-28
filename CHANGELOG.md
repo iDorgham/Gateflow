@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Security]** enforce scans bulk auth scoping, native crypto & security headers
+
 - **[Docs]** comprehensive update of README, PRD v13.0, feature log, and category documentation
 
 ### AI Tools

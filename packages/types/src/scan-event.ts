@@ -56,7 +56,7 @@ export const SyncResponseSchema = z.object({
 export type SyncResponse = z.infer<typeof SyncResponseSchema>;
 
 export const BulkScanRequestSchema = z.object({
-  scans: z.array(ScanEventSchema),
+  scans: z.array(ScanEventSchema).max(500),
 });
 
 export type BulkScanRequest = z.infer<typeof BulkScanRequestSchema>;

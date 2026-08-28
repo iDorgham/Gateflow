@@ -5,6 +5,7 @@ import {
 } from '@gate-access/types';
 import { prisma } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
+import { hasPermission } from '@/lib/auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { processBulkScans } from '@/lib/scans/bulk-sync';
 import {
@@ -18,6 +19,42 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const authResult = await requireAuth(request);
     if (isNextResponse(authResult)) return authResult;
+
+    const orgId = authResult.orgId;
+    if (!orgId) {
+      return NextResponse.json(
+        { success: false, message: 'Organization context required' },
+        { status: 403 }
+      );
+    }
+
+    const role = (
+      authResult.roleName ||
+      (authResult as { role?: string }).role ||
+      ''
+    ).toUpperCase();
+    const isAllowedRole =
+      role === 'SUPER_ADMIN' ||
+      role === 'ORG_ADMIN' ||
+      role === 'SECURITY_MANAGER' ||
+      role === 'GATE_OPERATOR' ||
+      role === 'GATE OPERATOR' ||
+      role === 'SECURITY MANAGER' ||
+      role === 'TENANT_USER';
+
+    const hasScanPermission = authResult.permissions
+      ? hasPermission(authResult, 'scans:view')
+      : isAllowedRole;
+
+    if (!hasScanPermission && !isAllowedRole) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Forbidden: insufficient permissions for scans sync',
+        },
+        { status: 403 }
+      );
+    }
 
     let body: unknown;
     try {
@@ -42,14 +79,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const { scans } = validation.data;
-    const orgId = authResult.orgId;
-
-    if (!orgId) {
-      return NextResponse.json(
-        { success: false, message: 'Organization context required' },
-        { status: 403 }
-      );
-    }
 
     // Location rule: when a gate has locationEnforced, reject scans without valid location or outside radius.
     const gateIds = Array.from(new Set(scans.map((s) => s.gateId)));
@@ -194,10 +223,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       failed: [...locationFailed, ...watchlistFailed, ...results.failed],
     };
 
-    return NextResponse.json({
-      success: true,
-      data: BulkScanResponseSchema.parse(response),
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        data: BulkScanResponseSchema.parse(response),
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Bulk sync error:', error);
     return NextResponse.json(

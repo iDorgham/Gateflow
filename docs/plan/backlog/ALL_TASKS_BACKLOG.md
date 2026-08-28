@@ -4,6 +4,20 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### security_hotfix_v1 — Scans Bulk Auth & Scoping, Native Crypto & Security Headers
+
+**PLAN:** `docs/plan/Complete/security_hotfix_v1/PLAN_security_hotfix_v1.md`  
+**Status:** 🟢 Complete — All 3 Phases Certified  
+**Priority:** P0 — Enterprise Security, Tenant Isolation & Cryptographic Hygiene  
+**Target:** Enforce auth/tenant scoping on scans bulk API, consolidate native AES-256-GCM crypto, enforce HTTP security headers  
+**App:** `apps/client-dashboard`, `packages/types`, `packages/db`, `packages/security`
+
+- [x] Phase 1 — Enforce Auth and Tenant Scoping for Scans Bulk API
+- [x] Phase 2 — Migrate CryptoJS to Native AES-256-GCM
+- [x] Phase 3 — Enforce HTTP Security Headers in Next.js Apps
+
+---
+
 ### lighthouse_perf_mobile_desktop — Lighthouse & Performance (Mobile + Desktop)
 
 **PLAN:** `docs/plan/Complete/lighthouse_perf_mobile_desktop/PLAN_lighthouse_perf_mobile_desktop.md`  

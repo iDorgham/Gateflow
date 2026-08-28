@@ -176,7 +176,31 @@ describe('POST /api/scans/bulk', () => {
     expect(res.status).toBe(429);
   });
 
-  it('calls processBulkScans and returns result', async () => {
+  it('returns 403 when user lacks scans permission', async () => {
+    mockRequireAuth.mockResolvedValue({
+      ...AUTH_CLAIMS,
+      roleName: 'RESIDENT',
+      role: 'RESIDENT',
+      permissions: { 'scans:view': false },
+    });
+    const res = await POST(makeRequest({ scans: [makeScan()] }));
+    expect(res.status).toBe(403);
+    expect(mockProcessBulkScans).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when payload exceeds 500 scans limit', async () => {
+    const excessiveScans = Array.from({ length: 501 }, (_, i) =>
+      makeScan({
+        id: `scan_${i}`,
+        scanUuid: `550e8400-e29b-41d4-a716-44665544${String(i).padStart(4, '0')}`,
+      })
+    );
+    const res = await POST(makeRequest({ scans: excessiveScans }));
+    expect(res.status).toBe(400);
+    expect(mockProcessBulkScans).not.toHaveBeenCalled();
+  });
+
+  it('calls processBulkScans and returns result with 201 status', async () => {
     mockProcessBulkScans.mockResolvedValue({
       synced: ['local_id_1'],
       conflicted: [{ id: 'local_id_2', reason: 'foo' }],
@@ -190,7 +214,7 @@ describe('POST /api/scans/bulk', () => {
     );
     const data = await res.json();
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
     expect(mockProcessBulkScans).toHaveBeenCalledWith(
       expect.any(Array),
       'mockTx',

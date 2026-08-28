@@ -575,7 +575,7 @@ export async function processBulkScans(
   // So filter is redundant but safe.
 
   if (creates.length > 0) {
-    await tx.scanLog.createMany({ data: creates });
+    await tx.scanLog.createMany({ data: creates, skipDuplicates: true });
   }
 
   if (updates.length > 0) {

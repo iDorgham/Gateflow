@@ -14,14 +14,13 @@
   },
   "dependencies": {
     "ai": "5.0.52",
-    "crypto-js": "^4.2.0",
     "xss": "^1.0.15",
     "zod": "4.4.3"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
-    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^30.0.0",
+    "@types/node": "^26.1.2",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.12",
     "typescript": "^5.9.3"
