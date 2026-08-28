@@ -70,47 +70,48 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
     };
 
     // Parallel fetch for live operational telemetry
-    const [gates, activeShifts, assignments, recentScans] = await Promise.all([
-      prisma.gate.findMany({
-        // ignore-security-guard — organizationId in gateWhere
-        where: gateWhere,
-        orderBy: { name: 'asc' },
-        include: {
-          project: { select: { id: true, name: true } },
-        },
-      }),
-      prisma.shiftLog.findMany({
-        where: {
-          organizationId: orgId,
-          endTime: null,
-        },
-        include: {
-          guard: {
-            select: { id: true, name: true, avatarUrl: true },
+    const [gates, activeShifts, assignments, recentScansRaw] =
+      await Promise.all([
+        prisma.gate.findMany({
+          // ignore-security-guard — organizationId in gateWhere
+          where: gateWhere,
+          orderBy: { name: 'asc' },
+          include: {
+            project: { select: { id: true, name: true } },
           },
-        },
-      }),
-      prisma.gateAssignment.findMany({
-        where: {
-          organizationId: orgId,
-          deletedAt: null,
-        },
-        include: {
-          user: {
-            select: { id: true, name: true, avatarUrl: true },
+        }),
+        prisma.shiftLog.findMany({
+          where: {
+            organizationId: orgId,
+            endTime: null,
           },
-        },
-      }),
-      prisma.scanLog.groupBy({
-        by: ['gateId'],
-        where: {
-          gate: { organizationId: orgId, deletedAt: null },
-          scannedAt: { gte: todayStart },
-        },
-        _count: true,
-        _max: { scannedAt: true },
-      }),
-    ]);
+          include: {
+            guard: {
+              select: { id: true, name: true, avatarUrl: true },
+            },
+          },
+        }),
+        prisma.gateAssignment.findMany({
+          where: {
+            organizationId: orgId,
+            deletedAt: null,
+          },
+          include: {
+            user: {
+              select: { id: true, name: true, avatarUrl: true },
+            },
+          },
+        }),
+        prisma.scanLog.groupBy({
+          by: ['gateId'],
+          where: {
+            gate: { organizationId: orgId, deletedAt: null },
+            scannedAt: { gte: todayStart },
+          },
+          _count: true,
+          _max: { scannedAt: true },
+        }),
+      ]);
 
     const recentScans = recentScansRaw as unknown as Array<{
       gateId: string | null;
