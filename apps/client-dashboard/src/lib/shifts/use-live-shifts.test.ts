@@ -1,39 +1,64 @@
-import { renderHook, waitFor } from '@testing-library/react';
-import { useLiveShifts } from './use-live-shifts';
+import {
+  buildLiveShiftsUrl,
+  parseLiveShiftPayload,
+  LiveGateShiftTelemetry,
+  LiveShiftSummary,
+} from './use-live-shifts';
 
-describe('useLiveShifts hook', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+describe('use-live-shifts utilities', () => {
+  describe('buildLiveShiftsUrl', () => {
+    it('constructs base url when no projectId is provided', () => {
+      const url = buildLiveShiftsUrl('http://localhost:3001');
+      expect(url).toBe('http://localhost:3001/api/shifts/live');
+    });
+
+    it('appends project query parameter when projectId is present', () => {
+      const url = buildLiveShiftsUrl('https://app.gateflow.site', 'proj_alpha');
+      expect(url).toBe(
+        'https://app.gateflow.site/api/shifts/live?project=proj_alpha'
+      );
+    });
+
+    it('ignores null or undefined projectId', () => {
+      const urlNull = buildLiveShiftsUrl('https://app.gateflow.site', null);
+      expect(urlNull).toBe('https://app.gateflow.site/api/shifts/live');
+
+      const urlUndef = buildLiveShiftsUrl(
+        'https://app.gateflow.site',
+        undefined
+      );
+      expect(urlUndef).toBe('https://app.gateflow.site/api/shifts/live');
+    });
   });
 
-  it('fetches live shifts telemetry successfully', async () => {
-    const mockGates = [
+  describe('parseLiveShiftPayload', () => {
+    const mockGates: LiveGateShiftTelemetry[] = [
       {
         gateId: 'gate_1',
-        gateName: 'Main Entrance',
-        location: 'North',
-        latitude: 30.0,
-        longitude: 31.0,
+        gateName: 'Main North Gate',
+        location: 'Sector 1',
+        latitude: 30.05,
+        longitude: 31.25,
         isActive: true,
         projectId: 'proj_1',
-        projectName: 'Compound A',
+        projectName: 'Compound Lotus',
         status: 'ACTIVE',
         isTerminalConnected: true,
-        lastHeartbeatAt: new Date().toISOString(),
+        lastHeartbeatAt: '2026-08-28T09:00:00.000Z',
         activeShift: {
-          id: 'shift_1',
+          id: 'shift_101',
           guardId: 'guard_1',
-          guardName: 'Ahmed',
+          guardName: 'Tarek',
           guardAvatar: null,
-          startTime: new Date().toISOString(),
-          elapsedMinutes: 45,
+          startTime: '2026-08-28T08:00:00.000Z',
+          elapsedMinutes: 60,
         },
         scheduledGuards: [],
-        scansTodayCount: 15,
+        scansTodayCount: 42,
       },
     ];
 
-    const mockSummary = {
+    const mockSummary: LiveShiftSummary = {
       totalGates: 1,
       activeShiftsCount: 1,
       unmannedGatesCount: 0,
@@ -42,35 +67,51 @@ describe('useLiveShifts hook', () => {
       activeGuardsCount: 1,
     };
 
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    it('successfully extracts gates and summary from compliant response', () => {
+      const response = {
         success: true,
         data: {
           gates: mockGates,
           summary: mockSummary,
         },
-      }),
-    } as Response);
+      };
 
-    const { result } = renderHook(() => useLiveShifts('proj_1'));
+      const result = parseLiveShiftPayload(response);
+      expect(result.gates).toHaveLength(1);
+      expect(result.gates[0].gateName).toBe('Main North Gate');
+      expect(result.gates[0].scansTodayCount).toBe(42);
+      expect(result.summary?.activeGuardsCount).toBe(1);
+    });
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    it('throws when success is false', () => {
+      const failedResponse = {
+        success: false,
+        message: 'Unauthorized access to shifts',
+      };
 
-    expect(result.current.gates).toHaveLength(1);
-    expect(result.current.gates[0].gateName).toBe('Main Entrance');
-    expect(result.current.summary?.activeGuardsCount).toBe(1);
-    expect(result.current.isError).toBe(false);
-  });
+      expect(() => parseLiveShiftPayload(failedResponse)).toThrow(
+        'Unauthorized access to shifts'
+      );
+    });
 
-  it('handles fetch failure gracefully', async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+    it('throws when payload is null or non-object', () => {
+      expect(() => parseLiveShiftPayload(null)).toThrow(
+        'Invalid response structure'
+      );
+      expect(() => parseLiveShiftPayload('invalid')).toThrow(
+        'Invalid response structure'
+      );
+    });
 
-    const { result } = renderHook(() => useLiveShifts());
+    it('defaults gates to empty array and summary to null if missing in data', () => {
+      const partialResponse = {
+        success: true,
+        data: {},
+      };
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-
-    expect(result.current.isError).toBe(true);
-    expect(result.current.gates).toEqual([]);
+      const result = parseLiveShiftPayload(partialResponse);
+      expect(result.gates).toEqual([]);
+      expect(result.summary).toBeNull();
+    });
   });
 });

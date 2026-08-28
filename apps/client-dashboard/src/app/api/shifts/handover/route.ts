@@ -22,7 +22,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const orgId = claims.orgId;
-    const body = await request.json().catch(() => ({}));
+
+    let body: unknown = {};
+    try {
+      body = await request.json();
+    } catch {
+      body = {};
+    }
     const parseResult = HandoverSchema.safeParse(body);
 
     if (!parseResult.success) {
