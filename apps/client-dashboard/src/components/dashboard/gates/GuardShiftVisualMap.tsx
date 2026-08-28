@@ -2,29 +2,47 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Compass, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
+import {
+  Compass,
+  Maximize2,
+  ZoomIn,
+  ZoomOut,
+  Navigation,
+  Shield,
+} from 'lucide-react';
 import type { LiveGateShiftTelemetry } from '@/lib/shifts/use-live-shifts';
+import type { PatrolRouteDto, PatrolRunDto } from '@gate-access/types';
 
 interface GuardShiftVisualMapProps {
   gates: LiveGateShiftTelemetry[];
   selectedGateId?: string | null;
   onSelectGate?: (gate: LiveGateShiftTelemetry) => void;
+  patrolRoutes?: PatrolRouteDto[];
+  activePatrols?: PatrolRunDto[];
+  onManagePatrols?: () => void;
 }
 
 /**
- * Renders an interactive perimeter schematic for live gate telemetry.
+ * Renders an interactive perimeter schematic for live gate telemetry and guard patrol routes.
  *
  * @param gates - Gate telemetry records to display.
  * @param selectedGateId - Identifier of the currently selected gate.
  * @param onSelectGate - Callback invoked when a gate node is selected.
+ * @param patrolRoutes - Configured patrol routes with checkpoints.
+ * @param activePatrols - Real-time active patrol runs.
+ * @param onManagePatrols - Callback to open patrol route manager drawer.
  */
 export function GuardShiftVisualMap({
   gates,
   selectedGateId,
   onSelectGate,
+  patrolRoutes = [],
+  activePatrols: _activePatrols = [],
+  onManagePatrols,
 }: GuardShiftVisualMapProps) {
   const { t } = useTranslation('dashboard');
   const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const [showPatrols, setShowPatrols] = useState<boolean>(true);
 
   // Compute node positions: use coordinates if present, otherwise distribute circularly / on perimeter ring
   const nodes = useMemo(() => {
@@ -98,11 +116,11 @@ export function GuardShiftVisualMap({
         };
       case 'SCHEDULED':
         return {
-          fill: '#0ea5e9',
-          bg: 'bg-sky-500',
-          ring: 'ring-sky-400',
-          border: 'border-sky-600',
-          text: 'text-sky-700 dark:text-sky-300',
+          fill: '#3b82f6',
+          bg: 'bg-blue-500',
+          ring: 'ring-blue-400',
+          border: 'border-blue-600',
+          text: 'text-blue-700 dark:text-blue-300',
         };
       case 'UNMANNED':
         return {
@@ -112,58 +130,92 @@ export function GuardShiftVisualMap({
           border: 'border-rose-600',
           text: 'text-rose-700 dark:text-rose-300',
         };
-      case 'OFFLINE':
       default:
         return {
-          fill: '#9ca3af',
-          bg: 'bg-gray-400',
-          ring: 'ring-gray-300',
-          border: 'border-gray-500',
-          text: 'text-gray-600 dark:text-gray-400',
+          fill: '#94a3b8',
+          bg: 'bg-slate-400',
+          ring: 'ring-slate-300',
+          border: 'border-slate-500',
+          text: 'text-slate-600 dark:text-slate-400',
         };
     }
   };
 
   return (
-    <div className="relative rounded-2xl border border-[var(--ds-border,#dfe1e6)] bg-[var(--ds-surface,#ffffff)] overflow-hidden shadow-xs">
-      {/* Map Control Bar */}
-      <div className="flex items-center justify-between p-3.5 border-b border-[var(--ds-border-subtle,#ebecf0)] bg-[var(--ds-surface-subtle,#f4f5f7)]/50">
+    <div className="relative w-full rounded-2xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 shadow-sm overflow-hidden flex flex-col">
+      {/* Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="flex items-center gap-2">
-          <Compass className="h-4 w-4 text-[var(--ds-text-subtle,#6b778c)]" />
-          <span className="text-xs font-semibold text-[var(--ds-text,#172b4d)]">
-            {t('shifts.perimeterSchematic', 'Perimeter Compound Schematic Map')}
+          <Compass className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            {t('shifts.perimeterRadar', 'Perimeter Terminal & Patrol Radar')}
+          </h3>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300">
+            {gates.length} {t('shifts.terminalsCount', 'Terminals')}
           </span>
-          <span className="text-xs text-[var(--ds-text-subtle,#6b778c)] font-mono">
-            ({gates.length} {t('shifts.nodes', 'access nodes')})
-          </span>
+          {patrolRoutes.length > 0 && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+              {patrolRoutes.length}{' '}
+              {t('shifts.patrolRoutesCount', 'Patrol Routes')}
+            </span>
+          )}
         </div>
 
-        {/* Zoom & Reset Controls */}
-        <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setZoomLevel((z) => Math.min(z + 0.2, 1.8))}
-            className="p-1 rounded-md border border-[var(--ds-border,#dfe1e6)] hover:bg-[var(--ds-surface-hovered,#f4f5f7)] text-[var(--ds-text-subtle,#6b778c)] transition-colors"
-            title={t('shifts.zoomIn', 'Zoom In')}
-          >
-            <ZoomIn className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setZoomLevel((z) => Math.max(z - 0.2, 0.8))}
-            className="p-1 rounded-md border border-[var(--ds-border,#dfe1e6)] hover:bg-[var(--ds-surface-hovered,#f4f5f7)] text-[var(--ds-text-subtle,#6b778c)] transition-colors"
-            title={t('shifts.zoomOut', 'Zoom Out')}
-          >
-            <ZoomOut className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setZoomLevel(1)}
-            className="p-1 rounded-md border border-[var(--ds-border,#dfe1e6)] hover:bg-[var(--ds-surface-hovered,#f4f5f7)] text-[var(--ds-text-subtle,#6b778c)] transition-colors"
-            title={t('shifts.resetZoom', 'Reset View')}
-          >
-            <Maximize2 className="h-3.5 w-3.5" />
-          </button>
+        {/* Action Controls */}
+        <div className="flex items-center gap-2">
+          {patrolRoutes.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowPatrols((prev) => !prev)}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-colors ${
+                showPatrols
+                  ? 'bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-950/50 dark:border-indigo-800 dark:text-indigo-300'
+                  : 'bg-white border-slate-200 text-slate-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400'
+              }`}
+            >
+              <Navigation className="h-3 w-3" />
+              {showPatrols ? 'Hide Patrols' : 'Show Patrols'}
+            </button>
+          )}
+
+          {onManagePatrols && (
+            <button
+              type="button"
+              onClick={onManagePatrols}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300"
+            >
+              <Shield className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+              Manage Routes
+            </button>
+          )}
+
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-1 border-s border-slate-200 ps-2 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setZoomLevel((z) => Math.min(z + 0.2, 1.8))}
+              className="p-1 rounded-md border border-slate-200 hover:bg-slate-100 text-slate-600 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+              title="Zoom In"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoomLevel((z) => Math.max(z - 0.2, 0.8))}
+              className="p-1 rounded-md border border-slate-200 hover:bg-slate-100 text-slate-600 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+              title="Zoom Out"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoomLevel(1)}
+              className="p-1 rounded-md border border-slate-200 hover:bg-slate-100 text-slate-600 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+              title="Reset View"
+            >
+              <Maximize2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -236,6 +288,33 @@ export function GuardShiftVisualMap({
                 strokeWidth="0.3"
               />
             ))}
+
+            {/* Patrol Route Polylines */}
+            {showPatrols &&
+              patrolRoutes.map((route) => {
+                if (!route.checkpoints || route.checkpoints.length < 2)
+                  return null;
+                const points = route.checkpoints
+                  .map((cp) => {
+                    const x = cp.mapCoordinates?.x ?? 50;
+                    const y = cp.mapCoordinates?.y ?? 50;
+                    return `${x},${y}`;
+                  })
+                  .join(' ');
+
+                return (
+                  <g key={`patrol-path-${route.id}`}>
+                    <polyline
+                      points={points}
+                      fill="none"
+                      stroke="#6366f1"
+                      strokeWidth="0.8"
+                      strokeDasharray="2 2"
+                      opacity="0.8"
+                    />
+                  </g>
+                );
+              })}
           </svg>
 
           {/* Interactive Gate Nodes */}
@@ -251,99 +330,79 @@ export function GuardShiftVisualMap({
                   top: `${n.y}%`,
                   transform: 'translate(-50%, -50%)',
                 }}
+                className="absolute z-10 cursor-pointer group"
                 onClick={() => onSelectGate?.(n.gate)}
-                className="absolute cursor-pointer group pointer-events-auto"
               >
-                {/* Status Ping for active / alert nodes */}
+                {/* Node Ring Pulse for Active/Overrun gates */}
                 {(n.gate.status === 'ACTIVE' ||
-                  n.gate.status === 'UNMANNED' ||
                   n.gate.status === 'OVERRUN') && (
                   <span
-                    className={`absolute -inset-1.5 rounded-full opacity-60 animate-ping ${
-                      n.gate.status === 'UNMANNED'
-                        ? 'bg-rose-500'
-                        : n.gate.status === 'OVERRUN'
-                          ? 'bg-amber-500'
-                          : 'bg-emerald-500'
-                    }`}
+                    className={`absolute -inset-1.5 rounded-full animate-ping opacity-40 ${colors.bg}`}
                   />
                 )}
 
-                {/* Node Target Core */}
+                {/* Node Base Badge */}
                 <div
-                  className={`relative flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all ${colors.border} ${
-                    isSelected
-                      ? 'ring-4 ring-sky-400 scale-125'
-                      : 'group-hover:scale-115'
-                  } bg-slate-900 shadow-lg`}
+                  className={`relative flex items-center justify-center h-8 w-8 rounded-full border-2 shadow-lg transition-all duration-200 group-hover:scale-125 ${
+                    isSelected ? 'ring-4 ring-white/60 scale-120' : ''
+                  } ${colors.bg} ${colors.border}`}
                 >
-                  <div className={`w-3.5 h-3.5 rounded-full ${colors.bg}`} />
+                  <span className="text-[10px] font-bold text-white uppercase tracking-tighter">
+                    {n.gate.gateName.slice(0, 2)}
+                  </span>
                 </div>
 
-                {/* Floating Node Label & Status Pill */}
-                <div className="absolute top-9 start-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none z-10 transition-transform group-hover:scale-105">
-                  <div className="flex flex-col items-center">
-                    <span className="px-2 py-0.5 rounded-md bg-slate-900/90 backdrop-blur-xs border border-slate-700 text-[11px] font-semibold text-slate-100 shadow-md">
+                {/* Node Label Tooltip on Hover */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-30">
+                  <div className="bg-slate-950/90 text-white text-[11px] font-semibold py-1.5 px-2.5 rounded-lg whitespace-nowrap shadow-xl border border-slate-800 backdrop-blur-xs flex flex-col items-center">
+                    <span className="font-bold text-slate-100">
                       {n.gate.gateName}
                     </span>
-                    {n.gate.activeShift ? (
-                      <span className="mt-0.5 px-1.5 py-0.2 rounded-sm bg-emerald-950/80 border border-emerald-500/40 text-[9px] text-emerald-300 font-mono">
-                        {n.gate.activeShift.guardName.split(' ')[0]}
-                      </span>
-                    ) : n.gate.status === 'UNMANNED' ? (
-                      <span className="mt-0.5 px-1.5 py-0.2 rounded-sm bg-rose-950/80 border border-rose-500/40 text-[9px] text-rose-300 font-bold">
-                        UNMANNED
-                      </span>
-                    ) : null}
+                    <span className="text-[10px] text-slate-400">
+                      {n.gate.activeShift
+                        ? `Guard: ${n.gate.activeShift.guardName}`
+                        : n.gate.status === 'UNMANNED'
+                          ? 'Unmanned'
+                          : 'Scheduled'}
+                    </span>
                   </div>
                 </div>
               </div>
             );
           })}
-        </div>
-      </div>
 
-      {/* Map Legend */}
-      <div className="p-3 border-t border-[var(--ds-border-subtle,#ebecf0)] bg-[var(--ds-surface,#ffffff)] flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-            <span className="text-[var(--ds-text-subtle,#6b778c)]">
-              {t('shifts.activeManned', 'Active Shift')}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-            <span className="text-[var(--ds-text-subtle,#6b778c)] font-medium">
-              {t('shifts.unmannedAlert', 'Unmanned')}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-            <span className="text-[var(--ds-text-subtle,#6b778c)]">
-              {t('shifts.overrunAlert', 'Overrun (>8h)')}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-sky-500"></span>
-            <span className="text-[var(--ds-text-subtle,#6b778c)]">
-              {t('shifts.scheduled', 'Scheduled')}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-gray-400"></span>
-            <span className="text-[var(--ds-text-subtle,#6b778c)]">
-              {t('shifts.disabled', 'Disabled')}
-            </span>
-          </div>
-        </div>
+          {/* Checkpoint Station Waypoint Nodes */}
+          {showPatrols &&
+            patrolRoutes.map((route) =>
+              route.checkpoints.map((cp, idx) => {
+                const x = cp.mapCoordinates?.x ?? 50;
+                const y = cp.mapCoordinates?.y ?? 50;
 
-        <span className="text-[11px] text-[var(--ds-text-subtlest,#8993a4)] italic">
-          {t(
-            'shifts.clickNodeHint',
-            'Click any gate node to view telemetry & guard handover'
-          )}
-        </span>
+                return (
+                  <div
+                    key={`checkpoint-node-${cp.id || idx}`}
+                    style={{
+                      left: `${x}%`,
+                      top: `${y}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                    className="absolute z-10 group cursor-default"
+                  >
+                    <div className="relative flex h-5 w-5 items-center justify-center rounded-md bg-indigo-600 text-[9px] font-extrabold text-white shadow-md border border-indigo-400 transition-transform group-hover:scale-125">
+                      {idx + 1}
+                    </div>
+
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:flex flex-col items-center pointer-events-none z-30">
+                      <div className="bg-indigo-950 text-indigo-100 text-[10px] font-semibold py-1 px-2 rounded-md whitespace-nowrap shadow-xl border border-indigo-800">
+                        <span>{route.name}</span>: #{idx + 1} {cp.name}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+        </div>
       </div>
     </div>
   );

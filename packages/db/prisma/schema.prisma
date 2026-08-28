@@ -93,6 +93,10 @@ model Organization {
   supportTickets    SupportTicket[]
   knowledgeSources  KnowledgeSource[]
   knowledgeItems    KnowledgeItem[]
+  patrolRoutes      PatrolRoute[]
+  patrolCheckpoints PatrolCheckpoint[]
+  patrolRuns        PatrolRun[]
+  patrolLogEntries  PatrolLogEntry[]
 
   @@index([deletedAt])
 }
@@ -213,6 +217,8 @@ model User {
   blogPosts       BlogPost[]
   assignedTickets SupportTicket[] @relation("AssignedTickets")
   supportMessages SupportMessage[]
+  patrolRuns      PatrolRun[]
+  patrolLogEntries PatrolLogEntry[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -358,6 +364,7 @@ model Gate {
   scanLogs              ScanLog[]
   workOrders            WorkOrder[]
   shiftLogs             ShiftLog[]
+  patrolRoutes          PatrolRoute[]
 
   @@index([organizationId])
   @@index([projectId])
@@ -1722,3 +1729,97 @@ enum BlogPostStatus {
   PUBLISHED
   ARCHIVED
 }
+
+enum PatrolRunStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  MISSED
+}
+
+model PatrolRoute {
+  id               String             @id @default(cuid())
+  name             String
+  frequencyMinutes Int                @default(60)
+  isStrictSequence Boolean            @default(true)
+  active           Boolean            @default(true)
+  startGateId      String?
+  organizationId   String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  deletedAt        DateTime?
+
+  organization     Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  startGate        Gate?              @relation(fields: [startGateId], references: [id])
+  checkpoints      PatrolCheckpoint[]
+  runs             PatrolRun[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model PatrolCheckpoint {
+  id             String           @id @default(cuid())
+  routeId        String
+  name           String
+  mapCoordinates Json?
+  orderIndex     Int              @default(0)
+  secretHash     String
+  organizationId String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+
+  route          PatrolRoute      @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  logEntries     PatrolLogEntry[]
+
+  @@index([routeId])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model PatrolRun {
+  id             String           @id @default(cuid())
+  routeId        String
+  guardId        String?
+  status         PatrolRunStatus  @default(SCHEDULED)
+  startedAt      DateTime?
+  completedAt    DateTime?
+  organizationId String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  route          PatrolRoute      @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  guard          User?            @relation(fields: [guardId], references: [id])
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  logEntries     PatrolLogEntry[]
+
+  @@index([routeId])
+  @@index([guardId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PatrolLogEntry {
+  id             String           @id @default(cuid())
+  runId          String
+  checkpointId   String
+  guardId        String?
+  scannedAt      DateTime         @default(now())
+  latencySeconds Int?
+  organizationId String
+
+  run            PatrolRun        @relation(fields: [runId], references: [id], onDelete: Cascade)
+  checkpoint     PatrolCheckpoint @relation(fields: [checkpointId], references: [id], onDelete: Cascade)
+  guard          User?            @relation(fields: [guardId], references: [id])
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([checkpointId])
+  @@index([guardId])
+  @@index([organizationId])
+  @@index([scannedAt])
+}
+

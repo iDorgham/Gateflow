@@ -15,3 +15,4 @@ export * from './organization-features';
 export * from './base';
 export * from './security';
 export * from './hardware/egypt-gate-integrator';
+export * from './patrol';
