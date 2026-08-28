@@ -2,86 +2,66 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Security_Shipped_Ready_Next-blueviolet?style=for-the-badge" alt="Status">
-  <img src="https://img.shields.io/badge/Next_Sprint-Resident_%26_Scanner-blue?style=for-the-badge" alt="Next Sprint">
+  <img src="https://img.shields.io/badge/Next_Sprint-Resident_Mobile_%26_Portal-blue?style=for-the-badge" alt="Next Sprint">
 </p>
 
 ---
 
-> **Roadmap SSOT:** This file is the canonical place for pipeline status, initiatives, and strategic goals. The root [`README.md`](../../../README.md) links here and does **not** duplicate roadmap tables—refresh the README snapshot line only when you want a new high-level teaser.
+> **Roadmap SSOT:** This file is the canonical place for pipeline status, initiatives, and strategic goals.
 
-## 🏗️ Active Initiatives
+## 🏗️ Active Initiatives & Next Milestones
 
 Real-time status of the engineering pipeline.
 
-### 🔴 In Progress
+### 🟡 In Planning (Next Sprint Candidates)
 
-_Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Complete/` (see `docs/development/PLAN_LIFECYCLE.md`)._
+| Initiative                       | Goal                                                                                            | App                    | Priority             |
+| :------------------------------- | :---------------------------------------------------------------------------------------------- | :--------------------- | :------------------- |
+| **`resident_mobile_one_tap`**    | One-tap biometric QR pass generation, instant visitor sharing & gate arrival push notifications | `apps/resident-mobile` | **P1 (Recommended)** |
+| **`resident_portal_responsive`** | Responsive ADS modernization, unit family management, and visitor request flow                  | `apps/resident-portal` | **P1**               |
+| **`admin_emulation_hub`**        | Superadmin fleet terminal emulation, load generator, and perimeter telemetry hub                | `apps/admin-dashboard` | **P2**               |
 
-| Initiative                 | Goal                          | Phase / note                                                      | Plan                                                |
-| :------------------------- | :---------------------------- | :---------------------------------------------------------------- | :-------------------------------------------------- |
-| **Audit Remediation 2026** | P0–P2 security + CI hardening | Phases 1–4 code shipped; residual ops credential-rotation receipt | [Folder](../../plan/Active/audit_remediation_2026/) |
+### ⚪ Backlog Initiatives
 
-### 🟡 In Planning (Ready)
-
-| Initiative                          | Goal                                             | Plan                                                   |
-| :---------------------------------- | :----------------------------------------------- | :----------------------------------------------------- |
-| **Resident Portal Responsive**      | PWA, mobile navigation, offline QR cache         | [Folder](../../plan/Ready/resident_portal_responsive/) |
-| **Scanner Onboarding Session**      | Secure scanner sessions + multi-step ADS wizards | [Folder](../../plan/Ready/scanner_onboarding_session/) |
-| **Org Types Dashboard (follow-up)** | Config-driven modules / terminology polish       | [Folder](../../plan/Ready/org_types_dashboard/)        |
-
-### ⚪ Draft / backlog ideas
-
-- **WhatsApp/SMS Gateway**: Mobile-first pass delivery for MENA regions.
-- **Self-serve billing**: Tenant onboarding and subscription portal.
-- **gateflow_readiness_market_leadership_2026**: Broader readiness initiative (reconcile with audit outcomes).
+- **WhatsApp Concierge Gateway**: Automated visitor pre-clearance and WhatsApp bot pass delivery.
+- **Enterprise Self-Serve Billing**: Multi-tenant Stripe billing portal with automated tier entitlement provisioning.
+- **ANPR License Plate Recognition Engine**: Video stream plate recognition and automated barrier lane triggers.
 
 ---
 
-## ✅ Recently Shipped
-
-Accomplishments from the last two sprints.
+## ✅ Recently Shipped (August 2026)
 
 > [!TIP]
-> **Repo Hygiene & Security Baseline (v0.3.0)** — _Shipped 2026-07-24_ — [Plan](../../plan/Draft/repo_hygiene/)
+> **Scanner App Onboarding & Biometric Session Management (`scanner_onboarding_session`)** — _Shipped 2026-08-28_ — [Plan](../../plan/Complete/scanner_onboarding_session/)
 >
-> - Dependency security overrides (`qs`, `uuid`, `ip-address`, `markdown-it`, `@babel/core`, `esbuild`, `@ai-sdk/provider-utils`).
-> - Reconciled design system blueprints, markdownlint MD024 configuration, and root-anchored hygiene rules.
-> - Client Dashboard null-safe locale label guard & Vercel Prisma engine packaging.
+> - 4-step onboarding wizard (`OnboardingNavigator`) with system settings deep-linking recovery.
+> - Fail-closed biometric hardware authentication with SHA-256 PIN vault in `expo-secure-store`.
+> - Shift-gated scanning preventing barcode scans without an active, matching shift.
+> - ADS Home Screen redesign with 8pt spatial grid, 72x72px `MasterScanFab`, and live duty timer.
+> - `BiometricGuard` 5-minute background inactivity auto-lock.
 
 > [!TIP]
-> **Audit Remediation 2026** — _Phases 1–4 shipped 2026-07-20 → 2026-07-21_ — [Plan](../../plan/Active/audit_remediation_2026/)
+> **Guard Patrol Checkpoints & QR Route Scanner (`guard_patrol_checkpoints`)** — _Shipped 2026-08-28_ — [Plan](../../plan/Complete/guard_patrol_checkpoints/)
 >
-> - Removed production bootstrap/reset-admin surface; CMS HTML + branding CSS sanitization.
-> - Request-local fail-closed tenant `db` (AsyncLocalStorage).
-> - Trustworthy CI scanners + full dashboard typecheck in preflight.
-> - High-risk API guards, admin login throttle, shared HSTS+CSP headers.
+> - Defined patrol loops, physical HMAC-signed QR checkpoint tokens, and route editor (`PatrolRouteManager.tsx`).
+> - Live polyline map telemetry overlay on `GuardShiftVisualMap.tsx`.
+> - Supervisor patrol compliance monitoring (`PatrolComplianceSummary.tsx`).
 
 > [!TIP]
-> **Platform / Admin / Design System (Q2 2026)**
+> **Guard Shift Visual Map & Real-Time Gate Monitor (`guard_shift_visual_map`)** — _Shipped 2026-08-28_ — [Plan](../../plan/Complete/guard_shift_visual_map/)
 >
-> - GateFlow Design System [v1.0] — [archive](../../plan/Complete/gateflow_design_system/)
-> - Admin Dashboard Evolution (side menu, CMS, builder) — [archive](../../plan/Complete/admin_dashboard_evolution/)
-> - Org Types Dashboard — [archive](../../plan/Complete/org_types_dashboard/)
-> - Platform Evolution (AI CMS page builder) — [archive](../../plan/Complete/platform_evolution/)
+> - Live gate terminal occupancy, active shift duration counters, terminal health indicators, and shift handover controls on Client Dashboard.
 
-> [!NOTE]
-> **Marketing Suite Foundation** — _Shipped 2026-03-23_
+> [!TIP]
+> **Enterprise MENA Security & Encryption Suite (`gateflow_security_readiness_mena`)** — _Shipped 2026-08-25_
 >
-> - UTM Attribution loop (Source → Gate).
-> - Meta Pixel & GA4 Event Streaming.
-> - Secure CRM Webhook architecture.
+> - AES-256-GCM field-level PII encryption, SHA-256 tamper-evident chained audit ledger, and Egyptian Law 151 / Saudi PDPL export tooling.
 
 ---
 
-## 📈 Strategic Goals (Q3 2026)
+## 📈 Strategic Goals (Q3/Q4 2026)
 
-1. **Zero-Trust Hardening**: Hold audit remediation gains; finish ops credential rotation; expand offline HMAC for multi-gate projects.
-2. **Resident & Scanner UX**: Ship Ready plans for responsive resident portal and scanner onboarding.
-3. **Lighthouse Perfection**: Consistent performance across marketing and dashboards (`*.gateflow.site`).
-4. **Revenue & Billing**: Self-serve billing portal for rapid tenant onboarding.
-
----
-
-<div align="center">
-  <sub>Managed by the <b>Ralph Loop</b> Autonomous Engineering Stack.</sub>
-</div>
+1. **Resident Digital Key Leadership**: Deliver zero-friction one-tap biometric access and arrival push feeds on `resident-mobile`.
+2. **Offline Hardware Gate Relays**: Expand CCITT-CRC16 framed TCP/serial barrier relay controllers for unattended high-throughput lanes.
+3. **Enterprise Compliance & Auditing**: Maintain 100% auditable system mutations with cryptographically chained SHA-256 logs.
+4. **Lighthouse CWV Perfection**: Sub-second LCP, zero CLS, and 98+ Desktop / 95+ Mobile scores on `*.gateflow.site`.

@@ -1,10 +1,8 @@
-# Antigravity Command Prompts
+# Antigravity Command Prompts & Tooling Guide
 
 <div align="center">
 
-**Copy-paste prompts for Antigravity IDE (Gemini) or other CLIs**
-
-_Wire into IDE macros if your tool supports it_
+**Multi-Tool AI Orchestration for GateFlow (Antigravity, Cursor, Claude CLI, Opencode, Kilo, Kiro)**
 
 </div>
 
@@ -20,36 +18,25 @@ _Wire into IDE macros if your tool supports it_
 
 ---
 
-## Usage
+## Multi-Tool Ecosystem & Synchronization
 
-1. Open the `.md` file and copy the prompt block
-2. Paste into Antigravity chat (or Gemini CLI, Claude CLI, etc.)
-3. Replace placeholders (e.g., `[Describe...]`, `[E.g....]`) with your input
-4. The model reads referenced files and produces output
+GateFlow AI configurations are canonically maintained under `.agents/` (or symlinked `.antigravity/`). Running `pnpm sync` (`scripts/ai-sync/sync-ai-tools.sh`) automatically synchronizes workflows, skills, agents, and rules across:
 
----
-
-## Copy-Paste Reference
-
-All prompts are also listed in `docs/guides/PROMPTS_REFERENCE.md` with "Where to copy from" guidance.
+- **Cursor IDE** (`.cursor/`)
+- **Antigravity IDE** (`.antigravity/` / `.agents/`)
+- **Claude CLI** (`.claude/`)
+- **Opencode CLI** (`.opencode/`)
+- **Kiro CLI** (`.kiro/`)
+- **Kilo CLI** (`.kilo/`)
 
 ---
 
-## GateFlow Rules
+## GateFlow Core Invariants
 
-All prompts assume GateFlow context:
+All prompts and tool operations strictly adhere to GateFlow architecture invariants:
 
-- pnpm only
-- Multi-tenant (organizationId)
-- Soft deletes (deletedAt null)
-- QR HMAC-SHA256
-
-See `CLAUDE.md` for full details.
-
----
-
-<div align="center">
-
-[Return to Docs Root](../../docs/README.md)
-
-</div>
+1. **Package Management**: Strictly `pnpm` (`v9.x`).
+2. **Multi-Tenancy**: Unconditional `organizationId` scoping on all queries and mutations.
+3. **Cryptographic Integrity**: HMAC-SHA256 signing for all physical and visitor QR passes.
+4. **Design Tokens**: 100% adherence to `@gateflow/ui/tokens` (`nativeTokens` for React Native, CSS variables for web).
+5. **Quality Gate**: `pnpm preflight` must pass 100% green before commits and releases.

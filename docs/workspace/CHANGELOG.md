@@ -4,6 +4,20 @@
 
 ### Added
 
+- **Scanner App Onboarding & Biometric Session Management (`scanner_onboarding_session`)**:
+  - 4-step onboarding wizard (`OnboardingNavigator`) with system settings deep-linking recovery.
+  - Fail-closed biometric hardware authentication with SHA-256 PIN vault in `expo-secure-store`.
+  - Shift-gated scanning preventing barcode scans without an active, matching shift (`canScanWithShift`).
+  - ADS Home Screen redesign with 8pt spatial grid, 72x72px `MasterScanFab`, and live duty timer.
+  - `BiometricGuard` 5-minute background inactivity auto-lock.
+- **Guard Patrol Checkpoints & QR Route Scanner (`guard_patrol_checkpoints`)**:
+  - Defined patrol loops, physical HMAC-signed QR checkpoint tokens, and route editor (`PatrolRouteManager.tsx`).
+  - Live polyline map telemetry overlay on `GuardShiftVisualMap.tsx`.
+  - Supervisor patrol compliance monitoring (`PatrolComplianceSummary.tsx`).
+- **Guard Shift Visual Map & Real-Time Gate Monitor (`guard_shift_visual_map`)**:
+  - Live gate terminal occupancy, active shift duration counters, terminal health indicators, and shift handover controls on Client Dashboard.
+- **Master AI Knowledge Base & NotebookLM Suite**:
+  - Extended NotebookLM source suite (01–11 + `NOTEBOOKLM_GATEFLOW_ULTIMATE_CONTEXT.md`) covering monorepo history, 67 Prisma database models, all 7 applications, and GitFlow quality gates.
 - Automated, diff-aware runtime-proof planning with `pnpm proof:plan`,
   head-bound evidence validation with `pnpm proof:check`, and fast PR readiness
   through `pnpm pr:ready` / `/github ready`.
@@ -16,20 +30,6 @@
   and the required gate no longer describes advisory performance as required.
 - Red Sea `--demo-full` / `pnpm --filter=@gate-access/db seed:demo` fills all demo orgs with 6-month contacts, units/classrooms, role logins, and optional scan history.
 - Root `pnpm health` runs workflow v2 contract tests, changelog check, and preflight.
-
-- NotebookLM Knowledge Base Source Suite (`NOTEBOOKLM_01` through `NOTEBOOKLM_09` + `NOTEBOOKLM_README.md`) under `docs/` providing comprehensive AI-ready architecture, database, PRD, and audit sources.
-- Data Retention & Legal Hold system (`retention-executor.ts`, schema migration `add_retention_legal_hold`, soft-deletes for `ScanLog` & `Incident`).
-- Workflow v2 state, fixed pilot sequence, atomic transitions, evidence-bound
-  certification receipts, app registry, route inventory, page scoring,
-  focused-diff checks, QR vectors, environment-name checks, and verification
-  planning.
-- Focused pilot commands, specialist contracts, and composable evidence skills.
-- Reusable `/dev loop` controller with pilot profile, task contracts, atomic
-  checkpoints, bounded repair, ownership-aware worktrees/commits, draft-PR
-  planning, head-bound merge approval, and target-bound release approval.
-- Workspace-aware Guide collector and renderer with live focus, stage, route,
-  evidence, plan, score, pilot-flow, Git, blocker, next-command, and copy-ready
-  prompt output.
 
 ### Changed
 
