@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useCameraPermissions } from 'expo-camera';
 import { nativeTokensNewEra as nativeTokens } from '../../../../../packages/ui/src/tokens';
 
@@ -13,6 +13,7 @@ export function PermissionsScreen({ onReady }: Props) {
   const [busy, setBusy] = useState(false);
 
   const granted = Boolean(permission?.granted);
+  const isBlocked = permission?.canAskAgain === false && !granted;
 
   const handleAllow = async () => {
     setError(null);
@@ -34,26 +35,43 @@ export function PermissionsScreen({ onReady }: Props) {
     }
   };
 
+  const handleOpenSettings = () => {
+    Linking.openSettings();
+  };
+
   return (
     <View style={styles.root}>
       <Text style={styles.body}>
-        The scanner needs camera access to read signed GateFlow QR codes at the
-        gate.
+        The scanner requires hardware permissions to validate signed GateFlow QR
+        codes and provide instant haptic feedback at the gate terminal.
       </Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Camera</Text>
+        <Text style={styles.cardTitle}>Camera (Required)</Text>
         <Text style={styles.cardBody}>
           Status:{' '}
           {granted
             ? 'Allowed'
-            : permission?.canAskAgain === false
-              ? 'Blocked'
+            : isBlocked
+              ? 'Blocked in System Settings'
               : 'Not granted'}
         </Text>
       </View>
 
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Haptic Feedback</Text>
+        <Text style={styles.cardBody}>
+          Status: Enabled (tactile feedback on access decisions)
+        </Text>
+      </View>
+
       {error ? <Text style={styles.error}>{error}</Text> : null}
+
+      {isBlocked ? (
+        <Pressable style={styles.secondary} onPress={handleOpenSettings}>
+          <Text style={styles.secondaryText}>Open Device Settings</Text>
+        </Pressable>
+      ) : null}
 
       <Pressable
         style={[styles.primary, busy && styles.disabled]}
@@ -61,7 +79,7 @@ export function PermissionsScreen({ onReady }: Props) {
         disabled={busy}
       >
         <Text style={styles.primaryText}>
-          {granted ? 'Continue' : 'Allow camera and finish'}
+          {granted ? 'Continue' : 'Allow Camera & Complete Setup'}
         </Text>
       </Pressable>
     </View>
@@ -100,6 +118,19 @@ const styles = StyleSheet.create({
   error: {
     fontFamily: 'Cairo_400Regular',
     color: nativeTokens.colors.danger,
+  },
+  secondary: {
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.border,
+    borderRadius: 8,
+    paddingVertical: nativeTokens.spacing['space-150'],
+    alignItems: 'center',
+  },
+  secondaryText: {
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 15,
+    color: nativeTokens.colors.textDefault,
   },
   primary: {
     marginTop: nativeTokens.spacing['space-100'],
