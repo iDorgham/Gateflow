@@ -293,7 +293,7 @@ export function Nav({ locale }: { locale: Locale }) {
               <input
                 type="text"
                 placeholder="Search resources..."
-                aria-label="Search resources"
+                aria-label={t('header.aria.searchResources')}
                 className={`h-11 rounded-full bg-ds-surface-sunken border border-ds-border focus:border-ds-border-brand focus:ring-1 focus:ring-ds-border-brand text-[13px] font-bold text-ds-text outline-none ps-9 pe-4 w-[220px] 2xl:w-[280px] shadow-inner transition-all placeholder:text-ds-text-subtlest`}
               />
               <div
@@ -337,7 +337,7 @@ export function Nav({ locale }: { locale: Locale }) {
               size="icon"
               className="lg:hidden rounded-full"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle navigation menu"
+              aria-label={t('header.aria.toggleNavigationMenu')}
               aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}

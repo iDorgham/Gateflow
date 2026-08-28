@@ -352,7 +352,10 @@ export const AntigravityBackground: React.FC = () => {
       observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+        requestRef.current = undefined;
+      }
       if (idleId !== undefined) win.cancelIdleCallback?.(idleId);
       if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };

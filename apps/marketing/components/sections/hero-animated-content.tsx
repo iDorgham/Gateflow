@@ -945,7 +945,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={slide.id}
-                initial={currentSlide === 0 ? false : { opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0, filter: 'none' }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -1000,7 +1000,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
             {/* Slide nav pills */}
             <div
               className="flex gap-3 justify-center lg:justify-start"
-              role="tablist"
+              role="group"
               aria-label="Hero feature showcase"
             >
               {slides.map((s, i) => (
@@ -1010,8 +1010,6 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                   className="group flex flex-col gap-1.5 focus:outline-none"
                   aria-label={`Go to slide: ${s.slideLabel}`}
                   aria-current={i === currentSlide ? 'true' : 'false'}
-                  role="tab"
-                  aria-selected={i === currentSlide}
                 >
                   <div
                     className={`h-1 rounded-full transition-all duration-700 overflow-hidden ${

@@ -94,7 +94,7 @@ export function TrustBar({ locale: _locale }: { locale: Locale }) {
       </p>
 
       {/* ── Scrolling track ── */}
-      <div className="relative overflow-hidden group">
+      <div className="relative overflow-hidden">
         {/* Fade masks — both sides with directional start/end gradients */}
         <div className="pointer-events-none absolute inset-y-0 start-0 w-28 z-10 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-ds-surface-sunken to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 end-0 w-28 z-10 ltr:bg-gradient-to-l rtl:bg-gradient-to-r from-ds-surface-sunken to-transparent" />
