@@ -64,7 +64,7 @@ export function calculateAuditHash(
       ? entry.createdAt.toISOString()
       : new Date(entry.createdAt).toISOString();
 
-  // Strip internal chain metadata from payload if passed
+  // Strip internal chain metadata and sensitive credential fields if passed
   let payloadClean: unknown = entry.metadataPayload;
   if (
     payloadClean &&
@@ -75,6 +75,10 @@ export function calculateAuditHash(
     delete raw.previousHash;
     delete raw.hash;
     delete raw.seq;
+    delete raw.password;
+    delete raw.passwordHash;
+    delete raw.secret;
+    delete raw.token;
     payloadClean = Object.keys(raw).length > 0 ? raw : null;
   }
 

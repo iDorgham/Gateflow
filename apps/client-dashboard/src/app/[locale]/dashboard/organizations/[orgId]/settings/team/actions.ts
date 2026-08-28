@@ -234,7 +234,7 @@ export async function inviteTeamMember(input: {
       entityId: normalizedEmail,
       orgId: claims.orgId,
       userId: claims.sub,
-      metadata: { roleId, mustChangePassword },
+      metadata: { roleId, requirePasswordReset: Boolean(mustChangePassword) },
     });
 
     revalidatePath('/dashboard/settings/team');
