@@ -3,7 +3,7 @@
  * SHA-256 via CryptoJS so this file stays webpack-safe when pulled from `@gate-access/db` on the client.
  */
 
-import CryptoJS from 'crypto-js';
+import { createHash } from 'crypto';
 import type { Prisma } from '@prisma/client';
 import { QRCodeType as PayloadQRType, signQRPayload } from '@gate-access/types';
 
@@ -14,9 +14,9 @@ export const RELATIONAL_SEED_CHAIN_DEPTH = 7 as const;
  * RFC 4122 UUID v4–shaped id derived from `(seed, index)` for reproducible tests.
  */
 export function deterministicScanUuid(seed: number, index: number): string {
-  const hex = CryptoJS.SHA256(`scanUuid:${seed}:${index}`).toString(
-    CryptoJS.enc.Hex
-  );
+  const hex = createHash('sha256')
+    .update(`scanUuid:${seed}:${index}`)
+    .digest('hex');
   const bytes = new Uint8Array(16);
   for (let i = 0; i < 16; i++) {
     bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
