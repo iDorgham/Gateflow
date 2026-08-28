@@ -19,6 +19,13 @@ export interface UseLiveShiftsResult {
   refresh: () => Promise<void>;
 }
 
+/**
+ * Builds the live shifts API URL, optionally scoped to a project.
+ *
+ * @param origin - The base origin used to construct the URL
+ * @param projectId - The project identifier to include in the query string
+ * @returns The fully qualified live shifts API URL
+ */
 export function buildLiveShiftsUrl(
   origin: string,
   projectId?: string | null
@@ -30,6 +37,13 @@ export function buildLiveShiftsUrl(
   return url.toString();
 }
 
+/**
+ * Validates and extracts live shift telemetry from an API response.
+ *
+ * @param json - The response value to validate and parse
+ * @returns The gate telemetry and shift summary, using empty or null defaults when omitted
+ * @throws If the response structure is invalid or indicates an API failure
+ */
 export function parseLiveShiftPayload(json: unknown): {
   gates: LiveGateShiftTelemetry[];
   summary: LiveShiftSummary | null;
@@ -56,6 +70,12 @@ export function parseLiveShiftPayload(json: unknown): {
   };
 }
 
+/**
+ * Fetches and periodically refreshes live shift telemetry for an optional project.
+ *
+ * @param projectId - Identifies the project whose shift telemetry should be fetched
+ * @returns The current gate telemetry, summary, request status, last update time, and refresh function
+ */
 export function useLiveShifts(projectId?: string | null): UseLiveShiftsResult {
   const [gates, setGates] = useState<LiveGateShiftTelemetry[]>([]);
   const [summary, setSummary] = useState<LiveShiftSummary | null>(null);

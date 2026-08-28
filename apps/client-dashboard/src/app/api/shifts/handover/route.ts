@@ -18,6 +18,12 @@ const HandoverSchema = z.object({
   notes: z.string().max(250).optional().nullable(),
 });
 
+/**
+ * Processes an authenticated gate shift handover request.
+ *
+ * @param request - The request containing the gate and optional incoming guard details.
+ * @returns A response indicating whether the handover completed successfully or why it failed.
+ */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();

@@ -24,6 +24,14 @@ interface ShiftDetailDrawerProps {
   onHandoverSuccess?: () => void;
 }
 
+/**
+ * Displays live shift telemetry and handover controls for a selected gate.
+ *
+ * @param gate - The selected gate's telemetry, or `null` when no gate is selected
+ * @param isOpen - Whether the drawer is visible
+ * @param onClose - Called when the drawer is closed
+ * @param onHandoverSuccess - Called after a handover completes successfully
+ */
 export function ShiftDetailDrawer({
   gate,
   isOpen,

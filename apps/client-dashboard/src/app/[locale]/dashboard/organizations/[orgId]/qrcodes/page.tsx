@@ -68,6 +68,9 @@ type SortBy =
   | 'gateName'
   | 'projectName';
 
+/**
+ * Displays the QR-code management page with filtering, sorting, customization, export, and bulk deletion controls.
+ */
 export default function QRCodesPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';

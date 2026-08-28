@@ -18,6 +18,14 @@ interface GateTerminalCardProps {
   isSelected?: boolean;
 }
 
+/**
+ * Displays live gate and terminal telemetry with guard assignment details.
+ *
+ * @param gate - The gate record to display.
+ * @param onSelect - Optional callback invoked when the card is selected.
+ * @param isSelected - Whether the card should display its selected state.
+ * @returns The rendered gate terminal card.
+ */
 export function GateTerminalCard({
   gate,
   onSelect,

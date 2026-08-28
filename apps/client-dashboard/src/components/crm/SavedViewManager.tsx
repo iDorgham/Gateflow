@@ -29,6 +29,16 @@ interface SavedViewManagerProps {
   disabled?: boolean;
 }
 
+/**
+ * Renders controls for selecting, saving, and deleting saved views.
+ *
+ * @param activeView - The identifier of the currently selected view
+ * @param savedViews - The available saved views keyed by identifier
+ * @param onViewSelect - Callback invoked when a view is selected
+ * @param onViewSave - Callback invoked with the trimmed name when a view is saved
+ * @param onViewDelete - Callback invoked when a view is deleted
+ * @param disabled - Whether the view selector is disabled
+ */
 export function SavedViewManager({
   activeView,
   savedViews = {},
