@@ -61,9 +61,8 @@ const BottomCTA = dynamic(
   { ssr: true }
 );
 
-const CookieConsent = dynamic(
-  () => import('../../components/cookie-consent').then((m) => m.CookieConsent),
-  { ssr: false }
+const CookieConsent = dynamic(() =>
+  import('../../components/cookie-consent').then((m) => m.CookieConsent)
 );
 
 /**
