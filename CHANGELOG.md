@@ -28,6 +28,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** optimize bundle splitting, layout parallelization, and media loading
+
+- **[Marketing]** prevent middleware edge crash and export i18n cookie submodule
+
 - **[Client]** guard shift visual map, live telemetry & handover drawer
 
 - **[Client]** add guard shift visual map, live telemetry polling, interactive gate terminal cards, and supervisor emergency handover drawer

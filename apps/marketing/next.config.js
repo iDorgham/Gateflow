@@ -5,6 +5,9 @@ const path = require('path');
 
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
   transpilePackages: [
     '@gateflow/ui',
     '@gateflow/theme',
@@ -23,7 +26,16 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', '@gateflow/ui', 'framer-motion'],
+    optimizePackageImports: [
+      'lucide-react',
+      '@gateflow/ui',
+      'framer-motion',
+      '@hugeicons/react',
+      '@hugeicons/core-free-icons',
+      'clsx',
+      'tailwind-merge',
+      'reading-time',
+    ],
     nextScriptWorkers: true,
   },
   async headers() {

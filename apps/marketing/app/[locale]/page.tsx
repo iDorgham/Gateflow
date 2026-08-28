@@ -1,20 +1,76 @@
-import * as React from 'react';
+import dynamic from 'next/dynamic';
 import { getTranslation } from '../../lib/i18n/get-translation';
 import type { Locale } from '../../i18n-config';
 import { Hero } from '../../components/sections/hero';
 import { TrustBar } from '../../components/sections/trust-bar';
-import { SecurityGrid } from '../../components/sections/security-grid';
-import { BottomCTA } from '../../components/sections/bottom-cta';
 import { StatsSection } from '../../components/sections/stats-section';
-import { HowItWorksSection } from '../../components/sections/how-it-works';
-import { ProductScreenshots } from '../../components/sections/product-screenshots';
-import { TestimonialsSection } from '../../components/sections/testimonials';
-import { ComparisonSection } from '../../components/sections/comparison';
-import { CookieConsent } from '../../components/cookie-consent';
-import { IntentLandingTracker } from '../../components/intent-landing-tracker';
-import { MidCtaSection } from '../../components/sections/mid-cta-section';
 import { FeaturesSection } from '../../components/sections/features-section';
+import { IntentLandingTracker } from '../../components/intent-landing-tracker';
 
+// Lazy-load below-the-fold interactive sections with SSR support
+const HowItWorksSection = dynamic(
+  () =>
+    import('../../components/sections/how-it-works').then(
+      (m) => m.HowItWorksSection
+    ),
+  { ssr: true }
+);
+
+const ProductScreenshots = dynamic(
+  () =>
+    import('../../components/sections/product-screenshots').then(
+      (m) => m.ProductScreenshots
+    ),
+  { ssr: true }
+);
+
+const ComparisonSection = dynamic(
+  () =>
+    import('../../components/sections/comparison').then(
+      (m) => m.ComparisonSection
+    ),
+  { ssr: true }
+);
+
+const TestimonialsSection = dynamic(
+  () =>
+    import('../../components/sections/testimonials').then(
+      (m) => m.TestimonialsSection
+    ),
+  { ssr: true }
+);
+
+const SecurityGrid = dynamic(
+  () =>
+    import('../../components/sections/security-grid').then(
+      (m) => m.SecurityGrid
+    ),
+  { ssr: true }
+);
+
+const MidCtaSection = dynamic(
+  () =>
+    import('../../components/sections/mid-cta-section').then(
+      (m) => m.MidCtaSection
+    ),
+  { ssr: true }
+);
+
+const BottomCTA = dynamic(
+  () => import('../../components/sections/bottom-cta').then((m) => m.BottomCTA),
+  { ssr: true }
+);
+
+const CookieConsent = dynamic(() =>
+  import('../../components/cookie-consent').then((m) => m.CookieConsent)
+);
+
+/**
+ * Renders the localized landing page for the requested locale.
+ *
+ * @param params - Route parameters containing the page locale
+ * @returns The localized landing page
+ */
 export default async function HomePage({
   params,
 }: {

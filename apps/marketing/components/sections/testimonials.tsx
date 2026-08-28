@@ -71,6 +71,12 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+/**
+ * Renders a testimonial card with author details, quote, company, and rating.
+ *
+ * @param item - The testimonial content and author information to display.
+ * @returns The rendered testimonial card.
+ */
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
     <div className="flex-shrink-0 w-[420px] mx-4 bg-ds-surface-overlay p-8 rounded-[32px] border border-ds-border-bold hover:border-ds-accent-bold/30 transition-all duration-500 group relative overflow-hidden">
@@ -83,6 +89,10 @@ function TestimonialCard({ item }: { item: Testimonial }) {
             <img
               src={item.avatar}
               alt={item.author}
+              width={56}
+              height={56}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover rounded-[14px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
             />
           </div>
