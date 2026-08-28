@@ -6,6 +6,7 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./cookie": "./src/cookie.ts",
     "./en": "./src/locales/en.json",
     "./ar": "./src/locales/ar-EG.json"
   },
