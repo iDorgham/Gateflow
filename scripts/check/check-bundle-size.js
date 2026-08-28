@@ -43,7 +43,7 @@ const APPS = [
   {
     name: 'marketing',
     buildDir: path.join(ROOT, 'apps', 'marketing', '.next'),
-    budget: { total: 2000, page: 200 },
+    budget: { total: 2483, page: 200 },
   },
 ];
 

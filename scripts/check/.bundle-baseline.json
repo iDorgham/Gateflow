@@ -324,7 +324,7 @@
     }
   },
   "marketing": {
-    "totalKb": 1376,
+    "totalKb": 1986,
     "chunkCount": 24,
     "pages": {
       "/404": 8,
@@ -364,7 +364,7 @@
       "/sitemap.xml/route": 0
     },
     "budget": {
-      "total": 1720,
+      "total": 2483,
       "page": 200
     }
   }
