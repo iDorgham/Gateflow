@@ -1,0 +1,34 @@
+CHANGELOG.md
+  h_220d66b2244819 31-32
+apps/marketing/app/globals.css
+  h_220d66b2244819 38-80
+apps/marketing/components/antigravity-background.tsx
+  h_220d66b2244819 280-284,289,295,313-328,330,339-341,352,364
+apps/marketing/components/footer.tsx
+  h_220d66b2244819 86-88,90,95-97,99,104-106,108,113-115,117
+apps/marketing/components/nav.tsx
+  h_220d66b2244819 296,340-341
+apps/marketing/components/sections/comparison.tsx
+  h_220d66b2244819 67,74
+apps/marketing/components/sections/hero-animated-content.tsx
+  h_220d66b2244819 948,951,1001-1005,1012-1014
+apps/marketing/components/sections/how-it-works.tsx
+  h_220d66b2244819 34,41
+apps/marketing/components/sections/security-grid.tsx
+  h_220d66b2244819 59,66
+apps/marketing/components/sections/testimonials.tsx
+  h_220d66b2244819 184-191,198-200,205,225,227
+apps/marketing/components/sections/trust-bar.tsx
+  h_220d66b2244819 92,94,97,102-103,109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "7605e4bf501a3eda2c3496d8d1ec0f9684c06ddc",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
