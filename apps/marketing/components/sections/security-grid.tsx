@@ -13,6 +13,12 @@ import {
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
+/**
+ * Renders a grid of security feature cards highlighting encryption and authentication methods.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The security features grid with animated card reveals
+ */
 export function SecurityGrid({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
 

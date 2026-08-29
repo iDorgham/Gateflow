@@ -6,6 +6,12 @@ import { QrCode, ScanLine, FileCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
+/**
+ * Renders the "How It Works" section showing the three-step process.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The how-it-works section with step-by-step visual timeline
+ */
 export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
 

@@ -12,6 +12,12 @@ type StatItem = {
   sub: string;
 };
 
+/**
+ * Renders the statistics section with key performance metrics and badges.
+ *
+ * @param props - Contains the locale for RTL layout and translations
+ * @returns The stats section with animated metric cards
+ */
 export async function StatsSection({ locale }: { locale: Locale }) {
   const { t } = await getTranslation(locale, 'landing');
   const isRtl = locale.startsWith('ar');

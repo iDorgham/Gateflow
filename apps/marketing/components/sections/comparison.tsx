@@ -6,6 +6,12 @@ import { Check, X, ShieldCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
+/**
+ * Renders a feature comparison table between GateFlow and alternative solutions.
+ *
+ * @param props - Contains the locale for RTL layout and translations
+ * @returns The comparison section with an interactive feature matrix
+ */
 export function ComparisonSection({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
   const isRtl = _locale.startsWith('ar');

@@ -40,6 +40,12 @@ const SPRING = {
 
 /* ─── Reusable Device Frames ──────────────────────────────────────────────── */
 
+/**
+ * Renders a realistic mobile phone frame with hardware details and status bar.
+ *
+ * @param props - Child content, width, className, and style overrides
+ * @returns A styled phone bezel wrapping the provided content
+ */
 function PhoneFrame({
   children,
   width = 300,
@@ -164,6 +170,12 @@ function PhoneFrame({
   );
 }
 
+/**
+ * Renders a realistic laptop frame with browser chrome and window controls.
+ *
+ * @param props - Child content to display in the laptop screen
+ * @returns A styled laptop mockup with browser UI
+ */
 function LaptopFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative w-full select-none max-w-[720px] mx-auto">
@@ -210,6 +222,12 @@ function LaptopFrame({ children }: { children: React.ReactNode }) {
 }
 
 /* ─── Artwork 1: Gate Scanner (Phone + floating badges) ───────────────────── */
+/**
+ * Renders the gate scanner phone mockup with animated QR scanning and activity log.
+ *
+ * @param props - RTL layout flag for proper directionality
+ * @returns Animated scanner interface with floating stat badges
+ */
 function ScannerArtwork({ isRtl }: { isRtl: boolean }) {
   const { t } = useTranslation('landing');
   const [granted, setGranted] = React.useState(false);
@@ -469,6 +487,12 @@ function ScannerArtwork({ isRtl }: { isRtl: boolean }) {
 }
 
 /* ─── Artwork 2: Visitor Permission (Phone centered) ──────────────────────── */
+/**
+ * Renders the visitor permission phone mockup with approval workflow and security checks.
+ *
+ * @param props - RTL layout flag for proper directionality
+ * @returns Interactive visitor approval interface with animated pending states
+ */
 function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
   const { t } = useTranslation('landing');
 
@@ -630,6 +654,12 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
 }
 
 /* ─── Artwork 3: Analytics Dashboard (Laptop) ─────────────────────────────── */
+/**
+ * Renders the analytics dashboard laptop mockup with live metrics and traffic graphs.
+ *
+ * @param props - RTL layout flag for proper directionality
+ * @returns Full analytics dashboard with realtime data visualization
+ */
 function AnalyticsArtwork({ isRtl }: { isRtl: boolean }) {
   const { t } = useTranslation('landing');
 
@@ -872,6 +902,12 @@ interface HeroSlide {
   artwork: React.ReactNode;
 }
 
+/**
+ * Renders the main hero section with rotating device mockups and localized content.
+ *
+ * @param props - Contains the current locale for RTL support and translations
+ * @returns Animated hero section with automatic slide rotation and parallax effects
+ */
 export function HeroAnimatedContent({ locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
   const isRtl = locale.startsWith('ar');

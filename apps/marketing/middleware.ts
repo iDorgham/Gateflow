@@ -10,6 +10,12 @@ import {
   LEGACY_LOCALE_COOKIE_NAME,
 } from '@gate-access/i18n/cookie';
 
+/**
+ * Detects the user's preferred locale from cookies or Accept-Language header.
+ *
+ * @param request - The incoming Next.js request object
+ * @returns The detected locale string or the default locale as fallback
+ */
 function getLocale(request: NextRequest): string {
   try {
     // 1. Check shared gf_locale or legacy NEXT_LOCALE cookie
@@ -42,6 +48,12 @@ function getLocale(request: NextRequest): string {
   }
 }
 
+/**
+ * Next.js middleware that handles locale detection and redirects for internationalized routing.
+ *
+ * @param request - The incoming Next.js request object
+ * @returns NextResponse that either redirects to add the locale prefix or continues the request
+ */
 export function middleware(request: NextRequest) {
   try {
     const { pathname } = request.nextUrl;

@@ -37,6 +37,12 @@ interface Feature {
   color: 'brand' | 'success' | 'information' | 'warning';
 }
 
+/**
+ * Renders a grid of feature cards with icons, titles, and descriptions.
+ *
+ * @param props - Section title, features array, and locale for RTL support
+ * @returns The features section with animated card hover effects
+ */
 export function FeaturesSection({
   sectionTitle,
   featuresTitle,
