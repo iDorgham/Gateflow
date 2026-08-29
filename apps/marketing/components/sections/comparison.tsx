@@ -8,6 +8,7 @@ import { useTranslation } from '../../hooks/use-translation';
 
 export function ComparisonSection({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
+  const isRtl = _locale.startsWith('ar');
 
   const features = [
     {
@@ -61,14 +62,14 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
   ];
 
   return (
-    <section className="py-32 lg:py-48 bg-ds-surface relative overflow-hidden">
+    <section className="py-24 lg:py-36 bg-ds-surface relative overflow-hidden">
       <div className="container px-8 mx-auto relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-32">
+        <div className="text-center max-w-4xl mx-auto mb-16 lg:mb-24">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
+            className="text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-brand mb-6"
           >
             {t('comparison.badge')}
           </motion.p>
@@ -77,7 +78,7 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-black tracking-tight text-ds-text-heading leading-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-ds-text-heading leading-tight"
           >
             {t('comparison.title')}
           </motion.h2>
@@ -95,23 +96,23 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
             <table className="w-full min-w-[800px] border-collapse">
               <thead>
                 <tr className="bg-ds-surface-sunken/50 border-b border-ds-border-bold">
-                  <th className="text-left rtl:text-right py-12 px-12 font-black text-[14px] text-ds-text-subtlest uppercase tracking-[0.3em]">
+                  <th className="text-left rtl:text-right py-8 px-10 font-black text-[13px] text-ds-text-subtlest uppercase tracking-[0.25em]">
                     {t('comparison.features_col')}
                   </th>
-                  <th className="py-12 px-8 text-center bg-ds-background-brand-subtle/30">
+                  <th className="py-8 px-8 text-center bg-ds-background-brand-subtle/30">
                     <div
-                      className="inline-flex items-center gap-3 px-6 py-2.5 bg-ds-background-brand-bold text-white text-[13px] font-black rounded-xl uppercase tracking-[0.2em]"
+                      className="inline-flex items-center gap-2.5 px-5 py-2 bg-ds-background-brand-bold text-white text-[12px] font-black rounded-xl uppercase tracking-wider"
                       style={{ boxShadow: 'var(--ds-glow-accent)' }}
                     >
-                      <ShieldCheck size={16} />
+                      <ShieldCheck size={15} />
                       GateFlow
                     </div>
                   </th>
-                  <th className="py-12 px-8 text-center text-[15px] font-black text-ds-text-subtle uppercase tracking-widest leading-none">
-                    WhatsApp/SMS
+                  <th className="py-8 px-8 text-center text-[13px] font-black text-ds-text-subtle uppercase tracking-wider leading-none">
+                    {isRtl ? 'واتساب / رسائل' : 'WhatsApp / SMS'}
                   </th>
-                  <th className="py-12 px-8 text-center text-[15px] font-black text-ds-text-subtle uppercase tracking-widest leading-none">
-                    Manual/Paper
+                  <th className="py-8 px-8 text-center text-[13px] font-black text-ds-text-subtle uppercase tracking-wider leading-none">
+                    {isRtl ? 'ورقي / يدوي' : 'Manual / Paper'}
                   </th>
                 </tr>
               </thead>

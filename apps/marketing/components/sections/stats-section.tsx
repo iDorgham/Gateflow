@@ -14,39 +14,40 @@ type StatItem = {
 
 export async function StatsSection({ locale }: { locale: Locale }) {
   const { t } = await getTranslation(locale, 'landing');
+  const isRtl = locale.startsWith('ar');
 
   const stats: StatItem[] = [
     {
       icon: Clock,
       value: '500ms',
-      badge: '+12%',
+      badge: isRtl ? '+١٢٪' : '+12%',
       badgeClass: 'bg-emerald-500 text-white',
       label: t('stats.scanTime'),
-      sub: 'Latency Peer-Verified',
+      sub: isRtl ? 'سرعة استجابة موثقة' : 'Latency Peer-Verified',
     },
     {
       icon: Shield,
       value: '100%',
-      badge: 'STABLE',
+      badge: isRtl ? 'مستقر' : 'STABLE',
       badgeClass: 'bg-ds-background-brand-bold text-white',
       label: t('stats.offline'),
-      sub: 'End-to-End Encrypted',
+      sub: isRtl ? 'تشفير أمني عسكري' : 'End-to-End Encrypted',
     },
     {
       icon: QrCode,
-      value: '1M+',
-      badge: '+12%',
+      value: isRtl ? '+١ مليون' : '1M+',
+      badge: isRtl ? '+١٢٪' : '+12%',
       badgeClass: 'bg-emerald-500 text-white',
       label: t('stats.qrCodes'),
-      sub: 'Global Distribution',
+      sub: isRtl ? 'تغطية واسعة النطاق' : 'High Volume Scale',
     },
     {
       icon: Check,
       value: '99.9%',
-      badge: 'STABLE',
+      badge: isRtl ? 'مستقر' : 'STABLE',
       badgeClass: 'bg-ds-background-brand-bold text-white',
       label: t('stats.uptime'),
-      sub: 'Tier-4 Reliability',
+      sub: isRtl ? 'موثوقية تشغيل قصوى' : 'Tier-4 Reliability',
     },
   ];
 
@@ -56,7 +57,7 @@ export async function StatsSection({ locale }: { locale: Locale }) {
       <div className="absolute bottom-0 inset-x-0 h-px bg-ds-border" />
 
       <div className="container mx-auto px-8 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x divide-ds-border">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x rtl:md:divide-x-reverse divide-ds-border">
           {stats.map((stat, i) => (
             <div
               key={i}

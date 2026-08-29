@@ -13,6 +13,43 @@
   body {
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
+
+  /* Arabic Cairo Typography Polish */
+  html[dir="rtl"],
+  body[dir="rtl"],
+  [dir="rtl"] {
+    font-family: var(--font-cairo), 'Cairo', system-ui, -apple-system, sans-serif;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6,
+  [dir="rtl"] p,
+  [dir="rtl"] span,
+  [dir="rtl"] a,
+  [dir="rtl"] button,
+  [dir="rtl"] input,
+  [dir="rtl"] select,
+  [dir="rtl"] textarea {
+    font-family: var(--font-cairo), 'Cairo', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Protect cursive Arabic script from broken letter-spacing (tracking) */
+  [dir="rtl"] [class*="tracking-"] {
+    letter-spacing: 0 !important;
+  }
+
+  /* Optimize Arabic heading line-height */
+  [dir="rtl"] h1 {
+    line-height: 1.25 !important;
+  }
+
+  [dir="rtl"] h2 {
+    line-height: 1.3 !important;
+  }
 }
 
 @layer utilities {

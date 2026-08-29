@@ -14,8 +14,8 @@ const inter = Inter({
   display: 'swap',
 });
 const cairo = Cairo({
-  subsets: ['arabic', 'latin-ext'],
-  weight: ['400', '500', '600', '700'],
+  subsets: ['arabic', 'latin', 'latin-ext'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-cairo',
   display: 'swap',
 });
