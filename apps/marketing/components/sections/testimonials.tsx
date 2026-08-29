@@ -207,6 +207,12 @@ function MarqueeRow({
   );
 }
 
+/**
+ * Renders the testimonials section with an infinite-scrolling carousel of customer reviews.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The testimonials section with animated cards and auto-scroll
+ */
 export function TestimonialsSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
   const half = Math.ceil(TESTIMONIALS.length / 2);

@@ -63,6 +63,8 @@ export function decryptField(payload: string | null): string | null {
   try {
     const [ivHex, tagHex, encryptedHex] = payload.split(':');
     if (!ivHex || !tagHex || !encryptedHex) return null;
+    if (ivHex.length !== IV_LENGTH * 2 || tagHex.length !== TAG_LENGTH * 2)
+      return null;
 
     const key = getKey();
     const iv = Buffer.from(ivHex, 'hex');
@@ -72,12 +74,13 @@ export function decryptField(payload: string | null): string | null {
     const decipher = createDecipheriv(ALGORITHM, key, iv);
     decipher.setAuthTag(tag);
 
-    let decrypted = decipher.update(encrypted, undefined, 'utf8');
-    decrypted += decipher.final('utf8');
+    const decrypted = Buffer.concat([
+      decipher.update(encrypted),
+      decipher.final(),
+    ]);
 
-    return decrypted;
-  } catch (error) {
-    console.error('Failed to decrypt field:', error);
+    return decrypted.toString('utf8');
+  } catch {
     return null;
   }
 }

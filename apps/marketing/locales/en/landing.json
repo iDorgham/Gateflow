@@ -23,6 +23,64 @@
         "suffix": "Control",
         "subHeadline": "Total control at every gate with real-time analytics, automated audit logs, and high-density performance monitoring."
       }
+    },
+    "mockups": {
+      "slidesLabels": {
+        "scanner": "Gate Scanner",
+        "visitor": "Visitor Passes",
+        "hub": "Analytics Hub"
+      },
+      "scanner": {
+        "appName": "GateFlow Scanner",
+        "live": "LIVE",
+        "alignQr": "Align QR code…",
+        "granted": "Access Granted",
+        "gateLocation": "Gate B · Main Entrance",
+        "log1Name": "Ahmed S.",
+        "log1Gate": "Gate A",
+        "log2Name": "Sara M.",
+        "log2Gate": "Gate C",
+        "log3Name": "Unknown",
+        "log3Gate": "Gate B",
+        "statusGranted": "GRANTED",
+        "statusBlocked": "BLOCKED",
+        "scansToday": "scans today",
+        "scansGrowth": "+12% vs yesterday",
+        "compoundName": "Palm Hills",
+        "compoundRole": "Compound Admin"
+      },
+      "visitor": {
+        "title": "Visitor Request",
+        "pending": "PENDING",
+        "guestName": "Ahmed Al-Rashidi",
+        "guestPhone": "+20 10 1234 5678",
+        "guestUnit": "Villa 14",
+        "gateLabel": "Gate",
+        "gateValue": "Main Entrance",
+        "durationLabel": "Duration",
+        "durationValue": "1 Hour",
+        "stepVerify": "Verify Identity",
+        "stepQuota": "Check Gate Quota",
+        "stepNotify": "Notify Host via WhatsApp",
+        "sending": "Sending…",
+        "grantCta": "Grant Access",
+        "denyCta": "Deny Request"
+      },
+      "hub": {
+        "title": "Security Hub",
+        "allSystemsLive": "All Systems Live",
+        "activeGates": "Active Gates",
+        "scansCount": "Today's Scans",
+        "blockedCount": "Blocked",
+        "uptime": "Uptime",
+        "trafficFlow": "Traffic Flow",
+        "accessLog": "Access Log",
+        "devicesOnline": "Hardware Devices Online",
+        "hardwareUptime": "98% Uptime",
+        "recentAlert": "Gate C Offline - Reconnecting...",
+        "timeAgo": "2 mins ago",
+        "now": "NOW"
+      }
     }
   },
   "trust": {

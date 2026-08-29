@@ -13,6 +13,12 @@ import {
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
+/**
+ * Renders a grid of security feature cards highlighting encryption and authentication methods.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The security features grid with animated card reveals
+ */
 export function SecurityGrid({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
 
@@ -52,10 +58,10 @@ export function SecurityGrid({ _locale }: { _locale: Locale }) {
   return (
     <section
       id="security"
-      className="py-32 md:py-64 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden"
+      className="py-24 md:py-36 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden"
     >
       <div className="container px-8 mx-auto relative z-10">
-        <div className="max-w-4xl mx-auto text-center mb-24 lg:mb-40">
+        <div className="max-w-4xl mx-auto text-center mb-16 lg:mb-24">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

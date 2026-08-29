@@ -23,6 +23,64 @@
         "suffix": "مركزي لحظي",
         "subHeadline": "تحكم مركزي شامل في جميع بوابات الدخول مع تحليلات ذكية لساعات الذروة وسجلات تدقيق فورية غير قابلة للتلاعب."
       }
+    },
+    "mockups": {
+      "slidesLabels": {
+        "scanner": "تطبيق الحراس",
+        "visitor": "تصاريح الزوار",
+        "hub": "لوحة التحكم"
+      },
+      "scanner": {
+        "appName": "ماسح جيت فلو",
+        "live": "مباشر",
+        "alignQr": "وجّه رمز QR نحو الكاميرا…",
+        "granted": "تم منح إذن الدخول",
+        "gateLocation": "بوابة ب · المدخل الرئيسي",
+        "log1Name": "أحمد سمير",
+        "log1Gate": "بوابة أ",
+        "log2Name": "سارة محمود",
+        "log2Gate": "بوابة ج",
+        "log3Name": "زائر غير مسجل",
+        "log3Gate": "بوابة ب",
+        "statusGranted": "تم المنح",
+        "statusBlocked": "مرفوض",
+        "scansToday": "عملية مسح اليوم",
+        "scansGrowth": "+١٢٪ عن الأمس",
+        "compoundName": "بالم هيلز",
+        "compoundRole": "إدارة الكمبوند"
+      },
+      "visitor": {
+        "title": "طلب تصريح زائر",
+        "pending": "قيد الانتظار",
+        "guestName": "أحمد الرشيدي",
+        "guestPhone": "+20 10 1234 5678",
+        "guestUnit": "فيلا ١٤",
+        "gateLabel": "البوابة",
+        "gateValue": "المدخل الرئيسي",
+        "durationLabel": "المدة",
+        "durationValue": "ساعة واحدة",
+        "stepVerify": "التحقق من الهوية",
+        "stepQuota": "فحص حصة البوابة",
+        "stepNotify": "إشعار المضيف عبر واتساب",
+        "sending": "جارٍ الإرسال...",
+        "grantCta": "منح تصريح الدخول",
+        "denyCta": "رفض الطلب"
+      },
+      "hub": {
+        "title": "مركز المراقبة والأمان",
+        "allSystemsLive": "جميع الأنظمة تعمل بكفاءة",
+        "activeGates": "بوابات نشطة",
+        "scansCount": "مسحات اليوم",
+        "blockedCount": "محاولات مرفوضة",
+        "uptime": "نسبة الجاهزية",
+        "trafficFlow": "كثافة المرور اللحظية",
+        "accessLog": "سجل الدخول اللحظي",
+        "devicesOnline": "أجهزة البوابات المتصلة",
+        "hardwareUptime": "٩٨٪ جاهزية",
+        "recentAlert": "بوابة ج غير متصلة - جارٍ إعادة الاتصال...",
+        "timeAgo": "منذ دقيقتين",
+        "now": "الآن"
+      }
     }
   },
   "trust": {

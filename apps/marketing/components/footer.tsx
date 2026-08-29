@@ -60,6 +60,12 @@ function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+/**
+ * Renders the site footer with navigation links, social media icons, and legal information.
+ *
+ * @param props - Contains the current locale for internationalization
+ * @returns The localized footer component
+ */
 export async function Footer({ locale }: { locale: Locale }) {
   const { t } = await getTranslation(locale, 'navigation');
 

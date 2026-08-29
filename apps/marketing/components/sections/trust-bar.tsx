@@ -80,6 +80,12 @@ function LogoChip({
   );
 }
 
+/**
+ * Renders a marquee-style trust bar displaying partner logos with infinite scroll animation.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The trust bar with animated partner brand logos
+ */
 export function TrustBar({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
 

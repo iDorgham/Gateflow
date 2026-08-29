@@ -37,17 +37,27 @@ interface Feature {
   color: 'brand' | 'success' | 'information' | 'warning';
 }
 
+/**
+ * Renders a grid of feature cards with icons, titles, and descriptions.
+ *
+ * @param props - Section title, features array, and locale for RTL support
+ * @returns The features section with animated card hover effects
+ */
 export function FeaturesSection({
   sectionTitle,
   featuresTitle,
   features,
+  locale = 'en',
 }: {
   sectionTitle: string;
   featuresTitle: string;
   features: Feature[];
+  locale?: string;
 }) {
+  const isRtl = locale.startsWith('ar');
+
   return (
-    <section className="relative overflow-hidden py-32 md:py-64">
+    <section className="relative overflow-hidden py-24 md:py-36 bg-ds-surface">
       {/* Brand-orange radial glow from top */}
       <div
         className="absolute inset-0 bg-ds-background-brand-bold opacity-[0.03]"
@@ -77,12 +87,12 @@ export function FeaturesSection({
         {/* ── Section header ── */}
         <motion.div
           {...revealProps}
-          className="text-center max-w-5xl mx-auto mb-24 lg:mb-40"
+          className="text-center max-w-4xl mx-auto mb-16 lg:mb-24"
         >
-          <span className="mb-8 inline-block text-[12px] font-black uppercase tracking-[0.4em] text-ds-text-subtle px-5 py-2 bg-ds-surface-raised rounded-full border border-ds-border shadow-sm">
+          <span className="mb-6 inline-block text-[11px] font-black uppercase tracking-[0.3em] text-ds-text-brand px-4 py-1.5 bg-ds-background-brand-subtle rounded-full border border-ds-border-brand/30 shadow-sm">
             {sectionTitle}
           </span>
-          <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-ds-text-heading leading-[0.95]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-ds-text-heading leading-[1.1]">
             {featuresTitle}
           </h2>
         </motion.div>
@@ -96,32 +106,32 @@ export function FeaturesSection({
                 key={i}
                 {...revealProps}
                 transition={{ ...revealProps.transition, delay: i * 0.1 }}
-                className="group flex h-full flex-col rounded-[32px] border border-ds-border bg-ds-surface-raised p-10 lg:p-12 transition-all duration-500 hover:border-ds-border-bold hover:shadow-lg hover:-translate-y-2 relative overflow-hidden active:scale-[0.98]"
+                className="group flex h-full flex-col rounded-[28px] border border-ds-border bg-ds-surface-raised p-8 lg:p-10 transition-all duration-500 hover:border-ds-border-bold hover:shadow-xl hover:-translate-y-1.5 relative overflow-hidden active:scale-[0.99]"
               >
                 {/* Hover shimmer overlay */}
-                <div className="absolute inset-0 bg-ds-background-neutral opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-[32px]" />
+                <div className="absolute inset-0 bg-ds-background-neutral opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-[28px]" />
 
                 {/* Icon badge */}
                 <div
-                  className={`relative z-10 mb-12 flex h-20 w-20 items-center justify-center rounded-2xl border transition-all duration-500 group-hover:scale-110 shadow-sm group-hover:shadow-md ${colorMap[feature.color]}`}
+                  className={`relative z-10 mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-500 group-hover:scale-110 shadow-sm group-hover:shadow-md ${colorMap[feature.color]}`}
                 >
-                  <Icon size={36} strokeWidth={1.5} />
+                  <Icon size={30} strokeWidth={1.75} />
                 </div>
 
                 {/* Title */}
-                <h3 className="relative z-10 mb-6 text-[28px] font-black tracking-tighter text-ds-text-heading group-hover:text-ds-text-brand transition-colors">
+                <h3 className="relative z-10 mb-4 text-[22px] font-black tracking-tight text-ds-text-heading group-hover:text-ds-text-brand transition-colors leading-snug">
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className="relative z-10 flex-grow text-[16px] leading-[1.65] text-ds-text-subtle font-medium group-hover:text-ds-text transition-colors">
+                <p className="relative z-10 flex-grow text-[15px] leading-relaxed text-ds-text-subtle font-medium group-hover:text-ds-text transition-colors">
                   {feature.desc}
                 </p>
 
                 {/* Learn more arrow */}
-                <div className="relative z-10 mt-12 flex items-center gap-2 text-ds-text-brand font-black uppercase tracking-[0.2em] text-[11px] opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-x-3 rtl:translate-x-3 group-hover:translate-x-0 rtl:group-hover:translate-x-0">
-                  <span>Learn More</span>
-                  <ArrowRight size={14} />
+                <div className="relative z-10 mt-8 flex items-center gap-2 text-ds-text-brand font-black uppercase tracking-wider text-[11px] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <span>{isRtl ? 'المزيد' : 'Learn More'}</span>
+                  <ArrowRight size={13} className="rtl:-scale-x-100" />
                 </div>
               </motion.div>
             );

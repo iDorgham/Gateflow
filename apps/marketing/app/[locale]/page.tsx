@@ -124,6 +124,7 @@ export default async function HomePage({
         sectionTitle={t('problems.title')}
         featuresTitle={t('features.title')}
         features={features}
+        locale={locale}
       />
 
       {/* How It Works */}

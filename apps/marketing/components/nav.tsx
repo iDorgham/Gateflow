@@ -44,6 +44,12 @@ const panelVariants = {
   },
 } as const;
 
+/**
+ * Renders the main navigation header with menu items, mega menus, language switcher, and CTA buttons.
+ *
+ * @param props - Contains the current locale for internationalization
+ * @returns The responsive navigation component with desktop and mobile variants
+ */
 export function Nav({ locale }: { locale: Locale }) {
   const { t } = useTranslation('navigation');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);

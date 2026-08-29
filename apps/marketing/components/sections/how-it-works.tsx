@@ -6,6 +6,12 @@ import { QrCode, ScanLine, FileCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
+/**
+ * Renders the "How It Works" section showing the three-step process.
+ *
+ * @param props - Contains the locale for translations
+ * @returns The how-it-works section with step-by-step visual timeline
+ */
 export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
 
@@ -28,9 +34,9 @@ export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="py-32 md:py-64 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden">
+    <section className="py-24 md:py-36 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden">
       <div className="container mx-auto px-8 relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-40">
+        <div className="text-center max-w-4xl mx-auto mb-16 lg:mb-24">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
