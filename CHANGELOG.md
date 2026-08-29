@@ -10,6 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** use Buffer.concat and silent error handling for GCM decrypt
+- **[Ci]** use accurate UTC timestamp for runtime proof receipt
+
 - **[Scanner-App]** add onboarding wizard, biometric guard, shift session manager and master scan fab
 - **[Guard-Patrol]** implement perimeter checkpoints, hmac validation and live map telemetry
 - **[Scanner Onboarding Session]** Completed all phases of Scanner Onboarding Session
