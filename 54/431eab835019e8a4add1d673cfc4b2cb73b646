@@ -1,0 +1,16 @@
+.ai/runtime-proof.json
+  h_220d66b2244819 13,26,39,52,57-58,65,78,91
+docs/audits/marketing/AUDIT_2026-08-29.md
+  h_220d66b2244819 1-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "54431eab835019e8a4add1d673cfc4b2cb73b646",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
