@@ -1,0 +1,14 @@
+packages/db/src/lib/crypto.ts
+  h_220d66b2244819 66-67,77-80,82-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ff28ed76820cad7c0e36c5215ae9ce323ea5fafe",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
