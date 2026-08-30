@@ -1,0 +1,20 @@
+apps/resident-mobile/app/index.tsx
+  h_220d66b2244819 25
+apps/resident-mobile/src/features/notifications/handlers/notificationHandlers.ts
+  h_220d66b2244819 32
+apps/resident-mobile/src/features/notifications/hooks/useArrivalNotifications.ts
+  h_220d66b2244819 40-41
+apps/resident-mobile/src/features/visitor-share/screens/CreateVisitorScreen.tsx
+  h_220d66b2244819 97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "db056eb221b4e3b8747eaa46d23f451b428b70c9",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
