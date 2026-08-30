@@ -1,0 +1,16 @@
+CHANGELOG.md
+  h_220d66b2244819 12-13
+docs/reference/product/PRD.md
+  h_220d66b2244819 175-177
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "00ebe8d54fe230115776beaf9ee9e67a4923d4af",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
