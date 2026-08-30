@@ -9,8 +9,8 @@ import {
 
 // Test 1: PII Phone Number Masking
 test('maskPhoneNumber properly masks middle digits while preserving prefix and last 4', () => {
-  assert.equal(maskPhoneNumber('+201012345678'), '+20101****5678');
-  assert.equal(maskPhoneNumber('01012345678'), '010****5678');
+  assert.strictEqual(maskPhoneNumber('+201012345678'), '+2010****5678');
+  assert.strictEqual(maskPhoneNumber('01012345678'), '010****5678');
   assert.equal(maskPhoneNumber(''), '');
   assert.equal(maskPhoneNumber(null), '');
 });
