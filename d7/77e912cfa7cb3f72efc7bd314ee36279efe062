@@ -1,0 +1,14 @@
+packages/ui/src/components/ui/button.tsx
+  h_220d66b2244819 42-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d777e912cfa7cb3f72efc7bd314ee36279efe062",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
