@@ -26,18 +26,35 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue
 );
 
-const FormField = <
+import {
+  FormField as StandaloneFormField,
+  type StandaloneFormFieldProps,
+} from './form-field';
+
+function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
-  return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  );
-};
+>(props: ControllerProps<TFieldValues, TName>): React.ReactElement;
+function FormField(props: StandaloneFormFieldProps): React.ReactElement;
+function FormField<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: ControllerProps<TFieldValues, TName> | StandaloneFormFieldProps
+): React.ReactElement {
+  if (
+    'name' in props &&
+    'render' in props &&
+    typeof props.render === 'function'
+  ) {
+    return (
+      <FormFieldContext.Provider value={{ name: props.name }}>
+        <Controller {...props} />
+      </FormFieldContext.Provider>
+    );
+  }
+  return <StandaloneFormField {...(props as StandaloneFormFieldProps)} />;
+}
 
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext);
