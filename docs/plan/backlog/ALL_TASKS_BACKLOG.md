@@ -4,6 +4,23 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### lighthouse-100 — Lighthouse Performance 100 Across All GateFlow Applications
+
+**PLAN:** `docs/plan/Draft/lighthouse-100/PLAN_lighthouse-100.md`  
+**DRAFT:** `docs/plan/Draft/lighthouse-100/DRAFT_lighthouse-100.md`  
+**Status:** 🟡 Draft / Ready for Review  
+**Priority:** P1 — Core Web Vitals, Bundle Optimization & Performance SLA  
+**Target:** 100 Performance, $\ge 95$ Accessibility, 100 Best Practices, 100 SEO across all 5 web apps  
+**App:** `apps/marketing`, `apps/design-system`, `apps/resident-portal`, `apps/client-dashboard`, `apps/admin-dashboard`, `packages/ui`, `packages/theme`
+
+- [ ] Phase 1 — Foundation & Measurement Baseline
+- [ ] Phase 2 — Marketing & Design System Portal Optimization
+- [ ] Phase 3 — Resident Portal (PWA & Offline Pass Optimization)
+- [ ] Phase 4 — Client Dashboard (High-Density Operations & Data Islands)
+- [ ] Phase 5 — Admin Dashboard & Monorepo CI Hard-Gate Enforcement
+
+---
+
 ### design_system_impeccable_revamp — Impeccable Design System UI/UX Overhaul & Multi-App Rollout
 
 **PLAN:** `docs/plan/Complete/design_system_impeccable_revamp/PLAN_design_system_impeccable_revamp.md`  
