@@ -1,0 +1,74 @@
+.antigravity/agents/roles/frontend.md
+  h_220d66b2244819 10,29-51
+.antigravity/skills/design-guide/SKILL.md
+  h_220d66b2244819 16,30-44
+.antigravity/skills/theme-auditor/SKILL.md
+  h_220d66b2244819 14,21-28,37,71-110,117-120,128,132-138
+.antigravity/templates/TEMPLATE_IMPECCABLE_PROMPT.md
+  h_220d66b2244819 13,15-17,75-78,84-90,94,96-97
+CHANGELOG.md
+  h_220d66b2244819 12
+DESIGN.md
+  h_220d66b2244819 12-15,21-24,33-36,45-48,57-60,73-76,86-89,131-134,140,145-153,158-161
+apps/design-system/src/app/(docs)/sandboxes/vibe-check/page.tsx
+  h_220d66b2244819 172
+docs/development/certification/CERTIFICATION_design_system_impeccable_revamp.md
+  h_220d66b2244819 6,8-10,22,30-38,45-48,72-75
+docs/development/initiatives/IDEA_design_system_impeccable_revamp.md
+  h_220d66b2244819 7,9-11,18-21
+docs/plan/Complete/design_system_impeccable_revamp/ACCESSIBILITY_AND_A11Y_GUIDE.md
+  h_220d66b2244819 6,8-10,55,63-72,79-84,88-89,95,97-101,106-109,120,137-157
+docs/plan/Complete/design_system_impeccable_revamp/AI_CONTEXT_PACK.md
+  h_220d66b2244819 5,7-9,69,71-80,98,100-109
+docs/plan/Complete/design_system_impeccable_revamp/AI_PROMPT_WRITING_GUIDE.md
+  h_220d66b2244819 5,7-9,16,18-21,26-29,47-52,56-57,66-69,71-72,82-85,97,100-105,113-117,120-121,129,132-137
+docs/plan/Complete/design_system_impeccable_revamp/CONTEXT_design_system_impeccable_revamp.md
+  h_220d66b2244819 4,6-8,53,61-69,95,97-98
+docs/plan/Complete/design_system_impeccable_revamp/DESIGN_SYSTEM_ARCHITECTURE.md
+  h_220d66b2244819 6,8-10,45-48,58,70-85,91,96-103,108,110-112,126-129,144-147,165,171-189,195,198-205,210,212-217,236-239,241-242,247,249-256,263,270-290,299,302-310,316,320-326,344-347
+docs/plan/Complete/design_system_impeccable_revamp/DRAFT_design_system_impeccable_revamp.md
+  h_220d66b2244819 11,13-15,31,33-37,42,55-72,84-87,98-101,108-111,117-120,141,157-177,195-198,203-206,291-294,300-303,309-312,318-321,328-331,337-340,346-349,355-358
+docs/plan/Complete/design_system_impeccable_revamp/FOR_PLAN_PROMPT.md
+  h_220d66b2244819 2-5,34-37,49-52,78-81,88-91,98-101,108,116-125,130-133,156-159,172-175,190-193,198-201,211-214,219-222,233-236,241-244,254-257,263-266,271-274,284-287,292-295,301-304,313-316,321-324,337-340
+docs/plan/Complete/design_system_impeccable_revamp/IMPECCABLE_AND_DESIGN_MD_GUIDE.md
+  h_220d66b2244819 6,8-10,19-22,37,74-115,130-133,148,155-165
+docs/plan/Complete/design_system_impeccable_revamp/MIGRATION_AND_ROLLOUT_GUIDE.md
+  h_220d66b2244819 5,7-9,39,50-63,83-86,119,132-149
+docs/plan/Complete/design_system_impeccable_revamp/PLAN_FEEDBACK.md
+  h_220d66b2244819 5,7-9,32,34-36,42,53-64
+docs/plan/Complete/design_system_impeccable_revamp/PLAN_design_system_impeccable_revamp.md
+  h_220d66b2244819 8,10-12,19,22-26,34,44-55,78-81,93,104-115,122-125
+docs/plan/Complete/design_system_impeccable_revamp/TASKS_design_system_impeccable_revamp.md
+  h_220d66b2244819 5,7-9,14-17,33-36,53-56,69-72,86,88-90,95-98,109-112,122-125,135-138
+docs/plan/Complete/design_system_impeccable_revamp/VIBE_CODER_QUICKSTART.md
+  h_220d66b2244819 12,21-30,45,50-55,64-67,72-75,85-88,96-100,103-104,110,112-114,125,127-131,137-140,142-143,150-153,161-164
+docs/plan/Complete/design_system_impeccable_revamp/phases/01_tokens_foundations/PROMPT_phase_01.md
+  h_220d66b2244819 8,10-12
+docs/plan/Complete/design_system_impeccable_revamp/phases/02_core_primitives/PROMPT_phase_02.md
+  h_220d66b2244819 8,10-12
+docs/plan/Complete/design_system_impeccable_revamp/phases/03_domain_patterns/PROMPT_phase_03.md
+  h_220d66b2244819 8,10-12
+docs/plan/Complete/design_system_impeccable_revamp/phases/04_showcase_audit/PROMPT_phase_04.md
+  h_220d66b2244819 8,10-12,89,91-93
+docs/plan/Complete/design_system_impeccable_revamp/phases/05_multi_app_rollout/PROMPT_phase_05.md
+  h_220d66b2244819 5,12-20,63-66,71-74,82-85,90-93,100-103,108-111
+docs/plan/Complete/design_system_impeccable_revamp/phases/06_monorepo_certification/PROMPT_phase_06.md
+  h_220d66b2244819 8,10-12
+docs/reference/product/FEATURE_LOG.md
+  h_220d66b2244819 7,26-45
+packages/tokens/scripts/check-contrast.js
+  h_220d66b2244819 9,22-35,41,54-67,81,83-85,108,130-304,316,318-322,331,338-353
+scripts/check/audit-showcase.js
+  h_220d66b2244819 11,13-18,31,36-46,71,77-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "0ff5ebb4c958aaad8e9787bfcabfbb29da9fc23d",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
