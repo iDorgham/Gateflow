@@ -1,8 +1,8 @@
 # GateFlow — Master Product Requirements Document (PRD)
 
-> **Document Version:** 13.0 (Master Enterprise & Pilot Certification Edition)  
+> **Document Version:** 14.0 (Master Enterprise, Design System & Pilot Certification Edition)  
 > **Status:** Active / Production Ready  
-> **Last Updated:** 2026-08-27  
+> **Last Updated:** 2026-08-30  
 > **Target Domain:** `*.gateflow.site`  
 > **Confidentiality:** Internal Engineering, Product, Security & Operations
 
@@ -19,6 +19,7 @@ GateFlow unifies:
 3. **Enterprise Zero-Trust Multi-Tenancy**: Strict `organizationId` query isolation, granular RBAC (Owner, Admin, Guard, Resident, Concierge), and step-up MFA challenge security.
 4. **Data Privacy & MENA Compliance**: AES-256-GCM field encryption for PII, SHA-256 tamper-evident chained audit ledger, and full compliance with Egyptian Law 151 of 2020 and Saudi PDPL.
 5. **Native Arabic/English Localization**: Complete bidirectional RTL layouts, Cairo typography, and unified cross-subdomain `.gateflow.site` theme and locale persistence.
+6. **Unified Enterprise Design System**: Three-tier token architecture (`@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`), OKLCH Satin-Charcoal Dark Mode layers (`--ds-layer-01` to `--ds-layer-04`), and calibrated Enterprise Radii (`4px`–`16px`).
 
 ---
 
@@ -44,7 +45,7 @@ Deliver high-trust, zero-friction access experiences with measurable operational
 
 ## 3. Product Surfaces & Application Architecture
 
-GateFlow operates as an integrated ecosystem of **6 applications and shared core packages**:
+GateFlow operates as an integrated ecosystem of **7 applications and shared core packages**:
 
 ```mermaid
 graph TD
@@ -55,6 +56,10 @@ graph TD
     RP -->|QR Passes| SA
     RM[apps/resident-mobile<br/>iOS / Android Key] -->|QR Passes / Biometrics| SA
     SA -->|CCITT-CRC16 Relay Frame| HW[Physical Barrier Gate Relays]
+    DS[apps/design-system<br/>design.gateflow.site] -.->|Tokens & Primitives| CD
+    DS -.->|Tokens & Primitives| AD
+    DS -.->|Tokens & Primitives| M
+    DS -.->|Tokens & Primitives| RP
 ```
 
 ### 3.1 `apps/marketing` (Public Web Portal & Growth Engine)
@@ -96,6 +101,15 @@ graph TD
 - **Stack**: Expo SDK 54, React Native, Biometrics (FaceID / TouchID).
 - **Core Capabilities**: Smartphone digital key, biometric guest pass generator, compound notifications.
 
+### 3.7 `apps/design-system` (Interactive Component Portal & Token Explorer)
+
+- **Domain**: `https://design.gateflow.site` (Local port: 3005)
+- **Stack**: Next.js 14 (App Router), `@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`.
+- **Core Capabilities**:
+  - **Dynamic Token Explorer**: Searchable, categorized token inspector covering Foundations, Semantic, and Component tokens with live preview swatches and CSS variable copying.
+  - **Pattern Laboratories**: Interactive entity management, compound metrics cards, filter composition bars, and analytics dashboards.
+  - **Vibe Check Sandbox**: Live dual-mode theme testing, density mode toggles, and RTL direction switches.
+
 ---
 
 ## 4. Security & Cryptographic Invariants
@@ -119,8 +133,23 @@ graph TD
 
 ## 5. Design System (ADS) & Localization Standards
 
-- **Token Semantics (`@gateflow/theme`)**: Pure CSS variables (`var(--ds-background-default)`, `var(--ds-text-primary)`).
-- **Theme Synchronization**: Synchronous cookie sync with hydration safety (`gateflow-theme`).
+### 5.1 Three-Tier Token Architecture
+
+1. **Tier 1 (Foundations — `@gateflow/tokens`)**: Primitive color palettes, spacing grid, typography scale, shadows, and Enterprise Radii tokens.
+2. **Tier 2 (Semantic & Theme — `@gateflow/theme`)**: OKLCH Satin-Charcoal Dark Mode surfaces (`--ds-layer-01` to `--ds-layer-04`), Porcelain Light Mode, semantic text/border/status roles, and SSR-safe `ThemeScript`.
+3. **Tier 3 (Components & Compositions — `@gateflow/ui`, `@gateflow/components`)**: Accessible Radix-backed primitives and high-density composite patterns (`FilterBar`, `DynamicTable`, `BottomSheet`, `StatGrid`).
+
+### 5.2 Enterprise Radii Scale
+
+- `--ds-radius-xs: 2px;` (subtle badges, tags)
+- `--ds-radius-sm: 4px;` (compact elements, inner tags)
+- `--ds-radius-md: 6px;` (inputs, select triggers, buttons)
+- `--ds-radius-lg: 10px;` (cards, data tables)
+- `--ds-radius-xl: 14px;` (composite containers, modals)
+- `--ds-radius-2xl: 16px;` (hero containers)
+
+### 5.3 Arabic RTL & Locale Standards
+
 - **Cross-Subdomain Locale Sharing (`@gate-access/i18n`)**: `gf_locale` cookie with `Domain=.gateflow.site` in production.
 - **Arabic RTL Compliance**: Full right-to-left layout with Cairo Arabic typography and logical CSS spacing (`ms-*`, `me-*`, `ps-*`, `pe-*`).
 
@@ -129,7 +158,7 @@ graph TD
 ## 6. Verification, Testing & Quality Gates
 
 - **Automated CI Checks**: 18 GitHub Actions checks (CodeQL, Lint, Typecheck, Test, Lighthouse CI, Security Scan, Runtime Proof Check).
-- **Preflight Mandate**: `pnpm preflight` must pass 100% cleanly across all 19 workspace packages prior to any release.
+- **Preflight Mandate**: `pnpm preflight` must pass 100% cleanly across all workspace packages prior to any release.
 - **Manual Deployment Guard**: Push-to-deploy is disabled. Production releases require explicit `/deploy` workflow dispatch.
 
 ### Guard Patrol Checkpoints
@@ -139,3 +168,7 @@ graph TD
 ### Scanner Onboarding Session
 
 **Status:** ✅ Complete | Last updated: 2026-08-28
+
+### GateFlow Design System Impeccable Revamp & Enterprise Radii Rollout
+
+**Status:** ✅ Complete | Last updated: 2026-08-30

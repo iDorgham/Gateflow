@@ -9,19 +9,13 @@
 ## 1. Product & Brand Registers
 
 ### Product Register (Console & Dashboards: `client-dashboard`, `admin-dashboard`, `scanner-app`)
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - **Tone**: Precision console, high-density, calm, diagnostic, authoritative.
 - **Rules**: Solid semantic colors, high data density (Compact 36px controls), zero decorative gradient text, zero default glassmorphism, zero colored `border-left` callouts.
 - **Typography**: Inter (LTR) + Cairo/Tajawal (RTL). Functional weights 500–600.
 
-### Brand Register (Websites & Portals: `marketing`, `resident-portal`, `resident-mobile`)
-<<<<<<< Updated upstream
-=======
+### Brand Register (Websites & Portals: `marketing`, `resident-portal`, `resident-mobile`, `design-system`)
 
->>>>>>> Stashed changes
 - **Tone**: Visionary, enterprise, empowering, reassuring, unforgettable.
 - **Rules**: Asymmetrical bento grids, subtle procedural rim-light glow, fluid typography (`clamp()`), Comfortable density (48px controls, $\ge 44\text{px}$ touch targets).
 
@@ -30,10 +24,7 @@
 ## 2. Color Geometry & Surface Layers (Carbon 3-Tier Model)
 
 ### OKLCH Satin-Charcoal Dark Mode Surfaces
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 ```
 layer-01 (Canvas / Gutter / Sunken):  oklch(8% 0.012 250)   -> #0b0d11
 layer-02 (Default Cards & Tables):    oklch(12% 0.015 250)  -> #12151c
@@ -42,10 +33,7 @@ layer-04 (Overlays / Modals / Sheets):oklch(20% 0.020 250)  -> #212633
 ```
 
 ### Porcelain Light Mode Surfaces
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 ```
 layer-01 (Page Background / Canvas):  oklch(98% 0.005 250)  -> #f8f9fa
 layer-02 (Surface / Default Cards):   oklch(100% 0 0)       -> #ffffff
@@ -54,10 +42,7 @@ layer-04 (Overlay / Dialogs):         oklch(100% 0 0)       -> #ffffff (+ deep s
 ```
 
 ### Semantic Accent Palettes (The 60-30-10 Rule)
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - **Primary / Brand Action (10% max)**: Kimchi Vermilion (`#ED4B00` / Dark hover `#FF5C0A` / Subtle `rgba(237, 75, 0, 0.10)`).
 - **Secondary / Telemetry**: Electric Cobalt (`#0052CC` / `#2563EB`).
 - **Success / Validated Gate**: Emerald Forest (`#10B981` / `#059669`).
@@ -70,10 +55,7 @@ layer-04 (Overlay / Dialogs):         oklch(100% 0 0)       -> #ffffff (+ deep s
 ## 3. Typography Scale & Bidirectional RTL Stacks
 
 ### Fluid Type Scale (CSS `clamp()`)
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - `text-xs`: `clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem)` (12px–13px)
 - `text-sm`: `clamp(0.875rem, 0.825rem + 0.25vw, 0.9375rem)` (14px–15px)
 - `text-base`: `clamp(1rem, 0.95rem + 0.25vw, 1.0625rem)` (16px–17px)
@@ -83,19 +65,23 @@ layer-04 (Overlay / Dialogs):         oklch(100% 0 0)       -> #ffffff (+ deep s
 - `text-3xl`: `clamp(2rem, 1.75rem + 1.25vw, 2.75rem)` (32px–44px)
 
 ### Font Stacks
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - **Latin (LTR)**: `Inter`, `Outfit`, `ui-sans-serif`, `system-ui`.
 - **Arabic (RTL)**: `Cairo`, `Tajawal`, `IBM Plex Arabic` (with $1.6\times$ line-height to protect diacritics).
 - **Code / Monospace**: `JetBrains Mono`, `SF Mono`, `monospace`.
 
 ---
 
-## 4. Spacing, Density & Mobile Touch Invariants
+## 4. Spacing, Density & Enterprise Radii
 
 - **Spatial Grid**: 4px base grid (4, 8, 12, 16, 24, 32, 40, 48, 64px).
+- **Enterprise Radii Scale**:
+  - `--ds-radius-xs: 2px;` (subtle badges, tags)
+  - `--ds-radius-sm: 4px;` (compact elements, inner tags)
+  - `--ds-radius-md: 6px;` (inputs, select triggers, buttons)
+  - `--ds-radius-lg: 10px;` (cards, data tables)
+  - `--ds-radius-xl: 14px;` (composite containers, modals)
+  - `--ds-radius-2xl: 16px;` (hero containers)
 - **Densities**:
   - **Compact**: 36px control height (default for Dashboards).
   - **Comfortable**: 48px control height (default for Marketing, Portals, Mobile).
@@ -128,35 +114,21 @@ layer-04 (Overlay / Dialogs):         oklch(100% 0 0)       -> #ffffff (+ deep s
 ## 7. Component Blueprints & Recipes
 
 ### Button Recipe
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - Subtle top-edge inner highlight (`box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15)` in dark mode).
 - Focus ring: 2px offset Kimchi ring (`ring-2 ring-[var(--ds-color-primary)] ring-offset-2`).
 - Variants: `primary`, `secondary`, `outline`, `ghost`, `destructive`, `fab`.
 
 ### FormField Recipe
-<<<<<<< Updated upstream
+
 Always wrap inputs in `<FormField label="..." helperText="..." errorMessage="..." isRequired>`:
 - Dynamic Ruby error border + single gentle shake animation on validation failure (`animate-shake`).
 
 ### DynamicTable Recipe
-=======
 
-Always wrap inputs in `<FormField label="..." helperText="..." errorMessage="..." isRequired>`:
-
-- Dynamic Ruby error border + single gentle shake animation on validation failure (`animate-shake`).
-
-### DynamicTable Recipe
-
->>>>>>> Stashed changes
 - Desktop ($\ge 768\text{px}$): Semantic table with sticky header and density toggle.
 - Mobile ($< 768\text{px}$): Automatically transforms rows into stacked interactive `<Card>` items with zero horizontal scroll.
 
 ### BottomSheet Recipe
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 - Snap points at 25%, 50%, 90%, spring drag handle, backdrop blur, safe-area-inset padding.
