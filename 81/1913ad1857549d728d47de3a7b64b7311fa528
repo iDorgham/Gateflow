@@ -1,0 +1,20 @@
+apps/resident-mobile/src/features/security/security.test.mjs
+  h_220d66b2244819 12-13
+packages/ui/src/components/ui/bottom-sheet.tsx
+  h_220d66b2244819 4-10,37-47,49-60,62-66,68-70
+packages/ui/src/components/ui/form.tsx
+  h_220d66b2244819 167
+pnpm-lock.yaml
+  h_220d66b2244819 764-766,770-772,806-808,852-857,11737-11744,11830-11838,17571-17583
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "811913ad1857549d728d47de3a7b64b7311fa528",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
