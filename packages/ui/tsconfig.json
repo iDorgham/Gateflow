@@ -5,5 +5,12 @@
     "skipLibCheck": true,
     "incremental": false
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/__tests__/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "node_modules",
+    "dist"
+  ]
 }
