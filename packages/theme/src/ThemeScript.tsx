@@ -8,6 +8,8 @@ import { THEME_BOOTSTRAP_SCRIPT } from './cookie';
 export function ThemeScript() {
   return (
     <script
+      id="gateflow-theme-bootstrap"
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
     />
   );

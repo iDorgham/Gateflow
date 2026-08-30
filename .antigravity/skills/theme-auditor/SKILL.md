@@ -1,51 +1,78 @@
 ---
 name: theme-auditor
-description: Specialized workflows and patterns for theme-auditor.
+description: Systematic theme auditing, WCAG 2.2 AA contrast verification, Impeccable heuristic scoring, and anti-AI-slop inspection for GateFlow apps and design systems.
 ---
 
-# GateFlow Theme Auditor Skill (gf-theme-auditor)
+# Impeccable Theme & UI Auditor (gf-theme-auditor)
 
-This skill provides a systematic approach to auditing, fixing, and memorizing light/dark mode consistency and accessibility across the GateFlow monorepo. It ensures that the design system's premium aesthetic (satin, glass, subtle gradients) is correctly implemented in both themes.
+Provides systematic auditing, heuristic evaluation, and automated contrast/quality checks across Light and Dark modes for the GateFlow monorepo using `/impeccable` commands.
 
-## 🎨 Core Mandates
+---
 
-1.  **Subtle Transitions**: Avoid high-contrast transitions (like pure black to pure white borders). Use semantic tokens instead of hardcoded colors.
-2.  **Satin Dark Mode**: Dark mode should feel like satin/charcoal, not pure black (#000). Use the `oklch(L% C H)` color space for perceptually uniform lightness.
-3.  **Contrast Compliance**: Ensure text-to-background contrast ratios meet WCAG 2.1 Level AA (4.5:1 for normal text).
-4.  **Token First**: Every color modification MUST be done via the token system (`packages/tokens/css/tokens.css`) to ensure synchronization across all apps.
+## 🔍 1. Impeccable Audit Commands
 
-## 🔍 Audit Workflow (RALPH Cycle)
+| Command | Action | Output / Goal |
+| :--- | :--- | :--- |
+| `/impeccable audit [target]` | Full automated technical check | WCAG contrast ratio table, CLS metrics, responsive breakpoints. |
+| `/impeccable critique [target]` | Heuristic UX evaluation | 30 UX laws score, cognitive load rating, density assessment. |
+| `/impeccable polish [target]` | Visual refinement cycle | Sub-pixel alignment, border contrast, focus ring states. |
+| `/impeccable live` | Visual variant inspection | Browser-based interactive theme & layout verification. |
 
-When asked to audit or fix theme issues, follow these steps:
+---
 
-1.  **Scan**: Identify hardcoded slate, grey, black, or white classes (e.g., `bg-white`, `dark:bg-slate-800`).
-2.  **Measure**: Use the browser subagent to inspect the actual rendered colors and contrast ratios.
-3.  **Map**: Replace hardcoded classes with the appropriate semantic tokens:
-    - `bg-[var(--ds-surface)]`
-    - `bg-[var(--ds-surface-raised)]`
-    - `border-[var(--ds-border-subtle)]`
-    - `text-[var(--ds-text)]`
-4.  **Synchronize**: Update the corresponding token definitions in `tokens.css` if the global palette needs refinement.
-5.  **Verify**: Use the browser subagent in both Light and Dark modes to capture comparison screenshots.
+## 📋 2. The 5-Point Heuristic Audit Checklist
 
-## 🧠 Theme Memory
+When auditing any application screen or component in `apps/design-system` or consumer apps, verify:
 
-Record persistent theme findings, recurring pitfalls, and approved aesthetic deviations in the `.ai-memory/theme_patterns.md` file.
+### 1. Dual-Mode Contrast & Luminance
+- **Normal Text**: Contrast ratio $\ge 4.5:1$ against surface background.
+- **Large Text / Headings**: Contrast ratio $\ge 3:1$.
+- **UI Components / Borders**: Contrast ratio $\ge 3:1$ for interactive controls and active focus rings.
+- **Dark Mode Surfaces**: Satin depth progression (`#0b0d11` → `#12151c` → `#191d26` → `#212633`).
 
-- **Bad Pattern**: Using `border-slate-200` for light mode components.
-- **Good Pattern**: Using `border-[var(--ds-border-subtle)]` which resolves to a more balanced, theme-aware shade.
-- **Pitfall**: Inconsistent `popover` backgrounds when using third-party libraries (Radix, HeadlessUI). Always wrap or theme these components explicitly.
+### 2. Anti-AI-Slop Gate (Pass Required)
+- Zero `border-left` colored card accents.
+- Zero decorative gradient text in console/dashboard UI.
+- Zero glassmorphism used as default card styling.
+- Zero unconstrained layout property animations.
+- Zero pure `#000000` or `#ffffff` body backgrounds.
 
-## 🛠 Usage Examples
+### 3. Spatial Rhythm & Optical Alignment
+- Strict 8pt spatial grid with 4pt baseline intervals.
+- Consistent container padding (`space-150`, `space-200`, `space-300`).
+- Text line length constrained to $65\text{--}75\text{ch}$ for optimal reading comfort.
 
-### `/theme-audit <app>`
+### 4. Arabic RTL & Bidirectional Symmetry
+- Logical spacing properties only (`ms-*`, `me-*`, `ps-*`, `pe-*`).
+- Correct optical alignment for chevron indicators, badges, and avatars in RTL mode.
+- Cairo / Tajawal font rendering without vertical text clipping.
 
-Use this command to trigger a full theme audit of a specific application.
+### 5. Micro-interactions & Accessible Focus
+- Visible, high-contrast focus rings (`ring-2 ring-primary ring-offset-2`).
+- Smooth cubic-bezier ease-out transitions (`transform` and `opacity` only).
+- Strict adherence to `prefers-reduced-motion`.
 
-- `ralph theme-audit design-system`
+---
 
-### `/theme-fix <issue>`
+## 📝 3. Theme Audit Report Template
 
-Use this command to implement a specific theme fix across all apps.
+When generating an audit report, use this structured format:
 
-- `ralph theme-fix "dropdown borders too bright in dark mode"`
+```markdown
+## Impeccable UI/UX & Theme Audit Report — [Target App/Component]
+
+**Status**: [✅ PASS (Score: 100/100) | ⚠️ ISSUES DETECTED (Score: X/100)]
+
+### Heuristic Evaluation Summary
+- **Color & Contrast (WCAG 2.2 AA)**: [PASS / FAIL - Details]
+- **Dual-Mode Elevation Depth**: [PASS / FAIL - Details]
+- **Anti-AI-Slop Compliance**: [PASS / FAIL - Details]
+- **Arabic RTL Localization**: [PASS / FAIL - Details]
+- **Touch Targets & Responsiveness**: [PASS / FAIL - Details]
+
+### Actionable Fixes Required
+1. `[file_path]`: [Specific issue and proposed token/className fix]
+
+### Verdict
+[APPROVED for Production / REQUIRES ITERATION in packages/ui]
+```

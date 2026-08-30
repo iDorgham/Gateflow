@@ -39,6 +39,7 @@
   "scripts": {
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
+    "check-contrast": "node scripts/check-contrast.js",
     "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "devDependencies": {

@@ -31,6 +31,7 @@ import {
   Skeleton,
 } from '@gateflow/ui';
 import { GalleryItem } from '../../../../components/gallery/GalleryItem';
+import { StateCoverageMatrix } from '../../../../components/gallery/StateCoverageMatrix';
 import { Mail, Settings, Search, Plus, CheckCircle2 } from 'lucide-react';
 
 export default function PrimitivesPage() {
@@ -51,6 +52,9 @@ export default function PrimitivesPage() {
           { label: isRTL ? 'العناصر الأساسية' : 'Primitives' },
         ]}
       />
+
+      {/* Live State Coverage Matrix */}
+      <StateCoverageMatrix />
 
       <section className="flex flex-col gap-4">
         <GalleryItem
@@ -243,7 +247,7 @@ export default function Demo() {
   );
 }`}
         >
-          <Card className="w-[350px] rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-xl overflow-hidden backdrop-blur-sm">
+          <Card className="w-[350px] rounded-xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-md overflow-hidden backdrop-blur-sm">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-brand-bold)] flex items-center justify-center text-white">
@@ -493,19 +497,19 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="flex flex-col gap-6 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-sm shadow-sm backdrop-blur-sm">
+          <div className="flex flex-col gap-6 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-xl w-full max-w-sm shadow-sm backdrop-blur-sm">
             <div className="flex items-center gap-4">
-              <Skeleton className="h-14 w-14 rounded-2xl bg-[var(--ds-background-neutral-subtle)]" />
+              <Skeleton className="h-12 w-12 rounded-lg bg-[var(--ds-background-neutral-subtle)]" />
               <div className="flex flex-col gap-2 flex-1">
-                <Skeleton className="h-4 w-3/4 rounded-lg bg-[var(--ds-background-neutral-subtle)]" />
-                <Skeleton className="h-3 w-1/2 rounded-lg bg-[var(--ds-background-neutral-subtle)]" />
+                <Skeleton className="h-4 w-3/4 rounded-md bg-[var(--ds-background-neutral-subtle)]" />
+                <Skeleton className="h-3 w-1/2 rounded-md bg-[var(--ds-background-neutral-subtle)]" />
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <Skeleton className="h-20 w-full rounded-2xl bg-[var(--ds-background-neutral-subtle)] animate-pulse" />
+              <Skeleton className="h-16 w-full rounded-lg bg-[var(--ds-background-neutral-subtle)] animate-pulse" />
               <div className="flex justify-between">
-                <Skeleton className="h-8 w-20 rounded-lg bg-[var(--ds-background-neutral-subtle)]" />
-                <Skeleton className="h-8 w-24 rounded-lg bg-[var(--ds-background-neutral-subtle)]" />
+                <Skeleton className="h-7 w-20 rounded-md bg-[var(--ds-background-neutral-subtle)]" />
+                <Skeleton className="h-7 w-24 rounded-md bg-[var(--ds-background-neutral-subtle)]" />
               </div>
             </div>
           </div>
@@ -526,7 +530,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="flex flex-col gap-4 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-xs shadow-sm backdrop-blur-sm">
+          <div className="flex flex-col gap-4 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-xl w-full max-w-xs shadow-sm backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-[var(--ds-text)]">

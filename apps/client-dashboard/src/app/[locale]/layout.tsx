@@ -47,6 +47,7 @@ export default async function RootLayout(props: {
     <html
       lang={params.locale}
       dir={isRtl ? 'rtl' : 'ltr'}
+      data-density="compact"
       suppressHydrationWarning
     >
       <head>

@@ -35,21 +35,21 @@ export function FilterBar({
     >
       <div className="flex flex-1 items-center gap-3 min-w-0">
         <div className="relative flex-1 max-w-md group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--ds-icon-subtle)] focus-within:text-[var(--ds-icon-brand)] transition-colors">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--ds-text-subtlest)] group-focus-within:text-[var(--ds-text-brand)] transition-colors">
             <Search size={18} />
           </div>
           <Input
             autoFocus
             type="search"
             placeholder={placeholder}
-            className="pl-10 h-10 w-full bg-[var(--ds-background-input)] border-[var(--ds-border)] focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[var(--ds-border-focused)] focus-visible:border-transparent transition-all hover:bg-[var(--ds-background-neutral-subtle)]"
+            className="!pl-11 h-11 w-full bg-[var(--ds-layer-01)] border-[var(--ds-border-subtle)] rounded-xl text-sm placeholder:text-[var(--ds-text-subtlest)] focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[var(--ds-border-focused)] focus-visible:border-[var(--ds-border-focused)] transition-all hover:border-[var(--ds-border-bold)]"
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
           />
           {searchValue && (
             <button
               onClick={onClear}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--ds-icon-subtle)] hover:text-[var(--ds-text)]"
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--ds-text-subtle)] hover:text-[var(--ds-text-primary)]"
             >
               <X size={16} />
               <span className="sr-only">Clear</span>

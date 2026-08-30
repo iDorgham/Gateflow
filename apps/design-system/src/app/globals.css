@@ -3,8 +3,8 @@
 @import "../../../../packages/tokens/css/tokens.css";
 
 @theme {
-  --font-sans: var(--font-inter, ui-sans-serif, system-ui);
-  --font-mono: var(--font-mono, monospace);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, system-ui;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Surfaces */
   --color-background: var(--ds-background-default);

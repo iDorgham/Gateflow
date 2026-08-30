@@ -10,6 +10,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design System]** three-tier token architecture (foundations, semantic, component), OKLCH Satin-Charcoal Dark Mode layers (`--ds-layer-01` to `--ds-layer-04`), Porcelain Light Mode, and procedural rim-light edge-glow shaders
+- **[Design System]** switchable Accent profiles (Kimchi default, Cobalt, Emerald) and 19/19 WCAG 2.2 AA automated contrast checker script
+- **[Design System]** calibrated enterprise corner radius scale (`4px` to `16px`) eliminating bubbly radii, refined Token Explorer tab navigation and live counter, and enhanced input search icon breathing room
+- **[UI Primitives]** enhanced Button (FAB variant, isLoading spinner), Badge overhaul (5 variants, 7 tones, pulsing dot), Card (interactive, selectable, metric), and standalone composable FormField with ARIA auto-linkage
+- **[Domain Patterns]** DynamicTable responsive mobile card transform, first-class BottomSheet mobile drawer, institutional Banner, and Virtual Lab Orchid AI palette
+- **[AI Tools]** root machine-readable DESIGN.md, llms.txt, AI prompt writing guide, and 1-click Vibe-Check AI code sanitizer sandbox
 - **[Db]** use Buffer.concat and silent error handling for GCM decrypt
 - **[Ci]** use accurate UTC timestamp for runtime proof receipt
 
@@ -31,6 +37,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Design System Showcase]** full information architecture restructure with Live State Coverage Matrix, Prompt Writing Guide, and Vibe-Check Sandbox
+- **[Client & Admin Dashboards]** set default density to Compact (36px control height) and integrated token-driven FormField and DynamicTable
+- **[Marketing & Resident Portal]** set default density to Comfortable (48px control height) with Arabic RTL Cairo and Inter typography alignment
+- **[Scanner & Resident Mobile]** integrated typed `nativeTokens` and enforced $\ge 44\text{px} \times 44\text{px}$ touch target minimums
 - **[Marketing]** eliminate TBT with hardware-accelerated CSS marquees, optimize canvas background on mobile, fix heading hierarchy, and add full a11y labels
 
 - **[Marketing]** optimize bundle splitting, layout parallelization, and media loading

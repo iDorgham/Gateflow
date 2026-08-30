@@ -39,7 +39,7 @@ export default async function RootLayout(props: {
   const rtl = isRtl(locale);
 
   return (
-    <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} data-density="compact" suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>

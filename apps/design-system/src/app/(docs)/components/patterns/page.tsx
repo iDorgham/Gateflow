@@ -76,7 +76,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl p-8 shadow-sm backdrop-blur-sm">
+          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-2xl p-8 shadow-sm backdrop-blur-sm">
             <PageHeader
               title="Compound Management"
               subtitle="Configure gate policies, resident permits, and security patrol shifts."
@@ -93,7 +93,7 @@ export default function Demo() {
                 >
                   Live: 42 Gates
                 </Badge>
-                <Button className="h-10 px-6 rounded-xl font-black uppercase tracking-tight bg-[var(--ds-background-brand-bold)]">
+                <Button variant="primary" className="h-10 px-6 rounded-xl font-bold uppercase tracking-tight text-white shadow-sm">
                   <Plus size={14} className="mr-2" /> Add Compound
                 </Button>
               </div>
@@ -103,36 +103,34 @@ export default function Demo() {
 
         <GalleryItem
           title="EntityCard"
-          description="A versatile card for displaying primary objects like compounds, residents, or devices. Supports complex status and metadata."
+          description="High-density data summary card with status badges, metadata grid, and contextual actions."
           packageName="@gateflow/components"
           code={`import { EntityCard } from '@gateflow/components';
-import { Building2, ShieldCheck, MoreHorizontal } from 'lucide-react';
-import { Avatar, AvatarImage, AvatarFallback, Button } from '@gateflow/ui';
+import { Building2, Users, MoreHorizontal } from 'lucide-react';
+import { Button } from '@gateflow/ui';
 
 export default function Demo() {
   return (
     <EntityCard
-      title="Zayed City South"
-      subtitle="Premium Residential Compound"
-      type="Compound"
+      title="Al-Nakheel Compound"
+      subtitle="Main Residential Zone"
       status="Active"
-      icon={<Building2 />}
-      avatar={<Avatar><AvatarImage src="..." /><AvatarFallback>ZC</AvatarFallback></Avatar>}
-      actions={<Button size="icon" variant="ghost"><MoreHorizontal /></Button>}
-      metadata={[
-        { label: 'Guard Count', value: '12' },
-        { label: 'Total Gates', value: '4' },
-        { label: 'Security Level', value: <ShieldCheck size={14} className="text-green-500" /> }
+      statusVariant="success"
+      icon={Building2}
+      meta={[
+        { label: 'Guards', value: '8' },
+        { label: 'Gates', value: '3' },
+        { label: 'Priority', value: 'High' },
       ]}
     />
   );
 }`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             <EntityCard
-              title="Zayed City North"
-              subtitle="Phase 01 | Operations"
-              status="Live"
+              title="Al-Nakheel Compound"
+              subtitle="Main Residential Zone"
+              status="Active"
               statusVariant="success"
               icon={Building2}
               actions={
@@ -145,7 +143,7 @@ export default function Demo() {
                 { label: 'Gates', value: '3' },
                 { label: 'Priority', value: 'High' },
               ]}
-              className="rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-lg p-6 backdrop-blur-sm"
+              className="rounded-xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-md p-6 backdrop-blur-sm"
             />
             <EntityCard
               title="Ahmadi Residential"
@@ -163,7 +161,7 @@ export default function Demo() {
                 { label: 'Uptime', value: '98%' },
                 { label: 'Health', value: '76/100' },
               ]}
-              className="rounded-3xl border-[var(--ds-border-subtle)] border-l-4 border-l-amber-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-lg p-6 backdrop-blur-sm"
+              className="rounded-xl border-[var(--ds-border-subtle)] border-l-4 border-l-amber-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-md p-6 backdrop-blur-sm"
             />
           </div>
         </GalleryItem>
@@ -187,7 +185,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl p-6 shadow-sm flex flex-col gap-6 backdrop-blur-sm">
+          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-2xl p-6 shadow-sm flex flex-col gap-6 backdrop-blur-sm">
             <FilterBar
               placeholder="Search residents..."
               filters={
@@ -211,7 +209,7 @@ export default function Demo() {
                 </div>
               }
               actions={
-                <Button className="rounded-xl h-11 px-6 font-black uppercase tracking-tight bg-[var(--ds-background-brand-bold)]">
+                <Button variant="primary" className="rounded-xl h-11 px-6 font-bold uppercase tracking-tight text-white shadow-sm">
                   <Plus size={14} className="mr-2" /> New Permitee
                 </Button>
               }
@@ -239,12 +237,12 @@ export default function Demo() {
 }`}
         >
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
+            <Card className="rounded-xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
-                <div className="h-10 w-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
+                <div className="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
                   <Activity size={20} />
                 </div>
-                <div className="flex items-center gap-1 text-[10px] font-black text-green-500 bg-green-500/5 px-2 py-1 rounded-lg">
+                <div className="flex items-center gap-1 text-[10px] font-black text-green-500 bg-green-500/5 px-2 py-1 rounded-md">
                   <TrendingUp size={10} /> +12.4%
                 </div>
               </div>
@@ -257,12 +255,12 @@ export default function Demo() {
                 </span>
               </div>
             </Card>
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
+            <Card className="rounded-xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
                   <UserCheck size={20} />
                 </div>
-                <div className="flex items-center gap-1 text-[10px] font-black text-blue-500 bg-blue-500/5 px-2 py-1 rounded-lg">
+                <div className="flex items-center gap-1 text-[10px] font-black text-blue-500 bg-blue-500/5 px-2 py-1 rounded-md">
                   <TrendingUp size={10} /> +5.2%
                 </div>
               </div>
@@ -275,7 +273,7 @@ export default function Demo() {
                 </span>
               </div>
             </Card>
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] border-l-4 border-l-red-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
+            <Card className="rounded-xl p-6 border-[var(--ds-border-subtle)] border-l-4 border-l-red-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
                   <ShieldCheck size={20} />

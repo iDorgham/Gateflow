@@ -45,7 +45,7 @@ export function Search() {
         />
         <input
           type="text"
-          className="h-11 w-full rounded-xl border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] ps-11 pe-4 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-brand)] transition-all cursor-pointer"
+          className="h-10 w-full rounded-lg border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] hover:bg-[var(--ds-layer-02)] ps-10 pe-4 text-xs font-medium text-[var(--ds-text-primary)] placeholder:text-[var(--ds-text-subtlest)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused)] focus:border-[var(--ds-border-focused)] transition-all cursor-pointer shadow-sm"
           placeholder={
             isRTL
               ? 'البحث في نظام التصميم (⌘K)...'
@@ -57,18 +57,18 @@ export function Search() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[15vh] bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[15vh] bg-black/50 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="fixed inset-0" onClick={() => setOpen(false)} />
           <div
             dir={isRTL ? 'rtl' : 'ltr'}
-            className="relative w-full max-w-xl bg-white dark:bg-[#18181b] rounded-2xl border border-[var(--ds-border-subtle)] shadow-2xl overflow-hidden animate-in slide-in-from-top-4 duration-200"
+            className="relative w-full max-w-xl bg-[var(--ds-layer-02)] rounded-xl border border-[var(--ds-border-subtle)] shadow-2xl overflow-hidden animate-in slide-in-from-top-4 duration-150"
           >
             <div className="flex items-center px-4 border-b border-[var(--ds-border-subtle)] h-14">
-              <SearchIcon size={18} className="text-[var(--ds-icon-subtle)]" />
+              <SearchIcon size={18} className="text-[var(--ds-icon-subtle)] shrink-0" />
               <input
                 autoFocus
                 type="text"
-                className="flex-1 px-4 h-full bg-transparent outline-none text-sm text-[var(--ds-text)]"
+                className="flex-1 px-3.5 h-full bg-transparent outline-none text-sm text-[var(--ds-text-primary)] placeholder:text-[var(--ds-text-subtlest)]"
                 placeholder={
                   isRTL
                     ? 'ابحث عن مكون أو مستند...'
@@ -78,14 +78,14 @@ export function Search() {
                 onChange={(e) => setQuery(e.target.value)}
               />
               <div className="flex items-center gap-2">
-                <kbd className="hidden md:inline-flex items-center gap-1 rounded border border-[var(--ds-border-subtle)] px-2 py-1 font-mono text-[10px] uppercase font-bold text-[var(--ds-text-subtlest)]">
+                <kbd className="hidden md:inline-flex items-center gap-1 rounded-md border border-[var(--ds-border-subtle)] px-2 py-1 font-mono text-[10px] uppercase font-bold text-[var(--ds-text-subtlest)] bg-[var(--ds-layer-01)]">
                   ESC
                 </kbd>
                 <button
                   onClick={() => setOpen(false)}
-                  className="p-1 hover:bg-[var(--ds-background-neutral-subtle)] rounded-md transition-colors"
+                  className="p-1 hover:bg-[var(--ds-layer-01)] rounded-md transition-colors text-[var(--ds-icon-subtle)]"
                 >
-                  <X size={16} className="text-[var(--ds-icon-subtle)]" />
+                  <X size={16} />
                 </button>
               </div>
             </div>
@@ -101,13 +101,13 @@ export function Search() {
                         setOpen(false);
                         setQuery('');
                       }}
-                      className="flex flex-col p-4 rounded-xl border border-transparent hover:border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] transition-all group"
+                      className="flex flex-col p-3.5 rounded-lg border border-transparent hover:border-[var(--ds-border-subtle)] hover:bg-[var(--ds-layer-01)] transition-all group"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-black uppercase tracking-tight text-[var(--ds-text)] group-hover:text-[var(--ds-text-brand)] transition-colors">
+                        <span className="text-xs font-bold uppercase tracking-tight text-[var(--ds-text-primary)] group-hover:text-[var(--ds-text-brand)] transition-colors">
                           {item.title}
                         </span>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)] bg-[var(--ds-background-neutral-pressed)] px-2 py-1 rounded-md">
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest)] bg-[var(--ds-layer-03)] px-2 py-0.5 rounded">
                           {item.category}
                         </span>
                       </div>
@@ -144,22 +144,22 @@ export function Search() {
               )}
             </div>
 
-            <div className="px-4 py-3 border-t border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] flex items-center justify-between">
+            <div className="px-4 py-3 border-t border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
-                  <kbd className="border border-[var(--ds-border-subtle)] px-1 rounded bg-white shadow-sm">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
+                  <kbd className="border border-[var(--ds-border-subtle)] px-1.5 py-0.5 rounded-md bg-[var(--ds-layer-02)] text-[var(--ds-text-primary)] shadow-sm">
                     ↵
                   </kbd>
                   <span>{isRTL ? 'للاختيار' : 'to select'}</span>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
-                  <kbd className="border border-[var(--ds-border-subtle)] px-1 rounded bg-white shadow-sm">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
+                  <kbd className="border border-[var(--ds-border-subtle)] px-1.5 py-0.5 rounded-md bg-[var(--ds-layer-02)] text-[var(--ds-text-primary)] shadow-sm">
                     ↑↓
                   </kbd>
                   <span>{isRTL ? 'للتنقل' : 'to navigate'}</span>
                 </div>
               </div>
-              <div className="text-[9px] font-black uppercase tracking-widest text-[var(--ds-text-brand)]">
+              <div className="text-[9px] font-bold uppercase tracking-widest text-[var(--ds-text-brand)]">
                 GateFlow Engine
               </div>
             </div>

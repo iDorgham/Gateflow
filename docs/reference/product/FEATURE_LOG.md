@@ -6,6 +6,7 @@ Chronological record of shipped features.
 
 | Date       | Feature                                                   | Status                | Notes                                                                                                                                      |
 | :--------- | :-------------------------------------------------------- | :-------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-30 | **GateFlow Design System Impeccable Revamp**              | ✅ Shipped            | 3-tier token architecture, OKLCH Satin-Charcoal/Porcelain, enterprise radii, FormField, DynamicTable mobile transform, Vibe-Check AI sandbox, and cross-app rollout. |
 | 2026-08-28 | **Scanner App Onboarding & Biometric Session Management** | ✅ Shipped            | 4-step first-mile wizard, fail-closed biometric/PIN vault in SecureStore, 5-minute background inactivity lock, 72x72px Master Scan FAB.    |
 | 2026-08-28 | **Guard Patrol Checkpoints & QR Route Scanner**           | ✅ Shipped            | Perimeter patrol routes, physical HMAC QR checkpoints, real-time map telemetry, and supervisor compliance reporting.                       |
 | 2026-08-28 | **Guard Shift Visual Map & Real-Time Gate Monitor**       | ✅ Shipped (PR #308)  | Live gate terminal occupancy, active shift duration counters, terminal health indicators, and shift handover controls on Client Dashboard. |

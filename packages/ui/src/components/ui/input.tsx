@@ -6,15 +6,15 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 /**
- * GateFlow Text Input - ATDS Core styled
- * Standardized to semantic tokens.
+ * GateFlow Input — Impeccable GA Spec
+ * Semantic tokens, density-aware (Compact 36px vs Comfortable 48px), focus ring.
  */
 export function Input({ className, type, ref, ...props }: InputProps) {
   return (
     <input
       type={type}
       className={cn(
-        'flex h-10 w-full rounded-[var(--ds-border-radius-100)] border border-[var(--ds-border)] bg-[var(--ds-background-default)] px-3 py-2 text-sm font-semibold transition-all duration-150 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[var(--ds-text-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused)] focus-visible:border-[var(--ds-border-focused)] disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[var(--ds-background-neutral-subtle-hovered)]',
+        'flex h-[var(--ds-control-height)] w-full rounded-[var(--ds-radius-md)] border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] px-[var(--ds-control-padding-x)] py-[var(--ds-control-padding-y)] text-sm font-medium text-[var(--ds-text-primary)] transition-all duration-150 placeholder:text-[var(--ds-text-subtlest)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused)] focus-visible:border-[var(--ds-border-focused)] disabled:cursor-not-allowed disabled:opacity-40 hover:border-[var(--ds-border-bold)]',
         className
       )}
       ref={ref}

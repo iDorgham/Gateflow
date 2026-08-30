@@ -101,10 +101,10 @@ export default function ColorFoundationsPage() {
         {colorPrinciples.map((p) => (
           <div
             key={p.title}
-            className="flex flex-col gap-4 p-6 rounded-2xl border border-[var(--ds-border-bold)] bg-[var(--ds-surface-subtle)] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group"
+            className="flex flex-col gap-4 p-6 rounded-2xl border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-02)] shadow-sm hover:border-[var(--ds-border-brand)] hover:shadow-md hover:-translate-y-1 transition-all group"
           >
-            <div className="p-2 w-fit rounded-lg bg-[var(--ds-accent-bold)] text-white shadow-lg transition-transform group-hover:rotate-6">
-              <p.icon size={22} strokeWidth={2.5} />
+            <div className="p-3 w-fit rounded-xl bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] shadow-sm transition-transform group-hover:scale-105">
+              <p.icon size={22} strokeWidth={2.2} />
             </div>
             <h3 className="text-sm font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
               {p.title}

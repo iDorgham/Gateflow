@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Search, Copy, Check, Palette, Settings2 } from 'lucide-react';
+import { Search, Copy, Check, Palette, Sparkles, Layers, Type, Shield, Sliders } from 'lucide-react';
 import {
   cn,
   Button,
@@ -15,295 +15,409 @@ import {
   useToast,
 } from '@gateflow/ui';
 
-// Mock token data based on gateflow/tokens system
-const tokenGroups = [
+interface TokenItem {
+  name: string;
+  tier: 'Tier 1 Primitives' | 'Tier 2 Semantic' | 'Tier 3 Component';
+  category: 'layers' | 'brand' | 'text' | 'borders' | 'status';
+  description: string;
+  lightValue: string;
+  darkValue: string;
+  type: 'color' | 'text' | 'border' | 'measure';
+  previewColor?: string;
+  previewBorder?: string;
+}
+
+const tokensCatalog: TokenItem[] = [
+  // Layers & Surfaces
   {
-    name: 'Background',
-    tokens: [
-      {
-        name: '--ds-background',
-        value: 'var(--ds-background)',
-        desc: 'Surface/Canvas background.',
-      },
-      {
-        name: '--ds-background-neutral-subtle',
-        value: 'var(--ds-background-neutral-subtle)',
-        desc: 'Secondary/Sidebar background.',
-      },
-      {
-        name: '--ds-background-brand-bold',
-        value: 'var(--ds-background-brand-bold)',
-        desc: 'Primary brand action background.',
-      },
-      {
-        name: '--ds-background-selected',
-        value: 'var(--ds-background-selected)',
-        desc: 'Selection/Active state surface.',
-      },
-    ],
+    name: '--ds-layer-01',
+    tier: 'Tier 2 Semantic',
+    category: 'layers',
+    description: 'Application canvas & background base level',
+    lightValue: 'oklch(98.5% 0.005 250) · #f8f9fa',
+    darkValue: 'oklch(8% 0.012 250) · #0b0d11',
+    type: 'color',
   },
   {
-    name: 'Text',
-    tokens: [
-      {
-        name: '--ds-text',
-        value: 'var(--ds-text)',
-        desc: 'Primary body text.',
-      },
-      {
-        name: '--ds-text-subtle',
-        value: 'var(--ds-text-subtle)',
-        desc: 'Secondary/Support text.',
-      },
-      {
-        name: '--ds-text-brand',
-        value: 'var(--ds-text-brand)',
-        desc: 'Brand-colored text.',
-      },
-      {
-        name: '--ds-text-selected',
-        value: 'var(--ds-text-selected)',
-        desc: 'Text color on selected backgrounds.',
-      },
-    ],
+    name: '--ds-layer-02',
+    tier: 'Tier 2 Semantic',
+    category: 'layers',
+    description: 'Default card, table row, and container surface',
+    lightValue: 'oklch(100% 0 0) · #ffffff',
+    darkValue: 'oklch(12% 0.015 250) · #12151c',
+    type: 'color',
   },
   {
-    name: 'Border',
-    tokens: [
-      {
-        name: '--ds-border',
-        value: 'var(--ds-border)',
-        desc: 'Standard structure divider.',
-      },
-      {
-        name: '--ds-border-subtle',
-        value: 'var(--ds-border-subtle)',
-        desc: 'Lightest structural divider.',
-      },
-      {
-        name: '--ds-border-brand',
-        value: 'var(--ds-border-brand)',
-        desc: 'Brand-focused accent border.',
-      },
-      {
-        name: '--ds-border-focused',
-        value: 'var(--ds-border-focused)',
-        desc: 'Focus state/Ring color.',
-      },
-    ],
+    name: '--ds-layer-03',
+    tier: 'Tier 2 Semantic',
+    category: 'layers',
+    description: 'Raised headers, sticky navbars, and elevated widgets',
+    lightValue: 'oklch(100% 0 0) · #ffffff',
+    darkValue: 'oklch(16% 0.018 250) · #191d26',
+    type: 'color',
   },
   {
-    name: 'Status',
-    tokens: [
-      {
-        name: '--ds-text-information',
-        value: 'var(--ds-text-information)',
-        desc: 'Informational message text.',
-      },
-      {
-        name: '--ds-background-information-subtle',
-        value: 'var(--ds-background-information-subtle)',
-        desc: 'Informational banner surface.',
-      },
-      {
-        name: '--ds-text-success',
-        value: 'var(--ds-text-success)',
-        desc: 'Success message text.',
-      },
-      {
-        name: '--ds-text-danger',
-        value: 'var(--ds-text-danger)',
-        desc: 'Critical/Error message text.',
-      },
-    ],
+    name: '--ds-layer-04',
+    tier: 'Tier 2 Semantic',
+    category: 'layers',
+    description: 'Modal overlays, dialogs, dropdowns, and flyout sheets',
+    lightValue: 'oklch(100% 0 0) · #ffffff',
+    darkValue: 'oklch(20% 0.020 250) · #212633',
+    type: 'color',
+  },
+
+  // Brand & Accents
+  {
+    name: '--ds-color-primary',
+    tier: 'Tier 2 Semantic',
+    category: 'brand',
+    description: 'Primary brand accent & default CTA fill (Kimchi Vermilion)',
+    lightValue: 'oklch(62% 0.22 38) · #ed4b00',
+    darkValue: 'oklch(62% 0.22 38) · #ed4b00',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-primary-hover',
+    tier: 'Tier 2 Semantic',
+    category: 'brand',
+    description: 'Interactive button hover and pressed highlight',
+    lightValue: 'oklch(54% 0.20 38) · #c73800',
+    darkValue: 'oklch(67% 0.21 38) · #ff6b2b',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-primary-subtle',
+    tier: 'Tier 2 Semantic',
+    category: 'brand',
+    description: 'Translucent active state and chip pill background',
+    lightValue: 'oklch(96% 0.02 38) · rgba(237, 75, 0, 0.08)',
+    darkValue: 'oklch(26% 0.12 38) · rgba(237, 75, 0, 0.18)',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-ai-lab',
+    tier: 'Tier 2 Semantic',
+    category: 'brand',
+    description: 'Virtual Lab & GateAI conversational accent (Orchid)',
+    lightValue: 'oklch(58% 0.23 300) · #8b5cf6',
+    darkValue: 'oklch(68% 0.22 300) · #a78bfa',
+    type: 'color',
+  },
+
+  // Typography
+  {
+    name: '--ds-text-primary',
+    tier: 'Tier 2 Semantic',
+    category: 'text',
+    description: 'Headlines, titles, and high-contrast primary body text',
+    lightValue: 'oklch(12% 0.015 250) · Contrast 17.8:1',
+    darkValue: 'oklch(98.5% 0.005 250) · Contrast 18.5:1',
+    type: 'text',
+  },
+  {
+    name: '--ds-text-subtle',
+    tier: 'Tier 2 Semantic',
+    category: 'text',
+    description: 'Secondary descriptions, labels, and table metadata',
+    lightValue: 'oklch(48% 0.022 250) · Contrast 7.6:1',
+    darkValue: 'oklch(76% 0.018 250) · Contrast 7.1:1',
+    type: 'text',
+  },
+  {
+    name: '--ds-text-subtlest',
+    tier: 'Tier 2 Semantic',
+    category: 'text',
+    description: 'Disabled indicators, placeholders, and subtle captions',
+    lightValue: 'oklch(62% 0.020 250) · Contrast 4.6:1',
+    darkValue: 'oklch(62% 0.020 250) · Contrast 4.8:1',
+    type: 'text',
+  },
+  {
+    name: '--ds-text-brand',
+    tier: 'Tier 2 Semantic',
+    category: 'text',
+    description: 'Branded links, interactive highlights, and active items',
+    lightValue: 'oklch(54% 0.20 38) · Contrast 5.3:1',
+    darkValue: 'oklch(67% 0.21 38) · Contrast 6.4:1',
+    type: 'text',
+  },
+
+  // Borders
+  {
+    name: '--ds-border-subtle',
+    tier: 'Tier 2 Semantic',
+    category: 'borders',
+    description: 'Standard card borders, table dividers, and subtle lines',
+    lightValue: 'oklch(92.5% 0.012 250) · Delicate Satin Slate',
+    darkValue: 'rgba(255, 255, 255, 0.08) · Satin Rim Shader',
+    type: 'border',
+    previewBorder: '1px solid var(--ds-border-subtle)',
+  },
+  {
+    name: '--ds-border-bold',
+    tier: 'Tier 2 Semantic',
+    category: 'borders',
+    description: 'Active card outlines, grouped dividers, and inputs',
+    lightValue: 'oklch(86.5% 0.015 250) · Defined Neutral',
+    darkValue: 'rgba(255, 255, 255, 0.16) · Elevated Rim',
+    type: 'border',
+    previewBorder: '1px solid var(--ds-border-bold)',
+  },
+  {
+    name: '--ds-border-focused',
+    tier: 'Tier 2 Semantic',
+    category: 'borders',
+    description: 'Accessible keyboard focus ring & active field boundary',
+    lightValue: 'oklch(62% 0.22 38) · Kimchi 500',
+    darkValue: 'oklch(67% 0.21 38) · Kimchi 400',
+    type: 'border',
+    previewBorder: '2px solid var(--ds-border-focused)',
+  },
+  {
+    name: '--ds-border-danger',
+    tier: 'Tier 2 Semantic',
+    category: 'borders',
+    description: 'Validation error boundary and invalid input outline',
+    lightValue: 'oklch(57% 0.23 25) · Ruby Crimson',
+    darkValue: 'oklch(65% 0.22 25) · Ruby 400',
+    type: 'border',
+    previewBorder: '1px solid var(--ds-border-danger)',
+  },
+
+  // Status Colors
+  {
+    name: '--ds-color-success',
+    tier: 'Tier 2 Semantic',
+    category: 'status',
+    description: 'Access granted, active shift, and verified pass badge',
+    lightValue: 'oklch(58% 0.20 150) · #10b981 (Emerald)',
+    darkValue: 'oklch(68% 0.18 150) · #34d399',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-warning',
+    tier: 'Tier 2 Semantic',
+    category: 'status',
+    description: 'Expiring visitor pass, maintenance notice, and guard alerts',
+    lightValue: 'oklch(64% 0.18 80) · #f59e0b (Solar Amber)',
+    darkValue: 'oklch(74% 0.16 80) · #fbbf24',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-danger',
+    tier: 'Tier 2 Semantic',
+    category: 'status',
+    description: 'Access denied, security breach, and emergency blacklist',
+    lightValue: 'oklch(57% 0.23 25) · #ef4444 (Ruby Crimson)',
+    darkValue: 'oklch(65% 0.22 25) · #f87171',
+    type: 'color',
+  },
+  {
+    name: '--ds-color-info',
+    tier: 'Tier 2 Semantic',
+    category: 'status',
+    description: 'System announcements, telemetry stats, and info logs',
+    lightValue: 'oklch(52% 0.23 250) · #0052cc (Electric Cobalt)',
+    darkValue: 'oklch(65% 0.20 250) · #388bfd',
+    type: 'color',
   },
 ];
 
 export function TokenExplorer() {
   const [search, setSearch] = React.useState('');
-  const [activeTab, setActiveTab] = React.useState('Background');
+  const [activeTab, setActiveTab] = React.useState<string>('all');
   const [copiedToken, setCopiedToken] = React.useState<string | null>(null);
   const { addToast } = useToast();
 
   const handleCopy = (token: string) => {
-    navigator.clipboard.writeText(token);
+    navigator.clipboard.writeText(`var(${token})`);
     setCopiedToken(token);
     addToast({
-      title: 'Token Copied',
-      description: `${token} has been copied to your clipboard.`,
+      title: 'CSS Token Copied',
+      description: `var(${token}) copied to clipboard.`,
     });
     setTimeout(() => setCopiedToken(null), 2000);
   };
 
-  const filteredTokens =
-    tokenGroups
-      .find((g) => g.name === activeTab)
-      ?.tokens.filter(
-        (t) =>
-          t.name.toLowerCase().includes(search.toLowerCase()) ||
-          t.desc.toLowerCase().includes(search.toLowerCase())
-      ) || [];
+  const categories = [
+    { id: 'all', label: 'All Tokens', icon: Sliders },
+    { id: 'layers', label: 'Layers & Surfaces', icon: Layers },
+    { id: 'brand', label: 'Brand & Accents', icon: Sparkles },
+    { id: 'text', label: 'Typography', icon: Type },
+    { id: 'borders', label: 'Borders & Focus', icon: Shield },
+    { id: 'status', label: 'Status & Badges', icon: Palette },
+  ];
+
+  const filteredTokens = tokensCatalog.filter((token) => {
+    const matchesCategory = activeTab === 'all' || token.category === activeTab;
+    const matchesSearch =
+      token.name.toLowerCase().includes(search.toLowerCase()) ||
+      token.description.toLowerCase().includes(search.toLowerCase()) ||
+      token.lightValue.toLowerCase().includes(search.toLowerCase()) ||
+      token.darkValue.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full md:w-auto"
-        >
-          <TabsList className="bg-[var(--ds-background-neutral-subtle)] p-1 rounded-xl h-10">
-            {tokenGroups.map((group) => (
-              <TabsTrigger
-                key={group.name}
-                value={group.name}
-                className="rounded-lg px-4 text-xs font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-surface-raised)] data-[state=active]:text-[var(--ds-text-selected)] data-[state=active]:shadow-sm"
+    <div className="flex flex-col gap-8">
+      {/* Search & Filter Header */}
+      <div className="flex flex-col gap-4 p-4 rounded-xl bg-[var(--ds-layer-02)] border border-[var(--ds-border-subtle)] shadow-sm">
+        {/* Category Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const isActive = activeTab === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveTab(cat.id)}
+                className={cn(
+                  'flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 border',
+                  isActive
+                    ? 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] font-bold border-[var(--ds-border-brand)] shadow-sm'
+                    : 'text-[var(--ds-text-subtle)] border-transparent hover:text-[var(--ds-text-primary)] hover:bg-[var(--ds-layer-01)] hover:border-[var(--ds-border-subtle)]'
+                )}
               >
-                {group.name}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+                <Icon className="w-4 h-4 shrink-0" />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-        <div className="relative group w-full md:w-72">
-          <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ds-icon-subtle)]"
-          />
-          <Input
-            placeholder="Search tokens..."
-            className="pl-9 h-10 rounded-xl border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] text-sm"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        {/* Search Bar & Stats */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[var(--ds-border-subtle)]">
+          <div className="relative flex-1 max-w-lg">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--ds-text-subtlest)] pointer-events-none" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search tokens by name, CSS variable, or hex value..."
+              className="!pl-11 h-11 text-sm rounded-lg bg-[var(--ds-layer-01)] border-[var(--ds-border-subtle)] placeholder:text-[var(--ds-text-subtlest)] focus:border-[var(--ds-border-brand)]"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--ds-text-subtle)] self-end sm:self-center">
+            <span className="w-2 h-2 rounded-full bg-[var(--ds-color-success)]" />
+            <span>Showing {filteredTokens.length} tokens</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {filteredTokens.map((token) => (
-          <Card
-            key={token.name}
-            className="border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] hover:border-[var(--ds-border-brand)] transition-all group overflow-hidden"
-          >
-            <CardContent className="p-0 flex items-stretch h-32">
-              <div className="w-32 shrink-0 border-r border-[var(--ds-border-subtle)] flex items-center justify-center bg-[var(--ds-surface-raised)] dark:bg-[oklch(12%_0.012_250)] relative overflow-hidden">
-                {/* Light/Dark side-by-side preview */}
-                <div className="absolute inset-0 flex">
-                  <div className="flex-1 bg-white flex items-center justify-center">
-                    <div
-                      className={cn(
-                        'h-12 w-12 rounded-xl border border-[var(--ds-border-subtle)] shadow-sm',
-                        token.name.includes('text')
-                          ? 'bg-transparent flex items-center justify-center font-bold text-lg'
-                          : 'bg-current'
-                      )}
-                      style={{
-                        color: `var(${token.name})`,
-                        backgroundColor: token.name.includes('background')
-                          ? `var(${token.name})`
-                          : undefined,
-                      }}
-                    >
-                      {token.name.includes('text') ? 'Aa' : ''}
-                    </div>
-                  </div>
-                  <div className="flex-1 bg-[oklch(12%_0.012_250)] flex items-center justify-center border-l border-[var(--ds-border-subtle)]">
-                    <div
-                      className={cn(
-                        'h-12 w-12 rounded-xl border border-[var(--ds-border-subtle)] shadow-sm',
-                        token.name.includes('text')
-                          ? 'bg-transparent flex items-center justify-center font-bold text-lg'
-                          : 'bg-current'
-                      )}
-                      style={{
-                        color: `var(${token.name})`,
-                        backgroundColor: token.name.includes('background')
-                          ? `var(${token.name})`
-                          : undefined,
-                      }}
-                    >
-                      {token.name.includes('text') ? 'Aa' : ''}
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute bottom-1 right-1 flex gap-1">
-                  <Badge
-                    variant="outline"
-                    className="text-[8px] px-1 py-0 bg-white/80 text-black border-none uppercase font-black"
-                  >
-                    Light
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="text-[8px] px-1 py-0 bg-black/80 text-white border-none uppercase font-black"
-                  >
-                    Dark
-                  </Badge>
-                </div>
-              </div>
+      {/* Token Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {filteredTokens.map((token) => {
+          const isCopied = copiedToken === token.name;
 
-              <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <code className="text-sm font-mono font-bold text-[var(--ds-text)] truncate">
+          return (
+            <Card
+              key={token.name}
+              className="group p-5 bg-[var(--ds-layer-02)] border border-[var(--ds-border-subtle)] hover:border-[var(--ds-border-bold)] rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between gap-4"
+            >
+              {/* Card Header & Preview */}
+              <div className="flex items-start justify-between gap-4">
+                {/* Visual Swatch */}
+                <div className="shrink-0 flex items-center justify-center">
+                  {token.type === 'color' && (
+                    <div
+                      className="w-12 h-12 rounded-lg border border-[var(--ds-border-subtle)] shadow-inner transition-transform group-hover:scale-105"
+                      style={{ backgroundColor: `var(${token.name})` }}
+                    />
+                  )}
+
+                  {token.type === 'text' && (
+                    <div
+                      className="w-12 h-12 rounded-xl border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] flex items-center justify-center font-bold text-base shadow-inner group-hover:scale-105 transition-transform"
+                      style={{ color: `var(${token.name})` }}
+                    >
+                      Aa
+                    </div>
+                  )}
+
+                  {token.type === 'border' && (
+                    <div
+                      className="w-12 h-12 rounded-xl bg-[var(--ds-layer-01)] flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform"
+                      style={{ border: token.previewBorder || `1px solid var(${token.name})` }}
+                    >
+                      <div className="w-4 h-4 rounded-md bg-[var(--ds-text-brand)]/20" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Token Details */}
+                <div className="flex-1 min-w-0 flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <code className="text-xs font-mono font-bold text-[var(--ds-text-primary)] group-hover:text-[var(--ds-text-brand)] transition-colors truncate">
                       {token.name}
                     </code>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        className="h-7 w-7 rounded-lg"
-                        onClick={() => handleCopy(token.name)}
-                      >
-                        {copiedToken === token.name ? (
-                          <Check size={14} className="text-green-500" />
-                        ) : (
-                          <Copy size={14} />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        className="h-7 w-7 rounded-lg"
-                      >
-                        <Settings2 size={14} />
-                      </Button>
-                    </div>
+                    <Badge variant="outline" tone="neutral" className="text-[10px] px-1.5 py-0">
+                      {token.tier.replace('Tier ', 'T')}
+                    </Badge>
                   </div>
-                  <p className="text-[10px] uppercase font-black tracking-tight text-[var(--ds-text-subtlest)] leading-none">
-                    {token.desc}
+                  <p className="text-xs text-[var(--ds-text-subtle)] leading-relaxed">
+                    {token.description}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="secondary"
-                    className="text-[10px] font-mono px-2 py-0 h-5 bg-[var(--ds-background-neutral-pressed)] text-[var(--ds-text-subtle)] border-none"
-                  >
-                    {token.value}
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="text-[9px] font-black uppercase px-2 py-0 h-5 border-[var(--ds-border-subtle)] text-[var(--ds-text-subtlest)]"
-                  >
-                    Semantic
-                  </Badge>
+                {/* Copy Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleCopy(token.name)}
+                  className={cn(
+                    'h-8 px-2.5 rounded-lg text-xs gap-1.5 shrink-0 border-[var(--ds-border-subtle)] transition-all',
+                    isCopied
+                      ? 'bg-[var(--ds-color-success)] text-white border-transparent'
+                      : 'hover:border-[var(--ds-border-brand)] hover:text-[var(--ds-text-brand)]'
+                  )}
+                >
+                  {isCopied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Light & Dark Spec Strip */}
+              <div className="grid grid-cols-2 gap-2 pt-3 border-t border-[var(--ds-border-subtle)] text-[11px]">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] uppercase font-mono font-bold text-[var(--ds-text-subtlest)]">
+                    Light Mode
+                  </span>
+                  <span className="font-mono text-[var(--ds-text-subtle)] truncate">
+                    {token.lightValue}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] uppercase font-mono font-bold text-[var(--ds-text-subtlest)]">
+                    Dark Mode
+                  </span>
+                  <span className="font-mono text-[var(--ds-text-subtle)] truncate">
+                    {token.darkValue}
+                  </span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
 
+      {/* Empty State */}
       {filteredTokens.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 bg-[var(--ds-background-neutral-subtle)] border-2 border-dashed border-[var(--ds-border-subtle)] rounded-3xl">
-          <Palette
-            className="text-[var(--ds-icon-subtlest)] mb-4"
-            size={48}
-            strokeWidth={1}
-          />
-          <p className="text-sm font-bold text-[var(--ds-text-subtle)]">
-            No tokens found matching &quot;{search}&quot;
+        <div className="flex flex-col items-center justify-center p-12 rounded-2xl border border-dashed border-[var(--ds-border-subtle)] bg-[var(--ds-layer-02)] text-center gap-3">
+          <Palette className="w-8 h-8 text-[var(--ds-text-subtlest)]" />
+          <p className="text-sm font-semibold text-[var(--ds-text-primary)]">
+            No tokens matching &quot;{search}&quot;
+          </p>
+          <p className="text-xs text-[var(--ds-text-subtle)]">
+            Try searching for another token name, hex code, or semantic layer.
           </p>
         </div>
       )}

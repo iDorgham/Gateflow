@@ -34,7 +34,7 @@ export default function RootLayout({
   const { lang, dir } = resolveHtmlDocumentAttrs();
 
   return (
-    <html lang={lang} dir={dir} suppressHydrationWarning>
+    <html lang={lang} dir={dir} data-density="comfortable" suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>

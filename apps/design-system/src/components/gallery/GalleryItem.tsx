@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Copy, Check, Code2, Eye } from 'lucide-react';
+import { Copy, Check, Code2, Eye, Sparkles } from 'lucide-react';
 import {
   Button,
   Tabs,
@@ -38,6 +38,7 @@ export function GalleryItem({
   packageName = '@gateflow/ui',
 }: GalleryItemProps) {
   const [copied, setCopied] = React.useState(false);
+  const [copiedAI, setCopiedAI] = React.useState(false);
   const { addToast } = useToast();
 
   const handleCopy = () => {
@@ -50,6 +51,17 @@ export function GalleryItem({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCopyAI = () => {
+    const aiPrompt = `### Component Spec: ${title} (${packageName})\n**Description:** ${description}\n\n**Usage Guidelines:**\n- Always use token-driven values from \`@gateflow/ui\`\n- Dark mode surfaces must use Satin-Charcoal tiers (\`--ds-layer-01\` to \`--ds-layer-04\`)\n- No hardcoded hex or arbitrary Tailwind values.\n\n**Example Code:**\n\`\`\`tsx\n${code}\n\`\`\``;
+    navigator.clipboard.writeText(aiPrompt);
+    setCopiedAI(true);
+    addToast({
+      title: 'Copied for AI Agent',
+      description: 'Clean prompt specification copied for Cursor/Antigravity/Claude CLI.',
+    });
+    setTimeout(() => setCopiedAI(false), 2000);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -60,17 +72,17 @@ export function GalleryItem({
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-2xl font-black uppercase tracking-tighter text-[var(--ds-text)] group-hover/item:text-[var(--ds-text-brand)] transition-all duration-500">
+          <h2 className="text-2xl font-black uppercase tracking-tighter text-[var(--ds-text-primary)] group-hover/item:text-[var(--ds-text-brand)] transition-all duration-500">
             {title}
           </h2>
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="text-[10px] uppercase font-black px-2 py-0 h-5 border-[var(--ds-border-subtle)] text-[var(--ds-text-subtlest)] bg-[var(--ds-background-neutral-subtle)]"
+              className="text-[10px] uppercase font-black px-2 py-0 h-5 border-[var(--ds-border-subtle)] text-[var(--ds-text-subtle)] bg-[var(--ds-layer-01)]"
             >
               {packageName.split('/').pop()}
             </Badge>
-            <div className="h-1.5 w-8 rounded-full bg-gradient-to-r from-[var(--ds-background-brand-bold)] to-blue-500 opacity-50 group-hover/item:opacity-100 group-hover/item:w-12 transition-all duration-500" />
+            <div className="h-1.5 w-8 rounded-full bg-gradient-to-r from-[var(--ds-color-primary)] to-blue-500 opacity-50 group-hover/item:opacity-100 group-hover/item:w-12 transition-all duration-500" />
           </div>
         </div>
         <p className="text-base text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-medium opacity-80 group-hover/item:opacity-100 transition-opacity">
@@ -79,53 +91,61 @@ export function GalleryItem({
       </div>
 
       <Tabs defaultValue="preview" className="w-full">
-        <div className="flex items-center justify-between mb-2">
-          <TabsList className="bg-[var(--ds-background-neutral-subtle)] p-1 rounded-xl h-10 border border-[var(--ds-border-subtle)]">
+        <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+          <TabsList className="bg-[var(--ds-layer-01)] p-1 rounded-xl h-10 border border-[var(--ds-border-subtle)]">
             <TabsTrigger
               value="preview"
-              className="rounded-lg px-4 text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:text-[var(--ds-text-selected)] data-[state=active]:shadow-sm flex gap-2 items-center"
+              className="rounded-lg px-4 text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-layer-02)] data-[state=active]:text-[var(--ds-text-primary)] data-[state=active]:shadow-sm flex gap-2 items-center"
             >
               <Eye size={12} /> Preview
             </TabsTrigger>
             <TabsTrigger
               value="code"
-              className="rounded-lg px-4 text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:text-[var(--ds-text-selected)] data-[state=active]:shadow-sm flex gap-2 items-center"
+              className="rounded-lg px-4 text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-layer-02)] data-[state=active]:text-[var(--ds-text-primary)] data-[state=active]:shadow-sm flex gap-2 items-center"
             >
               <Code2 size={12} /> Code
             </TabsTrigger>
           </TabsList>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopy}
-            className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider gap-2 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-hovered)]"
-          >
-            {copied ? (
-              <Check size={12} className="text-green-500" />
-            ) : (
-              <Copy size={12} />
-            )}
-            {copied ? 'Copied' : 'Copy Snippet'}
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* Copy for AI Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyAI}
+              className="h-8 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1.5 text-[var(--ds-color-ai-lab)] bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20"
+            >
+              {copiedAI ? (
+                <Check size={12} className="text-green-500" />
+              ) : (
+                <Sparkles size={12} />
+              )}
+              {copiedAI ? 'Copied Prompt' : 'Copy for AI'}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopy}
+              className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider gap-2 bg-[var(--ds-layer-01)] border border-[var(--ds-border-subtle)] hover:bg-[var(--ds-layer-03)]"
+            >
+              {copied ? (
+                <Check size={12} className="text-green-500" />
+              ) : (
+                <Copy size={12} />
+              )}
+              {copied ? 'Copied' : 'Copy Snippet'}
+            </Button>
+          </div>
         </div>
 
         <TabsContent
           value="preview"
           className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <div className="min-h-[400px] flex items-center justify-center p-12 rounded-[2.5rem] border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-surface-glass)] relative overflow-hidden group/canvas shadow-inner">
-            {/* Design Grid & Patterns */}
-            <div
-              className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none transition-transform duration-700 group-hover/canvas:scale-110"
-              style={{
-                backgroundImage: 'var(--gf-pattern-sentinel)',
-                backgroundSize: '24px 24px',
-              }}
-            ></div>
-
+          <div className="min-h-[400px] flex items-center justify-center p-12 rounded-[2.5rem] border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] dark:bg-[var(--ds-layer-02)] relative overflow-hidden group/canvas shadow-inner">
             {/* Interactive Glow */}
-            <div className="absolute -bottom-24 -right-24 h-64 w-64 bg-[var(--ds-background-brand-bold)]/5 rounded-full blur-[80px] pointer-events-none group-hover/canvas:bg-[var(--ds-background-brand-bold)]/10 transition-all duration-1000" />
+            <div className="absolute -bottom-24 -right-24 h-64 w-64 bg-[var(--ds-color-primary)]/5 rounded-full blur-[80px] pointer-events-none group-hover/canvas:bg-[var(--ds-color-primary)]/10 transition-all duration-1000" />
 
             <motion.div
               layout
@@ -154,10 +174,10 @@ export function GalleryItem({
       </Tabs>
 
       {properties && properties.length > 0 && (
-        <div className="mt-4 overflow-hidden rounded-2xl border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)]">
+        <div className="mt-4 overflow-hidden rounded-2xl border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)]">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-pressed)]">
+              <tr className="border-b border-[var(--ds-border-subtle)] bg-[var(--ds-layer-03)]">
                 <th className="px-4 py-3 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
                   Property
                 </th>
@@ -176,7 +196,7 @@ export function GalleryItem({
               {properties.map((prop) => (
                 <tr
                   key={prop.name}
-                  className="border-b border-[var(--ds-border-subtle)] last:border-0 hover:bg-white/50 transition-colors"
+                  className="border-b border-[var(--ds-border-subtle)] last:border-0 hover:bg-[var(--ds-layer-02)] transition-colors"
                 >
                   <td className="px-4 py-3 font-mono font-bold text-[var(--ds-text-brand)]">
                     {prop.name}

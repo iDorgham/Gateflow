@@ -43,6 +43,8 @@ export interface DynamicTableProps<T> {
   /** Enables row virtualization for large datasets. Requires 'containerHeight'. */
   isVirtual?: boolean;
   containerHeight?: string;
+  /** Automatically transforms table into a stacked card list on mobile screens (<768px). */
+  responsiveCardView?: boolean;
 }
 
 export function DynamicTable<T extends { id: string | number }>({
@@ -168,163 +170,201 @@ export function DynamicTable<T extends { id: string | number }>({
     totalHeight - (virtualRows[virtualRows.length - 1]?.end ?? totalHeight);
 
   return (
-    <div
-      ref={parentRef}
-      className="w-full relative overflow-auto rounded-xl border border-[var(--ds-border)]"
-      style={{ maxHeight: containerHeight }}
-    >
-      <Table className="border-separate border-spacing-0">
-        {renderHeaders()}
-        <TableBody>
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => (
-              <TableRow
-                key={i}
-                className="border-b border-[var(--ds-border-subtle)]"
-              >
-                {isSelectable && (
-                  <TableCell className="px-4">
-                    <Skeleton className="h-4 w-4 rounded-sm opacity-50" />
-                  </TableCell>
-                )}
-                {columns.map((col) => (
-                  <TableCell key={col.key}>
-                    <Skeleton className="h-4 w-full opacity-50" />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : items.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={columns.length + (isSelectable ? 1 : 0)}
-                className="h-48 text-center"
-              >
-                {emptyState || (
-                  <EmptyState
-                    icon={Search}
-                    title="No results found"
-                    description="Try adjusting your filters"
-                  />
-                )}
-              </TableCell>
-            </TableRow>
-          ) : isVirtual ? (
-            <>
-              {padTop > 0 ? (
-                <TableRow aria-hidden className="border-0 hover:bg-transparent">
-                  <TableCell
-                    colSpan={colSpan}
-                    className="p-0 border-0"
-                    style={{ height: padTop }}
-                  />
+    <div className="w-full flex flex-col gap-4">
+      <div
+        ref={parentRef}
+        style={{
+          height: isVirtual ? containerHeight : 'auto',
+          overflow: 'auto',
+          position: 'relative',
+        }}
+        className={cn(
+          'w-full rounded-[var(--ds-radius-lg)] border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-02)] shadow-sm',
+          responsiveCardView && 'hidden md:block'
+        )}
+      >
+        <Table>
+          {renderHeaders()}
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index} className="border-b border-[var(--ds-border-subtle)]">
+                  {isSelectable && (
+                    <TableCell className="w-12 px-4">
+                      <Skeleton className="h-4 w-4 rounded" />
+                    </TableCell>
+                  )}
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.key}
+                      className={cn(
+                        'text-sm',
+                        isCompact ? 'py-2 px-3' : 'py-4 px-4'
+                      )}
+                    >
+                      <Skeleton className="h-4 w-3/4 rounded" />
+                    </TableCell>
+                  ))}
                 </TableRow>
-              ) : null}
-              {virtualRows.map((virtualRow) => {
-                const item = items[virtualRow.index];
-                return (
-                  <TableRow
-                    key={item.id}
-                    onClick={() => onRowClick?.(item)}
-                    data-index={virtualRow.index}
-                    ref={virtualizer.measureElement}
-                    className={cn(
-                      'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-colors cursor-pointer',
-                      selectedIds.includes(item.id) &&
-                        'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
-                      rowClassName?.(item)
-                    )}
-                  >
-                    {isSelectable && (
-                      <TableCell
-                        className="px-4"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Checkbox
-                          checked={selectedIds.includes(item.id)}
-                          onChange={() => toggleRow(item.id)}
-                          aria-label={`Select row ${item.id}`}
-                        />
-                      </TableCell>
-                    )}
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.key}
-                        className={cn(
-                          'text-sm text-[var(--ds-text)]',
-                          isCompact ? 'py-1.5 px-3' : 'py-4',
-                          column.align === 'center'
-                            ? 'text-center'
-                            : column.align === 'right'
-                              ? 'text-end'
-                              : 'text-start'
-                        )}
-                      >
-                        {column.render
-                          ? column.render(item)
-                          : (item as Record<string, any>)[column.key]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-              {padBottom > 0 ? (
-                <TableRow aria-hidden className="border-0 hover:bg-transparent">
-                  <TableCell
-                    colSpan={colSpan}
-                    className="p-0 border-0"
-                    style={{ height: padBottom }}
-                  />
-                </TableRow>
-              ) : null}
-            </>
-          ) : (
-            items.map((item) => (
-              <TableRow
-                key={item.id}
-                onClick={() => onRowClick?.(item)}
-                className={cn(
-                  'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-colors cursor-pointer',
-                  selectedIds.includes(item.id) &&
-                    'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
-                  rowClassName?.(item)
-                )}
-              >
-                {isSelectable && (
-                  <TableCell
-                    className="px-4"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Checkbox
-                      checked={selectedIds.includes(item.id)}
-                      onChange={() => toggleRow(item.id)}
-                      aria-label={`Select row ${item.id}`}
+              ))
+            ) : items.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length + (isSelectable ? 1 : 0)}
+                  className="h-48 text-center"
+                >
+                  {emptyState || (
+                    <EmptyState
+                      icon={Search}
+                      title="No results found"
+                      description="Try adjusting your filters"
                     />
-                  </TableCell>
-                )}
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.key}
-                    className={cn(
-                      'text-sm text-[var(--ds-text)]',
-                      isCompact ? 'py-1.5 px-3' : 'py-4',
-                      column.align === 'center'
-                        ? 'text-center'
-                        : column.align === 'right'
-                          ? 'text-end'
-                          : 'text-start'
-                    )}
-                  >
-                    {column.render
-                      ? column.render(item)
-                      : (item as Record<string, any>)[column.key]}
-                  </TableCell>
-                ))}
+                  )}
+                </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : isVirtual ? (
+              <>
+                {padTop > 0 ? (
+                  <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                    <TableCell
+                      colSpan={colSpan}
+                      className="p-0 border-0"
+                      style={{ height: padTop }}
+                    />
+                  </TableRow>
+                ) : null}
+                {virtualRows.map((virtualRow) => {
+                  const item = items[virtualRow.index];
+                  return (
+                    <TableRow
+                      key={item.id}
+                      onClick={() => onRowClick?.(item)}
+                      data-index={virtualRow.index}
+                      ref={virtualizer.measureElement}
+                      className={cn(
+                        'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-layer-03)] transition-colors cursor-pointer',
+                        selectedIds.includes(item.id) &&
+                          'bg-[var(--ds-layer-03)]',
+                        rowClassName?.(item)
+                      )}
+                    >
+                      {isSelectable && (
+                        <TableCell
+                          className="px-4"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            checked={selectedIds.includes(item.id)}
+                            onChange={() => toggleRow(item.id)}
+                            aria-label={`Select row ${item.id}`}
+                          />
+                        </TableCell>
+                      )}
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.key}
+                          className={cn(
+                            'text-sm text-[var(--ds-text-primary)]',
+                            isCompact ? 'py-1.5 px-3' : 'py-4',
+                            column.align === 'center'
+                              ? 'text-center'
+                              : column.align === 'right'
+                                ? 'text-end'
+                                : 'text-start'
+                          )}
+                        >
+                          {column.render
+                            ? column.render(item)
+                            : (item as Record<string, any>)[column.key]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+                {padBottom > 0 ? (
+                  <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                    <TableCell
+                      colSpan={colSpan}
+                      className="p-0 border-0"
+                      style={{ height: padBottom }}
+                    />
+                  </TableRow>
+                ) : null}
+              </>
+            ) : (
+              items.map((item) => (
+                <TableRow
+                  key={item.id}
+                  onClick={() => onRowClick?.(item)}
+                  className={cn(
+                    'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-layer-03)] transition-colors cursor-pointer',
+                    selectedIds.includes(item.id) &&
+                      'bg-[var(--ds-layer-03)]',
+                    rowClassName?.(item)
+                  )}
+                >
+                  {isSelectable && (
+                    <TableCell
+                      className="px-4"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Checkbox
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => toggleRow(item.id)}
+                        aria-label={`Select row ${item.id}`}
+                      />
+                    </TableCell>
+                  )}
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.key}
+                      className={cn(
+                        'text-sm text-[var(--ds-text-primary)]',
+                        isCompact ? 'py-1.5 px-3' : 'py-4',
+                        column.align === 'center'
+                          ? 'text-center'
+                          : column.align === 'right'
+                            ? 'text-end'
+                            : 'text-start'
+                      )}
+                    >
+                      {column.render
+                        ? column.render(item)
+                        : (item as Record<string, any>)[column.key]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {responsiveCardView && (
+        <div className="md:hidden flex flex-col gap-3">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => onRowClick?.(item)}
+              className={cn(
+                'flex flex-col gap-2 rounded-[var(--ds-radius-lg)] border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-02)] p-4 shadow-sm transition-all text-start',
+                onRowClick && 'cursor-pointer active:scale-[0.99]',
+                selectedIds.includes(item.id) && 'border-[var(--ds-color-primary)] ring-1 ring-[var(--ds-color-primary)]',
+                rowClassName?.(item)
+              )}
+            >
+              {columns.map((column) => (
+                <div key={column.key} className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-[var(--ds-text-subtle)]">{column.label}</span>
+                  <span className="text-[var(--ds-text-primary)]">
+                    {column.render ? column.render(item) : (item as Record<string, any>)[column.key]}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

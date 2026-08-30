@@ -1,222 +1,259 @@
 /**
- * @gateflow/tokens — tokens.css v2
- * 2026 token system: warm neutrals, Kimchi brand, charcoal dark mode.
- * All values use OKLCH for perceptual uniformity.
+ * @gateflow/tokens — tokens.css (v7.1 Master Three-Tier Engine)
+ * 2026 token system: Carbon 3-tier architecture, Satin-Charcoal Dark Mode,
+ * Porcelain Light Mode, Kimchi Vermilion primary accent, and procedural rim-light shaders.
  */
 
 :root {
-  /* ─── Primitives: Neutrals (warm gray, hue ~30) ─────────────────── */
-  --gf-color-neutral-0: oklch(100% 0 0);
-  --gf-color-neutral-50: oklch(98.5% 0.004 80); /* near-white warm */
-  --gf-color-neutral-100: oklch(96.5% 0.006 80);
-  --gf-color-neutral-200: oklch(93% 0.008 80);
-  --gf-color-neutral-300: oklch(88% 0.01 80);
-  --gf-color-neutral-400: oklch(78% 0.012 80);
-  --gf-color-neutral-500: oklch(65% 0.015 80); /* mid gray */
-  --gf-color-neutral-600: oklch(50% 0.018 80);
-  --gf-color-neutral-700: oklch(38% 0.02 80);
-  --gf-color-neutral-800: oklch(26% 0.02 80);
-  --gf-color-neutral-900: oklch(16% 0.018 80); /* near-black warm */
-  --gf-color-neutral-950: oklch(10% 0.015 80);
-  --gf-color-neutral-1000: oklch(0% 0 0);
+  /* ─── Tier 1 Primitives: Neutral OKLCH Palette ─────────────────── */
+  --gf-primitives-neutral-0: oklch(100% 0 0);
+  --gf-primitives-neutral-50: oklch(98.5% 0.005 250);
+  --gf-primitives-neutral-100: oklch(96.5% 0.008 250);
+  --gf-primitives-neutral-200: oklch(92.5% 0.012 250);
+  --gf-primitives-neutral-300: oklch(86.5% 0.015 250);
+  --gf-primitives-neutral-400: oklch(76% 0.018 250);
+  --gf-primitives-neutral-500: oklch(62% 0.02 250);
+  --gf-primitives-neutral-600: oklch(48% 0.022 250);
+  --gf-primitives-neutral-700: oklch(34% 0.02 250);
+  --gf-primitives-neutral-800: oklch(20% 0.02 250);
+  --gf-primitives-neutral-850: oklch(16% 0.018 250);
+  --gf-primitives-neutral-900: oklch(12% 0.015 250);
+  --gf-primitives-neutral-950: oklch(8% 0.012 250);
+  --gf-primitives-neutral-1000: oklch(0% 0 0);
 
-  /* ─── Primitives: Brand (Kimchi — #ED4B00) ──────────────────────── */
-  --gf-color-brand-50: oklch(96% 0.02 38);
-  --gf-color-brand-100: oklch(92% 0.06 38);
-  --gf-color-brand-200: oklch(84% 0.12 38);
-  --gf-color-brand-300: oklch(74% 0.18 38);
-  --gf-color-brand-400: oklch(67% 0.21 38);
-  --gf-color-brand-500: oklch(62% 0.22 38); /* Kimchi core #ED4B00 */
-  --gf-color-brand-600: oklch(54% 0.2 38);
-  --gf-color-brand-700: oklch(45% 0.18 38);
-  --gf-color-brand-800: oklch(35% 0.15 38);
-  --gf-color-brand-900: oklch(26% 0.12 38);
+  /* ─── Tier 1 Primitives: Brand & Status ────────────────────────── */
+  --gf-primitives-kimchi-500: oklch(62% 0.22 38);   /* #ED4B00 */
+  --gf-primitives-kimchi-600: oklch(54% 0.20 38);
+  --gf-primitives-kimchi-400: oklch(67% 0.21 38);
+  --gf-primitives-kimchi-50: oklch(96% 0.02 38);
+  --gf-primitives-kimchi-900: oklch(26% 0.12 38);
 
-  /* ─── Status ─────────────────────────────────────────────────────── */
-  --gf-color-success-subtle: oklch(95% 0.04 145);
-  --gf-color-success: oklch(58% 0.2 145);
-  --gf-color-success-bold: oklch(42% 0.18 145);
+  --gf-primitives-cobalt-500: oklch(52% 0.23 250);  /* #0052CC */
+  --gf-primitives-emerald-500: oklch(58% 0.20 150); /* #10B981 */
+  --gf-primitives-amber-500: oklch(64% 0.18 80);    /* #F59E0B */
+  --gf-primitives-ruby-500: oklch(57% 0.23 25);     /* #EF4444 */
+  --gf-primitives-orchid-500: oklch(58% 0.23 300);  /* #8B5CF6 Virtual Lab */
 
-  --gf-color-warning-subtle: oklch(96% 0.05 80);
-  --gf-color-warning: oklch(74% 0.18 75);
-  --gf-color-warning-bold: oklch(56% 0.18 75);
+  /* ─── Tier 2 Semantic: Light Mode Porcelain Hierarchy ─────────── */
+  --ds-layer-01: var(--gf-primitives-neutral-50);  /* #f8f9fa - Canvas */
+  --ds-layer-02: var(--gf-primitives-neutral-0);   /* #ffffff - Card / Table */
+  --ds-layer-03: var(--gf-primitives-neutral-0);   /* #ffffff - Raised Header */
+  --ds-layer-04: var(--gf-primitives-neutral-0);   /* #ffffff - Modal Overlay */
 
-  --gf-color-danger-subtle: oklch(96% 0.04 25);
-  --gf-color-danger: oklch(55% 0.23 25);
-  --gf-color-danger-bold: oklch(40% 0.2 25);
+  /* Procedural Shaders & Glows */
+  --ds-glow-subtle: none;
+  --ds-glow-focused: 0 0 0 2px rgba(237, 75, 0, 0.25);
 
-  --gf-color-info-subtle: oklch(95% 0.03 245);
-  --gf-color-info: oklch(58% 0.18 245);
-  --gf-color-info-bold: oklch(42% 0.16 245);
+  /* Semantic Text */
+  --ds-text-primary: var(--gf-primitives-neutral-900);
+  --ds-text-subtle: var(--gf-primitives-neutral-600);
+  --ds-text-subtlest: var(--gf-primitives-neutral-400);
+  --ds-text-inverse: var(--gf-primitives-neutral-0);
+  --ds-text-brand: var(--gf-primitives-kimchi-500);
 
-  /* ─── Semantic: Light Mode ───────────────────────────────────────── */
+  /* Semantic Borders */
+  --ds-border-subtle: var(--gf-primitives-neutral-200);
+  --ds-border-bold: var(--gf-primitives-neutral-300);
+  --ds-border-focused: var(--gf-primitives-kimchi-500);
+  --ds-border-danger: var(--gf-primitives-ruby-500);
 
-  /* Backgrounds — 5-level hierarchy */
-  --gf-color-bg-page: var(--gf-color-neutral-50); /* page canvas */
-  --gf-color-bg-subtle: var(--gf-color-neutral-100); /* sidebar, inset */
-  --gf-color-bg-default: var(--gf-color-neutral-0); /* cards */
-  --gf-color-bg-raised: var(--gf-color-neutral-0); /* popovers, dropdowns */
-  --gf-color-bg-overlay: var(--gf-color-neutral-0); /* modals */
+  /* Primary Brand Action (Kimchi) */
+  --ds-color-primary: var(--gf-primitives-kimchi-500);
+  --ds-color-primary-hover: var(--gf-primitives-kimchi-600);
+  --ds-color-primary-subtle: var(--gf-primitives-kimchi-50);
 
-  /* Legacy aliases (for backward compat) */
-  --gf-color-theme-background: var(--gf-color-bg-page);
-  --gf-color-surface: var(--gf-color-bg-default);
-  --gf-color-surface-raised: var(--gf-color-bg-raised);
-  --gf-color-surface-overlay: var(--gf-color-bg-overlay);
+  /* Functional Status Colors */
+  --ds-color-success: var(--gf-primitives-emerald-500);
+  --ds-color-warning: var(--gf-primitives-amber-500);
+  --ds-color-danger: var(--gf-primitives-ruby-500);
+  --ds-color-info: var(--gf-primitives-cobalt-500);
+  --ds-color-ai-lab: var(--gf-primitives-orchid-500);
 
-  /* Text */
-  --gf-color-text: var(--gf-color-neutral-900);
-  --gf-color-text-subtle: var(--gf-color-neutral-600);
-  --gf-color-text-subtlest: var(--gf-color-neutral-400);
-  --gf-color-text-inverse: var(--gf-color-neutral-0);
-  --gf-color-text-brand: var(--gf-color-brand-500);
-  --gf-color-text-danger: var(--gf-color-danger);
-  --gf-color-text-success: var(--gf-color-success-bold);
-  --gf-color-text-warning: var(--gf-color-warning-bold);
+  /* Density Defaults (Comfortable default) */
+  --ds-control-height: 48px;
+  --ds-control-padding-x: 16px;
+  --ds-control-padding-y: 12px;
+  --ds-table-row-height: 48px;
+  --ds-radius-xs: 2px;
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 6px;
+  --ds-radius-lg: 10px;
+  --ds-radius-xl: 14px;
+  --ds-radius-2xl: 16px;
+  --ds-radius-full: 9999px;
 
-  /* Legacy alias */
-  --gf-color-theme-foreground: var(--gf-color-text);
+  /* Motion Standards */
+  --ds-motion-fast: 150ms;
+  --ds-motion-base: 250ms;
+  --ds-motion-slow: 400ms;
+  --ds-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Borders */
-  --gf-color-border: var(--gf-color-neutral-200);
-  --gf-color-border-subtle: var(--gf-color-neutral-100);
-  --gf-color-border-bold: var(--gf-color-neutral-400);
-  --gf-color-border-focused: var(--gf-color-brand-500);
-  --gf-color-border-hover: var(--gf-color-neutral-300);
+  /* Atlassian & Showcase Compatibility Aliases */
+  --ds-background-brand-bold: var(--ds-color-primary);
+  --ds-background-brand-subtle: var(--ds-color-primary-subtle);
+  --ds-background-neutral-subtle: var(--gf-primitives-neutral-100);
+  --ds-background-information-bold: var(--ds-color-info);
+  --ds-background-information-subtle: oklch(96% 0.03 250);
+  --ds-background-success-bold: var(--ds-color-success);
+  --ds-background-success-subtle: oklch(96% 0.03 150);
+  --ds-background-warning-bold: var(--ds-color-warning);
+  --ds-background-warning-subtle: oklch(96% 0.03 80);
+  --ds-background-danger-bold: var(--ds-color-danger);
+  --ds-background-danger-subtle: oklch(96% 0.03 25);
+  
+  --ds-accent-bold: var(--ds-color-primary);
+  --ds-accent-hover: var(--ds-color-primary-hover);
+  --ds-accent-subtle: var(--ds-color-primary-subtle);
+  --ds-primary-accent: var(--ds-color-primary);
 
-  /* Brand / Primary */
-  --gf-color-primary: var(--gf-color-brand-500);
-  --gf-color-primary-foreground: var(--gf-color-neutral-0);
-  --gf-color-primary-hover: var(--gf-color-brand-600);
-  --gf-color-primary-subtle: var(--gf-color-brand-50);
+  --ds-surface-subtle: var(--ds-layer-01);
+  --ds-surface-raised: var(--ds-layer-02);
+  --ds-surface-overlay: var(--ds-layer-04);
+  --ds-surface-glass: var(--ds-layer-02);
+  --ds-background-default: var(--ds-layer-01);
+  --ds-text: var(--ds-text-primary);
 
-  /* Muted */
-  --gf-color-muted: var(--gf-color-neutral-200);
-  --gf-color-muted-foreground: var(--gf-color-neutral-600);
+  /* ─── Backwards-Compatible Legacy Aliases ──────────────────────── */
+  --gf-color-bg-page: var(--ds-layer-01);
+  --gf-color-bg-subtle: var(--ds-layer-01);
+  --gf-color-bg-default: var(--ds-layer-02);
+  --gf-color-bg-raised: var(--ds-layer-03);
+  --gf-color-bg-overlay: var(--ds-layer-04);
+  --gf-color-surface: var(--ds-layer-02);
+  --gf-color-surface-raised: var(--ds-layer-03);
+  --gf-color-surface-overlay: var(--ds-layer-04);
+  --gf-color-text: var(--ds-text-primary);
+  --gf-color-text-subtle: var(--ds-text-subtle);
+  --gf-color-text-subtlest: var(--ds-text-subtlest);
+  --gf-color-text-brand: var(--ds-text-brand);
+  --gf-color-border: var(--ds-border-subtle);
+  --gf-color-border-subtle: var(--ds-border-subtle);
+  --gf-color-border-bold: var(--ds-border-bold);
+  --gf-color-primary: var(--ds-color-primary);
+  --gf-color-primary-hover: var(--ds-color-primary-hover);
+  --gf-color-primary-subtle: var(--ds-color-primary-subtle);
+  --gf-color-success: var(--ds-color-success);
+  --gf-color-warning: var(--ds-color-warning);
+  --gf-color-danger: var(--ds-color-danger);
+  --gf-color-info: var(--ds-color-info);
 
-  /* ─── shadcn/ui HSL Aliases — Light Mode ─────────────────────────── */
-  /* NOTE: shadcn expects raw HSL values without hsl() wrapper */
-  --background: 98.5 14% 99%; /* neutral-50 */
-  --foreground: 30 8% 16%; /* neutral-900 */
-
+  /* shadcn/ui variables */
+  --background: 250 14% 98.5%;
+  --foreground: 250 15% 12%;
   --card: 0 0% 100%;
-  --card-foreground: 30 8% 16%;
-
+  --card-foreground: 250 15% 12%;
   --popover: 0 0% 100%;
-  --popover-foreground: 30 8% 16%;
-
-  --primary: 20 100% 46%; /* Kimchi #ED4B00 */
+  --popover-foreground: 250 15% 12%;
+  --primary: 20 100% 46%;
   --primary-foreground: 0 0% 100%;
-
-  --secondary: 30 10% 93%; /* neutral-200 */
-  --secondary-foreground: 30 6% 26%;
-
-  --muted: 30 10% 93%;
-  --muted-foreground: 30 6% 42%;
-
-  --accent: 20 100% 96%; /* brand-50 */
-  --accent-foreground: 20 100% 38%;
-
-  --destructive: 10 80% 50%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border: 30 10% 88%; /* neutral-200 */
-  --input: 30 10% 88%;
-  --ring: 20 100% 46%; /* Kimchi */
-
+  --border: 250 12% 92.5%;
+  --input: 250 12% 92.5%;
+  --ring: 20 100% 46%;
   --radius: 0.5rem;
-
-  /* ─── Elevation / Shadow ─────────────────────────────────────────── */
-  --gf-shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.05);
-  --gf-shadow-sm:
-    0 1px 3px oklch(0% 0 0 / 0.08), 0 1px 2px oklch(0% 0 0 / 0.06);
-  --gf-shadow-md:
-    0 4px 6px oklch(0% 0 0 / 0.07), 0 2px 4px oklch(0% 0 0 / 0.06);
-  --gf-shadow-lg:
-    0 10px 15px oklch(0% 0 0 / 0.08), 0 4px 6px oklch(0% 0 0 / 0.05);
-  --gf-shadow-xl:
-    0 20px 25px oklch(0% 0 0 / 0.08), 0 10px 10px oklch(0% 0 0 / 0.04);
 }
 
-/* ─── Dark Mode ───────────────────────────────────────────────────────── */
+/* ─── Tier 2 Semantic: Dark Mode Satin-Charcoal Hierarchy ───────── */
 .dark,
 [data-color-mode='dark'] {
-  /* Backgrounds — charcoal hierarchy (warm-tinted dark) */
-  --gf-color-bg-page: oklch(12% 0.012 250); /* darkest: page canvas */
-  --gf-color-bg-subtle: oklch(14% 0.012 250); /* sidebar, nav */
-  --gf-color-bg-default: oklch(16% 0.012 250); /* cards */
-  --gf-color-bg-raised: oklch(20% 0.012 250); /* dropdowns, popovers */
-  --gf-color-bg-overlay: oklch(18% 0.012 250); /* modals */
+  --ds-layer-01: var(--gf-primitives-neutral-950); /* #0b0d11 - Sunken Base */
+  --ds-layer-02: var(--gf-primitives-neutral-900); /* #12151c - Default Surface */
+  --ds-layer-03: var(--gf-primitives-neutral-850); /* #191d26 - Raised Surface */
+  --ds-layer-04: var(--gf-primitives-neutral-800); /* #212633 - Modal / Sheet */
 
-  /* Legacy aliases */
-  --gf-color-theme-background: var(--gf-color-bg-page);
-  --gf-color-surface: var(--gf-color-bg-default);
-  --gf-color-surface-raised: var(--gf-color-bg-raised);
-  --gf-color-surface-overlay: var(--gf-color-bg-overlay);
+  /* Dark Mode Rim-Light Shaders */
+  --ds-glow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.04) inset, 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+  --ds-glow-focused: 0 0 0 1px rgba(237, 75, 0, 0.20) inset, 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 0 16px -2px rgba(237, 75, 0, 0.15);
 
-  /* Text */
-  --gf-color-text: oklch(94% 0.006 80);
-  --gf-color-text-subtle: oklch(65% 0.01 80);
-  --gf-color-text-subtlest: oklch(46% 0.01 80);
-  --gf-color-text-inverse: oklch(12% 0.012 80);
-  --gf-color-text-brand: var(--gf-color-brand-300);
-  --gf-color-text-danger: oklch(72% 0.18 25);
-  --gf-color-text-success: oklch(72% 0.16 145);
-  --gf-color-text-warning: oklch(80% 0.16 75);
+  /* Atlassian & Showcase Compatibility Aliases (Dark) */
+  --ds-background-brand-bold: var(--ds-color-primary);
+  --ds-background-brand-subtle: oklch(26% 0.12 38);
+  --ds-background-neutral-subtle: var(--gf-primitives-neutral-850);
+  --ds-background-information-bold: var(--ds-color-info);
+  --ds-background-information-subtle: oklch(24% 0.10 250);
+  --ds-background-success-bold: var(--ds-color-success);
+  --ds-background-success-subtle: oklch(24% 0.10 150);
+  --ds-background-warning-bold: var(--ds-color-warning);
+  --ds-background-warning-subtle: oklch(24% 0.10 80);
+  --ds-background-danger-bold: var(--ds-color-danger);
+  --ds-background-danger-subtle: oklch(24% 0.10 25);
+  
+  --ds-accent-bold: var(--ds-color-primary);
+  --ds-accent-hover: var(--ds-color-primary-hover);
+  --ds-accent-subtle: oklch(26% 0.12 38);
+  --ds-primary-accent: var(--ds-color-primary);
 
-  /* Legacy alias */
-  --gf-color-theme-foreground: var(--gf-color-text);
+  --ds-surface-subtle: var(--ds-layer-01);
+  --ds-surface-raised: var(--ds-layer-03);
+  --ds-surface-overlay: var(--ds-layer-04);
+  --ds-surface-glass: var(--ds-layer-02);
+  --ds-background-default: var(--ds-layer-01);
+  --ds-text: var(--ds-text-primary);
 
-  /* Borders */
-  --gf-color-border: oklch(24% 0.012 250);
-  --gf-color-border-subtle: oklch(20% 0.01 250);
-  --gf-color-border-bold: oklch(35% 0.015 250);
-  --gf-color-border-focused: var(--gf-color-brand-400);
-  --gf-color-border-hover: oklch(30% 0.015 250);
+  /* Semantic Text */
+  --ds-text-primary: var(--gf-primitives-neutral-50);
+  --ds-text-subtle: var(--gf-primitives-neutral-400);
+  --ds-text-subtlest: var(--gf-primitives-neutral-600);
+  --ds-text-inverse: var(--gf-primitives-neutral-950);
+  --ds-text-brand: var(--gf-primitives-kimchi-400);
 
-  /* Brand / Primary */
-  --gf-color-primary: var(--gf-color-brand-400);
-  --gf-color-primary-foreground: oklch(12% 0.012 80);
-  --gf-color-primary-hover: var(--gf-color-brand-300);
-  --gf-color-primary-subtle: oklch(20% 0.04 38);
+  /* Semantic Borders */
+  --ds-border-subtle: var(--gf-primitives-neutral-800);
+  --ds-border-bold: var(--gf-primitives-neutral-700);
+  --ds-border-focused: var(--gf-primitives-kimchi-400);
+  --ds-border-danger: var(--gf-primitives-ruby-500);
 
-  /* Muted */
-  --gf-color-muted: oklch(22% 0.012 250);
-  --gf-color-muted-foreground: oklch(55% 0.01 80);
+  /* Primary Action */
+  --ds-color-primary: var(--gf-primitives-kimchi-500);
+  --ds-color-primary-hover: var(--gf-primitives-kimchi-400);
+  --ds-color-primary-subtle: var(--gf-primitives-kimchi-900);
 
-  /* shadcn/ui HSL Aliases — Dark Mode */
-  --background: 225 18% 9%;
-  --foreground: 30 10% 94%;
+  /* Status Accents */
+  --ds-color-success: var(--gf-primitives-emerald-500);
+  --ds-color-warning: var(--gf-primitives-amber-500);
+  --ds-color-danger: var(--gf-primitives-ruby-500);
+  --ds-color-info: var(--gf-primitives-cobalt-500);
+  --ds-color-ai-lab: var(--gf-primitives-orchid-500);
 
-  --card: 225 18% 12%;
-  --card-foreground: 30 10% 94%;
-
-  --popover: 225 18% 11%;
-  --popover-foreground: 30 10% 94%;
-
-  --primary: 20 100% 60%; /* lighter Kimchi for dark bg */
+  /* shadcn/ui dark */
+  --background: 250 12% 8%;
+  --foreground: 250 5% 98.5%;
+  --card: 250 15% 12%;
+  --card-foreground: 250 5% 98.5%;
+  --popover: 250 18% 16%;
+  --popover-foreground: 250 5% 98.5%;
+  --primary: 20 100% 46%;
   --primary-foreground: 0 0% 100%;
+  --border: 250 20% 20%;
+  --input: 250 20% 20%;
+  --ring: 20 100% 46%;
+}
 
-  --secondary: 225 18% 18%;
-  --secondary-foreground: 30 8% 80%;
+/* ─── Density Modifiers ─────────────────────────────────────────── */
+[data-density='compact'] {
+  --ds-control-height: 36px;
+  --ds-control-padding-x: 12px;
+  --ds-control-padding-y: 6px;
+  --ds-table-row-height: 36px;
+}
 
-  --muted: 225 18% 18%;
-  --muted-foreground: 30 6% 50%;
+[data-density='comfortable'] {
+  --ds-control-height: 48px;
+  --ds-control-padding-x: 16px;
+  --ds-control-padding-y: 12px;
+  --ds-table-row-height: 48px;
+}
 
-  --accent: 225 18% 18%;
-  --accent-foreground: 30 8% 80%;
+/* ─── Switchable Accent Profiles ────────────────────────────────── */
+[data-accent='cobalt'] {
+  --ds-color-primary: var(--gf-primitives-cobalt-500);
+  --ds-text-brand: var(--gf-primitives-cobalt-500);
+  --ds-border-focused: var(--gf-primitives-cobalt-500);
+  --ring: 250 100% 50%;
+}
 
-  --destructive: 0 65% 52%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border: 225 18% 22%;
-  --input: 225 18% 22%;
-  --ring: 20 100% 60%;
-
-  /* Shadows (lighter in dark mode) */
-  --gf-shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.2);
-  --gf-shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.25), 0 1px 2px oklch(0% 0 0 / 0.2);
-  --gf-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.3), 0 2px 4px oklch(0% 0 0 / 0.22);
-  --gf-shadow-lg:
-    0 10px 15px oklch(0% 0 0 / 0.35), 0 4px 6px oklch(0% 0 0 / 0.25);
+[data-accent='emerald'] {
+  --ds-color-primary: var(--gf-primitives-emerald-500);
+  --ds-text-brand: var(--gf-primitives-emerald-500);
+  --ds-border-focused: var(--gf-primitives-emerald-500);
+  --ring: 150 80% 40%;
 }

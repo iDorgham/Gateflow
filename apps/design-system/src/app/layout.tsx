@@ -1,15 +1,9 @@
 import * as React from 'react';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import { ToastProvider } from '@gateflow/ui';
 import { cn } from '@gateflow/ui/utils';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://design.gateflow.site'),
@@ -56,10 +50,7 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={cn(
-          'min-h-screen font-sans antialiased bg-background text-foreground',
-          inter.variable
-        )}
+        className="min-h-screen font-sans antialiased bg-background text-foreground"
       >
         <LocaleProvider>
           <ThemeProvider>

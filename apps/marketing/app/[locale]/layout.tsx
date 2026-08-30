@@ -149,7 +149,7 @@ export default async function RootLayout(props: {
   const ga4MeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
 
   return (
-    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} data-density="comfortable" suppressHydrationWarning>
       <head>
         <ThemeScript />
         {ga4MeasurementId && (

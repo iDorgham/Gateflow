@@ -1,52 +1,81 @@
+'use client';
+
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
 /**
- * GateFlow Card — ADS-inspired monorepo component
- * Uses semantic tokens only.
+ * GateFlow Card (v7.1 Overhaul)
+ * Supports default, interactive (hover lift + glow), selectable, and metric variants.
  */
 const cardVariants = cva(
-  [
-    'rounded-[var(--ds-border-radius-400)]',
-    'text-[var(--ds-text-primary)]',
-    'transition-shadow',
-  ].join(' '),
+  'rounded-[var(--ds-radius-lg)] text-[var(--ds-text-primary)] transition-all duration-200 text-start',
   {
     variants: {
       variant: {
         default: [
-          'bg-[var(--ds-surface-raised)]',
-          'border border-[var(--ds-border)]',
-          'shadow-[var(--ds-shadow-raised)]',
+          'bg-[var(--ds-layer-02)]',
+          'border border-[var(--ds-border-subtle)]',
+          'shadow-[var(--ds-glow-subtle)]',
+        ].join(' '),
+        interactive: [
+          'bg-[var(--ds-layer-02)]',
+          'border border-[var(--ds-border-subtle)]',
+          'shadow-[var(--ds-glow-subtle)]',
+          'cursor-pointer',
+          'hover:translate-y-[-2px]',
+          'hover:border-[var(--ds-border-bold)]',
+          'hover:shadow-[var(--ds-glow-focused)]',
+          'active:translate-y-[0px]',
+          'active:scale-[0.99]',
+        ].join(' '),
+        selectable: [
+          'bg-[var(--ds-layer-02)]',
+          'border border-[var(--ds-border-subtle)]',
+          'cursor-pointer',
+          'hover:border-[var(--ds-border-bold)]',
         ].join(' '),
         sunken: [
-          'bg-[var(--ds-surface-sunken)]',
+          'bg-[var(--ds-layer-01)]',
           'border border-[var(--ds-border-subtle)]',
         ].join(' '),
-        overlay: [
-          'bg-[var(--ds-surface-overlay)]',
-          'border border-[var(--ds-border)]',
-          'shadow-[var(--ds-shadow-overlay)]',
+        raised: [
+          'bg-[var(--ds-layer-03)]',
+          'border border-[var(--ds-border-subtle)]',
+          'shadow-[0_8px_24px_rgba(0,0,0,0.4)]',
         ].join(' '),
-        ghost: 'bg-transparent border-transparent',
-        outline: 'bg-transparent border-2 border-[var(--ds-border)]',
+        metric: [
+          'bg-[var(--ds-layer-02)]',
+          'border border-[var(--ds-border-subtle)]',
+          'p-5 flex flex-col justify-between',
+        ].join(' '),
+        ghost: 'bg-transparent border-transparent shadow-none',
+        outline: 'bg-transparent border-2 border-[var(--ds-border-subtle)]',
+      },
+      isSelected: {
+        true: 'border-[var(--ds-color-primary)] ring-2 ring-[var(--ds-color-primary)] ring-offset-2 ring-offset-[var(--ds-layer-01)] shadow-[var(--ds-glow-focused)]',
+        false: '',
       },
     },
     defaultVariants: {
       variant: 'default',
+      isSelected: false,
     },
   }
 );
 
 export interface CardProps
-  extends
-    React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {}
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {
+  isSelected?: boolean;
+}
 
-export function Card({ className, variant, ...props }: CardProps) {
+export function Card({ className, variant, isSelected, ...props }: CardProps) {
   return (
-    <div className={cn(cardVariants({ variant }), className)} {...props} />
+    <div
+      className={cn(cardVariants({ variant, isSelected }), className)}
+      {...props}
+    />
   );
 }
 
@@ -63,7 +92,6 @@ export function CardHeader({
     />
   );
 }
-
 CardHeader.displayName = 'CardHeader';
 
 export function CardTitle({
@@ -73,14 +101,13 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        'text-lg font-semibold leading-none tracking-tight text-[var(--ds-text-primary)]',
+        'text-base font-semibold leading-none tracking-tight text-[var(--ds-text-primary)]',
         className
       )}
       {...props}
     />
   );
 }
-
 CardTitle.displayName = 'CardTitle';
 
 export function CardDescription({
@@ -94,7 +121,6 @@ export function CardDescription({
     />
   );
 }
-
 CardDescription.displayName = 'CardDescription';
 
 export function CardContent({
@@ -103,7 +129,6 @@ export function CardContent({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('p-6 pt-0', className)} {...props} />;
 }
-
 CardContent.displayName = 'CardContent';
 
 export function CardFooter({
@@ -114,7 +139,6 @@ export function CardFooter({
     <div className={cn('flex items-center p-6 pt-0', className)} {...props} />
   );
 }
-
 CardFooter.displayName = 'CardFooter';
 
 export { cardVariants };
