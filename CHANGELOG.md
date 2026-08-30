@@ -9,6 +9,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Ui]** add brand variant to buttonVariants
+- **[Ui]** support both controller and standalone modes in FormField
+- **[Ui]** add subtle badge & success button variants and fix FormField export
+- **[Ui]** add brand and information tone support to badge
+- **[Resident-Mobile]** resolve typecheck and contact picker props
+- **[Ui]** exclude tests from typecheck and resolve badge variants
+- **[Resident-Mobile]** implement resident one-tap biometric pass experience
 - **[Lighthouse-100]** complete phase 5 admin-dashboard optimization and monorepo ci hard-gate enforcement
 - **[Lighthouse-100]** complete phase 4 client dashboard optimization and high-density data islands
 - **[Lighthouse-100]** complete phase 3 resident portal pwa and offline pass optimization
