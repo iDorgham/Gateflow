@@ -1,69 +1,64 @@
-# PLAN: resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
+# PLAN — resident_mobile_one_tap
 
-This plan outlines the implementation of the "One-Tap" invitation experience for residents. It focuses on zero-friction sharing, high-security HMAC signing, and premium invitee landing pages.
-
-## Phases
-
-### Phase 1: Security & Signing Foundation (P0)
-
-**Goal:** Implement a cryptographically secure foundation for one-tap links.
-
-- **Backend/Security:** Use `HMAC-SHA256` for signing short-link payloads.
-- **Package:** Centralize signing logic in a shared package or `packages/db/src/security.ts`.
-- **Validation:** Add unit tests for signature generation and verification.
-- **Acceptance Criteria:**
-  - [x] `createSecureInviteSignature(payload: string, secret: string): string` implementation.
-  - [x] `verifySecureInviteSignature(payload: string, signature: string, secret: string): boolean` implementation.
-  - [x] Passing unit tests in `@gate-access/db`.
-
-### Phase 2: Core Logic - Fast Link Generation (P0)
-
-**Goal:** Implement the "Silent Generation" of high-speed guest passes.
-
-- **API:** Add `/api/resident/express-invite` endpoint (Next.js).
-- **Logic:** Generate a `QrShortLink` and a corresponding `QRCode` in a single transaction.
-- **Optimization:** Use "Anonymous-to-Identified" logic: the share link is valid even if the guest name isn't filled yet.
-- **Acceptance Criteria:**
-  - [x] API endpoint returns a signed `shortId` link.
-  - [x] `QrShortLink` points to the correct marketing landing page.
-
-### Phase 3: Home Tab "Express Invite" UI (P1)
-
-**Goal:** Build the high-premium "One-Tap" widget in the resident app.
-
-- **Mobile UI:** Premium Home Tab widget using Framer Motion (or Reanimated).
-- **Integration:** Use `expo-sharing` and `expo-contacts`.
-- **UX:** Recent Guests quick-access buttons.
-- **Acceptance Criteria:**
-  - [x] Widget is visible on Home Tab.
-  - [x] Tapping "Express Invite" opens the native share sheet with the signed link.
-
-### Phase 4: Invitee Landing Page - Premium Experience (P1)
-
-**Goal:** Redesign the guest landing page for a world-class invitation experience.
-
-- **Marketing App:** Redesign `/s/[shortId]` route in `apps/marketing`.
-- **Features:** High-density branding, interactive GPS guide, RTL support.
-- **Access:** Integration for "Add to Apple/Google Wallet."
-- **Acceptance Criteria:**
-  - [x] Landing page is fully responsive.
-  - [x] Page handles both LTR and RTL perfectly.
-
-### Phase 5: Refinement - i18n & GateAI Polish (P2)
-
-**Goal:** Finalize the MENA localization and add AI-delegation options.
-
-- **AI Integration:** Option for residents to delegate guest pre-clearance to GateAI.
-- **i18n:** Professional Arabic strings for all sharing messages.
-- **Audit:** Security & RTL audit across the new flow.
-- **Acceptance Criteria:**
-  - [x] Sharing message templates are localized.
-  - [x] No tenant-isolation leaks (verified via /clis-team audit).
+**Initiative:** `resident_mobile_one_tap`  
+**Target App:** `apps/resident-mobile`  
+**Status:** ✅ Complete  
+**Priority:** P1  
+**Created:** 2026-08-30
 
 ---
 
-## Technical Constraints
+## Executive Summary
 
-- **Stack:** Expo SDK 54, Next.js 14, Prisma 5.
-- **Tenant Isolation:** Every operation must be scoped to the resident's `organizationId` and `unitId`.
-- **Security:** HMAC-SHA256 is mandatory; no unsigned links ever.
+Resident Mobile One-Tap delivers a high-speed, zero-friction, biometric-first pass experience for gated community residents. Upon launch, authenticated residents are presented with biometric authentication (Face ID / Touch ID) with seamless PIN fallback. On unlock in $\le 800\text{ms}$, a full-screen, high-contrast, cryptographically signed (HMAC-SHA256) QR code appears with offline caching, auto-refresh countdown, and 3-tap instant visitor sharing.
+
+---
+
+## Phase Breakdown
+
+### Phase 1: Core Foundation + Biometric + QR Display
+
+- **Role:** Mobile & Security Engineer
+- **Scope:**
+  - Create `src/features/one-tap/` architecture
+  - Implement `useBiometricAuth.ts` with `expo-local-authentication` and 3-attempt failover
+  - Implement `useSecureQR.ts` with `expo-secure-store` (`WHEN_UNLOCKED_THIS_DEVICE_ONLY`) and offline fallback
+  - Build `BiometricGate.tsx`, `FullScreenQR.tsx`, `PinFallbackModal.tsx`, `OneTapHomeScreen.tsx`
+  - Enforce session timeout (45–60s) via `AppState`
+- **Done when:** Biometric unlock displays valid QR in $\le 800\text{ms}$ + PIN fallback functions reliably.
+
+### Phase 2: Instant Visitor Sharing
+
+- **Role:** Frontend & UX Engineer
+- **Scope:**
+  - Implement `src/features/visitor-share/` with templates (Family, Driver, Contractor, Day-Guest)
+  - Create `useVisitorInvite.ts`, `useShareVisitor.ts`, `VisitorTemplatePicker.tsx`, `ShareSheet.tsx`
+  - Local rate limiting (15 invites/hour) + invite status lifecycle tracking
+- **Done when:** Visitor pass is generated and shared in $\le 3$ taps.
+
+### Phase 3: Smart Arrival Notifications
+
+- **Role:** Mobile & Backend Integrations Engineer
+- **Scope:**
+  - Implement `src/features/notifications/` with interactive push handling
+  - Push token registration, interactive actions (Open Gate, Reject, Call Guard)
+  - Latency SLA $\le 3$ seconds from guard scan event
+- **Done when:** Interactive push triggers and actions execute in $\le 3\text{s}$.
+
+### Phase 4: Security + Compliance + Audit
+
+- **Role:** Security & Compliance Specialist
+- **Scope:**
+  - Implement `src/features/security/` with `useAuditLogger.ts` and `piiMasking.ts`
+  - Strict `organizationId` isolation, zero sensitive PII in client UI
+  - Replay and session hijacking protection
+- **Done when:** Every mutation is audited with zero PII leaks.
+
+### Phase 5: Final Polish + Quality
+
+- **Role:** QA & Design System Specialist
+- **Scope:**
+  - ADS Comfortable Density token audit, dark/light mode, Arabic RTL & Cairo font
+  - Loading skeletons, empty states, performance & battery benchmark
+  - Automated unit & integration tests + preflight green
+- **Done when:** 100% test pass rate and pristine visual polish.

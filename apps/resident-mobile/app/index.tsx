@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Text, View, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  View,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import { router } from 'expo-router';
 import { getValidAccessToken, logout } from '../lib/auth-client';
 import { theme } from '../lib/theme';
@@ -16,7 +22,7 @@ export default function HomeScreen() {
         router.replace('/login');
         return;
       }
-      router.replace('/qrs');
+      router.replace('/one-tap');
     });
   }, []);
 
@@ -27,7 +33,12 @@ export default function HomeScreen() {
 
   if (checking) {
     return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View
+        style={[
+          styles.container,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -45,16 +56,24 @@ export default function HomeScreen() {
 
         <Pressable
           onPress={() => router.push('/qrs')}
-          style={({ pressed }) => [styles.primaryButton, pressed && styles.primaryButtonPressed]}
+          style={({ pressed }) => [
+            styles.primaryButton,
+            pressed && styles.primaryButtonPressed,
+          ]}
         >
           <Text style={styles.primaryButtonText}>View my visitor QRs</Text>
         </Pressable>
 
         <Pressable
           onPress={handleSignInDifferent}
-          style={({ pressed }) => [styles.secondaryButton, pressed && styles.secondaryButtonPressed]}
+          style={({ pressed }) => [
+            styles.secondaryButton,
+            pressed && styles.secondaryButtonPressed,
+          ]}
         >
-          <Text style={styles.secondaryButtonText}>Sign in with a different account</Text>
+          <Text style={styles.secondaryButtonText}>
+            Sign in with a different account
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -122,5 +141,3 @@ const styles = StyleSheet.create({
     color: colors.foreground,
   },
 });
-
-

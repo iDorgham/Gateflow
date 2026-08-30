@@ -15,11 +15,10 @@ Real-time status of the engineering pipeline.
 
 ### 🟡 In Planning (Next Sprint Candidates)
 
-| Initiative                       | Goal                                                                                            | App                    | Priority             |
-| :------------------------------- | :---------------------------------------------------------------------------------------------- | :--------------------- | :------------------- |
-| **`resident_mobile_one_tap`**    | One-tap biometric QR pass generation, instant visitor sharing & gate arrival push notifications | `apps/resident-mobile` | **P1 (Recommended)** |
-| **`resident_portal_responsive`** | Responsive ADS modernization, unit family management, and visitor request flow                  | `apps/resident-portal` | **P1**               |
-| **`admin_emulation_hub`**        | Superadmin fleet terminal emulation, load generator, and perimeter telemetry hub                | `apps/admin-dashboard` | **P2**               |
+| Initiative                       | Goal                                                                             | App                    | Priority             |
+| :------------------------------- | :------------------------------------------------------------------------------- | :--------------------- | :------------------- |
+| **`resident_portal_responsive`** | Responsive ADS modernization, unit family management, and visitor request flow   | `apps/resident-portal` | **P1 (Recommended)** |
+| **`admin_emulation_hub`**        | Superadmin fleet terminal emulation, load generator, and perimeter telemetry hub | `apps/admin-dashboard` | **P2**               |
 
 ### ⚪ Backlog Initiatives
 
@@ -30,6 +29,15 @@ Real-time status of the engineering pipeline.
 ---
 
 ## ✅ Recently Shipped (August 2026)
+
+> [!TIP]
+> **Resident Mobile One-Tap Biometric & Instant Pass Experience (`resident_mobile_one_tap`)** — _Shipped 2026-08-30_ — [Plan](../../plan/Complete/resident_mobile_one_tap/)
+>
+> - Biometric-first pass unlocking in $\le 800\text{ms}$ with fail-closed PIN fallback after 3 attempts.
+> - High-contrast vector QR display with encrypted SecureStore offline cache and $\le 2\text{ min}$ expiry countdown warning.
+> - 3-tap instant visitor sharing (Family, Driver, Contractor, Day-Guest) with rolling 1-hour rate limiting ($\le 15\text{/hr}$).
+> - Real-time smart arrival notifications with interactive action triggers (_Open Gate_, _Reject Entry_, _Call Guard_).
+> - Universal PII masking and tamper-evident local encrypted audit ledger.
 
 > [!TIP]
 > **Lighthouse 100 & Zero-CLS Core Web Vitals Across All Monorepo Applications (`lighthouse-100`)** — _Shipped 2026-08-30_ — [Plan](../../plan/Complete/lighthouse-100/)

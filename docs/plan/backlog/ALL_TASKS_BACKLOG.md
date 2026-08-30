@@ -4,6 +4,23 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### resident_mobile_one_tap — Resident Mobile One-Tap Biometric & Instant Pass Experience
+
+**PLAN:** `docs/plan/Complete/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md`  
+**TASKS:** `docs/plan/Complete/resident_mobile_one_tap/TASKS_resident_mobile_one_tap.md`  
+**Status:** ✅ Complete — All 5 Phases Shipped & Verified  
+**Priority:** P1 — Resident Mobile First-Mile Friction Reduction  
+**Target:** Biometric unlock in $\le 800\text{ms}$, 3-tap instant visitor sharing, arrival notifications $\le 3\text{s}$  
+**App:** `apps/resident-mobile`, `packages/ui`
+
+- [x] Phase 1 — Core Foundation + Biometric + QR Display
+- [x] Phase 2 — Instant Visitor Sharing
+- [x] Phase 3 — Smart Arrival Notifications
+- [x] Phase 4 — Security + Compliance + Audit
+- [x] Phase 5 — Final Polish + Quality
+
+---
+
 ### lighthouse-100 — Lighthouse Performance 100 Across All GateFlow Applications
 
 **PLAN:** `docs/plan/Complete/lighthouse-100/PLAN_lighthouse-100.md`  
