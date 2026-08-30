@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Lighthouse-100]** complete phase 2 marketing and design system portal optimization
 - **[Lighthouse-100]** complete phase 1 baseline audit and performance primitives
 - **[Lighthouse-100]** Started development of Lighthouse-100
 - **[Tokens]** export TokenPath type definition
