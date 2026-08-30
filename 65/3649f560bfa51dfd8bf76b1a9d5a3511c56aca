@@ -1,0 +1,14 @@
+packages/ui/tsconfig.json
+  h_220d66b2244819 8-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "653649f560bfa51dfd8bf76b1a9d5a3511c56aca",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
