@@ -6,9 +6,9 @@
 
 ### lighthouse-100 — Lighthouse Performance 100 Across All GateFlow Applications
 
-**PLAN:** `docs/plan/Draft/lighthouse-100/PLAN_lighthouse-100.md`  
-**DRAFT:** `docs/plan/Draft/lighthouse-100/DRAFT_lighthouse-100.md`  
-**Status:** 🟡 Draft / Ready for Review  
+**PLAN:** `docs/plan/Ready/lighthouse-100/PLAN_lighthouse-100.md`  
+**DRAFT:** `docs/plan/Ready/lighthouse-100/DRAFT_lighthouse-100.md`  
+**Status:** 🟢 Ready for Execution  
 **Priority:** P1 — Core Web Vitals, Bundle Optimization & Performance SLA  
 **Target:** 100 Performance, $\ge 95$ Accessibility, 100 Best Practices, 100 SEO across all 5 web apps  
 **App:** `apps/marketing`, `apps/design-system`, `apps/resident-portal`, `apps/client-dashboard`, `apps/admin-dashboard`, `packages/ui`, `packages/theme`
