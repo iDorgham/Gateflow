@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Lighthouse-100]** complete phase 5 admin-dashboard optimization and monorepo ci hard-gate enforcement
 - **[Lighthouse-100]** complete phase 4 client dashboard optimization and high-density data islands
 - **[Lighthouse-100]** complete phase 3 resident portal pwa and offline pass optimization
 - **[Lighthouse-100]** complete phase 2 marketing and design system portal optimization
