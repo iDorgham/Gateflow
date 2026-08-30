@@ -1,0 +1,32 @@
+docs/plan/Ready/lighthouse-100/DRAFT_lighthouse-100.md
+  h_220d66b2244819 1-40
+docs/plan/Ready/lighthouse-100/FOR_PLAN_PROMPT.md
+  h_220d66b2244819 1-90
+docs/plan/Ready/lighthouse-100/PLAN_lighthouse-100.md
+  h_220d66b2244819 1-72
+docs/plan/Ready/lighthouse-100/PROMPT_lighthouse-100_phase_1.md
+  h_220d66b2244819 1-37
+docs/plan/Ready/lighthouse-100/PROMPT_lighthouse-100_phase_2.md
+  h_220d66b2244819 1-37
+docs/plan/Ready/lighthouse-100/PROMPT_lighthouse-100_phase_3.md
+  h_220d66b2244819 1-37
+docs/plan/Ready/lighthouse-100/PROMPT_lighthouse-100_phase_4.md
+  h_220d66b2244819 1-39
+docs/plan/Ready/lighthouse-100/PROMPT_lighthouse-100_phase_5.md
+  h_220d66b2244819 1-42
+docs/plan/Ready/lighthouse-100/TASKS_lighthouse-100.md
+  h_220d66b2244819 1-55
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 9-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "7f9a7583156f13146c4ee3ba4f0a2b26a29e4d5a",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
