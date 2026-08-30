@@ -19,6 +19,19 @@ const badgeVariants = cva(
         outline: 'border bg-transparent',
         ghost: 'border-transparent bg-transparent',
         dot: 'border-transparent bg-transparent gap-1.5',
+        default:
+          'border-transparent bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]',
+        primary:
+          'border-transparent bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]',
+        secondary:
+          'border-transparent bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]',
+        success:
+          'border-transparent bg-emerald-500/10 text-[var(--ds-color-success)]',
+        warning:
+          'border-transparent bg-amber-500/10 text-[var(--ds-color-warning)]',
+        danger:
+          'border-transparent bg-rose-500/10 text-[var(--ds-color-danger)]',
+        info: 'border-transparent bg-blue-500/10 text-[var(--ds-color-info)]',
       },
       tone: {
         primary: '',
@@ -37,49 +50,199 @@ const badgeVariants = cva(
     },
     compoundVariants: [
       // Solid Tones
-      { variant: 'solid', tone: 'primary', className: 'bg-[var(--ds-color-primary)] text-white' },
-      { variant: 'solid', tone: 'neutral', className: 'bg-[var(--ds-layer-03)] text-[var(--ds-text-primary)] border border-[var(--ds-border-subtle)]' },
-      { variant: 'solid', tone: 'success', className: 'bg-[var(--ds-color-success)] text-white' },
-      { variant: 'solid', tone: 'warning', className: 'bg-[var(--ds-color-warning)] text-white' },
-      { variant: 'solid', tone: 'danger', className: 'bg-[var(--ds-color-danger)] text-white' },
-      { variant: 'solid', tone: 'info', className: 'bg-[var(--ds-color-info)] text-white' },
-      { variant: 'solid', tone: 'aiLab', className: 'bg-[var(--ds-color-ai-lab)] text-white' },
+      {
+        variant: 'solid',
+        tone: 'primary',
+        className: 'bg-[var(--ds-color-primary)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'neutral',
+        className:
+          'bg-[var(--ds-layer-03)] text-[var(--ds-text-primary)] border border-[var(--ds-border-subtle)]',
+      },
+      {
+        variant: 'solid',
+        tone: 'success',
+        className: 'bg-[var(--ds-color-success)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'warning',
+        className: 'bg-[var(--ds-color-warning)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'danger',
+        className: 'bg-[var(--ds-color-danger)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'info',
+        className: 'bg-[var(--ds-color-info)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'aiLab',
+        className: 'bg-[var(--ds-color-ai-lab)] text-white',
+      },
 
       // Soft Tones (Subtle tint background + saturated text)
-      { variant: 'soft', tone: 'primary', className: 'bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]' },
-      { variant: 'soft', tone: 'neutral', className: 'bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]' },
-      { variant: 'soft', tone: 'success', className: 'bg-emerald-500/10 text-[var(--ds-color-success)]' },
-      { variant: 'soft', tone: 'warning', className: 'bg-amber-500/10 text-[var(--ds-color-warning)]' },
-      { variant: 'soft', tone: 'danger', className: 'bg-rose-500/10 text-[var(--ds-color-danger)]' },
-      { variant: 'soft', tone: 'info', className: 'bg-blue-500/10 text-[var(--ds-color-info)]' },
-      { variant: 'soft', tone: 'aiLab', className: 'bg-purple-500/10 text-[var(--ds-color-ai-lab)]' },
+      {
+        variant: 'soft',
+        tone: 'primary',
+        className:
+          'bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'neutral',
+        className:
+          'bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'success',
+        className: 'bg-emerald-500/10 text-[var(--ds-color-success)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'warning',
+        className: 'bg-amber-500/10 text-[var(--ds-color-warning)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'danger',
+        className: 'bg-rose-500/10 text-[var(--ds-color-danger)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'info',
+        className: 'bg-blue-500/10 text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'aiLab',
+        className: 'bg-purple-500/10 text-[var(--ds-color-ai-lab)]',
+      },
 
       // Outline Tones
-      { variant: 'outline', tone: 'primary', className: 'border-[var(--ds-color-primary)] text-[var(--ds-text-brand)]' },
-      { variant: 'outline', tone: 'neutral', className: 'border-[var(--ds-border-subtle)] text-[var(--ds-text-subtle)]' },
-      { variant: 'outline', tone: 'success', className: 'border-[var(--ds-color-success)] text-[var(--ds-color-success)]' },
-      { variant: 'outline', tone: 'warning', className: 'border-[var(--ds-color-warning)] text-[var(--ds-color-warning)]' },
-      { variant: 'outline', tone: 'danger', className: 'border-[var(--ds-color-danger)] text-[var(--ds-color-danger)]' },
-      { variant: 'outline', tone: 'info', className: 'border-[var(--ds-color-info)] text-[var(--ds-color-info)]' },
-      { variant: 'outline', tone: 'aiLab', className: 'border-[var(--ds-color-ai-lab)] text-[var(--ds-color-ai-lab)]' },
+      {
+        variant: 'outline',
+        tone: 'primary',
+        className:
+          'border-[var(--ds-color-primary)] text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'neutral',
+        className:
+          'border-[var(--ds-border-subtle)] text-[var(--ds-text-subtle)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'success',
+        className:
+          'border-[var(--ds-color-success)] text-[var(--ds-color-success)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'warning',
+        className:
+          'border-[var(--ds-color-warning)] text-[var(--ds-color-warning)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'danger',
+        className:
+          'border-[var(--ds-color-danger)] text-[var(--ds-color-danger)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'info',
+        className: 'border-[var(--ds-color-info)] text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'aiLab',
+        className:
+          'border-[var(--ds-color-ai-lab)] text-[var(--ds-color-ai-lab)]',
+      },
 
       // Ghost Tones
-      { variant: 'ghost', tone: 'primary', className: 'text-[var(--ds-text-brand)] hover:bg-[var(--ds-color-primary-subtle)]' },
-      { variant: 'ghost', tone: 'neutral', className: 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-layer-01)]' },
-      { variant: 'ghost', tone: 'success', className: 'text-[var(--ds-color-success)] hover:bg-emerald-500/10' },
-      { variant: 'ghost', tone: 'warning', className: 'text-[var(--ds-color-warning)] hover:bg-amber-500/10' },
-      { variant: 'ghost', tone: 'danger', className: 'text-[var(--ds-color-danger)] hover:bg-rose-500/10' },
-      { variant: 'ghost', tone: 'info', className: 'text-[var(--ds-color-info)] hover:bg-blue-500/10' },
-      { variant: 'ghost', tone: 'aiLab', className: 'text-[var(--ds-color-ai-lab)] hover:bg-purple-500/10' },
+      {
+        variant: 'ghost',
+        tone: 'primary',
+        className:
+          'text-[var(--ds-text-brand)] hover:bg-[var(--ds-color-primary-subtle)]',
+      },
+      {
+        variant: 'ghost',
+        tone: 'neutral',
+        className: 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-layer-01)]',
+      },
+      {
+        variant: 'ghost',
+        tone: 'success',
+        className: 'text-[var(--ds-color-success)] hover:bg-emerald-500/10',
+      },
+      {
+        variant: 'ghost',
+        tone: 'warning',
+        className: 'text-[var(--ds-color-warning)] hover:bg-amber-500/10',
+      },
+      {
+        variant: 'ghost',
+        tone: 'danger',
+        className: 'text-[var(--ds-color-danger)] hover:bg-rose-500/10',
+      },
+      {
+        variant: 'ghost',
+        tone: 'info',
+        className: 'text-[var(--ds-color-info)] hover:bg-blue-500/10',
+      },
+      {
+        variant: 'ghost',
+        tone: 'aiLab',
+        className: 'text-[var(--ds-color-ai-lab)] hover:bg-purple-500/10',
+      },
 
       // Dot Tones (Text color)
-      { variant: 'dot', tone: 'primary', className: 'text-[var(--ds-text-brand)]' },
-      { variant: 'dot', tone: 'neutral', className: 'text-[var(--ds-text-subtle)]' },
-      { variant: 'dot', tone: 'success', className: 'text-[var(--ds-color-success)]' },
-      { variant: 'dot', tone: 'warning', className: 'text-[var(--ds-color-warning)]' },
-      { variant: 'dot', tone: 'danger', className: 'text-[var(--ds-color-danger)]' },
-      { variant: 'dot', tone: 'info', className: 'text-[var(--ds-color-info)]' },
-      { variant: 'dot', tone: 'aiLab', className: 'text-[var(--ds-color-ai-lab)]' },
+      {
+        variant: 'dot',
+        tone: 'primary',
+        className: 'text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'neutral',
+        className: 'text-[var(--ds-text-subtle)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'success',
+        className: 'text-[var(--ds-color-success)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'warning',
+        className: 'text-[var(--ds-color-warning)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'danger',
+        className: 'text-[var(--ds-color-danger)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'info',
+        className: 'text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'aiLab',
+        className: 'text-[var(--ds-color-ai-lab)]',
+      },
     ],
     defaultVariants: {
       variant: 'soft',
@@ -90,7 +253,8 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   isRemovable?: boolean;
   onRemove?: () => void;
