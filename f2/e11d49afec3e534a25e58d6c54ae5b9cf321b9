@@ -1,0 +1,16 @@
+DESIGN.md
+  h_220d66b2244819 17,75,78-84
+docs/reference/product/PRD.md
+  h_220d66b2244819 3,5,22,48,59-62,104-112,136-152,161,171-174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "f2e11d49afec3e534a25e58d6c54ae5b9cf321b9",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
