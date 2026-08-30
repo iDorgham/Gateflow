@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import dynamic from 'next/dynamic';
 import {
   Button,
   Dialog,
@@ -13,7 +14,18 @@ import {
   SheetTitle,
 } from '@gateflow/ui';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
-import { VisitorForm } from '@/components/visitor-form';
+
+const VisitorForm = dynamic(
+  () => import('@/components/visitor-form').then((mod) => mod.VisitorForm),
+  {
+    loading: () => (
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface NewVisitorSheetProps {
   unitId: string;

@@ -30,7 +30,15 @@ export function PwaBootstrap() {
       }
     };
 
-    setup();
+    if (typeof window !== 'undefined') {
+      if ('requestIdleCallback' in window) {
+        (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(() => {
+          setup();
+        });
+      } else {
+        setTimeout(setup, 1200);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -40,7 +48,6 @@ export function PwaBootstrap() {
       });
     };
     window.addEventListener('online', onOnline);
-    onOnline();
     return () => window.removeEventListener('online', onOnline);
   }, []);
 

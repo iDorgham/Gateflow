@@ -29,10 +29,10 @@
 
 ### Phase 3: Resident Portal (PWA & Offline Pass Optimization)
 
-- [ ] Profile `apps/resident-portal` PWA service worker caching and manifest loading times.
-- [ ] Defer QR code Canvas generation and Web Share API initialization until after initial view render.
-- [ ] Implement layout skeletons for pass cards and active visitor lists to guarantee `CLS = 0.00`.
-- [ ] Verify Lighthouse 100 on `apps/resident-portal` on simulated mobile 4G network.
+- [x] Profile `apps/resident-portal` PWA service worker caching and manifest loading times.
+- [x] Defer QR code Canvas generation and Web Share API initialization until after initial view render.
+- [x] Implement layout skeletons for pass cards and active visitor lists to guarantee `CLS = 0.00`.
+- [x] Verify Lighthouse 100 on `apps/resident-portal` on simulated mobile 4G network.
 
 ---
 

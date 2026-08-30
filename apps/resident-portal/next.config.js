@@ -6,9 +6,13 @@ const { resolveResidentRewriteDestination } = require('./api-upstream.cjs');
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
   transpilePackages: [
-    '@gateflow/ui',
+    '@gateflow/tokens',
     '@gateflow/theme',
+    '@gateflow/ui',
+    '@gateflow/components',
     '@gate-access/db',
     '@gate-access/types',
   ],

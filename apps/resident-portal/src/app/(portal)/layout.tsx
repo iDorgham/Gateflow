@@ -3,19 +3,6 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { resolveOrganizationId } from '@/lib/session-claims';
 import { prisma } from '@gate-access/db';
 import { PortalShell } from '@/components/layout/portal-shell';
-import type { Metadata, Viewport } from 'next';
-
-export const metadata: Metadata = {
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'GateFlow',
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: 'token("color.background.accent.blue.bold")',
-};
 
 /**
  * Guard: RESIDENT users must have a linked unit to access portal content.

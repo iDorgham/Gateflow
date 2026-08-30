@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: 'GateFlow Resident Portal',
   description: 'Manage your visitor access codes and gate entry',
   manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'GateFlow',
+  },
   icons: {
     icon: [{ url: '/icon', sizes: '32x32', type: 'image/png' }],
     apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
@@ -17,12 +22,33 @@ export const metadata: Metadata = {
   },
 };
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#091e42' },
+    { media: '(prefers-color-scheme: light)', color: '#0c66e4' },
+  ],
+};
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
+});
+
 const cairo = Cairo({
   subsets: ['arabic', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-cairo',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
 });
 
 export default function RootLayout({
