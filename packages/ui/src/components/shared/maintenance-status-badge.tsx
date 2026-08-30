@@ -12,35 +12,30 @@ const statusMap: Record<
   string,
   {
     label: string;
-    variant:
-      | 'default'
-      | 'primary'
-      | 'secondary'
-      | 'success'
-      | 'warning'
-      | 'danger';
+    tone: 'primary' | 'neutral' | 'success' | 'warning' | 'danger' | 'info';
   }
 > = {
-  [MaintenanceStatus.OPEN]: { label: 'Open', variant: 'secondary' },
-  [MaintenanceStatus.ASSIGNED]: { label: 'Assigned', variant: 'primary' },
-  [MaintenanceStatus.IN_PROGRESS]: { label: 'In Progress', variant: 'warning' },
+  [MaintenanceStatus.OPEN]: { label: 'Open', tone: 'neutral' },
+  [MaintenanceStatus.ASSIGNED]: { label: 'Assigned', tone: 'info' },
+  [MaintenanceStatus.IN_PROGRESS]: { label: 'In Progress', tone: 'warning' },
   [MaintenanceStatus.PENDING_PARTS]: {
     label: 'Pending Parts',
-    variant: 'warning',
+    tone: 'warning',
   },
-  [MaintenanceStatus.RESOLVED]: { label: 'Resolved', variant: 'success' },
-  [MaintenanceStatus.CLOSED]: { label: 'Closed', variant: 'default' },
+  [MaintenanceStatus.RESOLVED]: { label: 'Resolved', tone: 'success' },
+  [MaintenanceStatus.CLOSED]: { label: 'Closed', tone: 'neutral' },
 };
 
 export function MaintenanceStatusBadge({
   status,
   className,
 }: MaintenanceStatusBadgeProps) {
-  const config = statusMap[status] || { label: status, variant: 'default' };
+  const config = statusMap[status] || { label: status, tone: 'neutral' };
 
   return (
     <Badge
-      variant={config.variant}
+      variant="soft"
+      tone={config.tone}
       className={cn('whitespace-nowrap', className)}
     >
       {config.label}

@@ -65,6 +65,12 @@ const buttonVariants = cva(
           'hover:bg-[var(--ds-layer-02)] hover:text-[var(--ds-text-primary)]',
           'active:scale-[0.98]',
         ].join(' '),
+        subtle: [
+          'bg-transparent',
+          'text-[var(--ds-text-subtle)]',
+          'hover:bg-[var(--ds-layer-02)] hover:text-[var(--ds-text-primary)]',
+          'active:scale-[0.98]',
+        ].join(' '),
         link: [
           'bg-transparent',
           'text-[var(--ds-text-brand)]',
@@ -99,7 +105,8 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
@@ -127,7 +134,10 @@ export function Button({
     >
       {isLoading ? (
         <>
-          <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden="true" />
+          <Loader2
+            className="w-4 h-4 animate-spin shrink-0"
+            aria-hidden="true"
+          />
           <span>{children}</span>
         </>
       ) : (

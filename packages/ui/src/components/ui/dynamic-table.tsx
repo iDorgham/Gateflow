@@ -63,6 +63,7 @@ export function DynamicTable<T extends { id: string | number }>({
   density = 'default',
   isVirtual = false,
   containerHeight = '500px',
+  responsiveCardView = false,
 }: DynamicTableProps<T>) {
   const isCompact = density === 'compact';
   const parentRef = React.useRef<HTMLDivElement>(null);
@@ -188,7 +189,10 @@ export function DynamicTable<T extends { id: string | number }>({
           <TableBody>
             {isLoading ? (
               Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index} className="border-b border-[var(--ds-border-subtle)]">
+                <TableRow
+                  key={index}
+                  className="border-b border-[var(--ds-border-subtle)]"
+                >
                   {isSelectable && (
                     <TableCell className="w-12 px-4">
                       <Skeleton className="h-4 w-4 rounded" />
@@ -225,7 +229,10 @@ export function DynamicTable<T extends { id: string | number }>({
             ) : isVirtual ? (
               <>
                 {padTop > 0 ? (
-                  <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                  <TableRow
+                    aria-hidden
+                    className="border-0 hover:bg-transparent"
+                  >
                     <TableCell
                       colSpan={colSpan}
                       className="p-0 border-0"
@@ -282,7 +289,10 @@ export function DynamicTable<T extends { id: string | number }>({
                   );
                 })}
                 {padBottom > 0 ? (
-                  <TableRow aria-hidden className="border-0 hover:bg-transparent">
+                  <TableRow
+                    aria-hidden
+                    className="border-0 hover:bg-transparent"
+                  >
                     <TableCell
                       colSpan={colSpan}
                       className="p-0 border-0"
@@ -298,8 +308,7 @@ export function DynamicTable<T extends { id: string | number }>({
                   onClick={() => onRowClick?.(item)}
                   className={cn(
                     'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-layer-03)] transition-colors cursor-pointer',
-                    selectedIds.includes(item.id) &&
-                      'bg-[var(--ds-layer-03)]',
+                    selectedIds.includes(item.id) && 'bg-[var(--ds-layer-03)]',
                     rowClassName?.(item)
                   )}
                 >
@@ -349,15 +358,23 @@ export function DynamicTable<T extends { id: string | number }>({
               className={cn(
                 'flex flex-col gap-2 rounded-[var(--ds-radius-lg)] border border-[var(--ds-border-subtle)] bg-[var(--ds-layer-02)] p-4 shadow-sm transition-all text-start',
                 onRowClick && 'cursor-pointer active:scale-[0.99]',
-                selectedIds.includes(item.id) && 'border-[var(--ds-color-primary)] ring-1 ring-[var(--ds-color-primary)]',
+                selectedIds.includes(item.id) &&
+                  'border-[var(--ds-color-primary)] ring-1 ring-[var(--ds-color-primary)]',
                 rowClassName?.(item)
               )}
             >
               {columns.map((column) => (
-                <div key={column.key} className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-[var(--ds-text-subtle)]">{column.label}</span>
+                <div
+                  key={column.key}
+                  className="flex items-center justify-between text-xs"
+                >
+                  <span className="font-semibold text-[var(--ds-text-subtle)]">
+                    {column.label}
+                  </span>
                   <span className="text-[var(--ds-text-primary)]">
-                    {column.render ? column.render(item) : (item as Record<string, any>)[column.key]}
+                    {column.render
+                      ? column.render(item)
+                      : (item as Record<string, any>)[column.key]}
                   </span>
                 </div>
               ))}
