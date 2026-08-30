@@ -1,0 +1,14 @@
+CHANGELOG.md
+  h_220d66b2244819 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "5e27014743b56a5e45f8c9d592c2b7fbfd0f51a6",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
