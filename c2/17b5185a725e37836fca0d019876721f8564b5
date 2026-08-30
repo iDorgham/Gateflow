@@ -1,0 +1,46 @@
+.lighthouserc.js
+  h_220d66b2244819 43-49
+DESIGN.md
+  h_220d66b2244819 135-153
+apps/admin-dashboard/next.config.js
+  h_220d66b2244819 7-8,21,23-25
+apps/admin-dashboard/src/app/[locale]/layout.tsx
+  h_220d66b2244819 1,20-38,44-46
+docs/plan/Complete/lighthouse-100/BASELINE_AUDIT.md
+  h_220d66b2244819 1-80
+docs/plan/Complete/lighthouse-100/DRAFT_lighthouse-100.md
+  h_220d66b2244819 1-40
+docs/plan/Complete/lighthouse-100/FOR_PLAN_PROMPT.md
+  h_220d66b2244819 1-90
+docs/plan/Complete/lighthouse-100/PLAN_lighthouse-100.md
+  h_220d66b2244819 1-72
+docs/plan/Complete/lighthouse-100/PROMPT_lighthouse-100_phase_1.md
+  h_220d66b2244819 1-37
+docs/plan/Complete/lighthouse-100/PROMPT_lighthouse-100_phase_2.md
+  h_220d66b2244819 1-37
+docs/plan/Complete/lighthouse-100/PROMPT_lighthouse-100_phase_3.md
+  h_220d66b2244819 1-37
+docs/plan/Complete/lighthouse-100/PROMPT_lighthouse-100_phase_4.md
+  h_220d66b2244819 1-39
+docs/plan/Complete/lighthouse-100/PROMPT_lighthouse-100_phase_5.md
+  h_220d66b2244819 1-42
+docs/plan/Complete/lighthouse-100/SESSION_MEMORY.md
+  h_220d66b2244819 1-56
+docs/plan/Complete/lighthouse-100/TASKS_lighthouse-100.md
+  h_220d66b2244819 1-57
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 9-11,20
+docs/reference/product/PRD.md
+  h_220d66b2244819 176-181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "c217b5185a725e37836fca0d019876721f8564b5",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
