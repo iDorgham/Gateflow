@@ -4,13 +4,21 @@
 **Date:** 2026-08-30  
 **Champion:** Core UI / UX Platform  
 **Target:** Q3/Q4 2026  
+<<<<<<< Updated upstream
 **Status:** ✅ Implemented — Certified & Shipped  
+=======
+**Status:** ✅ Implemented — Certified & Shipped
+>>>>>>> Stashed changes
 
 ---
 
 ## 1. Problem Statement
 
 While GateFlow has established foundational tokens and components in `@gate-access/ui`, the user interfaces across our web dashboards (`client-dashboard`, `admin-dashboard`), websites (`marketing`, `resident-portal`), and mobile apps (`resident-mobile`, `scanner-app`) currently exhibit subtle inconsistencies in:
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Light and Dark mode contrast, elevation depths, and surface hierarchy.
 - Component completeness for specialized surfaces (dense dashboards vs mobile touch targets vs marketing visual storytelling).
 - Modern motion, micro-interactions, and visual polish, leading to design fragmentation.

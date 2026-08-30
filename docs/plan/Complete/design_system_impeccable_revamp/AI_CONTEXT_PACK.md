@@ -2,7 +2,11 @@
 
 **Document:** `AI_CONTEXT_PACK.md`  
 **Endpoint Mirror:** `apps/design-system/public/llms.txt` and `apps/design-system/public/ai-context.json`  
+<<<<<<< Updated upstream
 **Target:** AI Assistants (Antigravity, Cursor, Claude Code, Gemini CLI, OpenCode)  
+=======
+**Target:** AI Assistants (Antigravity, Cursor, Claude Code, Gemini CLI, OpenCode)
+>>>>>>> Stashed changes
 
 ---
 
@@ -62,7 +66,18 @@ ANTI-SLOP INVARIANTS (STRICT):
   "components": {
     "Button": {
       "props": {
+<<<<<<< Updated upstream
         "variant": ["primary", "secondary", "outline", "ghost", "destructive", "fab"],
+=======
+        "variant": [
+          "primary",
+          "secondary",
+          "outline",
+          "ghost",
+          "destructive",
+          "fab"
+        ],
+>>>>>>> Stashed changes
         "size": ["sm", "md", "lg"],
         "isLoading": "boolean",
         "isDisabled": "boolean"
@@ -80,7 +95,18 @@ ANTI-SLOP INVARIANTS (STRICT):
     "Badge": {
       "props": {
         "variant": ["solid", "soft", "outline", "ghost", "dot"],
+<<<<<<< Updated upstream
         "tone": ["primary", "neutral", "success", "warning", "danger", "ai-lab"],
+=======
+        "tone": [
+          "primary",
+          "neutral",
+          "success",
+          "warning",
+          "danger",
+          "ai-lab"
+        ],
+>>>>>>> Stashed changes
         "size": ["sm", "md", "lg"],
         "isRemovable": "boolean"
       }

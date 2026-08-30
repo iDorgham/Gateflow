@@ -2,18 +2,31 @@
 
 **Document:** `AI_PROMPT_WRITING_GUIDE.md`  
 **Initiative:** `design_system_impeccable_revamp`  
+<<<<<<< Updated upstream
 **Audience:** AI Coding Assistants (Antigravity, Cursor, Claude Code, Gemini CLI, OpenCode) and Monorepo Developers  
+=======
+**Audience:** AI Coding Assistants (Antigravity, Cursor, Claude Code, Gemini CLI, OpenCode) and Monorepo Developers
+>>>>>>> Stashed changes
 
 ---
 
 ## 1. The Core AI Slop Test (Zero Tolerance)
 
 When creating or modifying UI components, ask:
+<<<<<<< Updated upstream
 > *"Could someone look at this interface and say 'AI made that' without doubt?"*
+=======
+
+> _"Could someone look at this interface and say 'AI made that' without doubt?"_
+>>>>>>> Stashed changes
 
 If the answer is **YES**, the design fails.
 
 ### 🚫 The 6 Blocking Anti-Slop Violations
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. **Colored `border-left` / `border-right` on cards**: Never use a 2px–4px left colored stripe as the primary accent. Use full borders (`border-[var(--ds-border-subtle)]`) and semantic status badges.
 2. **Decorative gradient text in console UI**: `background-clip: text` is banned in operational dashboards. Use solid semantic text colors (`text-[var(--ds-text-primary)]`).
 3. **Default glassmorphism**: Do not put `backdrop-blur` on regular cards or table rows. Reserve glassmorphism strictly for floating navigation headers and camera HUD overlays.
@@ -31,9 +44,17 @@ When requesting an AI agent to build a new component or screen, use this structu
 # Role: GateFlow Impeccable Frontend Specialist
 
 ## Task
+<<<<<<< Updated upstream
 Build the [Component Name] component in `@gateflow/ui` (`packages/ui/src/[path]`).
 
 ## Design DNA & Invariants
+=======
+
+Build the [Component Name] component in `@gateflow/ui` (`packages/ui/src/[path]`).
+
+## Design DNA & Invariants
+
+>>>>>>> Stashed changes
 - **Surface**: Use semantic tokens only (`bg-[var(--ds-layer-02)]`, `border-[var(--ds-border-subtle)]`).
 - **Typography**: Inter (LTR) / Cairo (RTL) with fluid clamp scale.
 - **Density**: Support both Compact (36px control height) and Comfortable (48px control height).
@@ -42,7 +63,13 @@ Build the [Component Name] component in `@gateflow/ui` (`packages/ui/src/[path]`
 - **RTL**: Use logical CSS utilities (`ms-*`, `me-*`, `ps-*`, `pe-*`).
 
 ## State Coverage Matrix Required
+<<<<<<< Updated upstream
 Implement and export all canonical states:
+=======
+
+Implement and export all canonical states:
+
+>>>>>>> Stashed changes
 1. `default` (rested state)
 2. `hover` (2px lift + subtle glow)
 3. `active` / `pressed` (`scale(0.97)`)
@@ -52,6 +79,10 @@ Implement and export all canonical states:
 7. `error` (Ruby crimson border + gentle shake)
 
 ## Anti-Slop Check
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - No colored border-left callout.
 - No gradient text.
 - No default glassmorphism.
@@ -63,8 +94,15 @@ Implement and export all canonical states:
 ## 3. Ready-to-Use Prompt Snippets for Common Patterns
 
 ### A. High-Density Dashboard Data Table
+<<<<<<< Updated upstream
 ```markdown
 Create a high-density Table for [Entity] using `@gateflow/ui`.
+=======
+
+```markdown
+Create a high-density Table for [Entity] using `@gateflow/ui`.
+
+>>>>>>> Stashed changes
 - Sticky header with subtle backdrop blur.
 - Support sorting, column visibility, and row selection.
 - Density toggle: Compact (36px rows) vs Comfortable (44px rows).
@@ -72,8 +110,15 @@ Create a high-density Table for [Entity] using `@gateflow/ui`.
 ```
 
 ### B. Composable Form Input with Validation
+<<<<<<< Updated upstream
 ```markdown
 Create a form section for [Feature] using `@gateflow/ui`.
+=======
+
+```markdown
+Create a form section for [Feature] using `@gateflow/ui`.
+
+>>>>>>> Stashed changes
 - Wrap every input in `<FormField label="..." helperText="..." errorMessage="...">`.
 - Inputs must support Compact (36px) and Comfortable (48px) heights.
 - On error, trigger the Ruby crimson shake animation (`animate-shake`).
@@ -81,8 +126,15 @@ Create a form section for [Feature] using `@gateflow/ui`.
 ```
 
 ### C. Mobile Action Sheet / Drawer
+<<<<<<< Updated upstream
 ```markdown
 Create a mobile BottomSheet for [Action] using `@gateflow/ui/mobile`.
+=======
+
+```markdown
+Create a mobile BottomSheet for [Action] using `@gateflow/ui/mobile`.
+
+>>>>>>> Stashed changes
 - Snap points at 25%, 50%, and 90%.
 - Smooth spring drag handle with iPhone safe-area-inset padding.
 - Touch targets >= 44px x 44px.

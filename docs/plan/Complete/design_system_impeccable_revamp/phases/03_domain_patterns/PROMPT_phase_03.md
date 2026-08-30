@@ -5,7 +5,11 @@
 **Target Paths:** `packages/ui/src/patterns/`, `packages/ui/src/mobile/`, `apps/design-system`  
 **Branch:** `feat/design-system-phase-3-patterns` (branches from `main`, merges into `main`)  
 **Status:** ⏳ Pending Phase 2  
+<<<<<<< Updated upstream
 **Effort / Risk:** 🟢 Med Effort / Low Risk  
+=======
+**Effort / Risk:** 🟢 Med Effort / Low Risk
+>>>>>>> Stashed changes
 
 ---
 

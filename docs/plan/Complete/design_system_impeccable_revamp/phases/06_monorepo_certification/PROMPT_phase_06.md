@@ -5,7 +5,11 @@
 **Target Scope:** Full Monorepo (All 6 apps + packages)  
 **Branch:** `feat/design-system-phase-6-certification` (branches from `main`, merges into `main`)  
 **Status:** ⏳ Pending Phase 5  
+<<<<<<< Updated upstream
 **Effort / Risk:** 🟢 Med Effort / Low Risk  
+=======
+**Effort / Risk:** 🟢 Med Effort / Low Risk
+>>>>>>> Stashed changes
 
 ---
 

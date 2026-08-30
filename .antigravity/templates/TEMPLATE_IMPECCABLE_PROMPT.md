@@ -10,7 +10,11 @@ Save as: `docs/plan/{Draft,Ready,Active,Complete}/<slug>/PROMPT_<slug>_phase_<N>
 **Initiative:** `[slug]`  
 **Target Applications:** `[e.g. packages/ui, apps/design-system, apps/client-dashboard]`  
 **Branch:** `feat/[slug]-phase-[N]-[short-name]`  
+<<<<<<< Updated upstream
 **Status:** ⏳ Pending Execution  
+=======
+**Status:** ⏳ Pending Execution
+>>>>>>> Stashed changes
 
 ---
 
@@ -68,15 +72,29 @@ Tick and run the exact `/impeccable` subcommands for this phase:
 ## 🛠️ 5. Step-by-Step Implementation Instructions
 
 ### Step 1: Branch Setup
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```bash
 git checkout -b feat/[slug]-phase-[N]-[short-name]
 ```
 
 ### Step 2: Implementation
+<<<<<<< Updated upstream
 [Detailed step-by-step instructions for tokens, components, or app integration]
 
 ### Step 3: Impeccable Audit & Verification
 Run the theme auditor and verify anti-slop compliance:
+=======
+
+[Detailed step-by-step instructions for tokens, components, or app integration]
+
+### Step 3: Impeccable Audit & Verification
+
+Run the theme auditor and verify anti-slop compliance:
+
+>>>>>>> Stashed changes
 - Run unit/component tests: `pnpm turbo test --filter=[target]`
 - Run typecheck & build: `pnpm turbo typecheck build --filter=[target]`
 - Verify WCAG 2.2 AA contrast ratios in both Light and Dark modes.

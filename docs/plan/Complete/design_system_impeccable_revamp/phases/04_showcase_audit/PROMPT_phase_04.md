@@ -5,7 +5,11 @@
 **Target Paths:** `apps/design-system`, `packages/ui/`  
 **Branch:** `feat/design-system-phase-4-showcase-audit` (branches from `main`, merges into `main`)  
 **Status:** ⏳ HARD GATE (Blocks Phase 5)  
+<<<<<<< Updated upstream
 **Effort / Risk:** 🟡 Med Effort / Med Risk  
+=======
+**Effort / Risk:** 🟡 Med Effort / Med Risk
+>>>>>>> Stashed changes
 
 ---
 
@@ -82,7 +86,11 @@
 - [ ] `AUDIT_REPORT_design_system.md` published with automated a11y results.
 - [ ] Preflight green.
 - [ ] Branch from `main` → PR against `main` → 5-Gate Review → squash-merge → delete branch.  
+<<<<<<< Updated upstream
   *(Phase 5A/5B/5C are strictly blocked until this gate closes)*
+=======
+      _(Phase 5A/5B/5C are strictly blocked until this gate closes)_
+>>>>>>> Stashed changes
 
 ---
 

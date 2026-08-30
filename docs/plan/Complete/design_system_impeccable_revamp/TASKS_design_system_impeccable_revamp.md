@@ -2,11 +2,19 @@
 
 **Version:** 7.1 (Trunk Branching, 3-Slice Rollout, Automated A11y & Visual Regression)  
 **Status:** ✅ Complete (Certified & Verified)  
+<<<<<<< Updated upstream
 **Current Phase:** Complete (All 6 Phases Finished)  
+=======
+**Current Phase:** Complete (All 6 Phases Finished)
+>>>>>>> Stashed changes
 
 ---
 
 ### Phase 1 — Tokens & Dual-Mode Foundations `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Align and sync tokens with repository root [DESIGN.md](DESIGN.md)
 - [x] Implement three-tier token architecture (Foundations → Semantic → Component) in `packages/tokens` (evolving existing CSS tokens while preserving aliases)
 - [x] Implement switchable Accent Profiles (Kimchi default, Cobalt, Emerald) + Density + `layer-01`…`04`
@@ -22,6 +30,10 @@
 ---
 
 ### Phase 2 — Core Primitives + API, State Matrix, FormField, A11y & Visual Gates `[High Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Implement all base primitives using semantic tokens in `@gateflow/ui`
 - [x] Enforce Component API consistency (`variant`, `size`, `tone`/`intent`, `isDisabled`, `isLoading`, `isSelected`, `asChild`)
 - [x] Build and render live **State Coverage Matrix** in `apps/design-system` for all interactive components (`default`, `hover`, `active`, `focus-visible`, `disabled`, `loading`, `selected`, `error`)
@@ -38,6 +50,10 @@
 ---
 
 ### Phase 3 — Domain Patterns + Content System + Mobile Primitives `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Implement DynamicTable with automatic transformation to Card list on mobile viewports ($< 768\text{px}$)
 - [x] Implement first-class BottomSheet with snap points, drag handle, and safe-area support
 - [x] Implement EmptyState following short-copy + single CTA standard
@@ -50,6 +66,10 @@
 ---
 
 ### Phase 4 — Showcase, Docs, Prompt Guide & Self-Healing Audit (HARD GATE) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Restructure `apps/design-system` IA:
   - **Foundations**: Color (Accent Profiles), Typography, Icons, Motion, Density/Elevation
   - **Components/Patterns**: Forms, Tables, AI, Analytics/Charts, Auth/Shells, Feedback/Empty, Menus/Overlays, Date Picker
@@ -63,11 +83,19 @@
 - [x] Run full audit (Light/Dark + LTR/RTL + both densities) with 0 contrast failures and 100/100 heuristic score
 - [x] Generate and attach `AUDIT_REPORT_design_system.md` with automated a11y test receipts
 - [x] Branch from `main` (`feat/design-system-phase-4-showcase-audit`) → PR against `main` → 5-Gate Review → squash-merge → delete branch  
+<<<<<<< Updated upstream
   *(Phase 5 is strictly blocked until this gate closes)*
+=======
+      _(Phase 5 is strictly blocked until this gate closes)_
+>>>>>>> Stashed changes
 
 ---
 
 ### Phase 5A — Dashboards Rollout (`client-dashboard` & `admin-dashboard`) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Additive migration: consume `@gateflow/ui` primitives and semantic tokens in `apps/client-dashboard` and `apps/admin-dashboard`
 - [x] Set default density to **Compact** (36px control height, dense tabular views)
 - [x] Replace ad-hoc tables with `<DynamicTable>` and form inputs with `<FormField>`
@@ -78,6 +106,10 @@
 ---
 
 ### Phase 5B — Web & Portals Rollout (`marketing` & `resident-portal`) `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Migrate `apps/marketing` and `apps/resident-portal` to `@gateflow/ui` tokens and Comfortable density
 - [x] Implement bento grid feature showcases with subtle rim-light glows
 - [x] Verify Arabic RTL layout rendering and font scaling on public marketing and resident portal pages
@@ -87,6 +119,10 @@
 ---
 
 ### Phase 5C — Mobile Apps Rollout (`scanner-app` & `resident-mobile`) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Migrate Expo mobile apps to typed `nativeTokens` from `@gateflow/ui/tokens`
 - [x] Implement `BottomSheet` drawers, `FAB` floating action triggers, and `BiometricHUD` feedback cards
 - [x] Enforce touch target minimums $\ge 44\text{px} \times 44\text{px}$ across all mobile screens
@@ -96,6 +132,10 @@
 ---
 
 ### Phase 6 — Monorepo Certification & Release Handoff `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [x] Perform comprehensive sample end-to-end audit: all 6 apps × Light/Dark × LTR/RTL × densities (24 matrix combinations)
 - [x] Verify critical user journeys across all 6 applications
 - [x] Verify automated a11y gates green on design-system and critical app routes

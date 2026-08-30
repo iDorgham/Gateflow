@@ -8,7 +8,11 @@
 **Repository:** https://github.com/iDorgham/Gateflow  
 **Initiative Link:** [IDEA_design_system_impeccable_revamp.md](docs/development/initiatives/IDEA_design_system_impeccable_revamp.md)  
 **Target:** Q3/Q4 2026  
+<<<<<<< Updated upstream
 **Status:** 💡 Refined Master Plan & Brand Blueprint  
+=======
+**Status:** 💡 Refined Master Plan & Brand Blueprint
+>>>>>>> Stashed changes
 
 > The definitive blueprint for GateFlow’s token-driven, accessibility-gated, dual-mode Brand and Product Design System. Built on the rigor of **Carbon Design System**, the documentation excellence of **Atlassian Design System**, and the adaptive density of **Material Design 3**, tailored to GateFlow’s unmistakable **Satin-Charcoal + Kimchi** identity.
 
@@ -24,11 +28,18 @@
 ## 1. Brand Identity & Design DNA
 
 ### 1.1 Brand Essence & Archetype
+<<<<<<< Updated upstream
 GateFlow is the digital security infrastructure for modern gated communities, commercial perimeters, and smart properties in the MENA region.
+=======
+
+GateFlow is the digital security infrastructure for modern gated communities, commercial perimeters, and smart properties in the MENA region.
+
+>>>>>>> Stashed changes
 - **Brand Archetype**: The Guardian Architect — Calm, High-Precision, Reassuring, Uncompromising on Security.
 - **Aesthetic DNA**: Deep Satin-Charcoal surfaces with subtle glowing rim-light borders, illuminated by energetic Kimchi Vermilion primary accents, and crisp typography optimized for bidirectional Latin/Arabic reading.
 
 ### 1.2 Glassmorphism & Rim-Light Shaders
+<<<<<<< Updated upstream
 *Subtle rim-light / edge-glow on `layer-03`/`layer-04` is allowed and encouraged for Dark mode depth. Default glassmorphism (heavy backdrop-blur + translucent panels on standard cards) is strictly banned.*
 
 ### 1.3 Voice & Tone (EN + AR)
@@ -41,6 +52,24 @@ GateFlow is the digital security infrastructure for modern gated communities, co
 
 ### 1.4 Color Geometry & 60-30-10 Distribution Rule
 We enforce strict color hierarchy across every screen:
+=======
+
+_Subtle rim-light / edge-glow on `layer-03`/`layer-04` is allowed and encouraged for Dark mode depth. Default glassmorphism (heavy backdrop-blur + translucent panels on standard cards) is strictly banned._
+
+### 1.3 Voice & Tone (EN + AR)
+
+| Context                    | Voice & Tone (English)             | Voice & Tone (Arabic)        | Do                                       | Don't                           |
+| :------------------------- | :--------------------------------- | :--------------------------- | :--------------------------------------- | :------------------------------ |
+| **Authentication & Gate**  | Immediate, authoritative, secure.  | فوري، حاسم، وآمن تماماً.     | "Access Granted · Gate 04"               | "Yay! You can come in now!"     |
+| **Operational Dashboards** | Clear, data-dense, objective.      | واضح، غني بالبيانات، ومباشر. | "24 active visitors across 3 zones"      | "Lots of people entered today"  |
+| **Error & Exception**      | Calm, diagnostic, actionable.      | هادئ، تشخيصي، وقابل للإجراء. | "PIN verification failed. Retry in 30s." | "Oops! Something went wrong :(" |
+| **Marketing & Brand**      | Visionary, enterprise, empowering. | ملهم، ريادي، وموثوق.         | "Autonomous perimeter intelligence"      | "Cheap QR code passes"          |
+
+### 1.4 Color Geometry & 60-30-10 Distribution Rule
+
+We enforce strict color hierarchy across every screen:
+
+>>>>>>> Stashed changes
 - **60% Dominant Neutral**: Dark Mode = Satin-Charcoal (`layer-01` #0b0d11 to `layer-03` #191d26) / Light Mode = Porcelain (`layer-01` #f8f9fa to `layer-02` #ffffff).
 - **30% Structural Secondary**: Surface borders (`border-subtle` #232834 / #e2e6eb), muted control backgrounds, table alternating headers, and card containers.
 - **10% Semantic Accent (Focal Point)**:
@@ -52,6 +81,10 @@ We enforce strict color hierarchy across every screen:
   - **Virtual Lab AI**: Orchid Violet (`#8B5CF6` / `#7C3AED`) reserved exclusively for AI chat, copilot summaries, and predictive telemetry.
 
 ### 1.5 Optical Iconography System
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Standardized icon library: `@hugeicons/react` + Lucide Icons.
 - **Stroke Width**: Consistent 1.5px (standard) and 2.0px (active / selected).
 - **Bounding Boxes**: Standardized `16px` (sm), `20px` (md), `24px` (lg) with optical centered padding.
@@ -62,17 +95,29 @@ We enforce strict color hierarchy across every screen:
 ## 2. Token Architecture & Physical Depth
 
 ### 2.1 Carbon-Inspired Three-Tier Architecture
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```
 packages/tokens/
   foundations/               # Tier 1: Primitive Tokens (raw OKLCH scales, 4px grid steps)
   semantic/                  # Tier 2: Semantic Tokens (layer-01..04, text-primary, border-subtle)
   component/                 # Tier 3: Component Bindings (button-primary-bg, table-header-bg)
 ```
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Invariant**: Alias flow is strictly `Component` → `Semantic` → `Primitive`.
 - **Theming**: Light and Dark modes only remap the Semantic layer; application components never touch raw primitives.
 - **Backwards Compatibility**: Evolves `packages/tokens/css/tokens.css` to import these tiers while preserving CSS variable aliases.
 
 ### 2.2 Surface Elevation & Lighting Model
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ layer-04 (Overlay / Modal / Drawer): #212633 (Dark) / #ffffff (Light)       │
@@ -93,6 +138,7 @@ packages/tokens/
 ## 3. Component Taxonomy & Live State Coverage Matrix
 
 ### 3.1 Live State Coverage Matrix
+<<<<<<< Updated upstream
 Every interactive component in `@gateflow/ui` must explicitly implement and showcase 8 canonical states live in `apps/design-system`:
 
 | Component | Default | Hover | Active / Pressed | Focus-Visible | Disabled | Loading | Selected | Error |
@@ -108,6 +154,27 @@ Consolidated into 5 clean architectural variants: `Solid`, `Soft`, `Outline`, `G
 
 ### 3.3 Composable FormField Architecture
 Standardizes all form controls across the monorepo:
+=======
+
+Every interactive component in `@gateflow/ui` must explicitly implement and showcase 8 canonical states live in `apps/design-system`:
+
+| Component          |        Default         |          Hover           | Active / Pressed  |     Focus-Visible      |        Disabled        |        Loading        |       Selected        |        Error        |
+| :----------------- | :--------------------: | :----------------------: | :---------------: | :--------------------: | :--------------------: | :-------------------: | :-------------------: | :-----------------: |
+| **Button**         |     Rested surface     | Top highlight + 2px lift |   `scale(0.97)`   | 2px Kimchi ring offset | 40% opacity, no cursor | Spinner + text dimmed |  Active pill toggle   |     Ruby shake      |
+| **Input / Select** |      Inset border      |    Border brightened     |    Focus ring     |    2px Kimchi ring     | Sunken bg, uneditable  | Skeleton placeholder  |  Highlighted border   | Ruby border + shake |
+| **Card**           |       1px border       | Edge glow (`--ds-glow`)  |  Sub-pixel press  |      Keynav ring       |     Muted contents     |   Shimmer skeleton    | 1.5px Kimchi outline  |  Red warning flag   |
+| **Badge / Tag**    | Solid / Soft / Outline |        Hover tint        |   Click action    |       Focus ring       |     Muted contrast     |      Pulsing dot      |   Active checkmark    | Critical Ruby pill  |
+| **TableRow**       |    Default surface     |  `layer-03` background   | Selected row tint |   Keynav row outline   |   Inactive row style   | Skeleton row shimmer  | Kimchi side indicator |  Flagged row alert  |
+
+### 3.2 Badge & Tag Overhaul
+
+Consolidated into 5 clean architectural variants: `Solid`, `Soft`, `Outline`, `Ghost`, `Dot` (with pulsing hardware LED effect).
+
+### 3.3 Composable FormField Architecture
+
+Standardizes all form controls across the monorepo:
+
+>>>>>>> Stashed changes
 ```tsx
 <FormField
   label="Resident National ID"
@@ -125,10 +192,18 @@ Standardizes all form controls across the monorepo:
 ## 4. Adaptive Domain Patterns (Desktop vs Mobile)
 
 ### 4.1 DynamicTable to Mobile Card List Transformation
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Desktop ($\ge 768\text{px}$)**: Dense tabular data, multi-column sorting, sticky header with backdrop blur, column visibility dropdown, density toggle (`Compact` 36px vs `Comfortable` 44px), and bulk action bar.
 - **Mobile ($< 768\text{px}$)**: Automatically transforms table rows into swipeable, stacked interactive Card items with summary badges, primary identifier headers, and slide-over actions, eliminating horizontal scroll entirely.
 
 ### 4.2 Mobile-First Primitives (Expo & Web)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **BottomSheet**: Spring-animated bottom drawer with snap points (25%, 50%, 90%), smooth drag handle, backdrop blur, and iPhone safe-area inset handling.
 - **Floating Action Button (FAB)**: Primary bottom-corner action with expanding speed-dial menu for quick guard logs or visitor creation.
 - **BiometricHUD**: Status overlay card for scanner camera viewfinders with instant visual validation feedback.
@@ -213,42 +288,74 @@ main
 ## 8. Master Execution Roadmap & Risk Breakdown
 
 ### Phase 1 — Tokens & Dual-Mode Foundations `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-1-tokens`
 - **Scope**: 3-tier tokens (`packages/tokens`), Satin `layer-01`…`04`, Accent Profiles (Kimchi, Cobalt, Emerald), Density, `nativeTokens` hex bridge, automated contrast checker script wired to Turbo build.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 2 — Core Primitives + API, State Matrix, FormField, A11y & Visual Gates `[High Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-2-primitives`
 - **Scope**: Base primitives, live State Coverage Matrix in showcase, Badge/Tag 5-variant taxonomy, Button FAB, Card edge glow, composable `FormField`, Playwright visual baseline snapshots, `jest-axe` unit test gates.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 3 — Domain Patterns + Content System + Mobile Primitives `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-3-patterns`
 - **Scope**: DynamicTable with responsive card list conversion, BottomSheet, TouchList, EmptyState, Virtual Lab AI palette, bilingual Voice & Tone guide.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 4 — Showcase, Docs, Vibe-Check Sandbox & Self-Healing Audit (HARD GATE) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-4-showcase-audit`
 - **Scope**: Extended Showcase IA, Prompt Writing Guide, live Vibe-Check Sandbox, `llms.txt`, Playwright+axe scan, 100/100 heuristic audit report.
 - **Gate Rule**: Strictly blocks Phase 5A/5B/5C until the design system showcase passes 100% of audits.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 5A — Dashboards Rollout (`client-dashboard` & `admin-dashboard`) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-5a-dashboards`
 - **Scope**: Additive migration to `@gateflow/ui` tokens, Compact density, FormField, DynamicTable, screenshot diff review, `@axe-core/playwright` green.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 5B — Web & Portals Rollout (`marketing` & `resident-portal`) `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-5b-portals`
 - **Scope**: Comfortable density, bento cards, glass headers, Arabic RTL bidi verification, screenshot diff review.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 5C — Mobile Apps Rollout (`scanner-app` & `resident-mobile`) `[Med Effort / Med Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-5c-mobile`
 - **Scope**: `nativeTokens` hex bridge, BottomSheet, touch targets $\ge 44\text{px}$, BiometricHUD feedback cards, screenshot diff review.
 - **Merge Target**: Squash-merge to `main`, delete branch.
 
 ### Phase 6 — Monorepo Certification & Release Handoff `[Med Effort / Low Risk]`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - **Branch**: `feat/design-system-phase-6-certification`
 - **Scope**: Monorepo-wide visual sample audit (6 apps × 2 themes × 2 directions × 2 densities = 24 combinations), full `pnpm preflight` verification, dated Walkthrough Certification artifact publishing in `docs/development/certification/`.
 - **Merge Target**: Squash-merge to `main`, delete branch, transition plan to `Complete/`.

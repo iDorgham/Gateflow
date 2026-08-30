@@ -13,6 +13,7 @@ The authoritative design reference for GateFlow web, mobile, and dashboard appli
 
 When building, refining, or auditing any UI, use the corresponding `/impeccable` subcommands:
 
+<<<<<<< Updated upstream
 | Action | Impeccable Command | Purpose & Focus |
 | :--- | :--- | :--- |
 | **Foundations & Palette** | `/impeccable colorize [target]` | Porcelain/satin-slate neutrals, WCAG 2.2 AA contrast, status tints. |
@@ -26,6 +27,21 @@ When building, refining, or auditing any UI, use the corresponding `/impeccable`
 | **UX Review & Heuristics** | `/impeccable critique [target]` | 30 UX laws evaluation, cognitive load, Nielsen Norman heuristics. |
 | **Quality Audit** | `/impeccable audit [target]` | Contrast calculations, anti-AI-slop test, Lighthouse CWV compatibility. |
 | **Final Delivery** | `/impeccable polish [target]` | Pixel-perfection, sub-pixel rendering, focus-ring elevation alignment. |
+=======
+| Action                          | Impeccable Command              | Purpose & Focus                                                            |
+| :------------------------------ | :------------------------------ | :------------------------------------------------------------------------- |
+| **Foundations & Palette**       | `/impeccable colorize [target]` | Porcelain/satin-slate neutrals, WCAG 2.2 AA contrast, status tints.        |
+| **Typography & Scale**          | `/impeccable typeset [target]`  | Inter / Outfit / Cairo (Arabic) hierarchy, fluid `clamp()` sizing.         |
+| **Spatial & Spacing**           | `/impeccable layout [target]`   | 8pt / 4pt spatial grid, consistent optical padding, bento grids.           |
+| **Feature Crafting**            | `/impeccable craft [feature]`   | End-to-end component creation from architectural shape to markup.          |
+| **Motion & Micro-interactions** | `/impeccable animate [target]`  | Purposeful cubic-bezier ease-out transitions (`transform`/`opacity` only). |
+| **Personality & Micro-glows**   | `/impeccable delight [target]`  | Tasteful glows, status pulses, distinct non-generic character.             |
+| **Resilience & Edge Cases**     | `/impeccable harden [target]`   | Error states, empty states, skeletons, Arabic RTL bidi mirroring.          |
+| **Mobile & Touch**              | `/impeccable adapt [target]`    | 44px+ touch targets, bottom sheets, `nativeTokens` hex bridge.             |
+| **UX Review & Heuristics**      | `/impeccable critique [target]` | 30 UX laws evaluation, cognitive load, Nielsen Norman heuristics.          |
+| **Quality Audit**               | `/impeccable audit [target]`    | Contrast calculations, anti-AI-slop test, Lighthouse CWV compatibility.    |
+| **Final Delivery**              | `/impeccable polish [target]`   | Pixel-perfection, sub-pixel rendering, focus-ring elevation alignment.     |
+>>>>>>> Stashed changes
 
 ---
 

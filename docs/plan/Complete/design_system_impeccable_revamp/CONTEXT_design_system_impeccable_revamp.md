@@ -1,7 +1,11 @@
 # CONTEXT — `design_system_impeccable_revamp`
 
 **Version:** 7.0 (Trunk Branching, Multi-Layer A11y, No Version Tags)  
+<<<<<<< Updated upstream
 **Repository:** https://github.com/iDorgham/Gateflow  
+=======
+**Repository:** https://github.com/iDorgham/Gateflow
+>>>>>>> Stashed changes
 
 This document defines the architectural context, 3-tier token structure, component API contracts, and automated accessibility layers for the Design System overhaul.
 
@@ -46,6 +50,7 @@ packages/
 
 ## 3. Automated Accessibility Matrix
 
+<<<<<<< Updated upstream
 | Layer | Tool | When Run | Gate Condition |
 | :--- | :--- | :--- | :--- |
 | **Lint** | `eslint-plugin-jsx-a11y` | Every PR | Zero lint errors |
@@ -53,6 +58,15 @@ packages/
 | **Component** | `jest-axe` / `vitest-axe` | Unit tests | Zero axe violations on primitives |
 | **Showcase** | Playwright + axe | Phase 4 Gate | Clean scan on all showcase pages |
 | **Apps** | `@axe-core/playwright` | Phase 5–6 | Zero serious/critical a11y regressions on key flows |
+=======
+| Layer         | Tool                      | When Run     | Gate Condition                                      |
+| :------------ | :------------------------ | :----------- | :-------------------------------------------------- |
+| **Lint**      | `eslint-plugin-jsx-a11y`  | Every PR     | Zero lint errors                                    |
+| **Tokens**    | Contrast Checker Script   | Token build  | 100% pairs $\ge 4.5:1$ text / $\ge 3:1$ UI          |
+| **Component** | `jest-axe` / `vitest-axe` | Unit tests   | Zero axe violations on primitives                   |
+| **Showcase**  | Playwright + axe          | Phase 4 Gate | Clean scan on all showcase pages                    |
+| **Apps**      | `@axe-core/playwright`    | Phase 5–6    | Zero serious/critical a11y regressions on key flows |
+>>>>>>> Stashed changes
 
 ---
 
@@ -78,4 +92,7 @@ packages/
 - **Multi-App Migration Guide**: [`MIGRATION_AND_ROLLOUT_GUIDE.md`](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Draft/design_system_impeccable_revamp/MIGRATION_AND_ROLLOUT_GUIDE.md)
 - **Vibe Coder Quickstart**: [`VIBE_CODER_QUICKSTART.md`](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Draft/design_system_impeccable_revamp/VIBE_CODER_QUICKSTART.md)
 - **AI Context Pack (llms.txt)**: [`AI_CONTEXT_PACK.md`](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Draft/design_system_impeccable_revamp/AI_CONTEXT_PACK.md)
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

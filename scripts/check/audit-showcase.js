@@ -8,7 +8,14 @@ const fs = require('fs');
 const path = require('path');
 
 const UI_INDEX_PATH = path.join(__dirname, '../../packages/ui/src/index.ts');
+<<<<<<< Updated upstream
 const SHOWCASE_DIR = path.join(__dirname, '../../apps/design-system/src/app/(docs)');
+=======
+const SHOWCASE_DIR = path.join(
+  __dirname,
+  '../../apps/design-system/src/app/(docs)'
+);
+>>>>>>> Stashed changes
 
 function runAudit() {
   console.log('===========================================================');
@@ -21,10 +28,22 @@ function runAudit() {
   }
 
   const indexContent = fs.readFileSync(UI_INDEX_PATH, 'utf8');
+<<<<<<< Updated upstream
   const exportMatches = indexContent.match(/export \* from '\.\/components\/ui\/([a-z-]+)'/g) || [];
   const exportedComponents = exportMatches.map(m => m.replace(/export \* from '\.\/components\/ui\/([a-z-]+)'/, '$1'));
 
   console.log(`Found ${exportedComponents.length} exported UI primitives in @gateflow/ui:`);
+=======
+  const exportMatches =
+    indexContent.match(/export \* from '\.\/components\/ui\/([a-z-]+)'/g) || [];
+  const exportedComponents = exportMatches.map((m) =>
+    m.replace(/export \* from '\.\/components\/ui\/([a-z-]+)'/, '$1')
+  );
+
+  console.log(
+    `Found ${exportedComponents.length} exported UI primitives in @gateflow/ui:`
+  );
+>>>>>>> Stashed changes
   console.log(exportedComponents.join(', ') + '\n');
 
   // Verify critical pages exist in design-system
@@ -49,11 +68,23 @@ function runAudit() {
   console.log('\n-----------------------------------------------------------');
   if (missing === 0) {
     console.log(`🎉 SHOWCASE AUDIT PASSED WITH 100% COVERAGE!`);
+<<<<<<< Updated upstream
     console.log('-----------------------------------------------------------\n');
     process.exit(0);
   } else {
     console.error(`🚨 ${missing} REQUIRED SHOWCASE ROUTES MISSING.`);
     console.log('-----------------------------------------------------------\n');
+=======
+    console.log(
+      '-----------------------------------------------------------\n'
+    );
+    process.exit(0);
+  } else {
+    console.error(`🚨 ${missing} REQUIRED SHOWCASE ROUTES MISSING.`);
+    console.log(
+      '-----------------------------------------------------------\n'
+    );
+>>>>>>> Stashed changes
     process.exit(1);
   }
 }

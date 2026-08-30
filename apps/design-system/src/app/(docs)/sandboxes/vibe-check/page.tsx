@@ -169,7 +169,7 @@ export default function VibeCheckPage() {
             <div className="min-h-[360px] flex flex-col items-center justify-center text-center p-8 rounded-[var(--ds-radius-md)] border border-dashed border-[var(--ds-border-subtle)] bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)]">
               <Sparkles className="w-8 h-8 text-[var(--ds-color-ai-lab)] mb-3 opacity-60" />
               <p className="font-semibold text-sm">No code audited yet</p>
-              <p className="text-xs max-w-xs mt-1">Click "Run Vibe Check & Sanitize" to inspect the snippet against all token rules.</p>
+              <p className="text-xs max-w-xs mt-1">Click &quot;Run Vibe Check &amp; Sanitize&quot; to inspect the snippet against all token rules.</p>
             </div>
           )}
         </Card>

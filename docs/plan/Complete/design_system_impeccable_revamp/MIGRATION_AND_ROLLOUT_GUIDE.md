@@ -2,7 +2,11 @@
 
 **Document:** `MIGRATION_AND_ROLLOUT_GUIDE.md`  
 **Initiative:** `design_system_impeccable_revamp`  
+<<<<<<< Updated upstream
 **Phase Target:** Phase 5 (Multi-App Rollout) & Phase 6 (Monorepo Certification)  
+=======
+**Phase Target:** Phase 5 (Multi-App Rollout) & Phase 6 (Monorepo Certification)
+>>>>>>> Stashed changes
 
 ---
 
@@ -32,6 +36,7 @@ The migration from legacy ad-hoc styles to `@gateflow/ui` is executed across 3 d
 ## 2. Step-by-Step Code Migration Recipes
 
 ### Recipe 1: Replacing Hardcoded Tailwind Colors with Semantic Tokens
+<<<<<<< Updated upstream
 | Legacy Code (Banned) | Upgraded Semantic Token |
 | :--- | :--- |
 | `bg-white dark:bg-slate-900` | `bg-[var(--ds-layer-02)]` |
@@ -42,6 +47,20 @@ The migration from legacy ad-hoc styles to `@gateflow/ui` is executed across 3 d
 | `bg-red-500 text-white` | `bg-[var(--ds-color-danger)] text-white` |
 
 ### Recipe 2: Upgrading Ad-Hoc Forms to `FormField`
+=======
+
+| Legacy Code (Banned)                     | Upgraded Semantic Token                                                 |
+| :--------------------------------------- | :---------------------------------------------------------------------- |
+| `bg-white dark:bg-slate-900`             | `bg-[var(--ds-layer-02)]`                                               |
+| `border-slate-200 dark:border-slate-800` | `border-[var(--ds-border-subtle)]`                                      |
+| `text-slate-900 dark:text-slate-50`      | `text-[var(--ds-text-primary)]`                                         |
+| `text-slate-500 dark:text-slate-400`     | `text-[var(--ds-text-subtle)]`                                          |
+| `bg-orange-600 hover:bg-orange-700`      | `bg-[var(--ds-color-primary)] hover:bg-[var(--ds-color-primary-hover)]` |
+| `bg-red-500 text-white`                  | `bg-[var(--ds-color-danger)] text-white`                                |
+
+### Recipe 2: Upgrading Ad-Hoc Forms to `FormField`
+
+>>>>>>> Stashed changes
 ```diff
 - <div className="mb-4">
 -   <label className="block text-sm font-medium text-gray-700 mb-1">Visitor Name</label>
@@ -61,6 +80,10 @@ The migration from legacy ad-hoc styles to `@gateflow/ui` is executed across 3 d
 ```
 
 ### Recipe 3: Upgrading Mobile Expo Styles to `nativeTokens`
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```diff
 import { StyleSheet, View, Text } from 'react-native';
 - import { colors } from './legacyColors';
@@ -93,6 +116,7 @@ To prevent future color regressions, add this rule to `packages/config/eslint/ba
 ```javascript
 module.exports = {
   rules: {
+<<<<<<< Updated upstream
     "no-restricted-syntax": [
       "warn",
       {
@@ -105,6 +129,24 @@ module.exports = {
       }
     ]
   }
+=======
+    'no-restricted-syntax': [
+      'warn',
+      {
+        selector:
+          "JSXAttribute[name.name='className'] Literal[value=/bg-(white|black|slate-|gray-)/]",
+        message:
+          "Direct background colors are banned. Use semantic tokens like 'bg-[var(--ds-layer-02)]'.",
+      },
+      {
+        selector:
+          "JSXAttribute[name.name='className'] Literal[value=/border-(slate-|gray-|zinc-)/]",
+        message:
+          "Direct border colors are banned. Use 'border-[var(--ds-border-subtle)]'.",
+      },
+    ],
+  },
+>>>>>>> Stashed changes
 };
 ```
 

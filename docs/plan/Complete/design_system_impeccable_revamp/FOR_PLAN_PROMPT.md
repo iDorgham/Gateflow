@@ -1,4 +1,8 @@
 # FOR_PLAN_PROMPT — design_system_impeccable_revamp
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Version:** 7.0 (Rewired – Trunk Branching, No Version Tags)  
 **Slug:** `design_system_impeccable_revamp`  
 **Repository:** https://github.com/iDorgham/Gateflow  
@@ -27,6 +31,10 @@ The system must feel premium, calm, and consistent — never generic, never AI-s
 ## 2. In Scope / Out of Scope
 
 **In scope**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Three-tier token architecture (Primitive → Semantic → Component)
 - Accent Profiles, Density, Elevation/Layers
 - Primitives + patterns with explicit Desktop/Mobile behavior
@@ -38,6 +46,10 @@ The system must feel premium, calm, and consistent — never generic, never AI-s
 - Migration of all apps + final certification
 
 **Out of scope**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - New product features / business logic
 - Backend / API / DB changes
 - Full visual rewrite of every screen
@@ -63,24 +75,37 @@ The system must feel premium, calm, and consistent — never generic, never AI-s
 ## 4. First-Class Systems
 
 ### 4.1 Token Architecture
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```
 packages/tokens/
   foundations/     # Primitive (OKLCH)
   semantic/        # Themeable (color, layer, density, interaction)
   component/       # Thin, optional
 ```
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Alias direction: Component → Semantic → Primitive
 - Themes only remap the semantic layer
 - Generate typed `nativeTokens` for Expo from the same source
 - Automated contrast checker on semantic pairs (fail build on WCAG AA failures)
 
 ### 4.2 Component API + State + FormField + Content
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Shared props: `variant`, `size`, `tone`/`intent`, `isDisabled`, `isLoading`, `isSelected`, `asChild`
 - Full State Coverage Matrix on every interactive component
 - `FormField` = label + control + helper + error
 - Content/microcopy patterns + short Voice & Tone (EN + AR)
 
 ### 4.3 Automated Accessibility
+<<<<<<< Updated upstream
 | Layer | Tool | When |
 |-------|------|------|
 | Lint | `eslint-plugin-jsx-a11y` | Every PR |
@@ -88,10 +113,24 @@ packages/tokens/
 | Showcase | Storybook a11y or Playwright+axe | Phase 4 gate |
 | Apps | `@axe-core/playwright` on critical routes | Phase 5–6 |
 | Tokens | Contrast checker on semantic pairs | Token build |
+=======
+
+| Layer     | Tool                                      | When         |
+| --------- | ----------------------------------------- | ------------ |
+| Lint      | `eslint-plugin-jsx-a11y`                  | Every PR     |
+| Component | `jest-axe` / `vitest-axe`                 | Unit tests   |
+| Showcase  | Storybook a11y or Playwright+axe          | Phase 4 gate |
+| Apps      | `@axe-core/playwright` on critical routes | Phase 5–6    |
+| Tokens    | Contrast checker on semantic pairs        | Token build  |
+>>>>>>> Stashed changes
 
 Standard: WCAG 2.2 AA. Progressive enforcement → hard gate on design-system + critical routes.
 
 ### 4.4 Automations
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - `pnpm preflight` (lint + typecheck + test) must be green
 - Run existing enforcers (`enforce-ads-design.js`, `enforce-security-invariants.js`) plus token contrast + a11y
 - CI fails on preflight failure, token contrast failure, and critical/serious a11y violations
@@ -114,6 +153,10 @@ main
 ```
 
 ### Rules (mandatory)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. **One short-lived branch per phase.** Name: `feat/design-system-phase-N-<short-title>`.
 2. Branch **from latest `main`** at the start of the phase.
 3. Keep the branch alive only until that phase’s acceptance criteria pass.
@@ -126,6 +169,10 @@ main
 10. Hotfixes: short branch from `main` → PR → merge to `main`.
 
 ### Per-phase branching steps
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. `git fetch origin && git checkout main && git pull origin main`
 2. `git checkout -b feat/design-system-phase-N-<title>`
 3. Implement + run all phase gates locally
@@ -140,10 +187,18 @@ main
 ## 6. Phase Breakdown
 
 ### Phase 1 — Tokens & Dual-Mode Foundations
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-1-tokens`  
 **Goal:** Three-tier tokens, layers, density, accent profiles, token contrast automation.
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] Three-tier architecture implemented (foundations / semantic / component).
 - [ ] Accent Profiles (Kimchi default, Cobalt, Emerald) + Density + `layer-01`…`04`.
 - [ ] Zero pure black/white. OKLCH only.
@@ -153,10 +208,18 @@ main
 - [ ] Branch from `main` → PR → 5-Gate → squash-merge → delete branch.
 
 ### Phase 2 — Core Primitives + API, State, FormField, A11y Unit Gates
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-2-primitives`  
 **Goal:** Premium primitives with strict API, full state matrix, FormField, component-level a11y.
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] All primitives use only semantic tokens.
 - [ ] Component API consistency + State Coverage Matrix visible in showcase.
 - [ ] Badge/Tag system complete; Button (incl. FAB); Card variants; density-aware Input.
@@ -167,10 +230,18 @@ main
 - [ ] Branch from `main` → PR → 5-Gate → squash-merge → delete branch.
 
 ### Phase 3 — Domain Patterns + Content System + Mobile
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-3-patterns`  
 **Goal:** Adaptive patterns, content/microcopy, mobile primitives.
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] Table → card list on mobile. BottomSheet first-class (snap points, safe area).
 - [ ] EmptyState + Banner use content system.
 - [ ] AI components use only Virtual Lab colors.
@@ -180,15 +251,27 @@ main
 - [ ] Branch from `main` → PR → 5-Gate → squash-merge → delete branch.
 
 ### Phase 4 — Showcase, Docs, Prompt Guide & Self-Healing Audit (HARD GATE)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-4-showcase-audit`  
 **Goal:** Atlassian-quality docs + Prompt Guide + full automated/manual audit.  
 **No Phase 5 work may start until this gate closes.**
 
 **Required pages**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Foundations, Components (State Matrix + AI Prompt snippet), Patterns
 - Guidelines: Accessibility, RTL, Do/Don’t, Contribution, Component API, Content & Microcopy, **Prompt Writing Guide**
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] New IA + Prompt Writing Guide + API + Content pages live.
 - [ ] Storybook a11y (or Playwright+axe) green on design-system key surfaces.
 - [ ] Full audit: Light/Dark + LTR/RTL + both densities.
@@ -198,15 +281,27 @@ main
 - [ ] Branch from `main` → PR → 5-Gate → squash-merge → delete branch.
 
 ### Phase 5 — Multi-App Rollout
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-5-multi-app`  
 **Goal:** All apps consume the certified system.
 
 **Parts**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - 5A Dashboards (Compact): `client-dashboard`, `admin-dashboard`
 - 5B Web & Portals (Comfortable): `marketing`, `resident-portal`
 - 5C Mobile: `scanner-app`, `resident-mobile` (`nativeTokens` + BottomSheet + FAB)
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] Semantic tokens + UI package used on migrated surfaces.
 - [ ] FormField + content patterns used where applicable.
 - [ ] Playwright+axe (or equivalent) on critical journeys.
@@ -215,10 +310,18 @@ main
 - [ ] Branch from `main` → PR → 5-Gate → squash-merge → delete branch.
 
 ### Phase 6 — Monorepo Certification
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 **Branch:** `feat/design-system-phase-6-certification`  
 **Goal:** Final proof that the product family feels like one premium system; close the initiative.
 
 **Hard Acceptance Criteria**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - [ ] Sample end-to-end audit: all apps × Light/Dark × LTR/RTL × densities.
 - [ ] Critical journeys verified (dashboards, portals, mobile scan/home).
 - [ ] Automated a11y gates green on design-system + critical app routes.
@@ -231,6 +334,10 @@ main
 - [ ] TASKS + SESSION_MEMORY updated with final merge commit and “all phases complete”.
 
 **Certification artifact must include**
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 - Executive summary
 - Screenshot grid
 - Token + anti-slop + a11y automation results

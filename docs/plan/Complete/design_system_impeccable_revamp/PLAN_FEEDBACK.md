@@ -2,7 +2,11 @@
 
 **Initiative:** `design_system_impeccable_revamp`  
 **Version:** 7.1 (Trunk Branching, 3-Slice Rollout, Automated A11y & Visual Regression)  
+<<<<<<< Updated upstream
 **Date:** 2026-08-30  
+=======
+**Date:** 2026-08-30
+>>>>>>> Stashed changes
 
 ---
 
@@ -25,12 +29,17 @@
 5. **Phase 5 Splitting (Dashboards, Web/Portals, Mobile)**:
    - Split into 3 independent, sequential slices (`5A`, `5B`, `5C`), each with its own branch, visual diff review, and squash-merge to `main`.
 6. **Glassmorphism & Rim-Light Clarification**:
+<<<<<<< Updated upstream
    - *Subtle rim-light / edge-glow on `layer-03`/`layer-04` is allowed and encouraged for Dark mode depth. Default glassmorphism (heavy backdrop-blur + translucent panels on standard cards) is strictly banned.*
+=======
+   - _Subtle rim-light / edge-glow on `layer-03`/`layer-04` is allowed and encouraged for Dark mode depth. Default glassmorphism (heavy backdrop-blur + translucent panels on standard cards) is strictly banned._
+>>>>>>> Stashed changes
 
 ---
 
 ## 2. Phase Ownership & Agent Swarm Matrix
 
+<<<<<<< Updated upstream
 | Phase | Branch | Owner Agent Role | Preferred AI Tool | Primary Skills to Invoke |
 | :--- | :--- | :--- | :--- | :--- |
 | **Phase 1** | `feat/design-system-phase-1-tokens` | `frontend.md` / `architecture.md` | Cursor / Claude Code CLI | `tokens-design`, `ads-foundations`, `design-guide`, `impeccable-bridge` |
@@ -41,6 +50,18 @@
 | **Phase 5B** | `feat/design-system-phase-5b-portals` | `frontend.md` | Cursor / Claude Code CLI | `content-creation`, `i18n`, `ads-a11y-rtl`, `design-guide` |
 | **Phase 5C** | `feat/design-system-phase-5c-mobile` | `mobile.md` | Cursor / Claude Code CLI | `mobile`, `expo-mobile-optimization`, `ads-a11y-rtl` |
 | **Phase 6** | `feat/design-system-phase-6-certification` | `qa.md` / `devops.md` | Claude Code CLI / Antigravity | `github-pr-review`, `merge-gatekeeper`, `theme-auditor`, `testing` |
+=======
+| Phase        | Branch                                      | Owner Agent Role                  | Preferred AI Tool             | Primary Skills to Invoke                                                             |
+| :----------- | :------------------------------------------ | :-------------------------------- | :---------------------------- | :----------------------------------------------------------------------------------- |
+| **Phase 1**  | `feat/design-system-phase-1-tokens`         | `frontend.md` / `architecture.md` | Cursor / Claude Code CLI      | `tokens-design`, `ads-foundations`, `design-guide`, `impeccable-bridge`              |
+| **Phase 2**  | `feat/design-system-phase-2-primitives`     | `frontend.md`                     | Cursor / Claude Code CLI      | `shadcn-ads`, `uiux-animator`, `impeccable-bridge`, `anti-slop-validator`, `testing` |
+| **Phase 3**  | `feat/design-system-phase-3-patterns`       | `frontend.md`                     | Cursor / Claude Code CLI      | `ads-data`, `shadcn-composable`, `expo-mobile-optimization`, `content-creation`      |
+| **Phase 4**  | `feat/design-system-phase-4-showcase-audit` | `qa.md` / `impeccable-critic`     | Gemini CLI / Cursor           | `theme-auditor`, `anti-slop-validator`, `ads-a11y-rtl`, `impeccable-bridge`          |
+| **Phase 5A** | `feat/design-system-phase-5a-dashboards`    | `frontend.md`                     | Cursor / Claude Code CLI      | `ads-data`, `shadcn-composable`, `design-guide`, `theme-auditor`                     |
+| **Phase 5B** | `feat/design-system-phase-5b-portals`       | `frontend.md`                     | Cursor / Claude Code CLI      | `content-creation`, `i18n`, `ads-a11y-rtl`, `design-guide`                           |
+| **Phase 5C** | `feat/design-system-phase-5c-mobile`        | `mobile.md`                       | Cursor / Claude Code CLI      | `mobile`, `expo-mobile-optimization`, `ads-a11y-rtl`                                 |
+| **Phase 6**  | `feat/design-system-phase-6-certification`  | `qa.md` / `devops.md`             | Claude Code CLI / Antigravity | `github-pr-review`, `merge-gatekeeper`, `theme-auditor`, `testing`                   |
+>>>>>>> Stashed changes
 
 ---
 

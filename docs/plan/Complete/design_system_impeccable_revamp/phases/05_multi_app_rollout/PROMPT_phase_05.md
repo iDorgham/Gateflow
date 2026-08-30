@@ -2,12 +2,22 @@
 
 **Initiative:** `design_system_impeccable_revamp`  
 **Phase:** Phase 5 — Multi-App Rollout (5A, 5B, 5C Sequential Slices)  
+<<<<<<< Updated upstream
 **Target Applications:**  
 - **5A (Dashboards)**: `apps/client-dashboard`, `apps/admin-dashboard` (`feat/design-system-phase-5a-dashboards`)  
 - **5B (Web & Portals)**: `apps/marketing`, `apps/resident-portal` (`feat/design-system-phase-5b-portals`)  
 - **5C (Mobile Apps)**: `apps/scanner-app`, `apps/resident-mobile` (`feat/design-system-phase-5c-mobile`)  
 **Status:** ⏳ Pending Phase 4 Hard Gate  
 **Effort / Risk:** 🔴 High Effort / High Overall Risk (5A Med/Med, 5B Med/Low, 5C Med/Med)  
+=======
+**Target Applications:**
+
+- **5A (Dashboards)**: `apps/client-dashboard`, `apps/admin-dashboard` (`feat/design-system-phase-5a-dashboards`)
+- **5B (Web & Portals)**: `apps/marketing`, `apps/resident-portal` (`feat/design-system-phase-5b-portals`)
+- **5C (Mobile Apps)**: `apps/scanner-app`, `apps/resident-mobile` (`feat/design-system-phase-5c-mobile`)  
+  **Status:** ⏳ Pending Phase 4 Hard Gate  
+  **Effort / Risk:** 🔴 High Effort / High Overall Risk (5A Med/Med, 5B Med/Low, 5C Med/Med)
+>>>>>>> Stashed changes
 
 ---
 
@@ -50,10 +60,18 @@
 ## 🛠️ 5. Sequential Execution Steps
 
 ### Slice 5A: Dashboards Migration (`client-dashboard` & `admin-dashboard`)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```bash
 git fetch origin && git checkout main && git pull origin main
 git checkout -b feat/design-system-phase-5a-dashboards
 ```
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. Update imports to consume `@gateflow/ui` primitives and patterns (`DynamicTable`, KPI cards, Filter drawers).
 2. Enforce **Compact** density (36px control height) as default.
 3. Replace raw forms with `<FormField>`.
@@ -61,20 +79,36 @@ git checkout -b feat/design-system-phase-5a-dashboards
 5. Generate screenshot diffs, create PR #5A, pass 5-Gate Review, squash-merge into `main`, and delete branch.
 
 ### Slice 5B: Web & Portals Migration (`marketing` & `resident-portal`)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```bash
 git fetch origin && git checkout main && git pull origin main
 git checkout -b feat/design-system-phase-5b-portals
 ```
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. Apply `@gateflow/ui` bento cards, glass headers, and interactive feature blocks.
 2. Enforce **Comfortable** density (48px control height) as default.
 3. Verify Arabic RTL rendering on public marketing and resident portal pages.
 4. Generate screenshot diffs, create PR #5B, pass 5-Gate Review, squash-merge into `main`, and delete branch.
 
 ### Slice 5C: Mobile Apps Migration (`scanner-app` & `resident-mobile`)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ```bash
 git fetch origin && git checkout main && git pull origin main
 git checkout -b feat/design-system-phase-5c-mobile
 ```
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 1. Update Expo apps to consume typed `nativeTokens` directly from `@gateflow/ui/tokens`.
 2. Implement `BottomSheet`, `FAB`, `BiometricHUD`, and ensure touch targets $\ge 44\text{px} \times 44\text{px}$.
 3. Verify guard camera scanner viewfinder HUD feedback in Light/Dark modes.
