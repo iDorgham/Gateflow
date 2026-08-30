@@ -34,10 +34,13 @@ export {
   FormControl,
   FormDescription,
   FormMessage,
-  FormField as HookFormField,
+  FormField,
   useFormField,
 } from './components/ui/form';
-export * from './components/ui/form-field';
+export {
+  FormField as StandaloneFormField,
+  type StandaloneFormFieldProps,
+} from './components/ui/form-field';
 export * from './components/ui/tooltip';
 export * from './components/ui/dynamic-table';
 export * from './components/ui/pagination';

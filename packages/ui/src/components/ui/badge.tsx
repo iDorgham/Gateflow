@@ -25,6 +25,8 @@ const badgeVariants = cva(
           'border-transparent bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]',
         secondary:
           'border-transparent bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]',
+        subtle:
+          'border-transparent bg-[var(--ds-layer-01)] text-[var(--ds-text-subtle)] border border-[var(--ds-border-subtle)]',
         success:
           'border-transparent bg-emerald-500/10 text-[var(--ds-color-success)]',
         warning:

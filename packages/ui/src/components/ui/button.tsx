@@ -52,6 +52,12 @@ const buttonVariants = cva(
           'hover:bg-red-600',
           'active:scale-[0.98]',
         ].join(' '),
+        success: [
+          'bg-[var(--ds-color-success)]',
+          'text-white font-medium',
+          'hover:bg-emerald-600',
+          'active:scale-[0.98]',
+        ].join(' '),
         outline: [
           'border border-[var(--ds-border-subtle)]',
           'bg-transparent',
