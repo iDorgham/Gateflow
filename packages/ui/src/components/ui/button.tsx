@@ -39,6 +39,14 @@ const buttonVariants = cva(
           'hover:bg-[var(--ds-color-primary-hover)] hover:translate-y-[-1px]',
           'active:translate-y-[0px] active:scale-[0.98]',
         ].join(' '),
+        brand: [
+          'bg-[var(--ds-color-primary)]',
+          'text-white font-medium',
+          'shadow-[0_1px_2px_rgba(0,0,0,0.2)]',
+          'dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_2px_4px_rgba(0,0,0,0.4)]',
+          'hover:bg-[var(--ds-color-primary-hover)] hover:translate-y-[-1px]',
+          'active:translate-y-[0px] active:scale-[0.98]',
+        ].join(' '),
         secondary: [
           'bg-[var(--ds-layer-03)]',
           'text-[var(--ds-text-primary)]',
