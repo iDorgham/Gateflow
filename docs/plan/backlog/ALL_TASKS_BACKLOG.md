@@ -13,7 +13,7 @@
 **Target:** 100 Performance, $\ge 95$ Accessibility, 100 Best Practices, 100 SEO across all 5 web apps  
 **App:** `apps/marketing`, `apps/design-system`, `apps/resident-portal`, `apps/client-dashboard`, `apps/admin-dashboard`, `packages/ui`, `packages/theme`
 
-- [ ] Phase 1 — Foundation & Measurement Baseline
+- [x] Phase 1 — Foundation & Measurement Baseline
 - [ ] Phase 2 — Marketing & Design System Portal Optimization
 - [ ] Phase 3 — Resident Portal (PWA & Offline Pass Optimization)
 - [ ] Phase 4 — Client Dashboard (High-Density Operations & Data Islands)

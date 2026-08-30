@@ -56,5 +56,6 @@ export * from './components/shared/maintenance-status-badge';
 export * from './components/panels/EditPanel';
 export * from './components/tables/AdvancedTable';
 export * from './components/ai/AISidePanel';
+export * from './performance/dynamic-island';
 export { cn } from './lib/utils';
 export * from './tokens';
