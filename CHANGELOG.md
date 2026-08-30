@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Tokens]** export TokenPath type definition
 - **[Design-System]** complete design system revamp, enterprise radii, and cross-app rollout
 
 - **[Design System]** three-tier token architecture (foundations, semantic, component), OKLCH Satin-Charcoal Dark Mode layers (`--ds-layer-01` to `--ds-layer-04`), Porcelain Light Mode, and procedural rim-light edge-glow shaders
