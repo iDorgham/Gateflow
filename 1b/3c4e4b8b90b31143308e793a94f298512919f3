@@ -1,0 +1,158 @@
+.antigravity/agents/roles/frontend.md
+  h_220d66b2244819 1,3,7,9-15,17-25,27-30
+.antigravity/skills/design-guide/SKILL.md
+  h_220d66b2244819 3,6,8,10-12,14,16-28,30,32,34,36-41,43-61,63,65-68
+.antigravity/skills/theme-auditor/SKILL.md
+  h_220d66b2244819 3,6,8,10-12,14-21,23,25,27-31,33-38,40-43,45-55,57,59,61-62,64,66-71,73-74,76-78
+.antigravity/templates/TEMPLATE_IMPECCABLE_PROMPT.md
+  h_220d66b2244819 1-103
+CHANGELOG.md
+  h_220d66b2244819 13-18,40-43
+DESIGN.md
+  h_220d66b2244819 1-116
+apps/admin-dashboard/src/app/[locale]/layout.tsx
+  h_220d66b2244819 42
+apps/client-dashboard/src/app/[locale]/layout.tsx
+  h_220d66b2244819 50
+apps/design-system/package.json
+  h_220d66b2244819 6
+apps/design-system/src/app/(docs)/components/page.tsx
+  h_220d66b2244819 4,6-17,19-100,103,105-110,113-213,215
+apps/design-system/src/app/(docs)/components/patterns/page.tsx
+  h_220d66b2244819 79,96,106,109-110,115-116,118-123,129,131-133,146,164,188,212,240,242,245,258,260,263,276
+apps/design-system/src/app/(docs)/components/primitives/page.tsx
+  h_220d66b2244819 34,56-58,250,500,502,504-505,509,511-512,533
+apps/design-system/src/app/(docs)/foundations/color/page.tsx
+  h_220d66b2244819 104,106-107
+apps/design-system/src/app/(docs)/guidelines/page.tsx
+  h_220d66b2244819 37-40,42-43,46,51-53,66,69,71,75,78-79,83,86,101,113-115,117-118,121,126-127,140,175,189,193,198,202,217
+apps/design-system/src/app/(docs)/guidelines/prompt-guide/page.tsx
+  h_220d66b2244819 1-113
+apps/design-system/src/app/(docs)/sandboxes/vibe-check/page.tsx
+  h_220d66b2244819 1-179
+apps/design-system/src/app/globals.css
+  h_220d66b2244819 6-7
+apps/design-system/src/app/layout.tsx
+  h_220d66b2244819 53
+apps/design-system/src/components/gallery/GalleryItem.tsx
+  h_220d66b2244819 4,41,54-64,75,81,85,94-95,98,104,110-139,146,148,177,180,199
+apps/design-system/src/components/gallery/StateCoverageMatrix.tsx
+  h_220d66b2244819 1-143
+apps/design-system/src/components/navigation/Search.tsx
+  h_220d66b2244819 48,60,64,67,71,81,86,88,104,107,110,147,149-150,155-156,162
+apps/design-system/src/components/token-explorer/TokenExplorer.tsx
+  h_220d66b2244819 4,18-187,189-195,198-204,207-213,216-222,228,233,236-237,242-259,262-279,281-298,300-303,307-328,330-331,333,335-337,339-340,342,344,347-350,353-355,357-358,362-404,407-409,412,414-420
+apps/marketing/app/[locale]/layout.tsx
+  h_220d66b2244819 152
+apps/resident-portal/src/app/layout.tsx
+  h_220d66b2244819 37
+docs/development/certification/CERTIFICATION_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-73
+docs/development/initiatives/IDEA_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-64
+docs/plan/Complete/design_system_impeccable_revamp/ACCESSIBILITY_AND_A11Y_GUIDE.md
+  h_220d66b2244819 1-105
+docs/plan/Complete/design_system_impeccable_revamp/AI_CONTEXT_PACK.md
+  h_220d66b2244819 1-106
+docs/plan/Complete/design_system_impeccable_revamp/AI_PROMPT_WRITING_GUIDE.md
+  h_220d66b2244819 1-89
+docs/plan/Complete/design_system_impeccable_revamp/CONTEXT_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-81
+docs/plan/Complete/design_system_impeccable_revamp/DESIGN_SYSTEM_ARCHITECTURE.md
+  h_220d66b2244819 1-209
+docs/plan/Complete/design_system_impeccable_revamp/DRAFT_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-268
+docs/plan/Complete/design_system_impeccable_revamp/FOR_PLAN_PROMPT.md
+  h_220d66b2244819 1-270
+docs/plan/Complete/design_system_impeccable_revamp/IMPECCABLE_AND_DESIGN_MD_GUIDE.md
+  h_220d66b2244819 1-104
+docs/plan/Complete/design_system_impeccable_revamp/MIGRATION_AND_ROLLOUT_GUIDE.md
+  h_220d66b2244819 1-120
+docs/plan/Complete/design_system_impeccable_revamp/PLAN_FEEDBACK.md
+  h_220d66b2244819 1-61
+docs/plan/Complete/design_system_impeccable_revamp/PLAN_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-90
+docs/plan/Complete/design_system_impeccable_revamp/TASKS_design_system_impeccable_revamp.md
+  h_220d66b2244819 1-105
+docs/plan/Complete/design_system_impeccable_revamp/VIBE_CODER_QUICKSTART.md
+  h_220d66b2244819 1-106
+docs/plan/Complete/design_system_impeccable_revamp/phases/01_tokens_foundations/PROMPT_phase_01.md
+  h_220d66b2244819 1-99
+docs/plan/Complete/design_system_impeccable_revamp/phases/02_core_primitives/PROMPT_phase_02.md
+  h_220d66b2244819 1-89
+docs/plan/Complete/design_system_impeccable_revamp/phases/03_domain_patterns/PROMPT_phase_03.md
+  h_220d66b2244819 1-87
+docs/plan/Complete/design_system_impeccable_revamp/phases/04_showcase_audit/PROMPT_phase_04.md
+  h_220d66b2244819 1-98
+docs/plan/Complete/design_system_impeccable_revamp/phases/05_multi_app_rollout/PROMPT_phase_05.md
+  h_220d66b2244819 1-106
+docs/plan/Complete/design_system_impeccable_revamp/phases/06_monorepo_certification/PROMPT_phase_06.md
+  h_220d66b2244819 1-94
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 7-24
+docs/reference/product/FEATURE_LOG.md
+  h_220d66b2244819 9
+packages/components/src/compositions/FilterBar.tsx
+  h_220d66b2244819 38,45,52
+packages/theme/src/ThemeScript.tsx
+  h_220d66b2244819 11-12
+packages/tokens/css/tokens.css
+  h_220d66b2244819 2-4,8-142,144,146-147,149-151,155,158-224,226-229,231-237,239-244,246-252,254-258
+packages/tokens/package.json
+  h_220d66b2244819 42
+packages/tokens/scripts/check-contrast.js
+  h_220d66b2244819 1-125
+packages/tokens/scripts/check-contrast.ts
+  h_220d66b2244819 1-129
+packages/tokens/src/foundations/colors.ts
+  h_220d66b2244819 1-108
+packages/tokens/src/foundations/motion.ts
+  h_220d66b2244819 1-19
+packages/tokens/src/foundations/spacing.ts
+  h_220d66b2244819 1-31
+packages/tokens/src/foundations/typography.ts
+  h_220d66b2244819 1-38
+packages/tokens/src/index.ts
+  h_220d66b2244819 2-3,6-16,18-24,29,31-54,56-61,64-67,71,74-75,77-81
+packages/tokens/src/semantic/accents.ts
+  h_220d66b2244819 1-38
+packages/tokens/src/semantic/colors.ts
+  h_220d66b2244819 1-79
+packages/tokens/src/semantic/density.ts
+  h_220d66b2244819 1-30
+packages/tokens/src/semantic/layers.ts
+  h_220d66b2244819 1-23
+packages/ui/src/__tests__/primitives.test.tsx
+  h_220d66b2244819 1-90
+packages/ui/src/components/ui/badge.tsx
+  h_220d66b2244819 1-2,5,8-11,13,17-35,38-83,85-87,93-98,100-110,112-162,168
+packages/ui/src/components/ui/banner.tsx
+  h_220d66b2244819 1-90
+packages/ui/src/components/ui/bottom-sheet.tsx
+  h_220d66b2244819 1-70
+packages/ui/src/components/ui/button.tsx
+  h_220d66b2244819 6,10-11,16,18,21-22,28-32,35-40,42-47,50-53,56,58-60,65-66,70,74-80,84,86-91,102,105,113-115,119-120,124-125,127-136
+packages/ui/src/components/ui/card.tsx
+  h_220d66b2244819 1-2,8-9,12,17-36,39,42-45,47-57,62,68-71,73,75-78,104
+packages/ui/src/components/ui/dynamic-table.tsx
+  h_220d66b2244819 46-47,173-207,209-220,222-223,225-367
+packages/ui/src/components/ui/form-field.tsx
+  h_220d66b2244819 1-96
+packages/ui/src/components/ui/input.tsx
+  h_220d66b2244819 9-10,17
+packages/ui/src/index.ts
+  h_220d66b2244819 30-40,47-48
+scripts/check/audit-showcase.js
+  h_220d66b2244819 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "1b3c4e4b8b90b31143308e793a94f298512919f3",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
