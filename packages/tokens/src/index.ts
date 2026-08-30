@@ -69,6 +69,9 @@ export const tokens = {
 } as const;
 
 export type TokenCategory = keyof typeof tokens;
+export type TokenPath = {
+  [C in TokenCategory]: `${C}.${Extract<keyof (typeof tokens)[C], string>}`;
+}[TokenCategory];
 
 /**
  * Helper to retrieve a typed CSS variable token.
