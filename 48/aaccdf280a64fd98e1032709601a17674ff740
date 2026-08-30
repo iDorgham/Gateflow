@@ -1,0 +1,28 @@
+apps/resident-portal/next.config.js
+  h_220d66b2244819 9-10,12,14-15
+apps/resident-portal/package.json
+  h_220d66b2244819 21-22
+apps/resident-portal/src/app/layout.tsx
+  h_220d66b2244819 13-17,25-43,49-51
+apps/resident-portal/src/components/pwa/pwa-bootstrap.tsx
+  h_220d66b2244819 33-41
+apps/resident-portal/src/components/visitors/new-visitor-sheet.tsx
+  h_220d66b2244819 4,17-28
+docs/plan/Active/lighthouse-100/SESSION_MEMORY.md
+  h_220d66b2244819 12,14-15
+docs/plan/Active/lighthouse-100/TASKS_lighthouse-100.md
+  h_220d66b2244819 32-35
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "48aaccdf280a64fd98e1032709601a17674ff740",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
