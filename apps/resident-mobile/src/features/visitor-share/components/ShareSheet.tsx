@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type VisitorInviteRecord } from '../types';
 import { useShareVisitor } from '../hooks/useShareVisitor';
 

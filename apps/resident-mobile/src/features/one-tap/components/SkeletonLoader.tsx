@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, DimensionValue } from 'react-native';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 
 const { colors, borderRadius, spacing } = theme;
 

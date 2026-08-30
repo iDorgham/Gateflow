@@ -11,18 +11,15 @@ import {
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
-import { theme } from '../../../lib/theme';
-import { ContactPickerButton } from '../../../components/ContactPickerButton';
+import { theme } from '../../../../lib/theme';
+import { ContactPickerButton } from '../../../../components/ContactPickerButton';
 import {
   type VisitorTemplate,
   type VisitorTemplateType,
   type VisitorInviteRecord,
   type AccessType,
 } from '../types';
-import {
-  VisitorTemplatePicker,
-  VISITOR_TEMPLATES,
-} from '../components/VisitorTemplatePicker';
+import { VisitorTemplatePicker } from '../components/VisitorTemplatePicker';
 import { ShareSheet } from '../components/ShareSheet';
 import { useVisitorInvite } from '../hooks/useVisitorInvite';
 

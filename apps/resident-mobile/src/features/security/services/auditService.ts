@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { residentFetch } from '../../../lib/api';
+import { residentFetch } from '../../../../lib/api';
 import { type AuditLogEntry, type AuditAction } from '../types';
 
 const AUDIT_LEDGER_STORAGE_KEY = 'gateflow_audit_ledger';

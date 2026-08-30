@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform, Linking } from 'react-native';
-import { residentFetch } from '../../../lib/api';
+import { residentFetch } from '../../../../lib/api';
 import {
   type NotificationActionType,
   type NotificationPreferences,

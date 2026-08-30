@@ -6,7 +6,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type UseBiometricAuthResult } from '../hooks/useBiometricAuth';
 import { PinFallbackModal } from './PinFallbackModal';
 

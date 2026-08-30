@@ -9,14 +9,13 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { router } from 'expo-router';
-import { theme } from '../../../lib/theme';
-import { residentFetch } from '../../../lib/api';
+import { theme } from '../../../../lib/theme';
+import { residentFetch } from '../../../../lib/api';
 import { type VisitorInviteRecord } from '../types';
 import { VisitorStatusBadge } from '../components/VisitorStatusBadge';
 import { ShareSheet } from '../components/ShareSheet';
 
-const { colors, spacing, borderRadius, typography, shadows } = theme;
+const { colors, spacing, borderRadius, shadows } = theme;
 
 type FilterTab = 'ALL' | 'ACTIVE' | 'EXPIRED';
 

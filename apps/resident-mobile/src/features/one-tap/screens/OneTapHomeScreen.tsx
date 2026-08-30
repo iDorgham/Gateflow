@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
 import { useSecureQR } from '../hooks/useSecureQR';
 import { BiometricGate } from '../components/BiometricGate';

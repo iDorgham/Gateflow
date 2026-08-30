@@ -28,11 +28,11 @@ export interface TimelineStep {
   timestamp?: string;
 }
 
-export const TIMELINE_STEPS: Array<{
+export const TIMELINE_STEPS: {
   key: TimelineStepKey;
   labelEn: string;
   labelAr: string;
-}> = [
+}[] = [
   { key: 'SUBMITTED', labelEn: 'Request Submitted', labelAr: 'تم إرسال الطلب' },
   {
     key: 'ASSIGNED',

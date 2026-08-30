@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type NotificationPreferences } from '../types';
 
-const { colors, spacing, borderRadius, typography, shadows } = theme;
+const { colors, spacing, borderRadius, shadows } = theme;
 
 const PREFERENCES_STORAGE_KEY = 'resident_notification_preferences';
 

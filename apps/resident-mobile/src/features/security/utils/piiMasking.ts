@@ -1,5 +1,3 @@
-import { type PiiMaskingOptions } from '../types';
-
 /**
  * Masks a phone number preserving the country/area code and last 4 digits.
  * Example: "+20 10 1234 5678" -> "+20 10 **** 5678"

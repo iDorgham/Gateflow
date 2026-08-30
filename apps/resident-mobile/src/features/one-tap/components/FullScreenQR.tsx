@@ -8,9 +8,9 @@ import {
   Platform,
   Share,
 } from 'react-native';
-import Svg, { Rect, Path } from 'react-native-svg';
+import Svg, { Rect } from 'react-native-svg';
 import * as Haptics from 'expo-haptics';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type ResidentActivePass } from '../hooks/useSecureQR';
 
 const { colors, spacing, borderRadius, typography, shadows } = theme;
@@ -43,7 +43,6 @@ function SimpleQRMatrix({ code, size = 220 }: { code: string; size?: number }) {
     ) {
       const isOuter = x === 0 || x === 6 || y === 0 || y === 6;
       const isInner = x >= 2 && x <= 4 && y >= 2 && y <= 4;
-      const isMargin = x === 1 || x === 5 || y === 1 || y === 5;
       if (
         (x >= gridCount - 7 && (x === gridCount - 7 || x === gridCount - 1)) ||
         (y >= gridCount - 7 && (y === gridCount - 7 || y === gridCount - 1))
@@ -95,7 +94,7 @@ export function FullScreenQR({
   onRefresh,
   onLock,
 }: FullScreenQRProps) {
-  const [highContrast, setHighContrast] = useState(true);
+  const [highContrast] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const formatCountdown = (secs: number): string => {

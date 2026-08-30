@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type VisitorTemplate, type VisitorTemplateType } from '../types';
 
 const { colors, spacing, borderRadius, typography, shadows } = theme;

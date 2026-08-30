@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 
 const { colors, spacing, borderRadius, typography, shadows } = theme;
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { residentFetch } from '../../../lib/api';
-import { type CachedVisitor } from '../../../lib/qr-cache';
+import { residentFetch } from '../../../../lib/api';
+import { type CachedVisitor } from '../../../../lib/qr-cache';
 
 export interface ResidentActivePass {
   id: string;

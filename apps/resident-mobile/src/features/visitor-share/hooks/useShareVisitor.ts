@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Share, Linking, Platform } from 'react-native';
+import { Share, Linking } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { type VisitorInviteRecord } from '../types';
 
@@ -26,6 +26,34 @@ export function useShareVisitor(): UseShareVisitorResult {
       );
     },
     []
+  );
+
+  const shareViaSystem = useCallback(
+    async (invite: VisitorInviteRecord): Promise<boolean> => {
+      const message = generateShareMessage(invite);
+      try {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } catch {
+        // Haptics fallback
+      }
+
+      try {
+        const result = await Share.share(
+          {
+            title: `GateFlow Pass - ${invite.visitorName}`,
+            message,
+          },
+          {
+            dialogTitle: `Share GateFlow Pass with ${invite.visitorName}`,
+          }
+        );
+        return result.action === Share.sharedAction;
+      } catch (err) {
+        console.error('[useShareVisitor] Share failed:', err);
+        return false;
+      }
+    },
+    [generateShareMessage]
   );
 
   const shareViaWhatsApp = useCallback(
@@ -67,35 +95,7 @@ export function useShareVisitor(): UseShareVisitorResult {
         return shareViaSystem(invite);
       }
     },
-    [generateShareMessage]
-  );
-
-  const shareViaSystem = useCallback(
-    async (invite: VisitorInviteRecord): Promise<boolean> => {
-      const message = generateShareMessage(invite);
-      try {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } catch {
-        // Haptics fallback
-      }
-
-      try {
-        const result = await Share.share(
-          {
-            title: `GateFlow Pass - ${invite.visitorName}`,
-            message,
-          },
-          {
-            dialogTitle: `Share Gate Pass for ${invite.visitorName}`,
-          }
-        );
-        return result.action === Share.sharedAction;
-      } catch (e) {
-        console.warn('[useShareVisitor] Share error:', e);
-        return false;
-      }
-    },
-    [generateShareMessage]
+    [generateShareMessage, shareViaSystem]
   );
 
   return {

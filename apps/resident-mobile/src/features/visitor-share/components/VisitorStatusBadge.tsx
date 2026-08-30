@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../../../lib/theme';
+import { theme } from '../../../../lib/theme';
 import { type VisitorInviteStatus } from '../types';
 
 const { borderRadius } = theme;
