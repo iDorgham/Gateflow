@@ -1,0 +1,18 @@
+docs/reference/product/FEATURE_LOG.md
+  h_220d66b2244819 7-25
+docs/reference/product/UPCOMING.md
+  h_220d66b2244819 34-50
+docs/reference/releases/RELEASE_SUMMARY_2026_08_30.md
+  h_220d66b2244819 1-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "6195373079062dfc1345c096a2c7f0ab2ca26527",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
