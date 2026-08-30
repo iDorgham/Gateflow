@@ -12,12 +12,18 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
 });
 const cairo = Cairo({
-  subsets: ['arabic', 'latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-cairo',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif'],
+  adjustFontFallback: true,
 });
 
 import { OrganizationJsonLd, WebSiteJsonLd } from '../../components/json-ld';

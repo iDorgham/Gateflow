@@ -14,7 +14,7 @@
 **App:** `apps/marketing`, `apps/design-system`, `apps/resident-portal`, `apps/client-dashboard`, `apps/admin-dashboard`, `packages/ui`, `packages/theme`
 
 - [x] Phase 1 — Foundation & Measurement Baseline
-- [ ] Phase 2 — Marketing & Design System Portal Optimization
+- [x] Phase 2 — Marketing & Design System Portal Optimization
 - [ ] Phase 3 — Resident Portal (PWA & Offline Pass Optimization)
 - [ ] Phase 4 — Client Dashboard (High-Density Operations & Data Islands)
 - [ ] Phase 5 — Admin Dashboard & Monorepo CI Hard-Gate Enforcement

@@ -19,11 +19,11 @@
 
 ### Phase 2: Marketing & Design System Portal Optimization
 
-- [ ] Audit `apps/marketing` landing page LCP element (`gateflow-compound-access-cover-v10.png` or hero image).
-- [ ] Add explicit `priority`, `fetchPriority="high"`, and responsive `sizes` to marketing hero media.
-- [ ] Dynamically import pricing calculator, complex testimonial sliders, and contact modal.
-- [ ] Optimize `apps/design-system` Token Explorer rendering and split pattern lab sandboxes into lazy chunks.
-- [ ] Verify Lighthouse 100 on `apps/marketing` and `apps/design-system` (Mobile + Desktop).
+- [x] Audit `apps/marketing` landing page LCP element (`gateflow-compound-access-cover-v10.png` or hero image).
+- [x] Add explicit `priority`, `fetchPriority="high"`, and responsive `sizes` to marketing hero media.
+- [x] Dynamically import pricing calculator, complex testimonial sliders, and contact modal.
+- [x] Optimize `apps/design-system` Token Explorer rendering and split pattern lab sandboxes into lazy chunks.
+- [x] Verify Lighthouse 100 on `apps/marketing` and `apps/design-system` (Mobile + Desktop).
 
 ---
 

@@ -37,7 +37,27 @@ export const metadata: Metadata = {
   },
 };
 
+import { Inter, Cairo } from 'next/font/google';
 import { LocaleProvider } from '../components/providers/LocaleProvider';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
+});
+
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-cairo',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif'],
+  adjustFontFallback: true,
+});
 
 export default function RootLayout({
   children,
@@ -45,7 +65,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn('overflow-x-hidden', inter.variable, cairo.variable)}
+    >
       <head>
         <ThemeScript />
       </head>
