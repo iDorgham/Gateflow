@@ -1,0 +1,48 @@
+apps/resident-mobile/src/features/notifications/components/NotificationSettings.tsx
+  h_220d66b2244819 12,15
+apps/resident-mobile/src/features/notifications/services/pushService.ts
+  h_220d66b2244819 4
+apps/resident-mobile/src/features/one-tap/components/BiometricGate.tsx
+  h_220d66b2244819 9
+apps/resident-mobile/src/features/one-tap/components/EmptyState.tsx
+  h_220d66b2244819 3
+apps/resident-mobile/src/features/one-tap/components/FullScreenQR.tsx
+  h_220d66b2244819 11,13,97
+apps/resident-mobile/src/features/one-tap/components/PinFallbackModal.tsx
+  h_220d66b2244819 11
+apps/resident-mobile/src/features/one-tap/components/SkeletonLoader.tsx
+  h_220d66b2244819 3
+apps/resident-mobile/src/features/one-tap/hooks/useSecureQR.ts
+  h_220d66b2244819 3-4
+apps/resident-mobile/src/features/one-tap/screens/OneTapHomeScreen.tsx
+  h_220d66b2244819 2
+apps/resident-mobile/src/features/security/services/auditService.ts
+  h_220d66b2244819 2
+apps/resident-mobile/src/features/visitor-share/components/ShareSheet.tsx
+  h_220d66b2244819 11
+apps/resident-mobile/src/features/visitor-share/components/VisitorStatusBadge.tsx
+  h_220d66b2244819 3
+apps/resident-mobile/src/features/visitor-share/components/VisitorTemplatePicker.tsx
+  h_220d66b2244819 4
+apps/resident-mobile/src/features/visitor-share/hooks/useShareVisitor.ts
+  h_220d66b2244819 2,31-58,98
+apps/resident-mobile/src/features/visitor-share/hooks/useVisitorInvite.ts
+  h_220d66b2244819 3
+apps/resident-mobile/src/features/visitor-share/screens/CreateVisitorScreen.tsx
+  h_220d66b2244819 14-15,22
+apps/resident-mobile/src/features/visitor-share/screens/VisitorListScreen.tsx
+  h_220d66b2244819 12-13,18
+apps/resident-mobile/src/lib/maintenance/resident-ticket-service.ts
+  h_220d66b2244819 31,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "46ca3f6a97d02733f989cf1f0d21cc3e1f425ca3",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
