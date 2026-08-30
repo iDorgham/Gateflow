@@ -1,0 +1,14 @@
+packages/ui/src/components/ui/badge.tsx
+  h_220d66b2244819 38,44,60-64,91-95,109-114,141-145,159-164,194-198,213-218,244-248,261-265,291-295,341-342,347-348,356-357,362-363
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "93f2a3876875f0794f03e34a5e8936a0439aaed9",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
