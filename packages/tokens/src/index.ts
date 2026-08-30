@@ -75,11 +75,26 @@ export type TokenPath = {
 
 /**
  * Helper to retrieve a typed CSS variable token.
- * Usage: token('color', 'primary') -> 'var(--ds-color-primary)'
+ * Usage:
+ *   token('color', 'primary') -> 'var(--ds-color-primary)'
+ *   token('color.primary') -> 'var(--ds-color-primary)'
  */
-export function token<C extends TokenCategory, K extends keyof typeof tokens[C]>(
-  category: C,
-  key: K
-): string {
-  return (tokens[category] as any)[key];
+export function token(path: TokenPath): string;
+export function token<
+  C extends TokenCategory,
+  K extends keyof (typeof tokens)[C],
+>(category: C, key: K): string;
+export function token(categoryOrPath: any, maybeKey?: any): string {
+  if (
+    maybeKey === undefined &&
+    typeof categoryOrPath === 'string' &&
+    categoryOrPath.includes('.')
+  ) {
+    const [category, key] = categoryOrPath.split('.') as [
+      TokenCategory,
+      string,
+    ];
+    return (tokens[category] as any)?.[key] ?? '';
+  }
+  return (tokens[categoryOrPath as TokenCategory] as any)?.[maybeKey] ?? '';
 }
