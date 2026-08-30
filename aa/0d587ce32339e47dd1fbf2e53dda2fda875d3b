@@ -1,0 +1,22 @@
+apps/design-system/src/app/layout.tsx
+  h_220d66b2244819 40,43-61,68-72
+apps/marketing/app/[locale]/layout.tsx
+  h_220d66b2244819 15-17,20-21,24-26
+docs/plan/Active/lighthouse-100/SESSION_MEMORY.md
+  h_220d66b2244819 12,14-15
+docs/plan/Active/lighthouse-100/TASKS_lighthouse-100.md
+  h_220d66b2244819 22-26
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "aa0d587ce32339e47dd1fbf2e53dda2fda875d3b",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
