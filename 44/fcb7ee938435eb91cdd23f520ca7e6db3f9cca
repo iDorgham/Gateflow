@@ -1,0 +1,14 @@
+packages/tokens/src/index.ts
+  h_220d66b2244819 78-80,82-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "44fcb7ee938435eb91cdd23f520ca7e6db3f9cca",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
