@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import { Inter, Cairo } from 'next/font/google';
 import { I18nProvider } from '@/components/i18n/i18n-provider';
@@ -17,12 +17,33 @@ export const metadata: Metadata = {
   },
 };
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#091e42' },
+    { media: '(prefers-color-scheme: light)', color: '#0c66e4' },
+  ],
+};
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
+});
+
 const cairo = Cairo({
   subsets: ['arabic', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-cairo',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
 });
 
 export default async function RootLayout(props: {

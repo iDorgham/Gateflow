@@ -4,6 +4,8 @@ const path = require('path');
 
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
+  compress: true,
+  poweredByHeader: false,
   typescript: {
     // TODO(ts-reeable): re-enable typechecking for admin-dashboard builds.
     // TEMPORARY: fixing the broken @prisma/extension-accelerate pin (see
@@ -16,9 +18,11 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   transpilePackages: [
-    '@gate-access/types',
-    '@gateflow/ui',
+    '@gateflow/tokens',
     '@gateflow/theme',
+    '@gateflow/ui',
+    '@gateflow/components',
+    '@gate-access/types',
     '@gate-access/db',
     '@gate-access/i18n',
   ],

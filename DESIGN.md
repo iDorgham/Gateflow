@@ -132,3 +132,22 @@ Always wrap inputs in `<FormField label="..." helperText="..." errorMessage="...
 ### BottomSheet Recipe
 
 - Snap points at 25%, 50%, 90%, spring drag handle, backdrop blur, safe-area-inset padding.
+
+---
+
+## 8. Performance & Core Web Vitals Contract
+
+Every web application and component in the GateFlow monorepo must adhere to the following hard performance invariants:
+
+1. **Lighthouse CI Thresholds**:
+   - **Performance**: $\ge 98$ (Target: 100 on Production)
+   - **Accessibility**: $\ge 95$
+   - **Best Practices**: $\ge 98$
+   - **SEO**: $1.00$ ($100$)
+2. **Core Web Vitals SLAs**:
+   - **LCP (Largest Contentful Paint)**: $< 1.2\text{s}$ (Hero images must include `priority`, `fetchPriority="high"`, and responsive `sizes`).
+   - **CLS (Cumulative Layout Shift)**: $\mathbf{0.00}$ strictly enforced via `DynamicIsland`, pre-allocated container dimensions, and `adjustFontFallback: true` with font preloading.
+   - **INP (Interaction to Next Paint)**: $< 150\text{ms}$ with deferred idle queues (`requestIdleCallback`) for heavy computations, PWA service workers, and real-time SSE streams.
+3. **Chunking & Dynamic Islands**:
+   - All complex widgets (Recharts, QR code canvas engines, multi-step creation wizards, and interactive sandboxes) must be code-split into dynamic islands using `next/dynamic` with pre-styled skeleton loaders.
+

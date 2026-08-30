@@ -40,13 +40,13 @@ module.exports = {
 
     assert: {
       assertions: {
-        'categories:performance': ['error', { minScore: 0.65 }],
-        'categories:accessibility': ['error', { minScore: 0.85 }],
-        'categories:best-practices': ['error', { minScore: 0.88 }],
-        'categories:seo': ['error', { minScore: 0.9 }],
-        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
-        'total-blocking-time': ['error', { maxNumericValue: 200 }],
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.15 }],
+        'categories:performance': ['error', { minScore: 0.98 }],
+        'categories:accessibility': ['error', { minScore: 0.95 }],
+        'categories:best-practices': ['error', { minScore: 0.98 }],
+        'categories:seo': ['error', { minScore: 1.0 }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 1500 }],
+        'total-blocking-time': ['error', { maxNumericValue: 100 }],
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.01 }],
       },
       failOnError: true,
     },
