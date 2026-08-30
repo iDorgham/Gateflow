@@ -35,11 +35,13 @@ const badgeVariants = cva(
       },
       tone: {
         primary: '',
+        brand: '',
         neutral: '',
         success: '',
         warning: '',
         danger: '',
         info: '',
+        information: '',
         aiLab: '',
       },
       size: {
@@ -53,6 +55,11 @@ const badgeVariants = cva(
       {
         variant: 'solid',
         tone: 'primary',
+        className: 'bg-[var(--ds-color-primary)] text-white',
+      },
+      {
+        variant: 'solid',
+        tone: 'brand',
         className: 'bg-[var(--ds-color-primary)] text-white',
       },
       {
@@ -83,6 +90,11 @@ const badgeVariants = cva(
       },
       {
         variant: 'solid',
+        tone: 'information',
+        className: 'bg-[var(--ds-color-info)] text-white',
+      },
+      {
+        variant: 'solid',
         tone: 'aiLab',
         className: 'bg-[var(--ds-color-ai-lab)] text-white',
       },
@@ -91,6 +103,12 @@ const badgeVariants = cva(
       {
         variant: 'soft',
         tone: 'primary',
+        className:
+          'bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'soft',
+        tone: 'brand',
         className:
           'bg-[var(--ds-color-primary-subtle)] text-[var(--ds-text-brand)]',
       },
@@ -122,6 +140,11 @@ const badgeVariants = cva(
       },
       {
         variant: 'soft',
+        tone: 'information',
+        className: 'bg-blue-500/10 text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'soft',
         tone: 'aiLab',
         className: 'bg-purple-500/10 text-[var(--ds-color-ai-lab)]',
       },
@@ -130,6 +153,12 @@ const badgeVariants = cva(
       {
         variant: 'outline',
         tone: 'primary',
+        className:
+          'border-[var(--ds-color-primary)] text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'outline',
+        tone: 'brand',
         className:
           'border-[var(--ds-color-primary)] text-[var(--ds-text-brand)]',
       },
@@ -164,6 +193,11 @@ const badgeVariants = cva(
       },
       {
         variant: 'outline',
+        tone: 'information',
+        className: 'border-[var(--ds-color-info)] text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'outline',
         tone: 'aiLab',
         className:
           'border-[var(--ds-color-ai-lab)] text-[var(--ds-color-ai-lab)]',
@@ -173,6 +207,12 @@ const badgeVariants = cva(
       {
         variant: 'ghost',
         tone: 'primary',
+        className:
+          'text-[var(--ds-text-brand)] hover:bg-[var(--ds-color-primary-subtle)]',
+      },
+      {
+        variant: 'ghost',
+        tone: 'brand',
         className:
           'text-[var(--ds-text-brand)] hover:bg-[var(--ds-color-primary-subtle)]',
       },
@@ -203,6 +243,11 @@ const badgeVariants = cva(
       },
       {
         variant: 'ghost',
+        tone: 'information',
+        className: 'text-[var(--ds-color-info)] hover:bg-blue-500/10',
+      },
+      {
+        variant: 'ghost',
         tone: 'aiLab',
         className: 'text-[var(--ds-color-ai-lab)] hover:bg-purple-500/10',
       },
@@ -211,6 +256,11 @@ const badgeVariants = cva(
       {
         variant: 'dot',
         tone: 'primary',
+        className: 'text-[var(--ds-text-brand)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'brand',
         className: 'text-[var(--ds-text-brand)]',
       },
       {
@@ -236,6 +286,11 @@ const badgeVariants = cva(
       {
         variant: 'dot',
         tone: 'info',
+        className: 'text-[var(--ds-color-info)]',
+      },
+      {
+        variant: 'dot',
+        tone: 'information',
         className: 'text-[var(--ds-color-info)]',
       },
       {
@@ -283,12 +338,14 @@ export function Badge({
             <span
               className={cn(
                 'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
-                tone === 'primary' && 'bg-[var(--ds-color-primary)]',
+                (tone === 'primary' || tone === 'brand') &&
+                  'bg-[var(--ds-color-primary)]',
                 tone === 'success' && 'bg-[var(--ds-color-success)]',
                 tone === 'warning' && 'bg-[var(--ds-color-warning)]',
                 tone === 'danger' && 'bg-[var(--ds-color-danger)]',
                 tone === 'aiLab' && 'bg-[var(--ds-color-ai-lab)]',
-                tone === 'info' && 'bg-[var(--ds-color-info)]',
+                (tone === 'info' || tone === 'information') &&
+                  'bg-[var(--ds-color-info)]',
                 tone === 'neutral' && 'bg-[var(--ds-text-subtle)]'
               )}
             />
@@ -296,12 +353,14 @@ export function Badge({
           <span
             className={cn(
               'relative inline-flex rounded-full h-2 w-2',
-              tone === 'primary' && 'bg-[var(--ds-color-primary)]',
+              (tone === 'primary' || tone === 'brand') &&
+                'bg-[var(--ds-color-primary)]',
               tone === 'success' && 'bg-[var(--ds-color-success)]',
               tone === 'warning' && 'bg-[var(--ds-color-warning)]',
               tone === 'danger' && 'bg-[var(--ds-color-danger)]',
               tone === 'aiLab' && 'bg-[var(--ds-color-ai-lab)]',
-              tone === 'info' && 'bg-[var(--ds-color-info)]',
+              (tone === 'info' || tone === 'information') &&
+                'bg-[var(--ds-color-info)]',
               tone === 'neutral' && 'bg-[var(--ds-text-subtle)]'
             )}
           />
