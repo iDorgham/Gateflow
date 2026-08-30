@@ -22,7 +22,7 @@ export default function HomeScreen() {
         router.replace('/login');
         return;
       }
-      router.replace('/one-tap');
+      router.replace('/one-tap' as any);
     });
   }, []);
 

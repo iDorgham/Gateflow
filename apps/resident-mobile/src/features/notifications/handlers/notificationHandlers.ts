@@ -29,7 +29,7 @@ export function subscribeToNotificationResponses(
     async (response) => {
       const actionId = response.actionIdentifier;
       const data = response.notification.request.content
-        .data as ArrivalNotificationPayload;
+        .data as unknown as ArrivalNotificationPayload;
 
       if (!data?.visitorQRId) return;
 

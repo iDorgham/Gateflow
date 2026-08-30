@@ -94,6 +94,7 @@ export function CreateVisitorScreen() {
               setVisitorName(name);
               setVisitorPhone(phone);
             }}
+            onFallback={() => {}}
           />
 
           <View style={styles.inputGroup}>

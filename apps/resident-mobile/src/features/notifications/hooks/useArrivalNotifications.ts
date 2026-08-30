@@ -37,7 +37,8 @@ export function useArrivalNotifications(): UseArrivalNotificationsResult {
     // Listener for notifications received while app is foregrounded
     const receivedSub = Notifications.addNotificationReceivedListener(
       (notif) => {
-        const data = notif.request.content.data as ArrivalNotificationPayload;
+        const data = notif.request.content
+          .data as unknown as ArrivalNotificationPayload;
         if (data?.visitorQRId && data?.visitorName) {
           try {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
