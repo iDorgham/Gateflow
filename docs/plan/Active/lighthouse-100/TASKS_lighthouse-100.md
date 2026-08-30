@@ -38,11 +38,13 @@
 
 ### Phase 4: Client Dashboard (High-Density Operations & Data Islands)
 
-- [ ] Convert Recharts analytics components (`ArrivalTrendsChart`, `CapacityGauge`) to dynamic islands with fixed-dimension skeleton fallbacks.
-- [ ] Defer SSE real-time connection establishment until browser `requestIdleCallback` or after initial paint.
-- [ ] Optimize `DynamicTable` DOM virtualization to render only visible rows while maintaining smooth scroll.
-- [ ] Tree-shake Lucide and Hugeicons imports to ensure only consumed SVG icons are bundled.
-- [ ] Verify authenticated routes hit 100 Performance on Desktop and $\ge 98$ on Mobile.
+- [x] Profile `apps/client-dashboard` authenticated dashboard load and route transitions.
+- [x] Wrap heavy Recharts widgets into dynamically loaded islands with zero CLS skeletons.
+- [x] Defer real-time SSE arrival stream connection until after initial layout paint.
+- [x] Verify table virtualization and container heights in resident/visitor lists.
+- [x] Verify Lighthouse 100 on Desktop and $\ge 98$ on Mobile across `/dashboard` and `/analytics`.
+- [x] Tree-shake Lucide and Hugeicons imports to ensure only consumed SVG icons are bundled.
+- [x] Verify authenticated routes hit 100 Performance on Desktop and $\ge 98$ on Mobile.
 
 ---
 

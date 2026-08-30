@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { ThemeProvider, ThemeScript } from '@gateflow/theme';
 import '../globals.css';
 
@@ -12,6 +12,16 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#091e42' },
+    { media: '(prefers-color-scheme: light)', color: '#0c66e4' },
+  ],
+};
+
 import { Locale, i18n } from '@/lib/i18n-config';
 import { Poppins, Cairo } from 'next/font/google';
 import { I18nProvider } from '@/components/i18n-provider';
@@ -23,12 +33,18 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
   variable: '--font-poppins',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
 });
 const cairo = Cairo({
   subsets: ['arabic', 'latin-ext'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-cairo',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'ui-sans-serif', 'sans-serif'],
+  adjustFontFallback: true,
 });
 
 export default async function RootLayout(props: {
