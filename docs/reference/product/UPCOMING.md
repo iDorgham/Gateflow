@@ -32,6 +32,23 @@ Real-time status of the engineering pipeline.
 ## ✅ Recently Shipped (August 2026)
 
 > [!TIP]
+> **Lighthouse 100 & Zero-CLS Core Web Vitals Across All Monorepo Applications (`lighthouse-100`)** — _Shipped 2026-08-30_ — [Plan](../../plan/Complete/lighthouse-100/)
+>
+> - 5-phase performance overhaul across Marketing, Resident Portal, Client Dashboard, Admin Dashboard, and Design System Portal.
+> - Zero-CLS `DynamicIsland` primitives with pre-styled skeleton loaders and `preloadCriticalImage` utilities in `@gateflow/ui`.
+> - Preloaded dual-language font metric overrides (`Inter`, `Cairo`, `Poppins`) with `adjustFontFallback: true`.
+> - Non-blocking idle PWA service worker hydration and dynamic wizard code-splitting in Resident Portal.
+> - Strict `.lighthouserc.js` CI assertion hard-gates ($\ge 0.98$ Performance, $\ge 0.95$ A11y, $1.00$ SEO).
+
+> [!TIP]
+> **GateFlow Design System Impeccable Revamp & Enterprise Radii Calibration (`design_system_revamp`)** — _Shipped 2026-08-30_
+>
+> - 3-tier token architecture (`@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`).
+> - Calibrated Enterprise Radii scale (`sm: 4px`, `md: 6px`, `lg: 10px`, `xl: 14px`, `2xl: 16px`).
+> - Refined input padding (`!pl-11`), high-contrast white button typography, and tab spacing in `TokenExplorer.tsx`.
+> - Verified `apps/design-system` portal on port 3005 (`design.gateflow.site`).
+
+> [!TIP]
 > **Scanner App Onboarding & Biometric Session Management (`scanner_onboarding_session`)** — _Shipped 2026-08-28_ — [Plan](../../plan/Complete/scanner_onboarding_session/)
 >
 > - 4-step onboarding wizard (`OnboardingNavigator`) with system settings deep-linking recovery.
