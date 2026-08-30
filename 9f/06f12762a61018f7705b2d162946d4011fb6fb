@@ -1,0 +1,102 @@
+apps/resident-mobile/app/_layout.tsx
+  h_220d66b2244819 30-36
+apps/resident-mobile/app/index.tsx
+  h_220d66b2244819 2-8,25,36-41,59-62,69-72,74-76
+apps/resident-mobile/app/one-tap.tsx
+  h_220d66b2244819 1-6
+apps/resident-mobile/package.json
+  h_220d66b2244819 25,27,39
+apps/resident-mobile/src/features/notifications/components/NotificationSettings.tsx
+  h_220d66b2244819 1-224
+apps/resident-mobile/src/features/notifications/handlers/notificationHandlers.ts
+  h_220d66b2244819 1-52
+apps/resident-mobile/src/features/notifications/hooks/useArrivalNotifications.ts
+  h_220d66b2244819 1-151
+apps/resident-mobile/src/features/notifications/index.ts
+  h_220d66b2244819 1-5
+apps/resident-mobile/src/features/notifications/notifications.test.mjs
+  h_220d66b2244819 1-89
+apps/resident-mobile/src/features/notifications/services/pushService.ts
+  h_220d66b2244819 1-168
+apps/resident-mobile/src/features/notifications/types.ts
+  h_220d66b2244819 1-36
+apps/resident-mobile/src/features/one-tap/components/BiometricGate.tsx
+  h_220d66b2244819 1-194
+apps/resident-mobile/src/features/one-tap/components/EmptyState.tsx
+  h_220d66b2244819 1-94
+apps/resident-mobile/src/features/one-tap/components/FullScreenQR.tsx
+  h_220d66b2244819 1-437
+apps/resident-mobile/src/features/one-tap/components/PinFallbackModal.tsx
+  h_220d66b2244819 1-300
+apps/resident-mobile/src/features/one-tap/components/SkeletonLoader.tsx
+  h_220d66b2244819 1-94
+apps/resident-mobile/src/features/one-tap/hooks/useBiometricAuth.ts
+  h_220d66b2244819 1-265
+apps/resident-mobile/src/features/one-tap/hooks/useSecureQR.ts
+  h_220d66b2244819 1-181
+apps/resident-mobile/src/features/one-tap/index.ts
+  h_220d66b2244819 1-8
+apps/resident-mobile/src/features/one-tap/one-tap.test.mjs
+  h_220d66b2244819 1-122
+apps/resident-mobile/src/features/one-tap/screens/OneTapHomeScreen.tsx
+  h_220d66b2244819 1-42
+apps/resident-mobile/src/features/security/hooks/useAuditLogger.ts
+  h_220d66b2244819 1-48
+apps/resident-mobile/src/features/security/index.ts
+  h_220d66b2244819 1-4
+apps/resident-mobile/src/features/security/security.test.mjs
+  h_220d66b2244819 1-81
+apps/resident-mobile/src/features/security/services/auditService.ts
+  h_220d66b2244819 1-111
+apps/resident-mobile/src/features/security/types.ts
+  h_220d66b2244819 1-31
+apps/resident-mobile/src/features/security/utils/piiMasking.js
+  h_220d66b2244819 1-59
+apps/resident-mobile/src/features/security/utils/piiMasking.ts
+  h_220d66b2244819 1-78
+apps/resident-mobile/src/features/visitor-share/components/ShareSheet.tsx
+  h_220d66b2244819 1-267
+apps/resident-mobile/src/features/visitor-share/components/VisitorStatusBadge.tsx
+  h_220d66b2244819 1-77
+apps/resident-mobile/src/features/visitor-share/components/VisitorTemplatePicker.tsx
+  h_220d66b2244819 1-189
+apps/resident-mobile/src/features/visitor-share/hooks/useShareVisitor.ts
+  h_220d66b2244819 1-106
+apps/resident-mobile/src/features/visitor-share/hooks/useVisitorInvite.ts
+  h_220d66b2244819 1-208
+apps/resident-mobile/src/features/visitor-share/index.ts
+  h_220d66b2244819 1-8
+apps/resident-mobile/src/features/visitor-share/screens/CreateVisitorScreen.tsx
+  h_220d66b2244819 1-262
+apps/resident-mobile/src/features/visitor-share/screens/VisitorListScreen.tsx
+  h_220d66b2244819 1-336
+apps/resident-mobile/src/features/visitor-share/types.ts
+  h_220d66b2244819 1-54
+apps/resident-mobile/src/features/visitor-share/visitor-share.test.mjs
+  h_220d66b2244819 1-128
+docs/plan/Complete/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md
+  h_220d66b2244819 1,3-7,9,11,13,17-64
+docs/plan/Complete/resident_mobile_one_tap/PROMPT_resident_mobile_one_tap_phase_1.md
+  h_220d66b2244819 1,3-6,10,12,14,16-24
+docs/plan/Complete/resident_mobile_one_tap/TASKS_resident_mobile_one_tap.md
+  h_220d66b2244819 3-7,11,13-45,49-75,77,81,83-91,93,97,99-102
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  h_220d66b2244819 7-23
+docs/plan/tasks.md
+  h_220d66b2244819 9-14,37
+docs/reference/product/FEATURE_LOG.md
+  h_220d66b2244819 7-25
+docs/reference/product/UPCOMING.md
+  h_220d66b2244819 18-21,33-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "9f06f12762a61018f7705b2d162946d4011fb6fb",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
