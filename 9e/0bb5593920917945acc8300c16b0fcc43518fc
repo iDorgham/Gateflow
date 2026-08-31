@@ -1,0 +1,70 @@
+CHANGELOG.md
+  h_220d66b2244819 13-14
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.test.ts
+  h_220d66b2244819 57-60,63-66
+docs/audit/GATEFLOW_FULL_AUDIT_REPORT.md
+  h_220d66b2244819 1-170
+docs/audit/gateflow-full-audit/00_EXECUTIVE_SUMMARY.md
+  h_220d66b2244819 1-96
+docs/audit/gateflow-full-audit/01_CRITICAL_FIXES.md
+  h_220d66b2244819 1-112
+docs/audit/gateflow-full-audit/02_SECURITY_AUDIT.md
+  h_220d66b2244819 1-69
+docs/audit/gateflow-full-audit/03_MULTI_TENANCY_AUDIT.md
+  h_220d66b2244819 1-84
+docs/audit/gateflow-full-audit/04_DATABASE_AUDIT.md
+  h_220d66b2244819 1-79
+docs/audit/gateflow-full-audit/05_API_AUDIT.md
+  h_220d66b2244819 1-95
+docs/audit/gateflow-full-audit/06_QR_SCAN_LIFECYCLE_AUDIT.md
+  h_220d66b2244819 1-68
+docs/audit/gateflow-full-audit/07_APPLICATION_AUDITS.md
+  h_220d66b2244819 1-151
+docs/audit/gateflow-full-audit/08_UI_UX_ACCESSIBILITY_AUDIT.md
+  h_220d66b2244819 1-68
+docs/audit/gateflow-full-audit/09_AI_AUTOMATION_AUDIT.md
+  h_220d66b2244819 1-79
+docs/audit/gateflow-full-audit/10_TESTING_CI_AUDIT.md
+  h_220d66b2244819 1-61
+docs/audit/gateflow-full-audit/11_PERFORMANCE_RELIABILITY_AUDIT.md
+  h_220d66b2244819 1-51
+docs/audit/gateflow-full-audit/12_PRIVACY_COMPLIANCE_AUDIT.md
+  h_220d66b2244819 1-48
+docs/audit/gateflow-full-audit/13_RECOMMENDED_BACKLOG.md
+  h_220d66b2244819 1-19
+docs/audit/gateflow-full-audit/14_RISK_REGISTER.md
+  h_220d66b2244819 1-16
+docs/audit/gateflow-full-audit/15_AUDIT_EVIDENCE.md
+  h_220d66b2244819 1-73
+docs/notebooklm/NOTEBOOKLM_01_SYSTEM_OVERVIEW_AND_PRD.md
+  h_220d66b2244819 1,11-14,20-28,34,38-43,57,61
+docs/notebooklm/NOTEBOOKLM_08_DESIGN_SYSTEM_AND_UI_UX.md
+  h_220d66b2244819 3,5,9-15,19-20,22,26,28,32-34,38,40-44,48,50,52-58,68-75
+docs/notebooklm/NOTEBOOKLM_09_DEVELOPMENT_STATUS_AND_PROBLEMS.md
+  h_220d66b2244819 5-10,12,14,16-19,23,25,27-29,31,33-35,37,39-48,54,56-57,61,68-72,74-76
+docs/notebooklm/NOTEBOOKLM_11_FULL_HISTORY_DAY1_TO_PRESENT_AND_AI_CONTEXT.md
+  h_220d66b2244819 7,22-23,43,48,70,78,82,90-107
+docs/notebooklm/NOTEBOOKLM_GATEFLOW_ULTIMATE_CONTEXT.md
+  h_220d66b2244819 6,8,22,37,41,49-52
+docs/notebooklm/NOTEBOOKLM_README.md
+  h_220d66b2244819 11-24
+docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/PLAN_v9.0_ENHANCED_BLUEPRINT.md
+  h_220d66b2244819 1-172
+docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/TASKS_v9.0_ENHANCED_BLUEPRINT.md
+  h_220d66b2244819 1-65
+docs/reference/GATEFLOW_MASTER_AI_KNOWLEDGE_BASE.md
+  h_220d66b2244819 6,8,22,36-37,41,45-52,87,102-106,185,187-192
+docs/reference/ultimate.md
+  h_220d66b2244819 1-229
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "9e0bb5593920917945acc8300c16b0fcc43518fc",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
