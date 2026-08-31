@@ -42,7 +42,7 @@ const cardVariants = cva(
         raised: [
           'bg-[var(--ds-layer-03)]',
           'border border-[var(--ds-border-subtle)]',
-          'shadow-[0_8px_24px_rgba(0,0,0,0.4)]',
+          'shadow-[var(--ds-glow-focused)]',
         ].join(' '),
         metric: [
           'bg-[var(--ds-layer-02)]',
@@ -65,7 +65,8 @@ const cardVariants = cva(
 );
 
 export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {
   isSelected?: boolean;
 }

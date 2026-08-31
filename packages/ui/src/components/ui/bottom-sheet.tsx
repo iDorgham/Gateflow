@@ -38,7 +38,7 @@ export function BottomSheet({
       <DialogOverlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm pointer-events-auto" />
       <div
         className={cn(
-          'fixed inset-x-0 bottom-0 z-50 flex max-h-[90vh] flex-col rounded-t-[var(--ds-radius-xl)] border-t border-[var(--ds-border-subtle)] bg-[var(--ds-layer-03)] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] outline-none duration-200 pointer-events-auto',
+          'fixed inset-x-0 bottom-0 z-50 flex max-h-[90vh] flex-col rounded-t-[var(--ds-radius-xl)] border-t border-[var(--ds-border-subtle)] bg-[var(--ds-layer-03)] shadow-[var(--ds-glow-focused)] outline-none duration-200 pointer-events-auto',
           'pb-[env(safe-area-inset-bottom,16px)]',
           className
         )}

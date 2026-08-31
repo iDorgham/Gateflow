@@ -240,6 +240,8 @@ export const nativeTokens = {
     md: 6, // Mira: compact
     lg: 8, // Mira: compact
     xl: 12,
+    '2xl': 16,
+    '3xl': 24,
     full: 9999,
   },
   shadows: {

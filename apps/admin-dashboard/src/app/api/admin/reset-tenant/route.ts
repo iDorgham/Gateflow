@@ -47,6 +47,19 @@ export async function POST(request: NextRequest) {
 
   const { organizationId, projectId } = parsed.data;
 
+  const confirmHeader =
+    request.headers?.get?.('x-confirm-reset') ||
+    request.headers?.get?.('x-confirm-wipe');
+  if (confirmHeader !== organizationId && confirmHeader !== 'true') {
+    return NextResponse.json(
+      {
+        error:
+          'Confirmation header (x-confirm-reset) matching organizationId is required',
+      },
+      { status: 412 }
+    );
+  }
+
   // skip-organization-check (Admin Management)
   const auditBase = {
     organizationId,
