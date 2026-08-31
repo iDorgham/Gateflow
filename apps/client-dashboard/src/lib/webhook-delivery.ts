@@ -17,7 +17,7 @@ import { decryptField } from './encryption';
 
 const MAX_ATTEMPTS = 3;
 const ATTEMPT_TIMEOUT_MS = 10_000;
-const RETRY_DELAYS_MS = [0, 1_000, 2_000]; // before attempt 1, 2, 3
+const RETRY_DELAYS_MS = [0, 1_000, 4_000]; // exponential backoff (0s -> 1s -> 4s)
 const MAX_RESPONSE_BODY = 1_000;
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -177,7 +177,7 @@ async function attemptDelivery(
     await prisma.webhookDelivery.update({
       where: { id: delivery.id },
       data: {
-        status: isLast ? 'FAILED' : 'RETRYING',
+        status: isLast ? 'DEAD_LETTER' : 'RETRYING',
         statusCode: result.statusCode,
         responseBody: (result.body ?? result.error ?? '').slice(
           0,

@@ -76,24 +76,53 @@ async function provisionSandboxTenant(input: ProvisionSandboxInput) {
   });
 
   // 2. Seed sample units (capped at 10 for demo speed)
+  // Unit.type is required — assign reasonable defaults based on locale name hints
+  const UNIT_TYPE_MAP: Record<
+    string,
+    'VILLA' | 'STUDIO' | 'ONE_BR' | 'PENTHOUSE' | 'COMMERCIAL'
+  > = {
+    villa: 'VILLA',
+    فيلا: 'VILLA',
+    studio: 'STUDIO',
+    استوديو: 'STUDIO',
+    penthouse: 'PENTHOUSE',
+    بنتهاوس: 'PENTHOUSE',
+    suite: 'ONE_BR',
+    جناح: 'ONE_BR',
+  };
+
   const seedCount = Math.min(input.unitCount, 10);
   const unitNames = sampleUnitNames(input.locale, seedCount);
-  const unitData = unitNames.map((name) => ({
-    name,
-    organizationId: org.id,
-    status: 'ACTIVE' as const,
-  }));
+  const unitData = unitNames.map((name) => {
+    const lowerName = name.toLowerCase();
+    const matchedType = Object.entries(UNIT_TYPE_MAP).find(([key]) =>
+      lowerName.startsWith(key)
+    );
+    return {
+      name,
+      organizationId: org.id,
+      type: (matchedType?.[1] ?? 'ONE_BR') as
+        'VILLA' | 'STUDIO' | 'ONE_BR' | 'PENTHOUSE' | 'COMMERCIAL',
+    };
+  });
   await prisma.unit.createMany({ data: unitData });
 
-  // 3. Create demo admin user
-  const demoUser = await prisma.user.create({
+  // 3. Record the sandbox contact in the org's integrationConfig
+  // (Full user provisioning requires roleId relation + passwordHash — handled post-login)
+  await prisma.organization.update({
+    where: { id: org.id },
     data: {
-      email: input.contactEmail,
-      name: input.locale === 'ar' ? 'مسؤول تجريبي' : 'Demo Admin',
-      role: 'ADMIN',
-      organizationId: org.id,
+      integrationConfig: {
+        sandboxContactEmail: input.contactEmail,
+        sandboxLocale: input.locale,
+      },
     },
   });
+
+  const demoUser = {
+    email: input.contactEmail,
+    name: input.locale === 'ar' ? 'مسؤول تجريبي' : 'Demo Admin',
+  };
 
   return {
     organizationId: org.id,

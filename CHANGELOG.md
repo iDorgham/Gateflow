@@ -10,6 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Lint]** remove useless escape in google-pass-service and unused createHash import
+- **[V9.0]** Phase 4 — MENA ROI Calculator, Sandbox Provisioner & Attribution Harness
+
 - **[Ui]** add 2xl/3xl borderRadius tokens, ADS shadow variables, and header reset confirmation
 
 - **[Ui]** add brand variant to buttonVariants

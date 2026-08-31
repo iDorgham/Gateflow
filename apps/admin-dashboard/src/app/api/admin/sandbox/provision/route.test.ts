@@ -13,7 +13,6 @@ const mockOrgFindMany = jest.fn();
 const mockOrgFindFirst = jest.fn();
 const mockOrgUpdate = jest.fn();
 const mockUnitCreateMany = jest.fn();
-const mockUserCreate = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
@@ -25,9 +24,6 @@ jest.mock('@gate-access/db', () => ({
     },
     unit: {
       createMany: (...args: unknown[]) => mockUnitCreateMany(...args),
-    },
-    user: {
-      create: (...args: unknown[]) => mockUserCreate(...args),
     },
   },
 }));
@@ -67,11 +63,8 @@ describe('POST /api/admin/sandbox/provision', () => {
       name: 'Sunset Heights Demo',
       email: 'demo@sunset-heights.com',
     });
+    mockOrgUpdate.mockResolvedValue({ id: 'org-1' });
     mockUnitCreateMany.mockResolvedValue({ count: 10 });
-    mockUserCreate.mockResolvedValue({
-      email: 'demo@sunset-heights.com',
-      name: 'Demo Admin',
-    });
   });
 
   it('returns 201 with sandbox details on valid payload', async () => {

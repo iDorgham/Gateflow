@@ -6,9 +6,9 @@
 
 ### v9.0_ENHANCED_BLUEPRINT — GateFlow v9.0 Production-Hardened Blueprint & Audit Remediation
 
-**PLAN:** `docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/PLAN_v9.0_ENHANCED_BLUEPRINT.md`  
-**TASKS:** `docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/TASKS_v9.0_ENHANCED_BLUEPRINT.md`  
-**Status:** 🟡 Ready for Execution — 7-Phase Production Hardening & Feature Expansion Roadmap  
+**PLAN:** `docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/PLAN_v9.0_ENHANCED_BLUEPRINT.md`  
+**TASKS:** `docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/TASKS_v9.0_ENHANCED_BLUEPRINT.md`  
+**Status:** 🟢 Active — Executing Phase 0 (Audit Remediation, Foundation Hardening & Deployment Connectivity)  
 **Priority:** P0 — Repository Audit Remediation, Hardware Fleet Telemetry, Wallet Passes & GateAI 2.0  
 **Target:** P0/P1 audit fixes, Apple/Google Wallet pass issuance, MQTT barrier telemetry, GateAI 2.0 triage & MENA Law 151 compliance  
 **App:** `apps/client-dashboard`, `apps/admin-dashboard`, `apps/resident-portal`, `apps/scanner-app`, `apps/resident-mobile`, `apps/marketing`, `apps/design-system`

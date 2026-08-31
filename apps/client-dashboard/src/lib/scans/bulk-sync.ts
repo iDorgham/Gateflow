@@ -488,6 +488,7 @@ export async function processBulkScans(
 
       state.pendingCreate = {
         scanUuid: scan.scanUuid ?? undefined,
+        organizationId: context.organizationId,
         status: scan.status,
         scannedAt: new Date(scan.scannedAt),
         qrCodeId: state.qrCodeId,

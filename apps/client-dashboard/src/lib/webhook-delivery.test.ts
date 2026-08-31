@@ -45,7 +45,11 @@ const WEBHOOK_ID = 'wh_test_1';
 const WEBHOOK_URL = 'https://example.com/webhook';
 const DELIVERY_ID = 'delivery_1';
 
-const baseWebhook = { id: WEBHOOK_ID, url: WEBHOOK_URL, secret: 'plaintext-test-secret' };
+const baseWebhook = {
+  id: WEBHOOK_ID,
+  url: WEBHOOK_URL,
+  secret: 'plaintext-test-secret',
+};
 
 // ─── Setup ───────────────────────────────────────────────────────────────────
 
@@ -62,7 +66,9 @@ describe('deliverWebhookEvent()', () => {
   it('is a no-op when no webhooks are subscribed to the event', async () => {
     mockWebhookFindMany.mockResolvedValue([]);
 
-    await deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, { data: 1 });
+    await deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, {
+      data: 1,
+    });
 
     expect(mockDeliveryCreate).not.toHaveBeenCalled();
     expect(global.fetch).not.toHaveBeenCalled();
@@ -76,13 +82,20 @@ describe('deliverWebhookEvent()', () => {
       text: () => Promise.resolve('ok'),
     });
 
-    await deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, { scan: 'data' });
+    await deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, {
+      scan: 'data',
+    });
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit & { headers: Record<string, string> }];
+    const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [
+      string,
+      RequestInit & { headers: Record<string, string> },
+    ];
     expect(url).toBe(WEBHOOK_URL);
     expect(init.method).toBe('POST');
-    expect(init.headers['X-GateFlow-Signature']).toMatch(/^sha256=[0-9a-f]{64}$/);
+    expect(init.headers['X-GateFlow-Signature']).toMatch(
+      /^sha256=[0-9a-f]{64}$/
+    );
     expect(init.headers['X-GateFlow-Event']).toBe('QR_SCANNED');
   });
 
@@ -99,11 +112,11 @@ describe('deliverWebhookEvent()', () => {
     expect(mockDeliveryUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'SUCCESS', statusCode: 200 }),
-      }),
+      })
     );
   });
 
-  it('retries up to MAX_ATTEMPTS (3) and marks FAILED after all fail', async () => {
+  it('retries up to MAX_ATTEMPTS (3) and marks DEAD_LETTER after all fail', async () => {
     jest.useFakeTimers();
     try {
       mockWebhookFindMany.mockResolvedValue([baseWebhook]);
@@ -113,13 +126,20 @@ describe('deliverWebhookEvent()', () => {
         text: () => Promise.resolve('error'),
       });
 
-      const deliverPromise = deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, {});
+      const deliverPromise = deliverWebhookEvent(
+        ORG_ID,
+        'QR_SCANNED' as WebhookEvent,
+        {}
+      );
       await jest.runAllTimersAsync();
       await deliverPromise;
 
       expect(global.fetch).toHaveBeenCalledTimes(3);
-      const lastUpdate = mockDeliveryUpdate.mock.calls[mockDeliveryUpdate.mock.calls.length - 1][0];
-      expect(lastUpdate.data.status).toBe('FAILED');
+      const lastUpdate =
+        mockDeliveryUpdate.mock.calls[
+          mockDeliveryUpdate.mock.calls.length - 1
+        ][0];
+      expect(lastUpdate.data.status).toBe('DEAD_LETTER');
     } finally {
       jest.useRealTimers();
     }
@@ -137,10 +157,18 @@ describe('deliverWebhookEvent()', () => {
     jest.useFakeTimers();
     try {
       (global.fetch as jest.Mock)
-        .mockResolvedValueOnce({ ok: true, status: 200, text: () => Promise.resolve('ok') })
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          text: () => Promise.resolve('ok'),
+        })
         .mockRejectedValue(new Error('Network timeout'));
 
-      const deliverPromise = deliverWebhookEvent(ORG_ID, 'QR_SCANNED' as WebhookEvent, {});
+      const deliverPromise = deliverWebhookEvent(
+        ORG_ID,
+        'QR_SCANNED' as WebhookEvent,
+        {}
+      );
       await jest.runAllTimersAsync();
       await expect(deliverPromise).resolves.toBeUndefined();
     } finally {
@@ -179,7 +207,7 @@ describe('testWebhookDelivery()', () => {
     expect(mockDeliveryUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'SUCCESS', statusCode: 200 }),
-      }),
+      })
     );
   });
 
@@ -198,7 +226,7 @@ describe('testWebhookDelivery()', () => {
     expect(mockDeliveryUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'FAILED' }),
-      }),
+      })
     );
   });
 });

@@ -590,6 +590,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         data: {
           status: 'SUCCESS',
           scannedAt: new Date(),
+          organizationId: claims.orgId,
           userId: claims.sub,
           qrCodeId: qrCode.id,
           gateId,

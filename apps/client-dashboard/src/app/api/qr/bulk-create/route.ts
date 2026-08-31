@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { randomUUID } from 'crypto';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { checkRateLimit } from '@/lib/rate-limit';
 import { prisma, QRCodeType as PrismaQRCodeType } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 
@@ -61,20 +62,52 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const rl = await checkRateLimit(
+      `qr-bulk-create:${claims.orgId}:${claims.sub}`,
+      20,
+      60_000
+    );
+    if (!rl.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Too many bulk QR create requests. Please try again later.',
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
+            'X-RateLimit-Limit': String(rl.limit),
+            'X-RateLimit-Remaining': '0',
+          },
+        }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = BulkCreateRequestSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -82,7 +115,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const secret = process.env.QR_SIGNING_SECRET ?? '';
     if (!secret || secret.length < 32) {
       return NextResponse.json(
-        { success: false, message: 'Server configuration error: QR signing secret not set' },
+        {
+          success: false,
+          message: 'Server configuration error: QR signing secret not set',
+        },
         { status: 500 }
       );
     }
@@ -94,7 +130,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       where: { organizationId: claims.orgId, deletedAt: null },
       select: { id: true, name: true },
     });
-    const gateByName = new Map<string, { id: string; name: string }>(orgGates.map((g) => [g.name.toLowerCase(), g]));
+    const gateByName = new Map<string, { id: string; name: string }>(
+      orgGates.map((g) => [g.name.toLowerCase(), g])
+    );
 
     // Phase 1: validate + sign (no DB writes yet)
     const validItems: ValidatedItem[] = [];
@@ -108,7 +146,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       if (item.gate?.trim()) {
         const gate = gateByName.get(item.gate.trim().toLowerCase());
         if (!gate) {
-          errors.push({ index: i, name: item.name, error: `Gate "${item.gate}" not found` });
+          errors.push({
+            index: i,
+            name: item.name,
+            error: `Gate "${item.gate}" not found`,
+          });
           continue;
         }
         gateId = gate.id;
@@ -119,7 +161,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       if (item.expiresAt?.trim() && item.type !== 'PERMANENT') {
         const expDate = new Date(item.expiresAt);
         if (isNaN(expDate.getTime()) || expDate <= new Date()) {
-          errors.push({ index: i, name: item.name, error: 'Expiry must be a valid future date' });
+          errors.push({
+            index: i,
+            name: item.name,
+            error: 'Expiry must be a valid future date',
+          });
           continue;
         }
         expiresAt = expDate.toISOString();
@@ -136,7 +182,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
 
       const resolvedMaxUses =
-        item.type === 'SINGLE' ? 1 : item.type === 'PERMANENT' ? null : (item.maxUses ?? null);
+        item.type === 'SINGLE'
+          ? 1
+          : item.type === 'PERMANENT'
+            ? null
+            : (item.maxUses ?? null);
 
       const qrId = randomUUID();
 
@@ -163,7 +213,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         continue;
       }
 
-      validItems.push({ original: item, index: i, gateId, expiresAt, resolvedMaxUses, qrId, qrString });
+      validItems.push({
+        original: item,
+        index: i,
+        gateId,
+        expiresAt,
+        resolvedMaxUses,
+        qrId,
+        qrString,
+      });
     }
 
     // Phase 2: persist valid items efficiently using createMany

@@ -34,6 +34,7 @@
     "dev:design": "pnpm turbo dev --filter=@gateflow/design-system",
     "build:design": "pnpm turbo build --filter=@gateflow/design-system",
     "sync": "bash scripts/ai-sync/sync-ai-tools.sh",
+    "check:integrations": "node scripts/check/check-integrations.js",
     "sync:watch": "node scripts/ai-sync/watch-sync.mjs",
     "workflow:v2": "node scripts/workflow-v2/cli.js",
     "workflow:v2:guide": "node scripts/workflow-v2/guide-cli.js",

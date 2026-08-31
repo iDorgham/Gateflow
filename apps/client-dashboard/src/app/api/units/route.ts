@@ -321,7 +321,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           JOIN "Unit" u ON vqr."unitId" = u.id
           WHERE sl."scannedAt" >= ${dateFromValue} AND sl."scannedAt" <= ${dateToValue}
             AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
-            AND u."organizationId" = ${orgId}
+            AND u."organizationId" = ${orgId} AND u."deletedAt" IS NULL
             ${gateCondition}
           GROUP BY vqr."unitId"
         `;
@@ -354,7 +354,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "Unit" u ON vqr."unitId" = u.id
         WHERE sl."scannedAt" >= ${vacancyCutoff}
           AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
-          AND u."organizationId" = ${orgId}
+          AND u."organizationId" = ${orgId} AND u."deletedAt" IS NULL
         GROUP BY vqr."unitId"
       `;
       vacancySuccessCounts = new Map(
