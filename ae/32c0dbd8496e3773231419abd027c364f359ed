@@ -1,0 +1,24 @@
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.ts
+  h_220d66b2244819 50-62
+apps/resident-mobile/tsconfig.json
+  h_220d66b2244819 2-22,24
+packages/ui/src/components/ui/bottom-sheet.tsx
+  h_220d66b2244819 41
+packages/ui/src/components/ui/button.tsx
+  h_220d66b2244819 37,44,96
+packages/ui/src/components/ui/card.tsx
+  h_220d66b2244819 45,68-69
+packages/ui/src/tokens.ts
+  h_220d66b2244819 243-244
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ae32c0dbd8496e3773231419abd027c364f359ed",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
