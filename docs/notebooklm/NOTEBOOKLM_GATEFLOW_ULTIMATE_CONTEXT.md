@@ -3,8 +3,9 @@
 > **Universal Source Document for External AI Engines**: Grok, Google NotebookLM, Claude 3.5/Opus, ChatGPT-4o/o1, Gemini 1.5 Pro  
 > **Repository**: `iDorgham/Gateflow` (Gate-Access Monorepo)  
 > **Workspace Version**: `0.5.1`  
+> **PRD Version**: `v13.0`  
 > **Production Target**: `https://*.gateflow.site`  
-> **Last Comprehensive Audit**: August 28, 2026
+> **Last Comprehensive Audit**: August 31, 2026
 
 ---
 
@@ -18,7 +19,7 @@
 2. **Internet Dependency in Security Gates**: Offline-first verification engine allows guards and gate barriers to validate HMAC-SHA256 QR passes and prevent replay attacks even when disconnected from the cloud.
 3. **Data Privacy & MENA Compliance**: End-to-end alignment with Egyptian Personal Data Protection Law (Law 151 of 2020) and Saudi PDPL regulations, featuring AES-256-GCM field encryption for PII and tamper-evident SHA-256 chained audit logs.
 4. **Bilingual Arabic/English Experience**: Native right-to-left (RTL) layout with Cairo Arabic typography and unified cross-subdomain `.gateflow.site` language/theme persistence.
-5. **Perimeter Situational Awareness**: Live guard shift visual map, real-time terminal occupancy, and cryptographically verified perimeter patrol routes.
+5. **Perimeter Situational Awareness**: Live guard shift visual map, real-time terminal occupancy, cryptographically verified perimeter patrol routes, and resident one-tap biometric passes.
 
 ---
 
@@ -33,11 +34,11 @@ timeline
     Security Hardening : AES-256-GCM PII encryption : SHA-256 hash-chained audit ledger : Egyptian Law 151 / Saudi PDPL package
     Design & Localization : Atlassian Design System (ADS) tokens : Arabic RTL layout : Cairo font pairing
     Perimeter & Guard Operations : Guard Shift Visual Map : Patrol Checkpoint HMAC QR Routes : Mobile Onboarding & Biometrics
-    Production Readiness : PWA service worker v2 : Cross-subdomain (.gateflow.site) locale & theme sync : 100% Preflight Pass
+    Design System Revamp & Performance : 3-tier token architecture : Calibrated enterprise radii (4-16px) : Lighthouse 100 across all apps : Resident One-Tap Biometric
 ```
 
 - **Phase 1 (Genesis)**: Single-tenant Next.js prototype with simple QR generation for residential gate access.
-- **Phase 2 (Monorepo & Multi-Tenancy)**: Transitioned to a pnpm + Turborepo monorepo separating `marketing`, `client-dashboard`, `admin-dashboard`, `resident-portal`, `scanner-app`, and `resident-mobile`. Introduced `Organization` root multi-tenancy.
+- **Phase 2 (Monorepo & Multi-Tenancy)**: Transitioned to a pnpm + Turborepo monorepo separating `marketing`, `client-dashboard`, `admin-dashboard`, `resident-portal`, `design-system`, `scanner-app`, and `resident-mobile`. Introduced `Organization` root multi-tenancy.
 - **Phase 3 (Cryptographic Access & Hardware Relays)**: Implemented cryptographic HMAC-SHA256 QR signing with deterministic `qrId` binding, anti-replay nonce windows, and CCITT-CRC16 framed TCP/serial barrier relay controllers.
 - **Phase 4 (Enterprise Compliance & Security)**: Integrated AES-256-GCM envelope encryption for sensitive fields, SHA-256 tamper-evident chained audit trails, and step-up MFA challenge modals for privileged mutations.
 - **Phase 5 (ADS Design System & MENA Regionalization)**: Standardized on Atlassian Design System (ADS) token semantics (`@gateflow/theme`), bidirectional Arabic RTL layouts, and Egyptian Arabic copywriting.
@@ -45,6 +46,10 @@ timeline
   - **Guard Shift Visual Map**: Live gate terminal occupancy, active shift duration counters, terminal health indicators, and shift handover controls.
   - **Perimeter Guard Patrol Checkpoints**: Cryptographic HMAC QR checkpoint routes, live polyline map telemetry, and supervisor compliance reporting.
   - **Scanner App Onboarding & Biometric Guard**: 4-step first-mile wizard, fail-closed biometric/PIN vault in SecureStore, 5-minute background inactivity lock, and redesigned 72x72px Master Scan FAB.
+- **Phase 7 (Design System Revamp & Lighthouse 100 Performance)**:
+  - **Design System Impeccable Revamp**: 3-tier token architecture (foundations, semantic, component), OKLCH Satin-Charcoal Dark Mode (`--ds-layer-01` to `--ds-layer-04`), switchable Cobalt/Emerald accents, 19/19 WCAG 2.2 AA contrast, calibrated enterprise radii scale (`4px`–`16px`), and Vibe-Check AI sandbox.
+  - **Lighthouse 100 & Zero-CLS**: 5-phase performance overhaul across all applications, zero-CLS `DynamicIsland` primitives, font preloading, and `.lighthouserc.js` CI hard-gates.
+  - **Resident Mobile One-Tap Biometrics**: $\le 800\text{ms}$ biometric unlock, fail-closed PIN fallback, vector HMAC QR, 3-tap visitor pass sharing, interactive arrival alerts ($\le 3\text{s}$).
 
 ---
 

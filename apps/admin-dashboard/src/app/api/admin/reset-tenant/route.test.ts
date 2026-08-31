@@ -54,9 +54,16 @@ jest.mock('@gate-access/db', () => ({
 
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
-function makeRequest(body: unknown) {
+function makeRequest(
+  body: unknown,
+  headersDict: Record<string, string> = { 'x-confirm-reset': 'true' }
+) {
   return {
     json: async () => body,
+    headers: {
+      get: (headerName: string) =>
+        headersDict[headerName.toLowerCase()] || null,
+    },
   } as unknown as Parameters<typeof import('./route').POST>[0];
 }
 

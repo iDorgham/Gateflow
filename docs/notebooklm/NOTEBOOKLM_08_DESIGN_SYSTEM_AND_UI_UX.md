@@ -1,71 +1,61 @@
 # NOTEBOOKLM SOURCE 8: GateFlow Design System, UI/UX & Visual Architecture
 
-## 1. Design System Foundation
+## 1. Design System Foundation (Impeccable Revamp)
 
-GateFlow's design system is built around **semantic tokens**, **shared primitives**, and **MENA-first bilingual support** (Arabic RTL + English LTR).
+GateFlow's design system is built around a **3-tier token architecture**, **OKLCH Satin-Charcoal dark mode**, **calibrated enterprise corner radii**, and **MENA-first bilingual support** (Arabic RTL + English LTR).
 
 ### Core Principles
 
-- Semantic tokens over raw colors.
-- Shared primitives via `@gate-access/ui`, not app-local reinvention.
-- Mobile-first responsive behavior with high-density desktop support.
-- AR/EN + RTL parity as a default requirement.
-- Accessible interactions and contrast-safe text/background pairing.
+- **3-Tier Token Hierarchy**: Foundations -> Semantic (`ds` namespace) -> Component Tokens.
+- **Calibrated Enterprise Radii**: Crisp scale (`4px` to `16px`), eliminating bubbly radii.
+- **OKLCH Dark Mode Layers**: Multi-layered background elevation (`--ds-layer-01` to `--ds-layer-04`) with Porcelain light mode and procedural rim-light edge-glow shaders.
+- **Switchable Accent Profiles**: Kimchi (default brand), Cobalt, and Emerald with automated 19/19 WCAG 2.2 AA contrast checks.
+- **Shared Primitives**: Centralized in `@gate-access/ui`, eliminating app-local reinvention.
+- **Density Control**: Compact 36px control height for operational dashboards (`client-dashboard`, `admin-dashboard`) and Comfortable 48px for public interfaces (`marketing`, `resident-portal`).
+- **AI Design Infrastructure**: Root `DESIGN.md`, `llms.txt`, prompt writing guide, and Vibe-Check AI code sanitizer sandbox.
 
 ### Source-of-Truth Files
 
-- `packages/ui/src/tokens.ts` — token contracts
-- `packages/ui/src/globals.css` — theme variables
+- `packages/ui/src/tokens.ts` — token contracts & `nativeTokens`
+- `packages/theme/src/globals.css` — 3-tier OKLCH CSS variables & theme layers
 - `packages/ui/src/components/**/*` — shared primitives
-- `docs/guides/UI_DESIGN_GUIDE.md` — design guide
+- `DESIGN.md` — canonical root design specification
 
 ---
 
-## 2. Token Architecture
+## 2. Token Architecture & Calibration
 
-### Color System
+### 2.1 Color System & OKLCH Layers
 
 - Base semantic set: `background`, `foreground`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring`.
 - Atlassian Design System (ADS) semantic families (`ds` namespace):
-  - `ds.background.*`
-  - `ds.text.*`
-  - `ds.border.*`
-  - `ds.icon.*`
+  - `ds.background.*` (`--ds-background-default`, `--ds-layer-01` to `--ds-layer-04`)
+  - `ds.text.*` (`--ds-text-primary`, `--ds-text-subtle`, `--ds-text-brand`)
+  - `ds.border.*` (`--ds-border-subtle`, `--ds-border-brand`)
   - `ds.surface.*`
   - `ds.sidebar.*`
 
-### Spacing / Typography / Radius
+### 2.2 Enterprise Radii Scale
 
-- Spacing scale: `space-050` through `space-600`.
-- Typography: tokenized families and weights.
-- Radius: `xsmall`, `small`, `medium`, `large`, `circle`, plus shadcn aliases `sm`, `lg`, `full`.
-
-### Breakpoints
-
-- Token breakpoints: `xs`, `sm`, `md`, `lg`.
-- Tailwind default breakpoints remain active.
-
-### Platform Parity
-
-- Web consumes CSS-variable-backed tokens.
-- React Native consumes `nativeTokens` / `nativeTokensRealEstate`.
+- `radius-xs`: `4px` (Tags, micro-badges)
+- `radius-sm`: `6px` (Inputs, buttons, dropdown items)
+- `radius-md`: `8px` (Cards, dialogs, popovers)
+- `radius-lg`: `12px` (Modal shells, drawer containers)
+- `radius-xl`: `16px` (Hero panels, feature cards)
 
 ---
 
-## 3. Light / Dark Theme System
+## 3. Light / Dark Theme System & Accents
 
-Implemented in `packages/ui/src/globals.css`:
+Implemented in `@gateflow/theme` (`packages/theme`):
 
-- `:root` defines light theme semantic variables.
-- `.dark` defines dark theme semantic variables.
-- Shared mapping to shadcn-compatible CSS vars (`--background`, `--foreground`, etc.).
-- DS surface and shadow tokens define elevation behavior.
-
-### Theme Characteristics
-
-- Light mode: neutral, high-legibility surfaces.
-- Dark mode: deep-neutral backgrounds and brand-accent highlights.
-- Borders and text subtlety tuned for dense dashboard readability.
+- **Porcelain Light Mode**: Neutral, crisp background with high contrast text.
+- **Satin-Charcoal Dark Mode**: OKLCH multi-depth layers (`#111112`, `#161719`, `#1c1d20`) reducing ocular fatigue during night guard shifts.
+- **Switchable Accent Profiles**:
+  - `kimchi`: Signature warm coral brand accent.
+  - `cobalt`: Enterprise blue operational profile.
+  - `emerald`: Eco/sustainability green profile.
+- **Theme Persistence**: Hydration-safe `ThemeProvider` with synchronous `gateflow-theme` cookie sync.
 
 ---
 
@@ -75,14 +65,14 @@ Implemented in `packages/ui/src/globals.css`:
 
 ### Core Primitive Families
 
-| Family    | Components                                                                   |
-| --------- | ---------------------------------------------------------------------------- |
-| Inputs    | button, input, textarea, select, checkbox, switch, radio-group, form         |
-| Structure | card, table, tabs, sheet, dialog, popover, tooltip, collapsible, scroll-area |
-| Feedback  | badge, skeleton, loading-spinner, empty-state, toast                         |
-| Advanced  | dynamic-table, pagination, date-picker, multi-select, command                |
-| Layout    | breadcrumbs, page-header, side-navigation, page-container                    |
-| Auth      | login-shell, squares-background                                              |
+| Family    | Components                                                                                              |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| Inputs    | button (FAB variant, spinner), input, textarea, select, checkbox, switch, radio-group, formfield (ARIA) |
+| Structure | card (interactive/selectable/metric), table, tabs, sheet, dialog, popover, tooltip, scroll-area         |
+| Feedback  | badge (5 variants, 7 tones, pulsing dot), skeleton, loading-spinner, empty-state, toast                 |
+| Advanced  | dynamic-table (mobile card transform), pagination, date-picker, multi-select, command                   |
+| Layout    | bottom-sheet (mobile drawer), breadcrumbs, page-header, side-navigation, page-container                 |
+| Auth      | login-shell, squares-background                                                                         |
 
 ### Utility Contract
 

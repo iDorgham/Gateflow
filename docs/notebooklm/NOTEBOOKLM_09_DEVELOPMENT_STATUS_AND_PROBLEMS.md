@@ -2,69 +2,75 @@
 
 ## 1. Overall Project Status
 
-| Attribute      | Value                                                                           |
-| -------------- | ------------------------------------------------------------------------------- |
-| **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                      |
-| **Status**     | Production MVP · **Integrated Pilot CERTIFIED** 🟢 (`2026-08-23`)               |
-| **Phase**      | Core Residential Pilot Complete; Production Rollout & Expansion Next            |
-| **Tech Stack** | Next.js 16 · Expo SDK 57 · PostgreSQL 16 · Prisma 6.19.3 · pnpm 8 · Turborepo 2 |
+| Attribute      | Value                                                                               |
+| -------------- | ----------------------------------------------------------------------------------- |
+| **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                          |
+| **Status**     | Production MVP · **Integrated Pilot CERTIFIED** 🟢 (`2026-08-31`)                   |
+| **Phase**      | Core Residential Pilot Certified; Performance & Operations Hardened; Expansion Next |
+| **Tech Stack** | Next.js 14 · Expo SDK 57 · PostgreSQL 16 · Prisma 6.x · pnpm 9 · Turborepo 2        |
 
-### MVP Completion Status
+### MVP & Operations Completion Status
 
-The end-to-end residential access control journey is **100% complete and certified**:
+The end-to-end access control, guard telemetry, and resident mobile experience are **100% complete and certified**:
 
-- **Client Dashboard**: Certified (9/9 outcomes, tenant isolation, DB-bound QR HMAC payloads).
-- **Resident Portal**: Certified (4/4 outcomes, cross-subdomain SSO, offline PWA pass storage).
-- **Scanner App**: Certified (physical iPhone device proofs: ACCESS GRANTED, AES-CBC v3 queue, anti-replay).
-- **Integrated Pilot**: Certified (`gateflow-integrated-pilot-2026-08-23`).
+- **Client Dashboard**: Certified (Guard Shift Visual Map, live terminal occupancy, shift duration counters, handover controls, compact 36px layout).
+- **Resident Portal & Mobile**: Certified (Resident Mobile One-Tap biometric pass in $\le 800\text{ms}$, 3-tap pass sharing, interactive arrival alerts, network-first PWA SW v2).
+- **Scanner App**: Certified (4-step onboarding wizard, fail-closed SecureStore PIN vault, 5-min inactivity lock, 72x72px Master Scan FAB, patrol route QR scanner).
+- **Design System & Performance**: Certified (3-tier token architecture, OKLCH Satin Charcoal dark mode, calibrated enterprise radii `4px`–`16px`, Lighthouse 100 zero-CLS across all monorepo apps).
 
 ---
 
-## 2. Recent Active Work & Milestones
+## 2. Recent Active Work & Milestones (August 28–30, 2026)
 
-### Scanner App
+### 2.1 Resident Mobile One-Tap Experience (`resident_mobile_one_tap`)
 
-- **Phase 01–05 Hardening**: `BiometricGuard`, 5-minute inactivity timer, `DutyErrorBoundary`, and pure RN `Animated` transitions.
-- **PR #284 & PR #285**: Runtime device-proof automation, AES-CBC v3 offline scan encryption, reconnect auto-sync, and physical iPhone ACCESS GRANTED validation.
-- **PR #277 QR DB ID Persistence**: Embedded Postgres `QRCode.id` in HMAC-signed QR codes to enable database lookups at gate scanners.
+- **Biometric Lock**: $\le 800\text{ms}$ FaceID/TouchID unlock with fail-closed local PIN vault.
+- **Instant Pass Generation**: Dynamic HMAC-SHA256 vector QR creation with 3-tap visitor sharing.
+- **Interactive Arrival Alerts**: Real-time push notifications ($\le 3\text{s}$) upon guest gate check-in.
 
-### Client Dashboard & Cross-Subdomain SSO
+### 2.2 Lighthouse 100 Performance Overhaul (`lighthouse-100`)
 
-- Shared authentication cookies across `.gateflow.site` domain.
-- `AsyncLocalStorage` request-local tenant scoping on all Prisma queries.
-- High-density operational tables with loading skeleton states.
+- **Monorepo-Wide Tuning**: 5-phase optimization achieving zero CLS and 98+ Desktop / 95+ Mobile performance scores.
+- **Zero-CLS Primitives**: `DynamicIsland` components, preloaded Cairo/Inter font fallbacks, hardware-accelerated CSS marquees.
+- **CI Enforcement**: `.lighthouserc.js` hard-gates in automated GitHub Actions CI.
 
-### Resident Portal & Mobile
+### 2.3 Design System Impeccable Revamp (`design_system_impeccable_revamp`)
 
-- Offline PWA service worker with encrypted guest pass caching.
-- Native mobile tokens (`nativeTokensNewEra`) aligning `@gateflow/ui` across web and Expo React Native.
+- **3-Tier Tokens**: Foundations, Semantic (`ds` namespace), Component Tokens.
+- **OKLCH Dark Mode**: Multi-layered background elevation (`--ds-layer-01` to `--ds-layer-04`) with Porcelain light mode.
+- **Enterprise Radii**: Calibrated scale (`4px` to `16px`) eliminating rounded/bubbly borders.
+- **Primitives**: FormField (controller & standalone), Badge (5 variants, 7 tones), Card, DynamicTable mobile card transform.
+
+### 2.4 Guard Operations & Telemetry
+
+- **Guard Shift Visual Map**: Terminal occupancy grid, live shift counters, handover drawer (`client-dashboard`).
+- **Guard Patrol Checkpoints**: Perimeter patrol route execution, physical HMAC QR checkpoint verification, real-time polyline map telemetry.
+- **Scanner App Onboarding**: 4-step onboarding wizard, background session lock, Master Scan FAB.
 
 ---
 
 ## 3. Known Problems & Technical Debt
 
-### 3.1 Architecture & Code Smells
+### 3.1 Mobile & i18n Hardening
 
-- **Monolithic `scanner-app/App.tsx`**: File exceeds 2,100 lines and requires extraction into `AppNavigator.tsx`, `CameraScannerView.tsx`, and `OnboardingWizardView.tsx`.
-- **Missing Mobile Arabic Translations**: `scanner-app` is layout-RTL ready, but requires wiring to `@gate-access/i18n` dictionary strings.
-- **Headless Hermes Compiler Packaging**: Headless `expo export --bytecode` encounters dependency resolution issues with `hermes-compiler`.
+- **Scanner App Mobile i18n Strings**: `scanner-app` is layout-RTL ready, but requires full string extraction into `@gate-access/i18n` dictionary files.
+- **Headless Hermes Compiler Packaging**: Headless `expo export --bytecode` encounters dependency resolution edge cases on certain standalone CI runners.
 
 ### 3.2 TypeScript Strictness
 
-- `apps/admin-dashboard` and `apps/marketing` currently have `"strict": false` in `tsconfig.json`.
+- `apps/admin-dashboard` and `apps/marketing` currently have `"strict": false` in `tsconfig.json` and are queued for full strictness enforcement.
 
 ---
 
 ## 4. Prioritized Next Steps
 
 1. **Immediate Hardening (P0)**:
-   - Decompose `scanner-app/App.tsx` (< 300 lines per module).
-   - Wire Arabic `@gate-access/i18n` strings to scanner onboarding and result overlays.
-   - Enable `"strict": true` in all remaining app `tsconfig.json` files.
-2. **Production Deployment & Distribution (P1)**:
-   - Run `/deploy check` and orchestrate production Vercel releases.
-   - Dispatch EAS Cloud builds for iOS (`.ipa`) and Android (`.aab`).
+   - Complete Arabic `@gate-access/i18n` dictionary string wiring across `scanner-app` onboarding and patrol screens.
+   - Enable `"strict": true` across remaining app `tsconfig.json` files.
+2. **Production Distribution (P1)**:
+   - Execute manual `/deploy` workflow for Vercel production web surfaces.
+   - Trigger EAS Cloud builds for iOS (`.ipa`) and Android (`.aab`).
 3. **Omnichannel & Hardware Expansion (P2)**:
-   - WhatsApp Cloud API for visitor pass dispatch.
-   - ANPR / LPR camera stream recognition.
-   - IoT barrier relay webhook integration.
+   - WhatsApp Cloud API visitor pass delivery.
+   - LPR / ANPR camera feed integration at compound gates.
+   - Webhook relay trigger for legacy hardware controllers.

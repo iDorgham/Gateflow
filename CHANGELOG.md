@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** add 2xl/3xl borderRadius tokens, ADS shadow variables, and header reset confirmation
+
 - **[Ui]** add brand variant to buttonVariants
 - **[Ui]** support both controller and standalone modes in FormField
 - **[Ui]** add subtle badge & success button variants and fix FormField export
