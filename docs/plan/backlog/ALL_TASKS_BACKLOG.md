@@ -4,6 +4,25 @@
 
 ## 🚀 Active & Ready Initiatives (Q3/Q4 2026)
 
+### v9.0_ENHANCED_BLUEPRINT — GateFlow v9.0 Production-Hardened Blueprint & Audit Remediation
+
+**PLAN:** `docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/PLAN_v9.0_ENHANCED_BLUEPRINT.md`  
+**TASKS:** `docs/plan/Ready/v9.0_ENHANCED_BLUEPRINT/TASKS_v9.0_ENHANCED_BLUEPRINT.md`  
+**Status:** 🟡 Ready for Execution — 7-Phase Production Hardening & Feature Expansion Roadmap  
+**Priority:** P0 — Repository Audit Remediation, Hardware Fleet Telemetry, Wallet Passes & GateAI 2.0  
+**Target:** P0/P1 audit fixes, Apple/Google Wallet pass issuance, MQTT barrier telemetry, GateAI 2.0 triage & MENA Law 151 compliance  
+**App:** `apps/client-dashboard`, `apps/admin-dashboard`, `apps/resident-portal`, `apps/scanner-app`, `apps/resident-mobile`, `apps/marketing`, `apps/design-system`
+
+- [ ] Phase 0 — Audit Remediation, Foundation Hardening & Deployment Connectivity
+- [ ] Phase 1 — Wallet Pass Issuance & Vehicle ANPR / LPR Access
+- [ ] Phase 2 — GateAI 2.0, Autonomous Triage & WebRTC Intercom
+- [ ] Phase 3 — Hardware Fleet Telemetry (MQTT) & BLE Proximity
+- [ ] Phase 4 — Marketing Growth Calculator & Self-Service Sandbox
+- [ ] Phase 5 — Design System Upgrade (Tailwind v4) & Observability
+- [ ] Phase 6 — MENA Compliance (Law 151 / PDPL) & Production Launch
+
+---
+
 ### resident_mobile_one_tap — Resident Mobile One-Tap Biometric & Instant Pass Experience
 
 **PLAN:** `docs/plan/Complete/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md`  

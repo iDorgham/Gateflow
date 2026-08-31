@@ -9,17 +9,18 @@
 
 ## 1. Executive Summary
 
-GateFlow is a multi‑tenant physical access and visitor management platform for gated communities, focused on the MENA region. The current baseline (v0.5.1) provides a solid foundation: 7 applications, 11 shared packages, 63 Prisma models, 187 API routes, and strong security invariants (HMAC QR, soft deletes, multi‑tenancy). This enhanced plan closes the gaps identified in the audit and expands the product to full‑stack, real‑time, and AI‑driven operations.
+GateFlow is a multi‑tenant physical access and visitor management platform for gated communities, focused on the MENA region. The baseline platform provides a solid foundation: 7 applications, 11 shared packages, 67 Prisma models, 187 API routes, and strong security invariants (HMAC QR, soft deletes, multi‑tenancy). This enhanced blueprint closes the P0/P1 audit findings from the **August 31, 2026 Comprehensive Repository Audit** and expands the product to full‑stack, real‑time, and AI‑driven operations.
 
 Key enhancements in this version:
 
+- **P0 Audit Remediation**: Sliding-window API rate limiting on bulk routes (P0-001), direct `organizationId` denormalization on `ScanLog` (P0-002), and outbound webhook Dead-Letter Queue (P1-001).
 - **Real‑time hardware telemetry** via MQTT with admin/ops dashboards.
-- **Wallet pass issuance** (Apple/Google) for frictionless resident experience.
-- **ANPR + on‑device LPR** for vehicle access.
+- **Wallet pass issuance** (Apple PKPass / Google Wallet JWT) for frictionless resident experience.
+- **ANPR + on‑device LPR** for vehicle access control.
 - **GateAI 2.0** with autonomous ticket triage and dispatch.
 - **Cross‑app event bus** to decouple services and enable real‑time updates.
 - **Comprehensive integration hub** in client & admin dashboards with encrypted secret storage and live testing.
-- **Security hardening**: step‑up MFA, rate limiting, IP allow‑lists, audit export.
+- **Security & Compliance hardening**: step‑up MFA, rate limiting, IP allow‑lists, Law 151 / PDPL audit export.
 
 ---
 
@@ -149,7 +150,7 @@ enum IntegrationType {
 
 ## 5. Application‑Specific Specifications
 
-- **`apps/client-dashboard`**: ANPR integration, GateAI 2.0 autonomous triage, MENA compliance PII purge, live barrier map.
+- **`apps/client-dashboard`**: ANPR integration, GateAI 2.0 autonomous triage, MENA compliance PII purge, live barrier map, sliding-window rate limiting on `/api/qrcodes/validate`, `/api/scans/bulk`, and `/api/qr/bulk-create`.
 - **`apps/admin-dashboard`**: Barrier hardware fleet telemetry, global AI token analytics, integration health dashboard, sandbox tenant provisioner.
 - **`apps/resident-portal`**: Apple & Google Wallet native passes, amenity bookings, WebRTC gate intercom.
 - **`apps/marketing`**: MENA security ROI calculator, 14-day self-service sandbox generator, attribution test harness.
@@ -159,14 +160,14 @@ enum IntegrationType {
 
 ---
 
-## 6. Implementation Roadmap with Dependencies
+## 6. Implementation Roadmap with Audit Dependencies
 
-| Phase                                      | Deliverables                                                            | Primary Apps / Packages                                              | Dependencies | Expected Completion |
-| ------------------------------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------ | :-----------------: |
-| **Phase 0: Foundation Hardening**          | Complete deployment audit, fix connectivity, encrypt secrets, event bus | All apps, `packages/db`, `packages/api-client`                       | None         |       2 weeks       |
-| **Phase 1: Wallet & ANPR**                 | Apple/Google Wallet passes, VehiclePlate schema + ANPR webhook          | `resident-portal`, `client-dashboard`, `packages/db`                 | Phase 0      |       6 weeks       |
-| **Phase 2: GateAI 2.0 + Intercom**         | AI triage and dispatch, WebRTC intercom, live barrier map               | `client-dashboard`, `resident-portal`, `scanner-app`, `@gateflow/ai` | Phase 1      |       8 weeks       |
-| **Phase 3: Hardware Telemetry & BLE**      | MQTT global map, BLE proximity, on-device LPR                           | `admin-dashboard`, `scanner-app`, `resident-mobile`                  | Phase 0      |       8 weeks       |
-| **Phase 4: Marketing & Sandbox**           | ROI calculator, self-service sandbox generator                          | `marketing`, `admin-dashboard`                                       | Phase 0      |       4 weeks       |
-| **Phase 5: Design System & Observability** | Tailwind v4 migration, WCAG playground, motion inspector                | `design-system`, `admin-dashboard`                                   | Phase 0      |       4 weeks       |
-| **Phase 6: Compliance & Hardening**        | PDPL/Law 151 export, PII purge scheduler, rate limiting, IP allow-lists | `client-dashboard`, `admin-dashboard`                                | Phase 0      |       4 weeks       |
+| Phase                                                 | Deliverables                                                                                                                                                                                 | Primary Apps / Packages                                              | Audit Target / Priority | Expected Duration |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | :---------------------: | :---------------: |
+| **Phase 0: Audit Remediation & Foundation Hardening** | P0-001 Redis sliding-window rate limiting, P0-002 `ScanLog.organizationId` denormalization + backfill migration, P1-001 Webhook DLQ with exponential retries, P1-002 soft-delete query audit | All apps, `packages/db`, `packages/api-client`                       | **P0 / P1 Remediation** |      2 weeks      |
+| **Phase 1: Wallet Pass & Vehicle ANPR / LPR**         | Apple PKPass / Google Wallet issuance, `VehiclePlate` model + camera ANPR webhook ingestion + on-device LPR                                                                                  | `resident-portal`, `client-dashboard`, `scanner-app`, `packages/db`  |    Feature Expansion    |      6 weeks      |
+| **Phase 2: GateAI 2.0, Triage & WebRTC Intercom**     | AI ticket triage & autonomous `WorkOrder` dispatch, WebRTC gate intercom, live barrier map                                                                                                   | `client-dashboard`, `resident-portal`, `scanner-app`, `@gateflow/ai` |     Autonomous Ops      |      8 weeks      |
+| **Phase 3: Hardware Fleet Telemetry & BLE**           | Admin global MQTT barrier fleet map, BLE proximity beacon challenge, on-device license plate OCR                                                                                             | `admin-dashboard`, `scanner-app`, `resident-mobile`                  |     Hardware Fleet      |      8 weeks      |
+| **Phase 4: Self-Service Sandbox & MENA ROI Engine**   | Interactive MENA Security ROI calculator, 14-day self-service sandbox generator, attribution harness                                                                                         | `marketing`, `admin-dashboard`                                       |      Growth Engine      |      4 weeks      |
+| **Phase 5: Design System & Observability**            | Tailwind v4 migration, WCAG 2.2 AA contrast playground, motion physics inspector, visual regression test suite                                                                               | `design-system`, `admin-dashboard`, `@gateflow/ui`                   |       Design & QA       |      4 weeks      |
+| **Phase 6: MENA Compliance & Launch**                 | Law 151 / PDPL PDF export, PII auto-purge scheduler, tenant IP allow-listing, Vercel production deployment                                                                                   | `client-dashboard`, `admin-dashboard`                                |   Compliance & Launch   |      4 weeks      |

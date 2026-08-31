@@ -2,13 +2,17 @@
 
 ---
 
-## 🚀 Phase 0: Foundation Hardening & Deployment Connectivity (Weeks 1–2)
+## 🚀 Phase 0: Audit Remediation, Foundation Hardening & Deployment Connectivity (Weeks 1–2)
 
-- [ ] Task 0.1: Run cross-app deployment connectivity audit and verify all 18 secrets.
-- [ ] Task 0.2: Implement `check:integrations` CLI script to validate required environment variables before builds.
-- [ ] Task 0.3: Add `IntegrationCredential` model to `packages/db/prisma/schema.prisma` with AES-256-GCM encryption.
-- [ ] Task 0.4: Build Central Event Bus interface (`packages/api-client` / Upstash Redis Streams wrapper).
-- [ ] Task 0.5: Verify cross-subdomain NextAuth cookie sharing (`Domain=.gateflow.site`).
+- [ ] Task 0.1: **[P0-001 Fix]** Add Upstash Redis sliding-window rate limiting (`applyRateLimit()`) to `/api/qrcodes/validate`, `/api/scans/bulk`, and `/api/qr/bulk-create`.
+- [ ] Task 0.2: **[P0-002 Fix]** Add direct `organizationId` column + index to `model ScanLog` in `packages/db/prisma/schema.prisma` with backfill migration script.
+- [ ] Task 0.3: **[P1-001 Fix]** Implement outbound Webhook Dead-Letter Queue (DLQ) with exponential backoff retries in `WebhookLog`.
+- [ ] Task 0.4: **[P1-002 Fix]** Audit custom raw SQL & aggregate queries to enforce explicit `deletedAt: null` filters across all multi-tenant models.
+- [ ] Task 0.5: Run cross-app deployment connectivity audit and verify all 18 environment secrets.
+- [ ] Task 0.6: Implement `check:integrations` CLI script to validate required environment variables before builds.
+- [ ] Task 0.7: Add `IntegrationCredential` model to `packages/db/prisma/schema.prisma` with AES-256-GCM encryption.
+- [ ] Task 0.8: Build Central Event Bus interface (`packages/api-client` / Upstash Redis Streams wrapper).
+- [ ] Task 0.9: Verify cross-subdomain NextAuth cookie sharing (`Domain=.gateflow.site`).
 
 ---
 
