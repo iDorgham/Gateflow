@@ -59,16 +59,19 @@ model Organization {
   gates                         Gate[]
   gateAssignments               GateAssignment[]
   incidents                     Incident[]
+  integrationCredentials        IntegrationCredential[]
   invitations                   Invitation[]
   projects                      Project[]
   qrCodes                       QRCode[]
   residentLimits                ResidentLimit[]
   roles                         Role[]
   scanAttachments               ScanAttachment[]
+  scanLogs                      ScanLog[]
   tags                          Tag[]
   tasks                         Task[]
   units                         Unit[]
   users                         User[]
+  vehiclePlates                 VehiclePlate[]
   watchlistEntries              WatchlistEntry[]
   webhooks                      Webhook[]
   shortLinkClicks               ShortLinkClick[]
@@ -98,7 +101,13 @@ model Organization {
   patrolRuns        PatrolRun[]
   patrolLogEntries  PatrolLogEntry[]
 
+  /// True for 14-day demo sandbox tenants provisioned from the admin dashboard.
+  isSandbox          Boolean   @default(false)
+  /// Auto-expiry timestamp for sandbox orgs. Null = permanent (production tenants).
+  sandboxExpiresAt   DateTime?
+
   @@index([deletedAt])
+  @@index([isSandbox, sandboxExpiresAt])
 }
 
 model Project {
@@ -475,6 +484,7 @@ model ScanLog {
   id                String           @id @default(cuid())
   status            ScanStatus
   scannedAt         DateTime         @default(now())
+  organizationId    String?
   userId            String?
   gateId            String
   qrCodeId          String
@@ -492,10 +502,13 @@ model ScanLog {
   deletedAt         DateTime?
   incidents         Incident[]
   attachments       ScanAttachment[]
+  organization      Organization?    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   gate              Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)
   qrCode            QRCode           @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
   user              User?            @relation(fields: [userId], references: [id])
 
+  @@index([organizationId])
+  @@index([organizationId, scannedAt])
   @@index([gateId])
   @@index([qrCodeId])
   @@index([userId])
@@ -712,6 +725,7 @@ model Contact {
   contactTags    ContactTag[]
   units          ContactUnit[]
   communicationLogs CommunicationLog[]
+  vehiclePlates  VehiclePlate[]
 
   /// Org-scoped identity: partial **unique** indexes on (`organizationId`,`email`) and (`organizationId`,`phone`)
   /// for rows with `deletedAt IS NULL` — see migration `seeding_integrity_foundation` (not expressible as `@@unique` here).
@@ -745,6 +759,7 @@ model Unit {
   visitorQRs     VisitorQR[]
   workOrders     WorkOrder[]
   serviceBookings ServiceBooking[]
+  vehiclePlates  VehiclePlate[]
 
   @@unique([organizationId, name])
   @@index([organizationId])
@@ -871,6 +886,48 @@ model AiActionLog {
   @@index([userId])
 }
 
+model IntegrationCredential {
+  id             String       @id @default(cuid())
+  provider       String       // e.g. 'HUBSPOT', 'TWILIO', 'EXPO_PUSH', 'RESEND', 'MQTT'
+  encryptedKey   String       @db.Text // AES-256-GCM encrypted payload (iv:tag:ciphertext)
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, provider])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model VehiclePlate {
+  id              String       @id @default(cuid())
+  plateNumber     String
+  normalizedPlate String
+  make            String?
+  model           String?
+  color           String?
+  ownerName       String?
+  ownerPhone      String?
+  isActive        Boolean      @default(true)
+  deletedAt       DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organizationId  String
+  contactId       String?
+  unitId          String?
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contact         Contact?     @relation(fields: [contactId], references: [id])
+  unit            Unit?        @relation(fields: [unitId], references: [id])
+
+  @@unique([organizationId, normalizedPlate])
+  @@index([organizationId])
+  @@index([normalizedPlate])
+  @@index([deletedAt])
+}
+
 model AiAutomation {
   id             String             @id @default(cuid())
   organizationId String
@@ -985,6 +1042,7 @@ enum WebhookDeliveryStatus {
   RETRYING
   SUCCESS
   FAILED
+  DEAD_LETTER
 }
 
 enum AdminAuthKeyType {
