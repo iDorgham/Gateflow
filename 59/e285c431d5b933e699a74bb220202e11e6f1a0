@@ -1,0 +1,16 @@
+apps/client-dashboard/src/lib/security/guard-biometric-lock-service.ts
+  h_220d66b2244819 1-78
+apps/client-dashboard/src/lib/wallet/google-pass-service.ts
+  h_220d66b2244819 1-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "59e285c431d5b933e699a74bb220202e11e6f1a0",
+  "prompts": {},
+  "humans": {
+    "h_220d66b2244819": {
+      "author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
