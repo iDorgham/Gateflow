@@ -1,0 +1,19 @@
+.ai/runtime-proof.json
+  s_59dacfd28dc132::t_39a8c78bdfe553 14,27,40,53,66,79,92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d3b5a7efa7baf44c59d38257c77192ec1d92ae34",
+  "prompts": {},
+  "sessions": {
+    "s_59dacfd28dc132": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa69dfdd5ffeFSdwqnCDhtvOZz",
+        "model": "big-pickle"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
