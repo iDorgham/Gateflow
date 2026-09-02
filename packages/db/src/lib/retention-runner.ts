@@ -156,7 +156,7 @@ async function purgeOrg(
         summary.anonymized.contacts += 1;
 
         const plates = await prisma.vehiclePlate.findMany({
-          where: { contactId: contact.id },
+          where: { organizationId: org.id, contactId: contact.id },
           select: {
             id: true,
             plateNumber: true,
