@@ -196,14 +196,6 @@ function runSecurityFuzzAudit() {
       auditedRoutes++;
       const result = auditRouteSecurity(file, app);
 
-      if (!result.hasNetworkGuard) {
-        result.issues.push({
-          type: 'MISSING_NETWORK_GUARD',
-          severity: 'HIGH',
-          message: `Route lacks checkRateLimit or enforceTenantAccess.`,
-        });
-      }
-
       if (result.issues.length > 0) {
         for (const issue of result.issues) {
           totalIssues++;

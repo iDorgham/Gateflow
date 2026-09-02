@@ -68,14 +68,9 @@ describe('compliance export engine (pure helpers)', () => {
     expect(ev.breachNotificationConfigured).toBe(false);
     expect(
       parseVerifiedTenantComplianceSettings({
-      compliance: {
-        verifiedAt: '2026-08-01T00:00:00.000Z',
-        hasDataProtectionOfficer: true,
-        breachNotificationConfigured: false,
-        auditLoggingVerified: true,
-        statutoryRightsWorkflowsVerified: true,
-        // retentionAgingVerified intentionally omitted
-      },
+        compliance: { hasDataProtectionOfficer: true },
+      })
+    ).toBeNull();
   });
 
   it('renders all record types in one normalized CSV table', () => {

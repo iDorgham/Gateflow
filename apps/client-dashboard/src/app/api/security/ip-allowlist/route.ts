@@ -62,12 +62,6 @@ export async function PUT(request: NextRequest) {
       { status: 404 }
     );
   }
-  if (!org) {
-    return NextResponse.json(
-      { error: 'Organization not found' },
-      { status: 404 }
-    );
-  }
   const existing =
     (
       (org?.scannerConfig as { security?: { ipAllowlist?: unknown } } | null) ??

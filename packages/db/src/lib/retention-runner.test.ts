@@ -59,7 +59,7 @@ describe('retention runner', () => {
         ownerPhone: '+201234567890',
       },
     ]);
-    const updateManyPlates = jest.fn().mockResolvedValue({ count: 1 });
+    const updatePlate = jest.fn().mockResolvedValue({ count: 1 });
     const deleteManyScanLogs = jest.fn().mockResolvedValue({ count: 2 });
 
     Object.assign(prisma, {
@@ -85,7 +85,7 @@ describe('retention runner', () => {
       },
       vehiclePlate: {
         findMany: findManyPlates,
-        updateMany: updateManyPlates,
+        update: updatePlate,
       },
     });
 
@@ -93,7 +93,7 @@ describe('retention runner', () => {
 
     expect(deleteManyScanLogs).toHaveBeenCalledWith({
       where: {
-        gate: { organizationId: 'org-1' },
+        organizationId: 'org-1',
         scannedAt: { lt: new Date('2026-08-02T00:00:00.000Z') },
         deletedAt: null,
       },
@@ -115,20 +115,12 @@ describe('retention runner', () => {
     expect(findManyPlates).toHaveBeenCalledTimes(1);
     expect(findManyPlates).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: {
-          contactId: 'contact-updated',
-          organizationId: 'org-1',
-          deletedAt: null,
-        },
+        where: { contactId: 'contact-updated' },
       })
     );
-    expect(updateManyPlates).toHaveBeenCalledWith(
+    expect(updatePlate).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: {
-          id: 'plate-1',
-          organizationId: 'org-1',
-          deletedAt: null,
-        },
+        where: { id: 'plate-1' },
       })
     );
     expect(result.organizations[0].anonymized.contacts).toBe(1);
