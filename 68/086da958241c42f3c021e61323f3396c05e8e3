@@ -1,0 +1,27 @@
+apps/client-dashboard/src/lib/compliance/export-engine.test.ts
+  s_59dacfd28dc132::t_4aaa4c4947c06a 71-73
+packages/db/src/lib/retention-runner.ts
+  s_59dacfd28dc132::t_fe46d33b66123d 159,169-170,176
+  s_59dacfd28dc132::t_0cd7c1c6dbcd0a 82
+packages/db/src/lib/retention-runner.test.ts
+  s_59dacfd28dc132::t_26f46e85b85ac8 62
+  s_59dacfd28dc132::t_9be75afad5c6c5 118,121,123
+  s_59dacfd28dc132::t_a32076f5b0af31 88
+  s_59dacfd28dc132::t_fab605044fe066 96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "68086da958241c42f3c021e61323f3396c05e8e3",
+  "prompts": {},
+  "sessions": {
+    "s_59dacfd28dc132": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa69dfdd5ffeFSdwqnCDhtvOZz",
+        "model": "big-pickle"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
