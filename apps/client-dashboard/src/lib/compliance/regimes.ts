@@ -113,9 +113,15 @@ export interface ComplianceEvidence {
   /** Number of audit-log entries retained. */
   auditLogCount: number;
   /** Whether the org has a designated data-protection officer/contact. */
-  hasDataProtectionOfficer: boolean;
+  hasDataProtectionOfficer: boolean | null;
   /** Whether breach notification to the regulator is configured. */
-  breachNotificationConfigured: boolean;
+  breachNotificationConfigured: boolean | null;
+  /** Whether tenant audit tooling and its operating workflow were verified. */
+  auditLoggingVerified: boolean | null;
+  /** Whether workflows for the regime's statutory rights were verified. */
+  statutoryRightsWorkflowsVerified: boolean | null;
+  /** Whether configured retention aging and purge execution were verified. */
+  retentionAgingVerified: boolean | null;
 }
 
 export type ControlStatus = 'PASS' | 'PARTIAL' | 'FAIL' | 'INFO';
@@ -157,10 +163,18 @@ export function assessCompliance(
     id: 'GOV-DPO',
     category: 'governance',
     title: 'Designated data-protection officer',
-    status: evidence.hasDataProtectionOfficer ? 'PASS' : 'PARTIAL',
-    note: evidence.hasDataProtectionOfficer
-      ? 'A data-protection officer is designated for this tenant.'
-      : 'Suggest designating a DPO and documenting their contact in the export.',
+    status:
+      evidence.hasDataProtectionOfficer === null
+        ? 'INFO'
+        : evidence.hasDataProtectionOfficer
+          ? 'PASS'
+          : 'PARTIAL',
+    note:
+      evidence.hasDataProtectionOfficer === null
+        ? 'Unassessed: no verified tenant DPO setting was available.'
+        : evidence.hasDataProtectionOfficer
+          ? 'A data-protection officer is designated for this tenant.'
+          : 'Suggest designating a DPO and documenting their contact in the export.',
   });
 
   // Governance — records of processing
@@ -168,8 +182,14 @@ export function assessCompliance(
     id: 'GOV-RECORDS',
     category: 'governance',
     title: 'Records of processing activities',
-    status: evidence.auditLogCount > 0 ? 'PASS' : 'PARTIAL',
-    note: `${evidence.auditLogCount} audit entries retained.`,
+    status:
+      evidence.auditLoggingVerified === true && evidence.auditLogCount > 0
+        ? 'PASS'
+        : 'PARTIAL',
+    note:
+      evidence.auditLoggingVerified === true
+        ? `${evidence.auditLogCount} audit entries retained; tenant audit tooling and workflow verified.`
+        : `${evidence.auditLogCount} audit entries retained; tenant audit tooling and workflow are unverified.`,
   });
 
   // Rights — all enacted rights must be covered by tooling
@@ -185,28 +205,29 @@ export function assessCompliance(
       id: `RIGHTS-${right.toUpperCase()}`,
       category: 'rights',
       title: rightsLabels[right],
-      status: def.rights[right] ? 'PASS' : 'INFO',
+      status: def.rights[right]
+        ? evidence.statutoryRightsWorkflowsVerified === true
+          ? 'PASS'
+          : 'PARTIAL'
+        : 'INFO',
       note: def.rights[right]
-        ? `${def.name.split(' (')[0]} grants this right; tooling must support the request.`
+        ? evidence.statutoryRightsWorkflowsVerified === true
+          ? `${def.name.split(' (')[0]} grants this right; the tenant request workflow is verified.`
+          : `${def.name.split(' (')[0]} grants this right; the tenant request workflow is unverified.`
         : 'Not explicitly required by this regime; still recommended.',
     });
   });
 
   // Retention
-  const piiWithinRetention = evidence.piiRecordCount >= 0; // presence of PII is expected; scheduler enforces aging
   push({
     id: 'RET-PII',
     category: 'retention',
     title: 'Retention of personal data',
-    status: piiWithinRetention
-      ? evidence.piiRecordCount > 0
-        ? 'INFO'
-        : 'PASS'
-      : 'FAIL',
+    status: evidence.retentionAgingVerified === true ? 'PASS' : 'PARTIAL',
     note:
-      evidence.piiRecordCount > 0
-        ? `${evidence.piiRecordCount} PII records; nightly purge enforces the ${def.retentionDays.contacts}-day contact window.`
-        : 'No personal data retained.',
+      evidence.retentionAgingVerified === true
+        ? `${evidence.piiRecordCount} PII records; retention aging and purge execution were verified against the ${def.retentionDays.contacts}-day contact window.`
+        : `${evidence.piiRecordCount} PII records; retention aging and purge execution are unverified.`,
   });
 
   // Transfer
@@ -225,10 +246,18 @@ export function assessCompliance(
     id: 'BREACH-NOTIFY',
     category: 'breach',
     title: 'Breach notification to regulator',
-    status: evidence.breachNotificationConfigured ? 'PASS' : 'PARTIAL',
-    note: evidence.breachNotificationConfigured
-      ? `${def.breachNotifyWindow} breach-notification window configured.`
-      : `Required within ${def.breachNotifyWindow}; configure the regulator notification destination.`,
+    status:
+      evidence.breachNotificationConfigured === null
+        ? 'INFO'
+        : evidence.breachNotificationConfigured
+          ? 'PASS'
+          : 'PARTIAL',
+    note:
+      evidence.breachNotificationConfigured === null
+        ? 'Unassessed: no verified tenant breach-notification setting was available.'
+        : evidence.breachNotificationConfigured
+          ? `${def.breachNotifyWindow} breach-notification window configured.`
+          : `Required within ${def.breachNotifyWindow}; configure the regulator notification destination.`,
   });
 
   // Score: PASS=1.0, PARTIAL and FAIL=0, INFO=excluded from denominator.
@@ -242,11 +271,13 @@ export function assessCompliance(
     (c) => c.status === 'FAIL'
   )
     ? 'NON_COMPLIANT'
-    : score >= 80
-      ? 'COMPLIANT'
-      : score >= 50
-        ? 'PARTIAL'
-        : 'NON_COMPLIANT';
+    : controls.some((c) => c.status === 'PARTIAL')
+      ? 'PARTIAL'
+      : score >= 80
+        ? 'COMPLIANT'
+        : score >= 50
+          ? 'PARTIAL'
+          : 'NON_COMPLIANT';
 
   return { regime, score, status, controls };
 }

@@ -17,6 +17,7 @@ import {
   renderCsv,
   renderPdf,
   buildEvidence,
+  parseVerifiedTenantComplianceSettings,
   type ComplianceExportData,
   type ComplianceRegime,
 } from '@/lib/compliance/export-engine';
@@ -75,12 +76,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const [org, rows] = await Promise.all([
       prisma.organization.findUnique({
         where: { id: claims.orgId },
-        select: { name: true },
+        select: { name: true, scannerConfig: true },
       }),
       collectComplianceRows(claims.orgId, range.from, range.to),
     ]);
 
-    const evidence = buildEvidence(rows);
+    const evidence = buildEvidence(
+      rows,
+      parseVerifiedTenantComplianceSettings(org?.scannerConfig)
+    );
     const payload: ComplianceExportData = {
       regime,
       orgName: org?.name ?? 'Workspace',

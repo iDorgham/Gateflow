@@ -25,6 +25,7 @@ describe('wcag contrast engine', () => {
         r: 0,
         g: 128,
         b: 255,
+        a: 0.5,
       });
     });
 
@@ -64,6 +65,16 @@ describe('wcag contrast engine', () => {
     it('returns NaN for unparseable input', () => {
       expect(Number.isNaN(contrastRatio('nope', '#ffffff'))).toBe(true);
     });
+
+    it('returns NaN for transparent and translucent colors', () => {
+      expect(Number.isNaN(contrastRatio('rgba(0, 0, 0, 0)', '#ffffff'))).toBe(
+        true
+      );
+      expect(Number.isNaN(contrastRatio('rgba(0, 0, 0, 0.5)', '#ffffff'))).toBe(
+        true
+      );
+      expect(contrastRatio('rgba(0, 0, 0, 1)', '#ffffff')).toBeCloseTo(21, 1);
+    });
   });
 
   describe('relativeLuminance', () => {
@@ -99,6 +110,14 @@ describe('wcag contrast engine', () => {
       // --gf-color-text-subtlest (#94a3b8) on white is ~2.56:1 → below AA large 3:1
       const outcome = evaluateContrast('#94a3b8', '#ffffff');
       expect(outcome.ratio).toBeLessThan(WCAG22.aaLarge);
+      expect(outcome.fails).toBe(true);
+    });
+
+    it('never passes an unmeasurable translucent foreground', () => {
+      const outcome = evaluateContrast('rgba(0, 0, 0, 0.5)', '#ffffff');
+      expect(Number.isNaN(outcome.ratio)).toBe(true);
+      expect(outcome.aaNormal).toBe(false);
+      expect(outcome.aaLarge).toBe(false);
       expect(outcome.fails).toBe(true);
     });
 

@@ -63,46 +63,85 @@ export interface CollectedRows {
   auditEvents: AuditEventRow[];
 }
 
-export function buildEvidence(rows: CollectedRows): ComplianceEvidence {
+export interface VerifiedTenantComplianceSettings {
+  hasDataProtectionOfficer: boolean;
+  breachNotificationConfigured: boolean;
+  auditLoggingVerified: boolean;
+  statutoryRightsWorkflowsVerified: boolean;
+  retentionAgingVerified: boolean;
+}
+
+export function parseVerifiedTenantComplianceSettings(
+  scannerConfig: unknown
+): VerifiedTenantComplianceSettings | null {
+  if (!scannerConfig || typeof scannerConfig !== 'object') return null;
+  const compliance = (scannerConfig as Record<string, unknown>).compliance;
+  if (!compliance || typeof compliance !== 'object') return null;
+  const settings = compliance as Record<string, unknown>;
+  if (
+    typeof settings.verifiedAt !== 'string' ||
+    Number.isNaN(Date.parse(settings.verifiedAt))
+  ) {
+    return null;
+  }
+
+  const keys = [
+    'hasDataProtectionOfficer',
+    'breachNotificationConfigured',
+    'auditLoggingVerified',
+    'statutoryRightsWorkflowsVerified',
+    'retentionAgingVerified',
+  ] as const;
+  if (keys.some((key) => typeof settings[key] !== 'boolean')) return null;
+
+  return Object.fromEntries(
+    keys.map((key) => [key, settings[key]])
+  ) as unknown as VerifiedTenantComplianceSettings;
+}
+
+export function buildEvidence(
+  rows: CollectedRows,
+  settings: VerifiedTenantComplianceSettings | null = null
+): ComplianceEvidence {
   return {
     piiRecordCount: rows.contacts.length,
     processingEventCount: rows.processingEvents.length,
     auditLogCount: rows.auditEvents.length,
-    hasDataProtectionOfficer: false,
-    breachNotificationConfigured: false,
+    hasDataProtectionOfficer: settings?.hasDataProtectionOfficer ?? null,
+    breachNotificationConfigured:
+      settings?.breachNotificationConfigured ?? null,
+    auditLoggingVerified: settings?.auditLoggingVerified ?? null,
+    statutoryRightsWorkflowsVerified:
+      settings?.statutoryRightsWorkflowsVerified ?? null,
+    retentionAgingVerified: settings?.retentionAgingVerified ?? null,
   };
 }
 
 export function renderCsv(rows: CollectedRows): string {
-  const contactFields = [
+  const fields = [
+    'recordType',
     'id',
     'fullName',
     'email',
     'phone',
     'company',
     'createdAt',
+    'scannedAt',
+    'status',
+    'gateId',
+    'action',
+    'entityType',
   ];
-  const processingFields = ['id', 'scannedAt', 'status', 'gateId'];
+  const records = [
+    ...rows.contacts.map((row) => ({ recordType: 'contact', ...row })),
+    ...rows.processingEvents.map((row) => ({
+      recordType: 'processing_event',
+      ...row,
+    })),
+    ...rows.auditEvents.map((row) => ({ recordType: 'audit_event', ...row })),
+  ];
 
-  const contactCsv = new Parser({ fields: contactFields }).parse(rows.contacts);
-  const processingCsv = new Parser({ fields: processingFields }).parse(
-    rows.processingEvents
-  );
-  const auditCsv = new Parser({
-    fields: ['id', 'action', 'entityType', 'createdAt'],
-  }).parse(rows.auditEvents);
-
-  const sep = '\n\n';
-  return [
-    '# CONTACTS (PII)',
-    contactCsv,
-    sep,
-    '# PROCESSING EVENTS',
-    processingCsv,
-    sep,
-    '# AUDIT LOG',
-    auditCsv,
-  ].join('\n');
+  return new Parser({ fields }).parse(records);
 }
 
 // ─── Prisma-backed collection ─────────────────────────────────────────────────

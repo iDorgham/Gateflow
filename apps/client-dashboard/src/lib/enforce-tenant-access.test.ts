@@ -22,7 +22,7 @@ const mockFindFirst = prisma.organization.findFirst as jest.Mock;
 
 function req(ip: string): NextRequest {
   return new NextRequest('http://localhost/api/x', {
-    headers: { 'x-forwarded-for': ip },
+    headers: { 'x-vercel-forwarded-for': ip },
   });
 }
 
@@ -37,21 +37,27 @@ describe('enforce-tenant-access', () => {
     });
   });
 
-  it('resolves the client IP from trusted proxies', () => {
+  it('resolves the client IP only from Vercel forwarding metadata', () => {
     expect(
       getClientIp(
         new NextRequest('http://localhost/a', {
-          headers: { 'cf-connecting-ip': '1.2.3.4' },
-        })
-      )
-    ).toBe('1.2.3.4');
-    expect(
-      getClientIp(
-        new NextRequest('http://localhost/a', {
-          headers: { 'x-forwarded-for': '9.9.9.9, 1.1.1.1' },
+          headers: {
+            'cf-connecting-ip': '1.2.3.4',
+            'x-vercel-forwarded-for': '9.9.9.9, 1.1.1.1',
+          },
         })
       )
     ).toBe('9.9.9.9');
+    expect(
+      getClientIp(
+        new NextRequest('http://localhost/a', {
+          headers: {
+            'cf-connecting-ip': '1.2.3.4',
+            'x-forwarded-for': '2.3.4.5',
+          },
+        })
+      )
+    ).toBe('0.0.0.0');
     expect(getClientIp(new NextRequest('http://localhost/a'))).toBe('0.0.0.0');
   });
 

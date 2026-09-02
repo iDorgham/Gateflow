@@ -98,7 +98,9 @@ function cidrParse(
       : null;
   }
   const ip = cidr.slice(0, idx);
-  const prefixNum = Number(cidr.slice(idx + 1));
+  const prefix = cidr.slice(idx + 1);
+  if (!/^\d+$/.test(prefix)) return null;
+  const prefixNum = Number(prefix);
   const buf = ipToBuffer(ip);
   if (!buf) return null;
   const max = buf[10] === 0xff && buf[11] === 0xff ? 32 : 128;

@@ -83,7 +83,7 @@ const PATTERNS = [
   {
     name: 'Generic Token Assign',
     severity: 'MEDIUM',
-    re: /(TOKEN|SIGNING_SECRET)\s*[:=]\s*["'][a-zA-Z0-9+/=_\-]{20,}["']/i,
+    re: /(TOKEN|SIGNING_SECRET)\s*[:=]\s*["'][a-zA-Z0-9+/=_-]{20,}["']/i,
   },
   {
     name: 'JWT (encoded)',
@@ -127,10 +127,6 @@ const SKIP_PATTERNS = [
   /\/coverage\//,
   /\/\.metro\//,
   /\/\.expo\//,
-  /\.env$/,
-  /\.env\.local$/,
-  /\.env\.production$/,
-  /\.env\..*\.local$/,
 ];
 
 const ROOT = getRepoRoot(__dirname);
@@ -244,6 +240,20 @@ const BINARY_EXTS = new Set([
   '.gz',
 ]);
 
+let trackedFiles;
+
+function isEnvironmentFile(filePath) {
+  return (
+    path.basename(filePath) === '.env' ||
+    path.basename(filePath).startsWith('.env.')
+  );
+}
+
+function isTrackedFile(filePath) {
+  trackedFiles ??= new Set(gitLines(['ls-files']));
+  return trackedFiles.has(filePath.split(path.sep).join('/'));
+}
+
 function walkRepoFiles(dir = ROOT, fileList = []) {
   if (!fs.existsSync(dir)) return fileList;
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -257,6 +267,7 @@ function walkRepoFiles(dir = ROOT, fileList = []) {
       const ext = path.extname(entry.name).toLowerCase();
       if (BINARY_EXTS.has(ext)) continue;
       if (shouldSkip(rel)) continue;
+      if (isEnvironmentFile(rel) && !isTrackedFile(rel)) continue;
       fileList.push(rel);
     }
   }
@@ -265,7 +276,11 @@ function walkRepoFiles(dir = ROOT, fileList = []) {
 
 function getAllFiles() {
   const scanRoots = ['apps', 'packages', 'scripts', '.github'];
-  return scanRoots.flatMap((r) => walkRepoFiles(path.join(ROOT, r)));
+  const files = scanRoots.flatMap((r) => walkRepoFiles(path.join(ROOT, r)));
+  const trackedEnvironmentFiles = gitLines(['ls-files']).filter(
+    isEnvironmentFile
+  );
+  return [...new Set([...files, ...trackedEnvironmentFiles])];
 }
 
 function reportAndExit(mode, considered, scanned, allFindings) {

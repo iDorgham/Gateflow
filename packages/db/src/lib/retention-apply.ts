@@ -2,7 +2,7 @@
  * Retention apply logic — opinionated, pure decision + redaction helpers.
  *
  * Consumed by the nightly PII purge scheduler. Kept dependency-light and
- * unit-testable (Node crypto + prisma only in the driver, not here).
+ * unit-testable (Node crypto only; Prisma remains in the driver).
  *
  * Semantics:
  *  - Hard purge: operational records whose retention window has elapsed
@@ -13,17 +13,25 @@
  *  - Legal hold: if `retentionLegalHold` is set for an org, nothing is purged.
  */
 
-import { createHash } from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
 export const REDACTED_PLACEHOLDER = '[redacted]';
 
 /**
- * Deterministic, non-reversible redaction token derived from the original value
- * and a per-org salt. Stable across runs for the same input so downstream
+ * Deterministic, non-reversible redaction token derived from the original value,
+ * an organization identifier, and an application-held secret. Stable across runs so downstream
  * correlation stays possible without exposing the original value.
  */
-export function redact(value: string, salt: string): string {
-  const digest = createHash('sha256').update(`${salt}:${value}`).digest('hex');
+export function redact(value: string, organizationId: string): string {
+  const secret = process.env.RETENTION_REDACTION_SECRET;
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      'RETENTION_REDACTION_SECRET must be at least 32 characters'
+    );
+  }
+  const digest = createHmac('sha256', secret)
+    .update(`${organizationId}:${value}`)
+    .digest('hex');
   return `[redacted-${digest.slice(0, 12)}]`;
 }
 

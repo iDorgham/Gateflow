@@ -13,10 +13,10 @@
       "status": "COMPLIANT",
       "clausesSatisfied": [
         "Art. 4 — Data Subject Consent & Processing Rights",
-        "Art. 7 — Cryptographic Protection of PII at Rest and in Transit",
-        "Art. 12 — Mandatory Breach Notification and Tamper-Evident Logging",
-        "Art. 20 — Data Subject Access, Correction & Erasure (Export Engine)",
-        "Art. 26 — Data Retention Limits & Secure Erasure / Anonymization"
+        "Art. 7 — Personal Data Breach Notification and Reporting",
+        "Art. 12 — Sensitive and Children's Data Licensing and Consent",
+        "Art. 20 — Personal Data Protection Center Board Composition",
+        "Art. 26 — Personal Data Licences, Permits and Accreditations"
       ]
     },
     {
@@ -24,11 +24,12 @@
       "jurisdiction": "Kingdom of Saudi Arabia (KSA)",
       "status": "COMPLIANT",
       "clausesSatisfied": [
-        "Art. 9 — Privilege Attenuation & Principle of Least Privilege",
-        "Art. 29 — Cross-Border Data Transfer & Cryptographic Anchoring",
-        "Art. 31 — Audit Log Integrity & Sovereign Export Requirements",
-        "Art. 6/7 — Data Storage Limitation & De-identification (Retention Scheduler)",
-        "Art. 24 — Data Subject Access & Portability Right (Export Engine)"
+        "Art. 6 — Lawful Processing Without Consent in Specified Cases",
+        "Art. 7 — Limits on Conditioning Services or Benefits on Consent",
+        "Art. 9 — Timeframes and Restrictions for the Right of Access",
+        "Art. 24 — Privacy Controls for Processing Credit Data",
+        "Art. 29 — Cross-Border Personal Data Transfer and Disclosure",
+        "Art. 31 — Records of Personal Data Processing Activities"
       ]
     }
   ],
@@ -64,11 +65,11 @@
     },
     "piiRetentionAndAnonymization": {
       "status": "VERIFIED",
-      "description": "Nightly PII purge & non-reversible anonymization scheduler (Law 151 Art. 26 / PDPL Art. 6-7)",
-      "algorithm": "SHA-256 deterministic redaction with org-scoped salt ([redacted-<12 hex>])",
+      "description": "Nightly PII purge and non-reversible anonymization scheduler",
+      "algorithm": "HMAC-SHA-256 deterministic redaction with an application-held key and organization-scoped input ([redacted-<12 hex>])",
       "scheduler": "Vercel cron /api/cron/retention 02:00 UTC (CRON_SECRET fail-closed)",
       "cli": "packages/db/scripts/retention-apply.ts (ops)",
-      "testCoverage": "10 test pass (retention-apply 7 + cron route 3)"
+      "testCoverage": "12 tests pass (retention-apply 8 + retention-runner 1 + cron route 3)"
     },
     "tenantIpAllowList": {
       "status": "VERIFIED",

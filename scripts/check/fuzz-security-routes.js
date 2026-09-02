@@ -71,6 +71,8 @@ function auditRouteSecurity(routePath, appConfig) {
   const code = fs.readFileSync(routePath, 'utf8');
   const relPath = path.relative(ROOT, routePath);
   const issues = [];
+  const hasNetworkGuard =
+    code.includes('checkRateLimit') || code.includes('enforceTenantAccess');
 
   const isPublicRoute =
     relPath.includes('/auth/') ||
@@ -85,7 +87,7 @@ function auditRouteSecurity(routePath, appConfig) {
 
   // 1. Check for Authentication or Guard logic in non-public routes
   if (!isPublicRoute && !appConfig.middlewareGuarded) {
-    const hasAuthGuard =
+    const hasIdentityGuard =
       code.includes('requireAuth') ||
       code.includes('requireResident') ||
       code.includes('withApiGuards') ||
@@ -99,16 +101,14 @@ function auditRouteSecurity(routePath, appConfig) {
       code.includes('validateAdminSession') ||
       code.includes('getScannerUserFromToken') ||
       code.includes('validateScannerToken') ||
+      code.includes('verifyArrivalCapability') ||
       code.includes('CRON_SECRET') ||
       code.includes('authOptions') ||
       code.includes('apiGuard') ||
-      code.includes('checkRateLimit') ||
-      code.includes('enforceTenantAccess') ||
       code.includes('verifyBearerToken') ||
       code.includes('requireOrgAccess') ||
       code.includes('Authorization');
-
-    if (!hasAuthGuard) {
+    if (!hasIdentityGuard) {
       issues.push({
         type: 'MISSING_AUTH_GUARD',
         severity: 'HIGH',
@@ -168,7 +168,13 @@ function auditRouteSecurity(routePath, appConfig) {
     }
   }
 
-  return { relPath, appName: appConfig.name, issues, isPublicRoute };
+  return {
+    relPath,
+    appName: appConfig.name,
+    issues,
+    isPublicRoute,
+    hasNetworkGuard,
+  };
 }
 
 function runSecurityFuzzAudit() {

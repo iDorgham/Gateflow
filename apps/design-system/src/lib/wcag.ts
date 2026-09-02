@@ -10,7 +10,7 @@
  * styles, so consumers call `parseColor` with a resolved color string.
  */
 
-export type RGB = { r: number; g: number; b: number };
+export type RGB = { r: number; g: number; b: number; a?: number };
 
 /** True if the string looks like a parseable color we can measure. */
 export function isMeasurableColor(value: string | null | undefined): boolean {
@@ -45,12 +45,27 @@ export function parseColor(value: string | null | undefined): RGB | null {
     };
   }
 
-  const rgb = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(v);
+  const rgb = /^rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/i.exec(v);
   if (rgb) {
     return {
       r: clampChannel(parseFloat(rgb[1])),
       g: clampChannel(parseFloat(rgb[2])),
       b: clampChannel(parseFloat(rgb[3])),
+    };
+  }
+
+  const rgba =
+    /^rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/i.exec(
+      v
+    );
+  if (rgba) {
+    const alpha = parseFloat(rgba[4]);
+    if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) return null;
+    return {
+      r: clampChannel(parseFloat(rgba[1])),
+      g: clampChannel(parseFloat(rgba[2])),
+      b: clampChannel(parseFloat(rgba[3])),
+      a: alpha,
     };
   }
 
@@ -94,7 +109,7 @@ export function contrastRatio(
       ? parseColor(background as string | null | undefined)
       : background;
 
-  if (!fg || !bg) return NaN;
+  if (!fg || !bg || (fg.a ?? 1) < 1 || (bg.a ?? 1) < 1) return NaN;
 
   const l1 = relativeLuminance(fg);
   const l2 = relativeLuminance(bg);
