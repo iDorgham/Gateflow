@@ -1,0 +1,20 @@
+apps/client-dashboard/src/lib/compliance/regimes.ts
+  s_dcd6ad35339f95::t_1a98f7724be19f 270-272,275
+  s_dcd6ad35339f95::t_aed62fb4e5a7de 273
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "99a22df75ea6fb7abd2b80882a975203396fbb30",
+  "prompts": {},
+  "sessions": {
+    "s_dcd6ad35339f95": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f9e429d3fffeaBO3qiIPhnRgf7",
+        "model": "big-pickle"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
