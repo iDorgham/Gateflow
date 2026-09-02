@@ -6,7 +6,7 @@ import {
 import { prisma } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { hasPermission } from '@/lib/auth';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { enforceTenantAccess } from '@/lib/enforce-tenant-access';
 import { processBulkScans } from '@/lib/scans/bulk-sync';
 import {
   orgHasAssignments,
@@ -56,9 +56,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Rate limit: 30 bulk-sync requests per minute per user (checked BEFORE body parsing & queries)
-    const rl = await checkRateLimit(`bulk:${authResult.sub}`, 30, 60_000);
-    if (!rl.allowed) {
+    // Rate limit + IP allow-list: 30 bulk-sync requests/min per tenant+IP (checked BEFORE body parsing & queries)
+    const access = await enforceTenantAccess(request, {
+      orgId,
+      keyPrefix: 'bulk',
+      max: 30,
+      windowMs: 60_000,
+    });
+    if (access.decision === 'deny_allowlist') {
+      return NextResponse.json(
+        { success: false, message: 'Access not permitted for this network' },
+        { status: 403 }
+      );
+    }
+    if (access.decision === 'rate_limited') {
       return NextResponse.json(
         {
           success: false,
@@ -67,8 +78,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         {
           status: 429,
           headers: {
-            'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
-            'X-RateLimit-Limit': String(rl.limit),
+            'Retry-After': String(
+              Math.ceil(access.rateLimit.retryAfterMs / 1000)
+            ),
+            'X-RateLimit-Limit': String(access.rateLimit.limit),
             'X-RateLimit-Remaining': '0',
           },
         }

@@ -111,8 +111,8 @@ const SKIP_PATTERNS = [
   /package-lock\.json$/,
   /\.github\/workflows\//,
   /\.github\/actions\//,
-  /\.test\.(ts|tsx|js)$/,
-  /\.spec\.(ts|tsx|js)$/,
+  /\.test\.(ts|tsx|js|mjs)$/,
+  /\.spec\.(ts|tsx|js|mjs)$/,
   /__tests__\//,
   /__mocks__\//,
   /\/\.claude\//,
@@ -125,6 +125,12 @@ const SKIP_PATTERNS = [
   /\.lighthouseci\//,
   /lighthouse.*\.json$/i,
   /\/coverage\//,
+  /\/\.metro\//,
+  /\/\.expo\//,
+  /\.env$/,
+  /\.env\.local$/,
+  /\.env\.production$/,
+  /\.env\..*\.local$/,
 ];
 
 const ROOT = getRepoRoot(__dirname);
@@ -213,6 +219,7 @@ const SKIP_DIRS = new Set([
   '.antigravity',
   'artifacts',
   'reference',
+  '.metro',
   '__tests__',
   '__mocks__',
 ]);

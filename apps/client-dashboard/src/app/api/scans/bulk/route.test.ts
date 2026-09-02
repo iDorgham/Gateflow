@@ -49,6 +49,17 @@ jest.mock('@/lib/require-auth', () => ({
   },
 }));
 
+const mockEnforceTenantAccess = jest.fn(async () => ({
+  decision: 'allow',
+  reason: 'allowed',
+  rateLimit: { allowed: true, limit: 30, remaining: 29, retryAfterMs: 0 },
+  allowListed: true,
+}));
+
+jest.mock('@/lib/enforce-tenant-access', () => ({
+  enforceTenantAccess: (...args: unknown[]) => mockEnforceTenantAccess(...args),
+}));
+
 jest.mock('@/lib/rate-limit', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
 }));
@@ -135,6 +146,12 @@ beforeEach(() => {
     remaining: 29,
     retryAfterMs: 0,
   });
+  mockEnforceTenantAccess.mockResolvedValue({
+    decision: 'allow',
+    reason: 'allowed',
+    rateLimit: { allowed: true, limit: 30, remaining: 29, retryAfterMs: 0 },
+    allowListed: true,
+  });
   mockProcessBulkScans.mockResolvedValue({
     synced: [],
     conflicted: [],
@@ -166,11 +183,15 @@ describe('POST /api/scans/bulk', () => {
   });
 
   it('returns 429 when rate-limited', async () => {
-    mockCheckRateLimit.mockResolvedValue({
-      allowed: false,
-      limit: 30,
-      remaining: 0,
-      retryAfterMs: 30000,
+    mockEnforceTenantAccess.mockResolvedValue({
+      decision: 'rate_limited',
+      reason: 'Rate limit exceeded',
+      rateLimit: {
+        allowed: false,
+        limit: 30,
+        remaining: 0,
+        retryAfterMs: 30000,
+      },
     });
     const res = await POST(makeRequest({ scans: [] }));
     expect(res.status).toBe(429);

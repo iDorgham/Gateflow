@@ -103,6 +103,7 @@ function auditRouteSecurity(routePath, appConfig) {
       code.includes('authOptions') ||
       code.includes('apiGuard') ||
       code.includes('checkRateLimit') ||
+      code.includes('enforceTenantAccess') ||
       code.includes('verifyBearerToken') ||
       code.includes('requireOrgAccess') ||
       code.includes('Authorization');

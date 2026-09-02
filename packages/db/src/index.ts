@@ -117,6 +117,20 @@ export type {
   RetentionGuard,
 } from './lib/retention-executor';
 export {
+  anonymizeContactPii,
+  anonymizeUserPii,
+  anonymizeVehiclePlatePii,
+  redact,
+  redactedOrNull,
+  retentionBatchEnabled,
+} from './lib/retention-apply';
+export { runRetentionBatch } from './lib/retention-runner';
+export type {
+  OrgRetentionRecord,
+  OrgRetentionSummary,
+  RetentionBatchSummary,
+} from './lib/retention-runner';
+export {
   assertPlannedHierarchyIntegrity,
   buildPlannedUnitHierarchy,
   buildingCodeForGlobalIndex,
