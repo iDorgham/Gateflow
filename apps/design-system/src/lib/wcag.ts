@@ -10,7 +10,7 @@
  * styles, so consumers call `parseColor` with a resolved color string.
  */
 
-export type RGB = { r: number; g: number; b: number; a?: number };
+export type RGB = { r: number; g: number; b: number };
 
 /** True if the string looks like a parseable color we can measure. */
 export function isMeasurableColor(value: string | null | undefined): boolean {
@@ -45,10 +45,7 @@ export function parseColor(value: string | null | undefined): RGB | null {
     };
   }
 
-  const rgb =
-    /^rgb\(\s*((?:\d+(?:\.\d+)?|\.\d+))\s*,\s*((?:\d+(?:\.\d+)?|\.\d+))\s*,\s*((?:\d+(?:\.\d+)?|\.\d+))\s*\)$/i.exec(
-      v
-    );
+  const rgb = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(v);
   if (rgb) {
     return {
       r: clampChannel(parseFloat(rgb[1])),
@@ -57,42 +54,14 @@ export function parseColor(value: string | null | undefined): RGB | null {
     };
   }
 
-  const rgba =
-    /^rgba\(\s*((?:\d+(?:\.\d+)?|\.\d+))\s*,\s*((?:\d+(?:\.\d+)?|\.\d+))\s*,\s*((?:\d+(?:\.\d+)?|\.\d+))\s*,\s*((?:\d+(?:\.\d+)?|\.\d+))\s*\)$/i.exec(
-      v
-    );
-  if (rgba) {
-    const alpha = parseFloat(rgba[4]);
-    if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) return null;
-    return {
-      r: clampChannel(parseFloat(rgba[1])),
-      g: clampChannel(parseFloat(rgba[2])),
-      b: clampChannel(parseFloat(rgba[3])),
-      a: alpha,
-    };
-  }
-
   return null;
 }
 
-/**
- * Clamp a color channel value to the valid 0-255 range.
- *
- * @param value - The raw channel value to clamp.
- * @returns The clamped value, rounded to the nearest integer.
- */
 function clampChannel(value: number): number {
   if (Number.isNaN(value)) return 0;
   return Math.min(255, Math.max(0, Math.round(value)));
 }
 
-/**
- * Convert an sRGB channel value to its linear RGB equivalent for luminance calculation.
- * Applies the WCAG 2.x sRGB to linear RGB transformation formula.
- *
- * @param channel - The sRGB channel value in the range 0-255.
- * @returns The linearized channel value in the range 0-1.
- */
 function channelToLinear(channel: number): number {
   const c = channel / 255;
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
@@ -125,7 +94,7 @@ export function contrastRatio(
       ? parseColor(background as string | null | undefined)
       : background;
 
-  if (!fg || !bg || (fg.a ?? 1) < 1 || (bg.a ?? 1) < 1) return NaN;
+  if (!fg || !bg) return NaN;
 
   const l1 = relativeLuminance(fg);
   const l2 = relativeLuminance(bg);

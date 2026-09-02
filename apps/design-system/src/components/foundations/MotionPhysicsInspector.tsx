@@ -45,7 +45,7 @@ export function MotionPhysicsInspector() {
   const [mass, setMass] = React.useState(1);
   const [runKey, setRunKey] = React.useState(0);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const update = () => setSystemReduced(systemPrefersReducedMotion());
     update();
     if (
