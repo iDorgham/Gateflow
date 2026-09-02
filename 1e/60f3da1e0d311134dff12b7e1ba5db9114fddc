@@ -1,0 +1,19 @@
+.ai/runtime-proof.json
+  s_59dacfd28dc132::t_f4f30d0f008ef8 18-19,23-24,26,31-32,34,36-37,39,57-60,62-63,65,83-86,88-89,91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "1e60f3da1e0d311134dff12b7e1ba5db9114fddc",
+  "prompts": {},
+  "sessions": {
+    "s_59dacfd28dc132": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa69dfdd5ffeFSdwqnCDhtvOZz",
+        "model": "big-pickle"
+      },
+      "human_author": null
+    }
+  }
+}
