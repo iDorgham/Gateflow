@@ -1,0 +1,65 @@
+apps/client-dashboard/src/app/api/compliance/export/route.ts
+  s_59dacfd28dc132::t_a4c96f1ffd00fe 1-126
+apps/client-dashboard/src/app/api/cron/retention/route.test.ts
+  s_59dacfd28dc132::t_85f267aa2e81b9 1-58
+apps/client-dashboard/src/app/api/cron/retention/route.ts
+  s_59dacfd28dc132::t_998aba47e0b161 1-46
+apps/client-dashboard/src/app/api/qr/bulk-create/route.test.ts
+  s_59dacfd28dc132::t_c374d586c570dd 17-18,31-41,50-51,78-83,138-140,170-177,191,200-204,213,222-226,235-245,253-257,265-275,284,291-298
+apps/client-dashboard/src/app/api/qr/bulk-create/route.ts
+  s_59dacfd28dc132::t_086204958975a9 5,71-83,92-95
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_59dacfd28dc132::t_4d058a0376c3b0 191-205,306-313,373-381,396,405-410
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_59dacfd28dc132::t_18d1611e5e7e97 18,130-157,166-169
+apps/client-dashboard/src/app/api/scans/bulk/route.ts
+  s_59dacfd28dc132::t_a5f51627afec4d 9,59-72,81-84
+apps/client-dashboard/src/app/api/security/ip-allowlist/route.ts
+  s_59dacfd28dc132::t_4eb83afa68107f 1-75
+apps/client-dashboard/src/lib/allow-list.test.ts
+  s_59dacfd28dc132::t_bc346a3c9bf24b 1-84
+apps/client-dashboard/src/lib/allow-list.ts
+  s_59dacfd28dc132::t_e4fce42c9f2ac0 1-205
+apps/client-dashboard/src/lib/compliance/export-engine.test.ts
+  s_59dacfd28dc132::t_37252a054b4c9c 1-67
+apps/client-dashboard/src/lib/compliance/export-engine.ts
+  s_59dacfd28dc132::t_67efd72401f573 1-235
+apps/client-dashboard/src/lib/compliance/regimes.test.ts
+  s_59dacfd28dc132::t_6b7cb6115315bc 1-95
+apps/client-dashboard/src/lib/compliance/regimes.ts
+  s_59dacfd28dc132::t_b81d7b313b05a2 1-252
+apps/client-dashboard/src/lib/enforce-tenant-access.test.ts
+  s_59dacfd28dc132::t_fd2891580a1416 1-125
+apps/client-dashboard/src/lib/enforce-tenant-access.ts
+  s_59dacfd28dc132::t_7f18434da64378 1-116
+docs/audits/security/SECURITY_READINESS_MENA_CERTIFICATION_2026.json
+  s_59dacfd28dc132::t_3e23859476fe68 4-5,7,17-19,29-31,57,59-84,88-89,92-105,109-112,114-122
+docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/SESSION_MEMORY.md
+  s_59dacfd28dc132::t_17817ad6dd9c01 3-4,13,20-60,67-72
+docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/phase_logs/PHASE_LOG_phase_06.md
+  s_59dacfd28dc132::t_c21c12cc425c11 1-111
+packages/db/src/lib/retention-apply.test.ts
+  s_59dacfd28dc132::t_24a3f8b65626ae 1-98
+packages/db/src/lib/retention-apply.ts
+  s_59dacfd28dc132::t_74ad895c16f742 1-125
+packages/db/src/lib/retention-runner.ts
+  s_59dacfd28dc132::t_a7533c8ad38c1e 1-219
+apps/client-dashboard/vercel.json
+  s_59dacfd28dc132::t_1e98c13ac80cc1 7-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "8887c16ba441b8a136233b43035729361600c114",
+  "prompts": {},
+  "sessions": {
+    "s_59dacfd28dc132": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa69dfdd5ffeFSdwqnCDhtvOZz",
+        "model": "big-pickle"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
