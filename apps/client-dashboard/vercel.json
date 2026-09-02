@@ -4,6 +4,12 @@
   "buildCommand": "cd ../.. && pnpm turbo build --filter=client-dashboard",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": ".next",
+  "crons": [
+    {
+      "path": "/api/cron/retention",
+      "schedule": "0 2 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

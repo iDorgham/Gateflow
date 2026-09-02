@@ -188,6 +188,21 @@ jest.mock('../../../../lib/rate-limit', () => ({
   RATE_LIMIT_WINDOW_MS: 60_000,
 }));
 
+jest.mock('../../../../lib/enforce-tenant-access', () => ({
+  enforceTenantAccess: (request: unknown, options: unknown) =>
+    mockEnforceTenantAccess(request, options),
+}));
+
+const mockEnforceTenantAccess = jest.fn(
+  async () =>
+    ({
+      decision: 'allow',
+      reason: 'allowed',
+      rateLimit: { allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 },
+      allowListed: true,
+    }) as const
+);
+
 const mockCheckGateAssignment = jest.fn();
 jest.mock('../../../../lib/gate-assignment', () => ({
   checkGateAssignment: (...args: unknown[]) => mockCheckGateAssignment(...args),
@@ -288,6 +303,14 @@ describe('POST /api/qrcodes/validate', () => {
       retryAfterMs: 0,
     });
 
+    // Default: per-tenant/IP enforcer allows the request.
+    mockEnforceTenantAccess.mockResolvedValue({
+      decision: 'allow',
+      reason: 'allowed',
+      rateLimit: { allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 },
+      allowListed: true,
+    });
+
     // Default: gate-assignment check passes (user allowed to scan at this gate).
     mockCheckGateAssignment.mockResolvedValue(null);
 
@@ -347,11 +370,15 @@ describe('POST /api/qrcodes/validate', () => {
   // ── Rate limiting ─────────────────────────────────────────────────────────
 
   it('returns 429 with Retry-After when rate limit is exceeded', async () => {
-    mockCheckRateLimit.mockResolvedValue({
-      allowed: false,
-      limit: 100,
-      remaining: 0,
-      retryAfterMs: 30_000,
+    mockEnforceTenantAccess.mockResolvedValue({
+      decision: 'rate_limited',
+      reason: 'Rate limit exceeded',
+      rateLimit: {
+        allowed: false,
+        limit: 100,
+        remaining: 0,
+        retryAfterMs: 30_000,
+      },
     });
 
     const auth = await makeAuthHeader();
@@ -366,7 +393,7 @@ describe('POST /api/qrcodes/validate', () => {
     expect(res.headers.get('X-RateLimit-Remaining')).toBe('0');
   });
 
-  it('passes the authenticated user ID as the rate-limit key', async () => {
+  it('enforces per-tenant/IP access for the validate entry point', async () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     await POST(
@@ -375,7 +402,12 @@ describe('POST /api/qrcodes/validate', () => {
         auth
       )
     );
-    expect(mockCheckRateLimit.mock.calls[0][0]).toBe('validate:user_1');
+    const options = mockEnforceTenantAccess.mock.calls[0][1] as {
+      orgId: string;
+      keyPrefix: string;
+    };
+    expect(options.orgId).toBe('org_test_456');
+    expect(options.keyPrefix).toBe('validate');
   });
 
   // ── Signature / format ────────────────────────────────────────────────────

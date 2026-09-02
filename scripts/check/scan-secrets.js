@@ -83,7 +83,7 @@ const PATTERNS = [
   {
     name: 'Generic Token Assign',
     severity: 'MEDIUM',
-    re: /(TOKEN|SIGNING_SECRET)\s*[:=]\s*["'][a-zA-Z0-9+/=_\-]{20,}["']/i,
+    re: /(TOKEN|SIGNING_SECRET)\s*[:=]\s*["'][a-zA-Z0-9+/=_-]{20,}["']/i,
   },
   {
     name: 'JWT (encoded)',
@@ -111,8 +111,8 @@ const SKIP_PATTERNS = [
   /package-lock\.json$/,
   /\.github\/workflows\//,
   /\.github\/actions\//,
-  /\.test\.(ts|tsx|js)$/,
-  /\.spec\.(ts|tsx|js)$/,
+  /\.test\.(ts|tsx|js|mjs)$/,
+  /\.spec\.(ts|tsx|js|mjs)$/,
   /__tests__\//,
   /__mocks__\//,
   /\/\.claude\//,
@@ -125,6 +125,8 @@ const SKIP_PATTERNS = [
   /\.lighthouseci\//,
   /lighthouse.*\.json$/i,
   /\/coverage\//,
+  /\/\.metro\//,
+  /\/\.expo\//,
 ];
 
 const ROOT = getRepoRoot(__dirname);
@@ -213,6 +215,7 @@ const SKIP_DIRS = new Set([
   '.antigravity',
   'artifacts',
   'reference',
+  '.metro',
   '__tests__',
   '__mocks__',
 ]);
@@ -237,6 +240,20 @@ const BINARY_EXTS = new Set([
   '.gz',
 ]);
 
+let trackedFiles;
+
+function isEnvironmentFile(filePath) {
+  return (
+    path.basename(filePath) === '.env' ||
+    path.basename(filePath).startsWith('.env.')
+  );
+}
+
+function isTrackedFile(filePath) {
+  trackedFiles ??= new Set(gitLines(['ls-files']));
+  return trackedFiles.has(filePath.split(path.sep).join('/'));
+}
+
 function walkRepoFiles(dir = ROOT, fileList = []) {
   if (!fs.existsSync(dir)) return fileList;
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -250,6 +267,7 @@ function walkRepoFiles(dir = ROOT, fileList = []) {
       const ext = path.extname(entry.name).toLowerCase();
       if (BINARY_EXTS.has(ext)) continue;
       if (shouldSkip(rel)) continue;
+      if (isEnvironmentFile(rel) && !isTrackedFile(rel)) continue;
       fileList.push(rel);
     }
   }
@@ -258,7 +276,11 @@ function walkRepoFiles(dir = ROOT, fileList = []) {
 
 function getAllFiles() {
   const scanRoots = ['apps', 'packages', 'scripts', '.github'];
-  return scanRoots.flatMap((r) => walkRepoFiles(path.join(ROOT, r)));
+  const files = scanRoots.flatMap((r) => walkRepoFiles(path.join(ROOT, r)));
+  const trackedEnvironmentFiles = gitLines(['ls-files']).filter(
+    isEnvironmentFile
+  );
+  return [...new Set([...files, ...trackedEnvironmentFiles])];
 }
 
 function reportAndExit(mode, considered, scanned, allFindings) {

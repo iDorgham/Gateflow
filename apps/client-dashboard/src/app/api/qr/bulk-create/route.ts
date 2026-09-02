@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { randomUUID } from 'crypto';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { enforceTenantAccess } from '@/lib/enforce-tenant-access';
 import { prisma, QRCodeType as PrismaQRCodeType } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 
@@ -68,12 +68,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const rl = await checkRateLimit(
-      `qr-bulk-create:${claims.orgId}:${claims.sub}`,
-      20,
-      60_000
-    );
-    if (!rl.allowed) {
+    const access = await enforceTenantAccess(request, {
+      orgId: claims.orgId,
+      keyPrefix: 'qr-bulk-create',
+      max: 20,
+      windowMs: 60_000,
+    });
+    if (access.decision === 'deny_allowlist') {
+      return NextResponse.json(
+        { success: false, message: 'Access not permitted for this network' },
+        { status: 403 }
+      );
+    }
+    if (access.decision === 'rate_limited') {
       return NextResponse.json(
         {
           success: false,
@@ -82,8 +89,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         {
           status: 429,
           headers: {
-            'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
-            'X-RateLimit-Limit': String(rl.limit),
+            'Retry-After': String(
+              Math.ceil(access.rateLimit.retryAfterMs / 1000)
+            ),
+            'X-RateLimit-Limit': String(access.rateLimit.limit),
             'X-RateLimit-Remaining': '0',
           },
         }

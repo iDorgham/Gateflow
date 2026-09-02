@@ -14,7 +14,8 @@
  */
 
 // Set env vars before any module import.
-process.env.QR_SIGNING_SECRET = 'test-qr-signing-secret-that-is-at-least-32-chars!!';
+process.env.QR_SIGNING_SECRET =
+  'test-qr-signing-secret-that-is-at-least-32-chars!!';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -27,6 +28,17 @@ jest.mock('@/lib/auth-cookies', () => ({
   getSessionClaims: () => mockGetSessionClaims(),
 }));
 
+const mockEnforceTenantAccess = jest.fn(async () => ({
+  decision: 'allow',
+  reason: 'allowed',
+  rateLimit: { allowed: true, limit: 20, remaining: 19, retryAfterMs: 0 },
+  allowListed: true,
+}));
+
+jest.mock('@/lib/enforce-tenant-access', () => ({
+  enforceTenantAccess: (...args: unknown[]) => mockEnforceTenantAccess(...args),
+}));
+
 jest.mock('@gate-access/db', () => ({
   prisma: {
     gate: {
@@ -35,7 +47,8 @@ jest.mock('@gate-access/db', () => ({
     qRCode: {
       createMany: (...args: unknown[]) => mockQRCodeCreateMany(...args),
     },
-    $transaction: (fn: (tx: unknown) => Promise<unknown>) => mockTransaction(fn),
+    $transaction: (fn: (tx: unknown) => Promise<unknown>) =>
+      mockTransaction(fn),
   },
   QRCodeType: {
     SINGLE: 'SINGLE',
@@ -62,7 +75,12 @@ function makeRequest(body: unknown): NextRequest {
 }
 
 const ORG_ID = 'org_test_456';
-const SESSION_CLAIMS = { orgId: ORG_ID, sub: 'user_1', email: 'test@test.com', role: 'TENANT_ADMIN' };
+const SESSION_CLAIMS = {
+  orgId: ORG_ID,
+  sub: 'user_1',
+  email: 'test@test.com',
+  role: 'TENANT_ADMIN',
+};
 
 // ─── Lazy route import (after mocks) ──────────────────────────────────────────
 
@@ -117,7 +135,9 @@ describe('POST /api/qr/bulk-create', () => {
   });
 
   it('returns 400 when items exceeds 500 entries', async () => {
-    const items = Array.from({ length: 501 }, (_, i) => ({ name: `User ${i}` }));
+    const items = Array.from({ length: 501 }, (_, i) => ({
+      name: `User ${i}`,
+    }));
     const res = await POST(makeRequest({ items }));
     expect(res.status).toBe(400);
   });
@@ -147,12 +167,14 @@ describe('POST /api/qr/bulk-create', () => {
   // ── Success ──────────────────────────────────────────────────────────────────
 
   it('creates QR codes for all valid items and returns totalCreated', async () => {
-    const res = await POST(makeRequest({
-      items: [
-        { name: 'Alice', type: 'SINGLE' },
-        { name: 'Bob', type: 'PERMANENT' },
-      ],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [
+          { name: 'Alice', type: 'SINGLE' },
+          { name: 'Bob', type: 'PERMANENT' },
+        ],
+      })
+    );
     const data = await res.json();
 
     expect(res.status).toBe(200);
@@ -166,7 +188,7 @@ describe('POST /api/qr/bulk-create', () => {
           expect.objectContaining({ code: expect.any(String) }),
           expect.objectContaining({ code: expect.any(String) }),
         ]),
-      }),
+      })
     );
   });
 
@@ -175,9 +197,11 @@ describe('POST /api/qr/bulk-create', () => {
   it('resolves gate by name (case-insensitive) and assigns gateId', async () => {
     mockGateFindMany.mockResolvedValue([{ id: 'gate_1', name: 'Main Gate' }]);
 
-    const res = await POST(makeRequest({
-      items: [{ name: 'Alice', gate: 'main gate', type: 'SINGLE' }],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [{ name: 'Alice', gate: 'main gate', type: 'SINGLE' }],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(1);
@@ -186,7 +210,7 @@ describe('POST /api/qr/bulk-create', () => {
         data: expect.arrayContaining([
           expect.objectContaining({ gateId: 'gate_1' }),
         ]),
-      }),
+      })
     );
   });
 
@@ -195,9 +219,11 @@ describe('POST /api/qr/bulk-create', () => {
   it('adds item to errors when the gate name is not found', async () => {
     mockGateFindMany.mockResolvedValue([{ id: 'gate_1', name: 'Main Gate' }]);
 
-    const res = await POST(makeRequest({
-      items: [{ name: 'Alice', gate: 'Unknown Gate', type: 'SINGLE' }],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [{ name: 'Alice', gate: 'Unknown Gate', type: 'SINGLE' }],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(0);
@@ -206,13 +232,17 @@ describe('POST /api/qr/bulk-create', () => {
   });
 
   it('adds item to errors when expiresAt is in the past', async () => {
-    const res = await POST(makeRequest({
-      items: [{
-        name: 'Alice',
-        type: 'SINGLE',
-        expiresAt: new Date(Date.now() - 60_000).toISOString(),
-      }],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [
+          {
+            name: 'Alice',
+            type: 'SINGLE',
+            expiresAt: new Date(Date.now() - 60_000).toISOString(),
+          },
+        ],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalErrors).toBe(1);
@@ -220,9 +250,11 @@ describe('POST /api/qr/bulk-create', () => {
   });
 
   it('adds item to errors for RECURRING type without maxUses', async () => {
-    const res = await POST(makeRequest({
-      items: [{ name: 'Alice', type: 'RECURRING' }],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [{ name: 'Alice', type: 'RECURRING' }],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalErrors).toBe(1);
@@ -230,13 +262,17 @@ describe('POST /api/qr/bulk-create', () => {
   });
 
   it('PERMANENT type ignores expiresAt and sets maxUses to null', async () => {
-    const res = await POST(makeRequest({
-      items: [{
-        name: 'Permanent Alice',
-        type: 'PERMANENT',
-        expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
-      }],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [
+          {
+            name: 'Permanent Alice',
+            type: 'PERMANENT',
+            expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
+          },
+        ],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(1);
@@ -245,19 +281,21 @@ describe('POST /api/qr/bulk-create', () => {
         data: expect.arrayContaining([
           expect.objectContaining({ expiresAt: null, maxUses: null }),
         ]),
-      }),
+      })
     );
   });
 
   // ── Partial success ───────────────────────────────────────────────────────────
 
   it('returns partial success when some items are valid and some are not', async () => {
-    const res = await POST(makeRequest({
-      items: [
-        { name: 'Good User', type: 'SINGLE' },
-        { name: 'Bad User', type: 'RECURRING' }, // missing maxUses
-      ],
-    }));
+    const res = await POST(
+      makeRequest({
+        items: [
+          { name: 'Good User', type: 'SINGLE' },
+          { name: 'Bad User', type: 'RECURRING' }, // missing maxUses
+        ],
+      })
+    );
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(1);

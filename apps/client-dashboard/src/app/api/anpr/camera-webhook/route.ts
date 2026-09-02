@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { timingSafeEqual } from 'node:crypto';
+import { decrypt, prisma } from '@gate-access/db';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 import { normalizePlate } from '../stream-event/route';
@@ -21,6 +22,21 @@ interface CameraWebhookBody {
   snapshotUrl?: string;
   api_key?: string;
   apiKey?: string;
+}
+
+function verifyApiKey(candidate: string, encryptedKey: string): boolean {
+  let expected: string;
+  try {
+    expected = decrypt(encryptedKey);
+  } catch {
+    return false;
+  }
+  const candidateBytes = Buffer.from(candidate);
+  const expectedBytes = Buffer.from(expected);
+  return (
+    candidateBytes.length === expectedBytes.length &&
+    timingSafeEqual(candidateBytes, expectedBytes)
+  );
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -47,14 +63,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 401 }
       );
     }
-
-    // Verify integration credential API Key
-    const credential = await prisma.integrationCredential.findFirst({
-      where: {
-        provider: 'ANPR_CAMERA',
-        deletedAt: null,
-      },
-    });
 
     // Extract raw plate and gateId across vendor payload shapes
     const rawPlate = body.plate || body.license_plate || body.plateNumber;
@@ -83,6 +91,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { success: false, message: 'Gate not found' },
         { status: 404 }
+      );
+    }
+
+    const credential = await prisma.integrationCredential.findFirst({
+      where: {
+        organizationId: gate.organizationId,
+        provider: 'ANPR_CAMERA',
+        deletedAt: null,
+      },
+      select: { encryptedKey: true },
+    });
+    if (!credential || !verifyApiKey(apiKey, credential.encryptedKey)) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized: invalid camera API key' },
+        { status: 401 }
       );
     }
 

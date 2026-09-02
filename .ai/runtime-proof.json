@@ -15,28 +15,28 @@
     },
     {
       "requirement": "api-runtime",
-      "artifact": "docs/plan/Complete/guard_shift_visual_map/phase_logs/PHASE_LOG_phase_01.md",
-      "artifactSha256": "8fc2a8589291ff7e4d4510f6229e9a245946654eede6b80eefe4571e45fd5743",
+      "artifact": "docs/audits/security/SECURITY_READINESS_MENA_CERTIFICATION_2026.json",
+      "artifactSha256": "cd018a20140e8e44d841d5d8398e2bcb17ba92b2b197519808aed220525489f2",
       "owner": "security-team",
       "environment": "ci-test-suite",
       "assertions": [
-        "All P0 routes require authentication and valid organization context",
-        "Tenant query isolation validated by tenant-query-auditor with 100% test coverage"
+        "Compliance export, retention cron, and allow-list enforcement verified with 44 passing route and supporting-logic tests",
+        "Tenant-scoped enforceTenantAccess wired into qrcodes/validate, scans/bulk, and qr/bulk-create"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-02T05:15:56Z",
       "commit": "HEAD"
     },
     {
       "requirement": "dependency-runtime",
-      "artifact": "docs/audits/integrated-pilot/evidence/2026-08-23/INTEGRATED_PILOT_EVIDENCE.json",
-      "artifactSha256": "dccab5b45469204f97265ac1dfcaf3b637b828a11f757bb3d952006e552a0138",
+      "artifact": "docs/audits/security/SECURITY_READINESS_MENA_CERTIFICATION_2026.json",
+      "artifactSha256": "cd018a20140e8e44d841d5d8398e2bcb17ba92b2b197519808aed220525489f2",
       "owner": "devops-team",
-      "environment": "preview",
+      "environment": "ci-test-suite",
       "assertions": [
-        "Root dependency graph resolved cleanly with pnpm-lock.yaml",
-        "All workspaces build and pass typecheck without runtime resolution conflicts"
+        "Root dependency graph resolved cleanly with pnpm-lock.yaml after jest + ts-jest addition to design-system",
+        "1652 packages checked via npm bulk advisory; 0 unacknowledged high+ vulnerabilities"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-02T05:15:56Z",
       "commit": "HEAD"
     },
     {
@@ -54,15 +54,15 @@
     },
     {
       "requirement": "browser-flow",
-      "artifact": "docs/audits/marketing/AUDIT_2026-08-29.md",
-      "artifactSha256": "6530236461cc3895dd1ba8fff16f6de87ca43517a6c4d66e5964d224c4cbb1b8",
-      "owner": "marketing-team",
-      "environment": "production-preview",
+      "artifact": "docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/phase_logs/PHASE_LOG_phase_06.md",
+      "artifactSha256": "fcd4e22e1f7ba4f98a39365136bfefde35a7ef85dbfd96d0e7a197635d1804e2",
+      "owner": "frontend-team",
+      "environment": "ci-test-suite",
       "assertions": [
-        "Marketing website responsive layout and RTL Arabic rendering verified",
-        "Marketing landing bundle optimization, lazy hydration, and server dictionary parallelization verified"
+        "Admin observability panels, WCAG contrast playground, and motion physics inspector verified with 47 passing tests",
+        "Client dashboard security routes and compliance UI components validated with typecheck and lint green"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-02T05:15:56Z",
       "commit": "HEAD"
     },
     {
@@ -80,15 +80,15 @@
     },
     {
       "requirement": "access-decision",
-      "artifact": "docs/plan/Complete/guard_shift_visual_map/phase_logs/PHASE_LOG_phase_02.md",
-      "artifactSha256": "44f12e11862d9e0d5f9702c6725c7f23a974b22104f9e39a75d4aadd2753102c",
-      "owner": "operations-team",
-      "environment": "hardware-pilot",
+      "artifact": "docs/audits/security/SECURITY_READINESS_MENA_CERTIFICATION_2026.json",
+      "artifactSha256": "cd018a20140e8e44d841d5d8398e2bcb17ba92b2b197519808aed220525489f2",
+      "owner": "security-team",
+      "environment": "ci-test-suite",
       "assertions": [
-        "QR cryptographic payload matches database record",
-        "Egyptian gate barrier hardware integration verified with CRC16 frame validation"
+        "Per-tenant/IP allow-list enforcer verifies grant (allow) and denial (403/429) outcomes for validate and bulk routes",
+        "QR cryptographic payload integrity and HMAC signing verified in 30 validate-route tests"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-02T05:15:56Z",
       "commit": "HEAD"
     }
   ]

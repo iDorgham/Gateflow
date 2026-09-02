@@ -15,7 +15,7 @@ import {
 } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { type AccessTokenClaims } from '../../../../lib/auth';
-import { checkRateLimit } from '../../../../lib/rate-limit';
+import { enforceTenantAccess } from '../../../../lib/enforce-tenant-access';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import {
   findOpenShiftForGate,
@@ -127,25 +127,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (isNextResponse(authResult)) return authResult;
     claims = authResult;
 
-    // Step 2 — Rate limit: 100 req/min per authenticated user.
-    const rl = await checkRateLimit(`validate:${claims.sub}`);
-    if (!rl.allowed) {
-      const responseBody: QRValidateResponse = {
-        status: 'rejected',
-        reason: 'rate_limited',
-        message: 'Too many requests — please slow down',
-      };
-      return NextResponse.json(responseBody, {
-        status: 429,
-        headers: {
-          'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
-          'X-RateLimit-Limit': String(rl.limit),
-          'X-RateLimit-Remaining': '0',
-        },
-      });
-    }
-
-    // Step 2.5 — Require organization (fail-closed: no org = no validate).
+    // Step 2 — Require organization (fail-closed: no org = no validate).
     if (!claims.orgId) {
       return json<QRValidateResponse>(
         {
@@ -155,6 +137,39 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         },
         403
       );
+    }
+
+    // Step 2.5 — Per-tenant/IP allow-list + rate limit (100 req/min per IP).
+    const access = await enforceTenantAccess(request, {
+      orgId: claims.orgId,
+      keyPrefix: 'validate',
+    });
+    if (access.decision === 'deny_allowlist') {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'denied',
+          message: 'Access not permitted for this network',
+        },
+        403
+      );
+    }
+    if (access.decision === 'rate_limited') {
+      const responseBody: QRValidateResponse = {
+        status: 'rejected',
+        reason: 'rate_limited',
+        message: 'Too many requests — please slow down',
+      };
+      return NextResponse.json(responseBody, {
+        status: 429,
+        headers: {
+          'Retry-After': String(
+            Math.ceil(access.rateLimit.retryAfterMs / 1000)
+          ),
+          'X-RateLimit-Limit': String(access.rateLimit.limit),
+          'X-RateLimit-Remaining': '0',
+        },
+      });
     }
 
     // Step 3 — Request-local tenant ALS context (enterWith) for scoped `db` helpers.

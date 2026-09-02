@@ -574,6 +574,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: 4.3.3
         version: 4.3.3
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/node':
         specifier: ^26.1.2
         version: 26.2.0
@@ -589,12 +592,18 @@ importers:
       eslint:
         specifier: 9.39.5
         version: 9.39.5
+      jest:
+        specifier: ^30.3.0
+        version: 30.4.2(@types/node@26.2.0)
       postcss:
         specifier: '>=8.5.23'
         version: 8.5.26
       tailwindcss:
         specifier: 4.3.3
         version: 4.3.3
+      ts-jest:
+        specifier: ^29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(jest@30.4.2)(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3

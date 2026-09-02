@@ -5,6 +5,7 @@ import { PageHeader } from '@gateflow/components';
 import { Activity, Zap, Play, RotateCcw, Sparkles } from 'lucide-react';
 import { Button } from '@gateflow/ui';
 import { motion, AnimatePresence, type Easing } from 'framer-motion';
+import { MotionPhysicsInspector } from '../../../../components/foundations/MotionPhysicsInspector';
 
 function curveToEasing(curve: string): Easing {
   const nums = curve
@@ -143,6 +144,20 @@ export default function MotionFoundationsPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Motion Physics Inspector */}
+      <section className="flex flex-col gap-4 mt-10">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+            Motion Physics Inspector
+          </h2>
+          <p className="text-xs font-bold text-[var(--ds-text-subtle)] max-w-2xl opacity-60 uppercase tracking-widest leading-relaxed">
+            Tune spring/tween physics and verify the prefers-reduced-motion
+            contract live.
+          </p>
+        </div>
+        <MotionPhysicsInspector />
       </section>
 
       {/* Cine-Entrance / Stagger Demo */}

@@ -20,6 +20,7 @@ const mockVehicleFindFirst = jest.fn();
 const mockCredentialFindFirst = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
+  decrypt: (value: string) => value,
   prisma: {
     gate: { findFirst: (...args: unknown[]) => mockGateFindFirst(...args) },
     vehiclePlate: {
@@ -40,7 +41,9 @@ describe('ANPR Camera Webhook API', () => {
       name: 'North Barrier',
       organizationId: 'org_1',
     });
-    mockCredentialFindFirst.mockResolvedValue({ id: 'cred_1' });
+    mockCredentialFindFirst.mockResolvedValue({
+      encryptedKey: 'cam_secret_123',
+    });
   });
 
   it('rejects camera webhook calls missing API key', async () => {
@@ -51,6 +54,20 @@ describe('ANPR Camera Webhook API', () => {
 
     const res = await POST(req);
     expect(res.status).toBe(401);
+  });
+
+  it('rejects an invalid camera API key', async () => {
+    const req = new NextRequest(
+      'http://localhost/api/anpr/camera-webhook?key=wrong-key',
+      {
+        method: 'POST',
+        body: JSON.stringify({ plate: 'ABC 1234', gate_id: 'gate_1' }),
+      }
+    );
+
+    const res = await POST(req);
+    expect(res.status).toBe(401);
+    expect(mockVehicleFindFirst).not.toHaveBeenCalled();
   });
 
   it('sends OPEN_BARRIER trip signal for recognized plate via camera webhook', async () => {

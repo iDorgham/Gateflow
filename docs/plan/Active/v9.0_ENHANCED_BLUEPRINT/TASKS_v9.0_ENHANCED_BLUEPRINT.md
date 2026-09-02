@@ -54,16 +54,16 @@
 
 ## 🎨 Phase 5: Design System Upgrade & Observability (Weeks 29–32)
 
-- [ ] Task 5.1: Upgrade `@gateflow/ui` & `apps/design-system` to Tailwind CSS v4.
-- [ ] Task 5.2: Build WCAG 2.2 AA Contrast & Theme Audit Playground in Design System portal.
-- [ ] Task 5.3: Build Micro-Interaction Motion Physics Inspector with `prefers-reduced-motion` toggles.
-- [ ] Task 5.4: Build Admin Dashboard Global Integration Health & AI Cost Analytics.
+- [x] Task 5.1: Upgrade `@gateflow/ui` & `apps/design-system` to Tailwind CSS v4.
+- [x] Task 5.2: Build WCAG 2.2 AA Contrast & Theme Audit Playground in Design System portal.
+- [x] Task 5.3: Build Micro-Interaction Motion Physics Inspector with `prefers-reduced-motion` toggles.
+- [x] Task 5.4: Build Admin Dashboard Global Integration Health & AI Cost Analytics.
 
 ---
 
 ## 🔐 Phase 6: Compliance & Hardening (Weeks 33–36)
 
-- [ ] Task 6.1: Implement Egyptian Law 151 and Saudi PDPL compliance PDF/CSV export engine.
-- [ ] Task 6.2: Build Nightly PII Purge & Anonymization Scheduler.
-- [ ] Task 6.3: Implement Upstash Redis API rate-limiting per tenant/IP allow-list enforcer.
-- [ ] Task 6.4: Perform end-to-end security penetration testing & certification.
+- [x] Task 6.1: Implement Egyptian Law 151 and Saudi PDPL compliance PDF/CSV export engine.
+- [x] Task 6.2: Build Nightly PII Purge & Anonymization Scheduler.
+- [x] Task 6.3: Implement Upstash Redis API rate-limiting per tenant/IP allow-list enforcer.
+- [x] Task 6.4: Perform end-to-end security penetration testing & certification.
