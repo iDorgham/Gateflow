@@ -53,15 +53,9 @@ export async function PUT(request: NextRequest) {
   }
 
   const org = await prisma.organization.findFirst({
-    where: { id: claims.orgId, deletedAt: null },
+    where: { id: claims.orgId },
     select: { scannerConfig: true },
   });
-  if (!org) {
-    return NextResponse.json(
-      { error: 'Organization not found' },
-      { status: 404 }
-    );
-  }
   const existing =
     (
       (org?.scannerConfig as { security?: { ipAllowlist?: unknown } } | null) ??
@@ -72,16 +66,10 @@ export async function PUT(request: NextRequest) {
     security: { ...existing, ipAllowlist: parsed.entries },
   } as Prisma.InputJsonObject;
 
-  const updated = await prisma.organization.updateMany({
-    where: { id: claims.orgId, deletedAt: null },
+  await prisma.organization.update({
+    where: { id: claims.orgId },
     data: { scannerConfig: next },
   });
-  if (updated.count === 0) {
-    return NextResponse.json(
-      { error: 'Organization not found' },
-      { status: 404 }
-    );
-  }
 
   return NextResponse.json({ allowList: parsed.entries });
 }

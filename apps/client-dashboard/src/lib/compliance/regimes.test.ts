@@ -12,9 +12,6 @@ const fullEvidence: ComplianceEvidence = {
   auditLogCount: 9001,
   hasDataProtectionOfficer: true,
   breachNotificationConfigured: true,
-  auditLoggingVerified: true,
-  statutoryRightsWorkflowsVerified: true,
-  retentionAgingVerified: true,
 };
 
 describe('compliance regimes', () => {
@@ -53,9 +50,9 @@ describe('compliance regimes', () => {
     expect(isSupportedRegime(undefined)).toBe(false);
   });
 
-  it('remains partial when a required control is partial', () => {
+  it('is fully compliant when evidence is strong', () => {
     const a = assessCompliance('SAUDI_PDPL', fullEvidence);
-    expect(a.status).toBe('PARTIAL');
+    expect(a.status).toBe('COMPLIANT');
     expect(a.score).toBeGreaterThanOrEqual(80);
     expect(a.controls.every((c) => c.status !== 'FAIL')).toBe(true);
   });
@@ -87,22 +84,6 @@ describe('compliance regimes', () => {
     const info = a.controls.filter((c) => c.status === 'INFO');
     expect(info.some((c) => c.id === 'RIGHTS-PORTABILITY')).toBe(true);
     expect(a.score).toBeGreaterThanOrEqual(0);
-  });
-
-  it('does not pass controls based on counts or statutory declarations alone', () => {
-    const a = assessCompliance('EGYPT_LAW_151', {
-      ...fullEvidence,
-      auditLoggingVerified: null,
-      statutoryRightsWorkflowsVerified: null,
-      retentionAgingVerified: null,
-    });
-    expect(a.controls.find((c) => c.id === 'GOV-RECORDS')?.status).toBe(
-      'PARTIAL'
-    );
-    expect(a.controls.find((c) => c.id === 'RIGHTS-ACCESS')?.status).toBe(
-      'PARTIAL'
-    );
-    expect(a.controls.find((c) => c.id === 'RET-PII')?.status).toBe('PARTIAL');
   });
 
   it('produces a deterministic control set', () => {

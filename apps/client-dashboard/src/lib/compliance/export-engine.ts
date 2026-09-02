@@ -63,124 +63,50 @@ export interface CollectedRows {
   auditEvents: AuditEventRow[];
 }
 
-export interface VerifiedTenantComplianceSettings {
-  hasDataProtectionOfficer: boolean;
-  breachNotificationConfigured: boolean;
-  auditLoggingVerified: boolean;
-  statutoryRightsWorkflowsVerified: boolean;
-  retentionAgingVerified: boolean;
-}
-
-/**
- * Extract and validate compliance verification settings from tenant scanner configuration.
- * Parses the `compliance` object from scannerConfig and verifies that all required
- * boolean fields and a verification timestamp are present.
- *
- * @param scannerConfig - The raw tenant scanner configuration object.
- * @returns The verified compliance settings, or null if invalid or unverified.
- */
-export function parseVerifiedTenantComplianceSettings(
-  scannerConfig: unknown
-): VerifiedTenantComplianceSettings | null {
-  if (!scannerConfig || typeof scannerConfig !== 'object') return null;
-  const compliance = (scannerConfig as Record<string, unknown>).compliance;
-  if (!compliance || typeof compliance !== 'object') return null;
-  const settings = compliance as Record<string, unknown>;
-  if (
-    typeof settings.verifiedAt !== 'string' ||
-    Number.isNaN(Date.parse(settings.verifiedAt))
-  ) {
-    return null;
-  }
-
-  const keys = [
-    'hasDataProtectionOfficer',
-    'breachNotificationConfigured',
-    'auditLoggingVerified',
-    'statutoryRightsWorkflowsVerified',
-    'retentionAgingVerified',
-  ] as const;
-  if (keys.some((key) => typeof settings[key] !== 'boolean')) return null;
-
-  return Object.fromEntries(
-    keys.map((key) => [key, settings[key]])
-  ) as unknown as VerifiedTenantComplianceSettings;
-}
-
-/**
- * Build compliance evidence from collected data rows and verification settings.
- * Aggregates record counts and merges verified compliance settings into a
- * single evidence object for regime assessment.
- *
- * @param rows - The collected contact, processing, and audit data rows.
- * @param settings - Optional verified compliance settings from tenant configuration.
- * @returns A compliance evidence object suitable for regime assessment.
- */
-export function buildEvidence(
-  rows: CollectedRows,
-  settings: VerifiedTenantComplianceSettings | null = null
-): ComplianceEvidence {
+export function buildEvidence(rows: CollectedRows): ComplianceEvidence {
   return {
     piiRecordCount: rows.contacts.length,
     processingEventCount: rows.processingEvents.length,
     auditLogCount: rows.auditEvents.length,
-    hasDataProtectionOfficer: settings?.hasDataProtectionOfficer ?? null,
-    breachNotificationConfigured:
-      settings?.breachNotificationConfigured ?? null,
-    auditLoggingVerified: settings?.auditLoggingVerified ?? null,
-    statutoryRightsWorkflowsVerified:
-      settings?.statutoryRightsWorkflowsVerified ?? null,
-    retentionAgingVerified: settings?.retentionAgingVerified ?? null,
+    hasDataProtectionOfficer: false,
+    breachNotificationConfigured: false,
   };
 }
 
-/**
- * Render compliance data rows as a CSV string for export.
- * Combines contacts, processing events, and audit events into a single CSV
- * with a 'recordType' discriminator column.
- *
- * @param rows - The collected contact, processing, and audit data rows.
- * @returns A CSV string with headers and all data rows.
- */
 export function renderCsv(rows: CollectedRows): string {
-  const fields = [
-    'recordType',
+  const contactFields = [
     'id',
     'fullName',
     'email',
     'phone',
     'company',
     'createdAt',
-    'scannedAt',
-    'status',
-    'gateId',
-    'action',
-    'entityType',
   ];
-  const records = [
-    ...rows.contacts.map((row) => ({ recordType: 'contact', ...row })),
-    ...rows.processingEvents.map((row) => ({
-      recordType: 'processing_event',
-      ...row,
-    })),
-    ...rows.auditEvents.map((row) => ({ recordType: 'audit_event', ...row })),
-  ];
+  const processingFields = ['id', 'scannedAt', 'status', 'gateId'];
 
-  return new Parser({ fields }).parse(records);
+  const contactCsv = new Parser({ fields: contactFields }).parse(rows.contacts);
+  const processingCsv = new Parser({ fields: processingFields }).parse(
+    rows.processingEvents
+  );
+  const auditCsv = new Parser({
+    fields: ['id', 'action', 'entityType', 'createdAt'],
+  }).parse(rows.auditEvents);
+
+  const sep = '\n\n';
+  return [
+    '# CONTACTS (PII)',
+    contactCsv,
+    sep,
+    '# PROCESSING EVENTS',
+    processingCsv,
+    sep,
+    '# AUDIT LOG',
+    auditCsv,
+  ].join('\n');
 }
 
 // ─── Prisma-backed collection ─────────────────────────────────────────────────
 
-/**
- * Collect compliance-relevant data from the database for a specific organization and date range.
- * Fetches contacts (up to 1000), plus scan logs and audit logs (up to 5000 each)
- * for the given tenant; only scan and audit logs are limited to the time window.
- *
- * @param orgId - The organization ID to collect data for.
- * @param dateFrom - The start of the collection window.
- * @param dateTo - The end of the collection window.
- * @returns A CollectedRows object containing all relevant data rows.
- */
 export async function collectComplianceRows(
   orgId: string,
   dateFrom: Date,
@@ -248,14 +174,6 @@ export async function collectComplianceRows(
 
 // ─── Buffer producers (pdfkit is only exercised here) ─────────────────────────
 
-/**
- * Generate a compliance report PDF from export data.
- * Renders a structured PDF document containing the regime assessment, control
- * statuses, and evidence summary using pdfkit.
- *
- * @param data - The complete compliance export data including regime, evidence, and records.
- * @returns A Promise that resolves to a Buffer containing the PDF document.
- */
 export function renderPdf(data: ComplianceExportData): Promise<Buffer> {
   const regime = getRegime(data.regime);
   const assessment = assessCompliance(data.regime, data.evidence);

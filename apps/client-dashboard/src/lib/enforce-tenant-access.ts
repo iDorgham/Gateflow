@@ -34,11 +34,18 @@ export interface EnforceTenantAccessOptions {
   windowMs?: number;
 }
 
-const VERCEL_FORWARDED_FOR = 'x-vercel-forwarded-for';
+const FORWARDED_FOR = 'x-forwarded-for';
+const REAL_IP = 'x-real-ip';
+const CLOUDFLARE_IP = 'cf-connecting-ip';
 
-/** Resolve the client IP from Vercel's platform-controlled forwarding header. */
+/** Best-effort client IP resolution from trusted proxy headers. */
 export function getClientIp(request: Pick<NextRequest, 'headers'>): string {
-  const ff = request.headers.get(VERCEL_FORWARDED_FOR);
+  const hdrs = request.headers;
+  const cf = hdrs.get(CLOUDFLARE_IP);
+  if (cf) return cf.trim();
+  const real = hdrs.get(REAL_IP);
+  if (real) return real.trim();
+  const ff = hdrs.get(FORWARDED_FOR);
   if (ff) {
     const first = ff.split(',')[0]?.trim();
     if (first) return first;

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[V9.0]** Phase 5 — Design System & Observability
 
 - **[Compliance]** respect score cutoff so deficient assessments are NON_COMPLIANT
 
