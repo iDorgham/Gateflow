@@ -267,17 +267,12 @@ export function assessCompliance(
   const total = scored.reduce((s, c) => s + (c.status === 'PASS' ? 1 : 0), 0);
   const score = Math.round((total / denom) * 100);
 
-  const status: ComplianceAssessment['status'] = controls.some(
-    (c) => c.status === 'FAIL'
-  )
-    ? 'NON_COMPLIANT'
-    : controls.some((c) => c.status === 'PARTIAL')
-      ? 'PARTIAL'
-      : score >= 80
+  const status: ComplianceAssessment['status'] =
+    controls.some((c) => c.status === 'FAIL') || score < 50
+      ? 'NON_COMPLIANT'
+      : score >= 80 && !controls.some((c) => c.status === 'PARTIAL')
         ? 'COMPLIANT'
-        : score >= 50
-          ? 'PARTIAL'
-          : 'NON_COMPLIANT';
+        : 'PARTIAL';
 
   return { regime, score, status, controls };
 }

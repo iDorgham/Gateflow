@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Compliance]** respect score cutoff so deficient assessments are NON_COMPLIANT
+
 - **[V9.0]** Phase 6 — Compliance & Hardening
 
 - **[Lint]** remove useless escape in google-pass-service and unused createHash import
