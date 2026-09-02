@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "@gateflow/ai": "workspace:*",
@@ -27,13 +28,16 @@
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@tailwindcss/postcss": "4.3.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.20",
     "eslint": "9.39.5",
+    "jest": "^30.3.0",
     "postcss": "^8.5.23",
     "tailwindcss": "4.3.3",
+    "ts-jest": "^29.4.12",
     "typescript": "^5.9.3"
   }
 }

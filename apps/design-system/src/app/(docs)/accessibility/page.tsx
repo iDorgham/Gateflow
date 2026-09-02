@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { PageHeader, EntityCard } from '@gateflow/components';
 import { Keyboard, Eye, Move, Globe, ShieldCheck } from 'lucide-react';
+import { WCAGContrastPlayground } from '../../../components/foundations/WCAGContrastPlayground';
 
 export default function AccessibilityPage() {
   return (
@@ -66,6 +67,19 @@ export default function AccessibilityPage() {
           ]}
         />
       </div>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text)]">
+          Live WCAG 2.2 Audit Playground
+        </h2>
+        <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-3xl">
+          Measure the resolved contrast of real semantic token pairs against
+          WCAG 2.2 AA / AAA thresholds. Toggle light/dark mode or an accent
+          profile, then re-measure to re-audit the active theme.
+        </p>
+      </section>
+
+      <WCAGContrastPlayground />
 
       <section className="rounded-3xl border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] p-8 flex flex-col gap-6">
         <div className="flex items-center gap-3">
