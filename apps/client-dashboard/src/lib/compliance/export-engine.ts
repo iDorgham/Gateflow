@@ -173,8 +173,8 @@ export function renderCsv(rows: CollectedRows): string {
 
 /**
  * Collect compliance-relevant data from the database for a specific organization and date range.
- * Fetches contacts (up to 1000), scan logs (up to 5000), and audit logs (up to 5000)
- * for the given tenant and time window.
+ * Fetches contacts (up to 1000), plus scan logs and audit logs (up to 5000 each)
+ * for the given tenant; only scan and audit logs are limited to the time window.
  *
  * @param orgId - The organization ID to collect data for.
  * @param dateFrom - The start of the collection window.
