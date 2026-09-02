@@ -26,10 +26,17 @@ describe('wcag contrast engine', () => {
         g: 128,
         b: 255,
       });
+      expect(parseColor('rgb(.5, .5, .5)')).toEqual({ r: 1, g: 1, b: 1 });
       expect(parseColor('rgba(0, 128, 255, 0.5)')).toEqual({
         r: 0,
         g: 128,
         b: 255,
+        a: 0.5,
+      });
+      expect(parseColor('rgba(.5, .5, .5, .5)')).toEqual({
+        r: 1,
+        g: 1,
+        b: 1,
         a: 0.5,
       });
     });
@@ -85,6 +92,10 @@ describe('wcag contrast engine', () => {
         true
       );
       expect(contrastRatio('rgba(0, 0, 0, 1)', '#ffffff')).toBeCloseTo(21, 1);
+      expect(contrastRatio('rgba(.5, .5, .5, 1)', '#ffffff')).toBeCloseTo(
+        20.87,
+        1
+      );
     });
   });
 

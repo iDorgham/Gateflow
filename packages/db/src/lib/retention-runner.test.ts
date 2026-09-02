@@ -121,6 +121,10 @@ describe('retention runner', () => {
     expect(updatePlate).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'plate-1' },
+        data: {
+          ownerName: '[redacted-5e679a0610f0]',
+          ownerPhone: '[redacted-7d755324beda]',
+        },
       })
     );
     expect(result.organizations[0].anonymized.contacts).toBe(1);
