@@ -1,0 +1,19 @@
+CHANGELOG.md
+  s_59dacfd28dc132::t_18bac611324e31 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d147fa92444a328d1f84ef32fbb3fc780bb1ac2b",
+  "prompts": {},
+  "sessions": {
+    "s_59dacfd28dc132": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa69dfdd5ffeFSdwqnCDhtvOZz",
+        "model": "big-pickle"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
