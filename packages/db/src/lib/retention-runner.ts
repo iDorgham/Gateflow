@@ -156,7 +156,11 @@ async function purgeOrg(
         summary.anonymized.contacts += 1;
 
         const plates = await prisma.vehiclePlate.findMany({
-          where: { organizationId: org.id, contactId: contact.id },
+          where: {
+            contactId: contact.id,
+            organizationId: org.id,
+            deletedAt: null,
+          },
           select: {
             id: true,
             plateNumber: true,
@@ -166,14 +170,18 @@ async function purgeOrg(
         });
         for (const plate of plates) {
           const scrubbedPlate = anonymizeVehiclePlatePii(plate, salt);
-          await prisma.vehiclePlate.update({
-            where: { id: plate.id },
+          const updatedPlate = await prisma.vehiclePlate.updateMany({
+            where: {
+              id: plate.id,
+              organizationId: org.id,
+              deletedAt: null,
+            },
             data: {
               ownerName: scrubbedPlate.ownerName,
               ownerPhone: scrubbedPlate.ownerPhone,
             },
           });
-          summary.anonymized.vehiclePlates += 1;
+          summary.anonymized.vehiclePlates += updatedPlate.count;
         }
       }
     }

@@ -21,6 +21,11 @@ describe('wcag contrast engine', () => {
 
     it('parses rgb() and rgba()', () => {
       expect(parseColor('rgb(255, 0, 0)')).toEqual({ r: 255, g: 0, b: 0 });
+      expect(parseColor('rgb(12.5, 127.5, 254.5)')).toEqual({
+        r: 13,
+        g: 128,
+        b: 255,
+      });
       expect(parseColor('rgba(0, 128, 255, 0.5)')).toEqual({
         r: 0,
         g: 128,
@@ -38,6 +43,12 @@ describe('wcag contrast engine', () => {
       expect(parseColor('')).toBeNull();
       expect(parseColor('oklch(62% 0.25 32)')).toBeNull();
       expect(parseColor('transparent')).toBeNull();
+    });
+
+    it('rejects malformed decimal components', () => {
+      expect(parseColor('rgb(1.2.3, 0, 0)')).toBeNull();
+      expect(parseColor('rgba(0, 1.2.3, 0, 0.5)')).toBeNull();
+      expect(parseColor('rgba(0, 0, 0, 0.5.1)')).toBeNull();
     });
   });
 

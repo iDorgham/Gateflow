@@ -45,7 +45,10 @@ export function parseColor(value: string | null | undefined): RGB | null {
     };
   }
 
-  const rgb = /^rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/i.exec(v);
+  const rgb =
+    /^rgb\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)$/i.exec(
+      v
+    );
   if (rgb) {
     return {
       r: clampChannel(parseFloat(rgb[1])),
@@ -55,7 +58,7 @@ export function parseColor(value: string | null | undefined): RGB | null {
   }
 
   const rgba =
-    /^rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/i.exec(
+    /^rgba\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)$/i.exec(
       v
     );
   if (rgba) {
