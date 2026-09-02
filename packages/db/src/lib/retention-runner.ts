@@ -79,7 +79,7 @@ async function purgeOrg(
   if (cutoffs.scanLogs) {
     const res = await prisma.scanLog.deleteMany({
       where: {
-        organizationId: org.id,
+        gate: { organizationId: org.id },
         scannedAt: { lt: cutoffs.scanLogs },
         deletedAt: null,
       },
