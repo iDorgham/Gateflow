@@ -43,7 +43,17 @@ export interface RetentionBatchSummary {
   };
 }
 
-/** One org's applicable paginated PII/operational sets. */
+/**
+ * Purge and anonymize an organization's expired data according to its retention policy.
+ *
+ * Applies per-org retention cutoffs by hard-deleting expired operational records
+ * (scan logs, incidents, ID artifacts) and anonymizing stale personal data (contacts
+ * and vehicle plates). Respects legal holds and skips orgs without configured windows.
+ *
+ * @param org - The organization with its retention policy settings.
+ * @param now - The current timestamp for calculating cutoff dates.
+ * @returns A summary of deleted and anonymized record counts.
+ */
 async function purgeOrg(
   org: OrgRetentionRecord,
   now: Date
@@ -182,6 +192,12 @@ async function purgeOrg(
   return summary;
 }
 
+/**
+ * Calculate the total number of records affected by a retention run.
+ *
+ * @param summary - The organization's retention run summary.
+ * @returns The sum of all deleted and anonymized records.
+ */
 function total(summary: OrgRetentionSummary): number {
   return (
     summary.deleted.scanLogs +

@@ -22,6 +22,13 @@ export function ipToBuffer(ip: string): Uint8Array | null {
   return ipv4ToMapped(normalized);
 }
 
+/**
+ * Convert an IPv4 address string to an IPv4-mapped IPv6 buffer (16 bytes).
+ * Maps the IPv4 address into the ::ffff:0:0/96 range per RFC 4291.
+ *
+ * @param ip - The IPv4 address string (e.g., "192.168.1.1").
+ * @returns A 16-byte buffer representing the IPv4-mapped IPv6 address, or null if invalid.
+ */
 function ipv4ToMapped(ip: string): Uint8Array | null {
   const parts = ip.trim().split('.');
   if (parts.length !== 4) return null;
@@ -41,6 +48,13 @@ function ipv4ToMapped(ip: string): Uint8Array | null {
   return buf;
 }
 
+/**
+ * Expand an IPv6 address string into a normalized 16-byte buffer.
+ * Handles standard IPv6 notation including :: compression and embedded IPv4.
+ *
+ * @param input - The IPv6 address string (e.g., "2001:db8::1" or "::ffff:192.0.2.1").
+ * @returns A 16-byte buffer representing the IPv6 address, or null if invalid.
+ */
 function expandIpv6(input: string): Uint8Array | null {
   let s = input.trim();
 
@@ -87,6 +101,14 @@ function expandIpv6(input: string): Uint8Array | null {
   return buf;
 }
 
+/**
+ * Parse a CIDR notation string or plain IP into network address and prefix length.
+ * Accepts IPv4 CIDR (e.g., "192.168.1.0/24"), IPv6 CIDR (e.g., "2001:db8::/32"),
+ * or a plain IP address (treated as a single-host /128 or /32).
+ *
+ * @param cidr - The CIDR string to parse.
+ * @returns An object with the network buffer and prefix length, or null if invalid.
+ */
 function cidrParse(
   cidr: string
 ): { network: Uint8Array; prefix: number } | null {

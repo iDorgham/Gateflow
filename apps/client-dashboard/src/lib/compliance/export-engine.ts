@@ -71,6 +71,14 @@ export interface VerifiedTenantComplianceSettings {
   retentionAgingVerified: boolean;
 }
 
+/**
+ * Extract and validate compliance verification settings from tenant scanner configuration.
+ * Parses the `compliance` object from scannerConfig and verifies that all required
+ * boolean fields and a verification timestamp are present.
+ *
+ * @param scannerConfig - The raw tenant scanner configuration object.
+ * @returns The verified compliance settings, or null if invalid or unverified.
+ */
 export function parseVerifiedTenantComplianceSettings(
   scannerConfig: unknown
 ): VerifiedTenantComplianceSettings | null {
@@ -99,6 +107,15 @@ export function parseVerifiedTenantComplianceSettings(
   ) as unknown as VerifiedTenantComplianceSettings;
 }
 
+/**
+ * Build compliance evidence from collected data rows and verification settings.
+ * Aggregates record counts and merges verified compliance settings into a
+ * single evidence object for regime assessment.
+ *
+ * @param rows - The collected contact, processing, and audit data rows.
+ * @param settings - Optional verified compliance settings from tenant configuration.
+ * @returns A compliance evidence object suitable for regime assessment.
+ */
 export function buildEvidence(
   rows: CollectedRows,
   settings: VerifiedTenantComplianceSettings | null = null
@@ -117,6 +134,14 @@ export function buildEvidence(
   };
 }
 
+/**
+ * Render compliance data rows as a CSV string for export.
+ * Combines contacts, processing events, and audit events into a single CSV
+ * with a 'recordType' discriminator column.
+ *
+ * @param rows - The collected contact, processing, and audit data rows.
+ * @returns A CSV string with headers and all data rows.
+ */
 export function renderCsv(rows: CollectedRows): string {
   const fields = [
     'recordType',
@@ -146,6 +171,16 @@ export function renderCsv(rows: CollectedRows): string {
 
 // ─── Prisma-backed collection ─────────────────────────────────────────────────
 
+/**
+ * Collect compliance-relevant data from the database for a specific organization and date range.
+ * Fetches contacts (up to 1000), scan logs (up to 5000), and audit logs (up to 5000)
+ * for the given tenant and time window.
+ *
+ * @param orgId - The organization ID to collect data for.
+ * @param dateFrom - The start of the collection window.
+ * @param dateTo - The end of the collection window.
+ * @returns A CollectedRows object containing all relevant data rows.
+ */
 export async function collectComplianceRows(
   orgId: string,
   dateFrom: Date,
@@ -213,6 +248,14 @@ export async function collectComplianceRows(
 
 // ─── Buffer producers (pdfkit is only exercised here) ─────────────────────────
 
+/**
+ * Generate a compliance report PDF from export data.
+ * Renders a structured PDF document containing the regime assessment, control
+ * statuses, and evidence summary using pdfkit.
+ *
+ * @param data - The complete compliance export data including regime, evidence, and records.
+ * @returns A Promise that resolves to a Buffer containing the PDF document.
+ */
 export function renderPdf(data: ComplianceExportData): Promise<Buffer> {
   const regime = getRegime(data.regime);
   const assessment = assessCompliance(data.regime, data.evidence);

@@ -90,6 +90,13 @@ export const REGIMES: Record<ComplianceRegime, RegimeDefinition> = {
   },
 };
 
+/**
+ * Retrieve the full regime definition for a given compliance regime identifier.
+ *
+ * @param id - The compliance regime identifier (e.g., 'EGYPT_LAW_151' or 'SAUDI_PDPL').
+ * @returns The complete regime definition with requirements and thresholds.
+ * @throws Error if the regime identifier is not recognized.
+ */
 export function getRegime(id: ComplianceRegime | string): RegimeDefinition {
   if (id === 'EGYPT_LAW_151' || id === 'SAUDI_PDPL') {
     return REGIMES[id];
@@ -97,6 +104,13 @@ export function getRegime(id: ComplianceRegime | string): RegimeDefinition {
   throw new Error(`Unknown compliance regime: ${id}`);
 }
 
+/**
+ * Check if a value is a valid, supported compliance regime identifier.
+ * Type guard that narrows the type to ComplianceRegime if true.
+ *
+ * @param id - The value to check.
+ * @returns True if the value is a supported regime identifier.
+ */
 export function isSupportedRegime(id: unknown): id is ComplianceRegime {
   return id === 'EGYPT_LAW_151' || id === 'SAUDI_PDPL';
 }

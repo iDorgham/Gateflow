@@ -75,11 +75,24 @@ export function parseColor(value: string | null | undefined): RGB | null {
   return null;
 }
 
+/**
+ * Clamp a color channel value to the valid 0-255 range.
+ *
+ * @param value - The raw channel value to clamp.
+ * @returns The clamped value, rounded to the nearest integer.
+ */
 function clampChannel(value: number): number {
   if (Number.isNaN(value)) return 0;
   return Math.min(255, Math.max(0, Math.round(value)));
 }
 
+/**
+ * Convert an sRGB channel value to its linear RGB equivalent for luminance calculation.
+ * Applies the WCAG 2.x sRGB to linear RGB transformation formula.
+ *
+ * @param channel - The sRGB channel value in the range 0-255.
+ * @returns The linearized channel value in the range 0-1.
+ */
 function channelToLinear(channel: number): number {
   const c = channel / 255;
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
