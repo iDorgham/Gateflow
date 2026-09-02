@@ -104,7 +104,7 @@ function expandIpv6(input: string): Uint8Array | null {
 /**
  * Parse a CIDR notation string or plain IP into network address and prefix length.
  * Accepts IPv4 CIDR (e.g., "192.168.1.0/24"), IPv6 CIDR (e.g., "2001:db8::/32"),
- * or a plain IP address (treated as a single-host /128 or /32).
+ * or a plain IP address (treated as a single host: /128 in v4-mapped form for IPv4).
  *
  * @param cidr - The CIDR string to parse.
  * @returns An object with the network buffer and prefix length, or null if invalid.
