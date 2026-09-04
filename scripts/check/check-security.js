@@ -26,7 +26,7 @@ const BULK_ADVISORY_URL =
   'https://registry.npmjs.org/-/npm/v1/security/advisories/bulk';
 const ROOT = getRepoRoot(__dirname);
 const LOCKFILE_PATH = path.join(ROOT, 'pnpm-lock.yaml');
-const CHUNK_SIZE = 300;
+const CHUNK_SIZE = 100;
 const SEVERITY_RANK = { low: 0, moderate: 1, high: 2, critical: 3 };
 /** Exit code for registry/network/unavailable — distinct from clean (0) and vulns (1). */
 const EXIT_UNAVAILABLE = 2;
@@ -123,16 +123,28 @@ async function queryBulkAdvisories(versionsByName) {
       batch.map(([name, versions]) => [name, [...versions]])
     );
 
-    const response = await fetch(BULK_ADVISORY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+    let response;
+    let attempts = 0;
+    while (attempts < 3) {
+      try {
+        attempts++;
+        response = await fetch(BULK_ADVISORY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(15000),
+        });
+        if (response.ok) break;
+      } catch (err) {
+        if (attempts >= 3) throw err;
+        await new Promise((r) => setTimeout(r, 1000 * attempts));
+      }
+    }
 
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
+    if (!response || !response.ok) {
+      const text = response ? await response.text().catch(() => '') : 'timeout';
       throw new Error(
-        `Bulk advisory endpoint responded ${response.status}: ${text}`
+        `Bulk advisory endpoint responded ${response ? response.status : 'error'}: ${text}`
       );
     }
 
