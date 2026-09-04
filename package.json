@@ -99,7 +99,7 @@
     "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",
-    "@turbo/gen": "^2.10.9",
+    "@turbo/gen": "^2.10.12",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
     "ai": "6.0.246",
