@@ -74,16 +74,16 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "framer-motion": "^13.1.1",
+    "framer-motion": "^13.4.0",
     "react-hook-form": "^7.82.0",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
-    "lucide-react": "^1.31.0",
+    "lucide-react": "^1.47.0",
     "postcss": "^8.5.23",
     "react": "19.2.8",
     "react-dom": "19.2.8",
