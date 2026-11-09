@@ -108,7 +108,7 @@
     "globals": "^16.4.0",
     "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "tsx": "^4.23.11",
     "turbo": "^2.10.9",
     "typescript": "5.9.3",
