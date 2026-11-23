@@ -579,7 +579,11 @@
         "activeStudents": "مسجلون",
         "openMaintenance": "قيد المراجعة",
         "securityIncidents": "تتطلب اهتماماً",
-        "currentCapacity": "الإشغال المباشر"
+        "currentCapacity": "الإشغال المباشر",
+        "noBaseline": "لا يوجد متوسط 7 أيام بعد",
+        "vsAvg": "مقارنة بمتوسط 7 أيام",
+        "rejectRate": "{{rate}}% من مسح اليوم",
+        "guardsOnDuty": "الحراس في الخدمة: {{n}}"
       },
       "emptyState": {
         "REAL_ESTATE": "أضف السكان والوحدات لبدء تتبع الوصول إلى الكومباوند.",
@@ -607,7 +611,73 @@
         "MAX_USES_REACHED": "تم تجاوز عدد الاستخدامات",
         "INACTIVE": "غير نشط",
         "DENIED": "مرفوض"
-      }
+      },
+      "residents": "السكان",
+      "students": "الطلاب",
+      "keyMetrics": "المؤشرات الرئيسية",
+      "rejectedToday": "المرفوض اليوم",
+      "gatesLive": "البوابات النشطة الآن",
+      "gateStatus": "حالة البوابات",
+      "gateStatusMeta": "نشطة = مسح خلال آخر 10 دقائق",
+      "gateState": {
+        "live": "نشطة",
+        "idle": "هادئة",
+        "quiet": "متوقفة"
+      },
+      "noGates": "لا توجد بوابات نشطة بعد.",
+      "noGuard": "لا يوجد حارس في الوردية",
+      "noScans7d": "لا مسح منذ 7 أيام",
+      "rejectedCount": "{{n}} مرفوض",
+      "recentActivityMeta": "أحدث عمليات المسح عبر كل البوابات",
+      "col": {
+        "status": "الحالة",
+        "gate": "البوابة",
+        "pass": "التصريح",
+        "time": "الوقت"
+      },
+      "qrType": {
+        "SINGLE": "استخدام واحد",
+        "RECURRING": "متكرر",
+        "PERMANENT": "دائم",
+        "VISITOR": "زائر",
+        "OPEN": "مفتوح"
+      },
+      "needsAttention": "يتطلب الانتباه",
+      "needsAttentionMeta": "{{incidents}} حوادث مفتوحة",
+      "allClear": "لا توجد حوادث مفتوحة أو طلبات عاجلة.",
+      "attentionStatus": {
+        "UNDER_REVIEW": "قيد المراجعة",
+        "ESCALATED": "مُصعّد",
+        "OPEN": "مفتوح",
+        "ASSIGNED": "مُسند",
+        "IN_PROGRESS": "قيد التنفيذ",
+        "PENDING_PARTS": "بانتظار قطع الغيار"
+      },
+      "maintenancePipeline": "مسار الصيانة",
+      "openCount": "{{n}} مفتوح",
+      "maintenanceStatus": {
+        "OPEN": "مفتوح",
+        "ASSIGNED": "مُسند",
+        "IN_PROGRESS": "قيد التنفيذ",
+        "PENDING_PARTS": "قطع غيار"
+      },
+      "outcomeMix": "نتائج المسح",
+      "last7Days": "آخر 7 أيام",
+      "analytics": "التحليلات",
+      "noScans7dShort": "لا توجد عمليات مسح في آخر 7 أيام.",
+      "grantRate": "مسموح من {{n}} عملية مسح",
+      "granted": "مسموح",
+      "rejected": "مرفوض",
+      "updatedAt": "آخر تحديث {{time}}",
+      "accessActivity": "نشاط الدخول",
+      "last24h": "آخر 24 ساعة، بالساعة",
+      "peakHour": "الذروة {{time}} · {{n}} عملية مسح",
+      "activitySummary": "{{granted}} مسموح و{{rejected}} مرفوض خلال آخر 24 ساعة.",
+      "dailyTrend": "الاتجاه اليومي",
+      "last14Days": "آخر 14 يومًا",
+      "trendSummary": "{{granted}} مسموح و{{rejected}} مرفوض خلال آخر 14 يومًا.",
+      "addResident": "إضافة مقيم",
+      "reportIncident": "الحوادث"
     },
     "maintenance": {
       "title": "مركز الصيانة",

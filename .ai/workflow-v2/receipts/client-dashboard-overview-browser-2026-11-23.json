@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "app": "client-dashboard",
+  "requirement": "browser-flow",
+  "scenario": "Organization overview (dashboard home) renders with live data",
+  "runner": "Playwright Chromium against next dev, local Postgres 16 with seeded scans",
+  "headCommit": "6dc3355",
+  "capturedAt": "2026-11-23T21:38:34.413Z",
+  "runs": [
+    {
+      "url": "http://127.0.0.1:3001/en/",
+      "locale": "en",
+      "theme": "light",
+      "viewport": "1440x1600",
+      "status": 200,
+      "dir": "ltr",
+      "h1": "Compound Overview",
+      "kpiCells": 6,
+      "panels": [
+        "Access activity",
+        "Gate status",
+        "Recent Scan Activity",
+        "Needs attention",
+        "Daily trend",
+        "Scan outcomes"
+      ],
+      "hourlyBars": 2,
+      "hScroll": false,
+      "pageErrors": [],
+      "result": "pass"
+    },
+    {
+      "url": "http://127.0.0.1:3001/en/",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": "1440x1600",
+      "status": 200,
+      "dir": "ltr",
+      "h1": "Compound Overview",
+      "kpiCells": 6,
+      "panels": [
+        "Access activity",
+        "Gate status",
+        "Recent Scan Activity",
+        "Needs attention",
+        "Daily trend",
+        "Scan outcomes"
+      ],
+      "hourlyBars": 2,
+      "hScroll": false,
+      "pageErrors": [],
+      "result": "pass"
+    },
+    {
+      "url": "http://127.0.0.1:3001/ar-EG/",
+      "locale": "ar-EG",
+      "theme": "light",
+      "viewport": "1440x1600",
+      "status": 200,
+      "dir": "rtl",
+      "h1": "نظرة عامة على المجمع",
+      "kpiCells": 6,
+      "panels": [
+        "نشاط الدخول",
+        "حالة البوابات",
+        "نشاط المسح الأخير",
+        "يتطلب الانتباه",
+        "الاتجاه اليومي",
+        "نتائج المسح"
+      ],
+      "hourlyBars": 2,
+      "hScroll": false,
+      "pageErrors": [],
+      "result": "pass"
+    },
+    {
+      "url": "http://127.0.0.1:3001/en/",
+      "locale": "en",
+      "theme": "light",
+      "viewport": "390x1600",
+      "status": 200,
+      "dir": "ltr",
+      "h1": "Compound Overview",
+      "kpiCells": 6,
+      "panels": [
+        "Access activity",
+        "Gate status",
+        "Recent Scan Activity",
+        "Needs attention",
+        "Daily trend",
+        "Scan outcomes"
+      ],
+      "hourlyBars": 2,
+      "hScroll": false,
+      "pageErrors": [],
+      "result": "pass"
+    }
+  ],
+  "result": "pass"
+}

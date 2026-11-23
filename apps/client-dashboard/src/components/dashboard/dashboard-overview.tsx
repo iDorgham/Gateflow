@@ -1,63 +1,34 @@
 import Link from 'next/link';
-import { prisma } from '@gate-access/db';
 import { getTranslation, Locale } from '@/lib/i18n';
-import { Card, CardContent, CardHeader, CardTitle, Button } from '@gateflow/ui';
-import { PageHeader } from '@gateflow/components';
-import { AnimatedKpiGrid } from './animated-kpi-grid';
+import { Button } from '@gateflow/ui';
 import { OrganizationType, getOrganizationFeatures } from '@gate-access/types';
+import { Plus, UserPlus, ShieldAlert, ScanLine } from 'lucide-react';
+import { getOverviewData } from '@/lib/dashboard/overview-data';
+import { Panel } from './overview/panel';
+import { StackedBars, ChartLegend } from './overview/stacked-bars';
 import {
-  QrCode,
-  ScanLine,
-  Shield,
-  Users,
-  TrendingUp,
-  ArrowRight,
-  Plus,
-  Wrench,
-  GraduationCap,
-  Ticket,
-  GlassWater,
-} from 'lucide-react';
-import { DashboardEmptyState } from './dashboard-empty-state';
+  KpiBand,
+  GateStatusPanel,
+  LiveFeed,
+  AttentionPanel,
+  OutcomeMix,
+  type WidgetContext,
+} from './overview/widgets';
 
-const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
-  {
-    SUCCESS: {
-      bg: 'bg-[var(--ds-background-success-subtle)]',
-      text: 'text-[var(--ds-text-success)]',
-      dot: 'bg-[var(--ds-background-success-bold)]',
-    },
-    FAILED: {
-      bg: 'bg-[var(--ds-background-danger-subtle)]',
-      text: 'text-[var(--ds-text-danger)]',
-      dot: 'bg-[var(--ds-background-danger-bold)]',
-    },
-    EXPIRED: {
-      bg: 'bg-[var(--ds-background-warning-subtle)]',
-      text: 'text-[var(--ds-text-warning)]',
-      dot: 'bg-[var(--ds-background-warning-bold)]',
-    },
-    MAX_USES_REACHED: {
-      bg: 'bg-[var(--ds-background-information-subtle)]',
-      text: 'text-[var(--ds-text-information)]',
-      dot: 'bg-[var(--ds-background-information-bold)]',
-    },
-    INACTIVE: {
-      bg: 'bg-[var(--ds-background-neutral-subtle)]',
-      text: 'text-[var(--ds-text-subtlest)]',
-      dot: 'bg-[var(--ds-icon-subtle)]',
-    },
-    DENIED: {
-      bg: 'bg-[var(--ds-background-danger-subtle)]',
-      text: 'text-[var(--ds-text-danger)]',
-      dot: 'bg-[var(--ds-background-danger-bold)]',
-    },
-  };
-
-function cn(...classes: (string | false | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
+/**
+ * Organization overview (dashboard home).
+ *
+ * Layout: 12-column bento on xl, single column below lg.
+ *   Header ─ KPI band (full width)
+ *   Access activity 24h (8) │ Gate status (4)
+ *   Recent scans (7)        │ Needs attention (5)
+ *   14-day trend (8)        │ Scan outcomes (4)
+ *
+ * Every widget is a server component over one bounded data load
+ * (lib/dashboard/overview-data.ts). Vertical-specific widgets (occupancy,
+ * stays, capacity) slot in as additional rows keyed off
+ * features.dashboard.chartIds; ids without a real data source render nothing.
+ */
 export async function DashboardOverview({
   locale,
   orgId,
@@ -67,435 +38,292 @@ export async function DashboardOverview({
   orgId: string;
   orgType?: OrganizationType;
 }) {
-  const { t } = await getTranslation(locale, 'dashboard');
+  const [{ t }, { t: tOrg }] = await Promise.all([
+    getTranslation(locale, 'dashboard'),
+    getTranslation(locale, 'orgType'),
+  ]);
   const features = getOrganizationFeatures(orgType);
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const data = await getOverviewData(orgId, features);
 
-  // Common data for all orgs
-  const [
-    totalQRs,
-    scansToday,
-    activeGates,
-    teamSize,
-    recentScans,
-    topGatesData,
-    maintenanceStats,
-  ] = (await Promise.all([
-    prisma.qRCode.count({
-      where: { organizationId: orgId, isActive: true, deletedAt: null },
-    }),
-    prisma.scanLog.count({
-      where: {
-        deletedAt: null,
-        qrCode: { organizationId: orgId, deletedAt: null },
-        scannedAt: { gte: todayStart },
-      },
-    }),
-    prisma.gate.count({
-      where: { organizationId: orgId, isActive: true, deletedAt: null },
-    }),
-    prisma.user.count({ where: { organizationId: orgId, deletedAt: null } }),
-    prisma.scanLog.findMany({
-      where: {
-        deletedAt: null,
-        qrCode: { organizationId: orgId, deletedAt: null },
-      },
-      orderBy: { scannedAt: 'desc' },
-      take: 8,
-      include: {
-        qrCode: { select: { code: true, type: true } },
-        gate: { select: { name: true } },
-      },
-    }),
-    // Top gates data
-    prisma.scanLog.groupBy({
-      by: ['gateId'],
-      where: {
-        deletedAt: null,
-        qrCode: { organizationId: orgId, deletedAt: null },
-      },
-      _count: { _all: true },
-      // '_all' isn't a valid orderBy key in this Prisma version's generated
-      // types (only '_count: { _all: true }' selection is). Order by gateId
-      // instead — equivalent since it's the non-null group-by key.
-      orderBy: { _count: { gateId: 'desc' } },
-      take: 5,
-    }),
-    // Maintenance stats
-    prisma.workOrder.groupBy({
-      by: ['status'],
-      where: { organizationId: orgId, deletedAt: null },
-      _count: { _all: true },
-    }),
-  ])) as [number, number, number, number, any[], any[], any[]];
+  const now = new Date(data.generatedAt);
+  const nf = new Intl.NumberFormat(locale);
+  const ctx: WidgetContext = {
+    data,
+    t,
+    locale,
+    base: `/dashboard/organizations/${orgId}`,
+    now,
+    fmt: (n) => nf.format(n),
+  };
+  const tz = data.timeZone;
 
-  const gateIds = (topGatesData as any[]).map((g) => g.gateId).filter(Boolean);
-  const gateNames = await prisma.gate.findMany({
-    where: {
-      id: { in: gateIds },
-      organizationId: orgId,
-      deletedAt: null,
-    },
-    select: { id: true, name: true },
+  const hourLabel = (iso: string) =>
+    new Intl.DateTimeFormat(locale, { hour: 'numeric', timeZone: tz }).format(
+      new Date(iso)
+    );
+  const dayLabel = (iso: string) =>
+    new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'short',
+      timeZone: tz,
+    }).format(new Date(iso));
+
+  const sum = (key: 'granted' | 'rejected', rows: typeof data.hourly) =>
+    rows.reduce((s, r) => s + r[key], 0);
+  const h24 = {
+    granted: sum('granted', data.hourly),
+    rejected: sum('rejected', data.hourly),
+  };
+  const d14 = {
+    granted: sum('granted', data.daily),
+    rejected: sum('rejected', data.daily),
+  };
+  const peak = data.hourly.reduce(
+    (best, b) =>
+      b.granted + b.rejected > best.granted + best.rejected ? b : best,
+    data.hourly[0]
+  );
+  const peakTotal = peak.granted + peak.rejected;
+
+  const grantedLabel = t('overview.granted', { defaultValue: 'Granted' });
+  const rejectedLabel = t('overview.rejected', { defaultValue: 'Rejected' });
+
+  const orgLabelKey = features.terminology.orgLabel.replace(/^orgType:/, '');
+  const title = tOrg(orgLabelKey, {
+    defaultValue: t('overview.title', { defaultValue: 'Dashboard' }),
   });
 
-  const topGates = (topGatesData as any[]).map((g) => ({
-    name: gateNames.find((gn) => gn.id === g.gateId)?.name || 'Unknown',
-    scans: g._count._all,
-  }));
+  const quickActions = features.dashboard.quickActions
+    .map((id) => QUICK_ACTIONS[id])
+    .filter(Boolean)
+    .filter((a) => a.id !== 'create-qr');
 
-  // Conditional data based on features
-  let residentsCount = 0;
-  let maintenanceCount = 0;
-
-  if (
-    features.sidebar.visibleCapabilities.includes('contacts') ||
-    features.sidebar.visibleCapabilities.includes('units')
-  ) {
-    residentsCount = await prisma.unit.count({
-      where: { organizationId: orgId, userId: { not: null }, deletedAt: null },
-    });
-  }
-
-  if (features.flags.maintenanceModule) {
-    maintenanceCount = await prisma.workOrder.count({
-      where: {
-        organizationId: orgId,
-        status: { notIn: ['RESOLVED', 'CLOSED', 'CANCELLED'] },
-        deletedAt: null,
-      },
-    });
-  }
-
-  const KPI_REGISTRY: Record<string, any> = {
-    'total-scans': {
-      title: t('overview.scansToday', { defaultValue: 'Scans Today' }),
-      value: scansToday,
-      sub: t('overview.sub.scansToday', { defaultValue: 'Last 24 hours' }),
-      icon: <ScanLine className="h-4 w-4 text-success" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/scans`,
-      iconBg: 'bg-success/10',
-      valueColor: 'text-success',
-    },
-    'active-qr': {
-      title: t('overview.activeQRs', { defaultValue: 'Active QR Codes' }),
-      value: totalQRs,
-      sub: t('overview.sub.activeQRs', { defaultValue: 'Across all gates' }),
-      icon: <QrCode className="h-4 w-4 text-primary" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/qrcodes`,
-      iconBg: 'bg-primary/10',
-      valueColor: 'text-primary',
-    },
-    'active-gates': {
-      title: t('overview.activeGates', { defaultValue: 'Active Gates' }),
-      value: activeGates,
-      sub: t('overview.sub.activeGates', {
-        defaultValue: 'Currently operational',
-      }),
-      icon: <Shield className="h-4 w-4 text-chart-2" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/gates`,
-      iconBg: 'bg-chart-2/10',
-      valueColor: 'text-chart-2',
-    },
-    'team-members': {
-      title: t('overview.teamMembers', { defaultValue: 'Team Members' }),
-      value: teamSize,
-      sub: t('overview.sub.teamMembers', {
-        defaultValue: 'In your organization',
-      }),
-      icon: <Users className="h-4 w-4 text-warning" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/team`,
-      iconBg: 'bg-warning/10',
-      valueColor: 'text-warning',
-    },
-    'active-residents': {
-      title: t(features.terminology.contactLabelPlural, {
-        defaultValue: 'Residents',
-      }),
-      value: residentsCount,
-      sub: t('overview.sub.activeResidents', {
-        defaultValue: 'With linked units',
-      }),
-      icon: <Users className="h-4 w-4 text-info" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/residents/contacts`,
-      iconBg: 'bg-info/10',
-      valueColor: 'text-info',
-    },
-    'active-students': {
-      title: t('orgType.school.contactLabelPlural', {
-        defaultValue: 'Students',
-      }),
-      value: residentsCount,
-      sub: t('overview.sub.activeStudents', { defaultValue: 'Enrolled' }),
-      icon: <Users className="h-4 w-4 text-info" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/residents/contacts`,
-      iconBg: 'bg-info/10',
-      valueColor: 'text-info',
-    },
-    'open-maintenance': {
-      title: t('overview.openMaintenance', { defaultValue: 'Open Requests' }),
-      value: maintenanceCount,
-      sub: t('overview.sub.openMaintenance', {
-        defaultValue: 'Pending action',
-      }),
-      icon: <Wrench className="h-4 w-4 text-warning" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/maintenance`,
-      iconBg: 'bg-warning/10',
-      valueColor: 'text-warning',
-    },
-    'security-incidents': {
-      title: t('overview.securityIncidents', { defaultValue: 'Incidents' }),
-      value: 0, // Mock for now
-      sub: t('overview.sub.securityIncidents', {
-        defaultValue: 'Requires attention',
-      }),
-      icon: <Shield className="h-4 w-4 text-danger" aria-hidden="true" />,
-      href: `/dashboard/organizations/${orgId}/team/incidents`,
-      iconBg: 'bg-danger/10',
-      valueColor: 'text-danger',
-    },
-    'current-capacity': {
-      title: t('overview.currentCapacity', {
-        defaultValue: 'Current Capacity',
-      }),
-      value: 0, // Mock for now
-      sub: t('overview.sub.currentCapacity', {
-        defaultValue: 'Live occupancy',
-      }),
-      icon: (
-        <Users
-          className="h-4 w-4 text-[var(--gf-color-discovery)]"
-          aria-hidden="true"
-        />
-      ),
-      href: `/dashboard/organizations/${orgId}/analytics`,
-      iconBg: 'bg-[var(--gf-color-discovery)]/10',
-      valueColor: 'text-[var(--gf-color-discovery)]',
-    },
-  };
-
-  const STAT_CARDS = features.dashboard.kpiIds
-    .map((id) => KPI_REGISTRY[id])
-    .filter(Boolean);
+  const emptyFeed = (
+    <div className="flex flex-col items-center gap-3 rounded-md border border-dashed border-[var(--ds-border-subtle)] px-6 py-8 text-center">
+      <ScanLine
+        className="h-5 w-5 text-[var(--ds-text-subtlest)]"
+        aria-hidden="true"
+      />
+      <div>
+        <p className="text-sm font-medium text-[var(--ds-text-primary)]">
+          {t('overview.noScans', { defaultValue: 'No scans yet' })}
+        </p>
+        <p className="mt-1 text-xs text-[var(--ds-text-subtlest)]">
+          {t(`overview.emptyState.${orgType}`, {
+            defaultValue: t('overview.noScansDesc', {
+              defaultValue:
+                'Create and share a QR code to see access activity here.',
+            }),
+          })}
+        </p>
+      </div>
+      <Button asChild size="sm" variant="outline">
+        <Link href={`${ctx.base}/qrcodes/create`}>
+          {t('overview.createFirst', {
+            defaultValue: 'Create your first QR code',
+          })}
+        </Link>
+      </Button>
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t(features.terminology.orgLabel, { defaultValue: 'Dashboard' })}
-        subtitle={new Date().toLocaleDateString(locale, {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}
-        showHome={false}
-        className="mb-0"
-        actions={
-          <Button asChild className="shrink-0">
-            <Link href={`/dashboard/organizations/${orgId}/qrcodes/create`}>
+    <div className="flex flex-col gap-4 pb-8">
+      {/* ── Header ─────────────────────────────────────────────────────── */}
+      <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-xl font-semibold tracking-tight text-[var(--ds-text-primary)]">
+            {title}
+          </h1>
+          <p className="mt-1 text-sm text-[var(--ds-text-subtle)]">
+            {new Intl.DateTimeFormat(locale, {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              timeZone: tz,
+            }).format(now)}
+            <span
+              className="mx-2 text-[var(--ds-text-subtlest)]"
+              aria-hidden="true"
+            >
+              ·
+            </span>
+            <span className="text-[var(--ds-text-subtlest)]">
+              {t('overview.updatedAt', {
+                defaultValue: 'Updated {{time}}',
+                time: new Intl.DateTimeFormat(locale, {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: tz,
+                }).format(now),
+              })}
+            </span>
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {quickActions.map((a) => (
+            <Button key={a.id} asChild variant="outline" size="sm">
+              <Link href={`${ctx.base}${a.path}`}>
+                <a.icon className="me-1.5 h-4 w-4" aria-hidden="true" />
+                {t(a.labelKey, { defaultValue: a.fallback })}
+              </Link>
+            </Button>
+          ))}
+          <Button asChild size="sm">
+            <Link href={`${ctx.base}/qrcodes/create`}>
               <Plus className="me-1.5 h-4 w-4" aria-hidden="true" />
               {t('overview.createQr', { defaultValue: 'Create QR Code' })}
             </Link>
           </Button>
-        }
-      />
+        </div>
+      </header>
 
-      <AnimatedKpiGrid cards={STAT_CARDS} />
+      <KpiBand ctx={ctx} features={features} />
 
-      <div className="grid gap-6">
-        {features.dashboard.chartIds.map((chartId) => {
-          if (chartId === 'recent-activity') {
-            return (
-              <Card
-                key={chartId}
-                className="border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]"
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp
-                        className="h-4 w-4 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                      <CardTitle className="text-base">
-                        {t('overview.recentActivity', {
-                          defaultValue: 'Recent Scan Activity',
-                        })}
-                      </CardTitle>
-                    </div>
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link
-                        href={`/dashboard/organizations/${orgId}/scans`}
-                        className="text-primary hover:text-primary/80"
-                      >
-                        {t('overview.viewAll', { defaultValue: 'View all' })}
-                        <ArrowRight
-                          className="ms-1 h-3.5 w-3.5 rtl:rotate-180"
-                          aria-hidden="true"
-                        />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  {recentScans.length === 0 ? (
-                    <DashboardEmptyState
-                      orgType={orgType}
-                      orgId={orgId}
-                      t={t}
-                    />
-                  ) : (
-                    <div
-                      className="divide-y divide-border"
-                      role="list"
-                      aria-label="Recent scans"
-                    >
-                      {recentScans.map((scan) => {
-                        const style =
-                          STATUS_COLORS[scan.status] ?? STATUS_COLORS.INACTIVE;
-                        return (
-                          <div
-                            key={scan.id}
-                            role="listitem"
-                            className="flex items-center justify-between gap-3 py-3 text-sm"
-                          >
-                            <div className="flex items-center gap-3 min-w-0">
-                              <span
-                                className={cn(
-                                  'h-2 w-2 shrink-0 rounded-full',
-                                  style.dot
-                                )}
-                                aria-hidden="true"
-                              />
-                              <span
-                                className={cn(
-                                  'shrink-0 rounded-full px-2 py-0.5 text-xs font-medium',
-                                  style.bg,
-                                  style.text
-                                )}
-                              >
-                                {t(`overview.scanStatus.${scan.status}`, {
-                                  defaultValue: scan.status.replace(/_/g, ' '),
-                                })}
-                              </span>
-                              <span
-                                className="truncate font-mono text-xs text-muted-foreground"
-                                title={scan.qrCode?.code}
-                              >
-                                {scan.qrCode?.code?.slice(0, 18)}…
-                              </span>
-                              {scan.gate?.name && (
-                                <span className="hidden truncate text-muted-foreground sm:block">
-                                  @ {scan.gate.name}
-                                </span>
-                              )}
-                            </div>
-                            <time
-                              className="shrink-0 text-xs text-muted-foreground"
-                              dateTime={new Date(scan.scannedAt).toISOString()}
-                            >
-                              {new Date(scan.scannedAt).toLocaleTimeString(
-                                locale,
-                                { hour: '2-digit', minute: '2-digit' }
-                              )}
-                            </time>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          }
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
+        {/* ── Access activity, last 24h ─────────────────────────────────── */}
+        <Panel
+          className="xl:col-span-8"
+          bodyClassName="flex flex-col"
+          title={t('overview.accessActivity', {
+            defaultValue: 'Access activity',
+          })}
+          meta={t('overview.last24h', {
+            defaultValue: 'Last 24 hours, by hour',
+          })}
+          action={{
+            href: `${ctx.base}/analytics`,
+            label: t('overview.analytics', { defaultValue: 'Analytics' }),
+          }}
+        >
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <ChartLegend
+              items={[
+                {
+                  label: grantedLabel,
+                  className: 'bg-[var(--gf-color-info)]',
+                  value: ctx.fmt(h24.granted),
+                },
+                {
+                  label: rejectedLabel,
+                  className: 'bg-[var(--gf-color-danger)]',
+                  value: ctx.fmt(h24.rejected),
+                },
+              ]}
+            />
+            {peakTotal > 0 && (
+              <p className="text-xs text-[var(--ds-text-subtlest)]">
+                {t('overview.peakHour', {
+                  defaultValue: 'Peak {{time}} · {{n}} scans',
+                  time: hourLabel(peak.at),
+                  n: ctx.fmt(peakTotal),
+                })}
+              </p>
+            )}
+          </div>
+          <StackedBars
+            buckets={data.hourly}
+            labelFor={(b) => hourLabel(b.at)}
+            tickEvery={4}
+            height={220}
+            formatNumber={ctx.fmt}
+            grantedLabel={grantedLabel}
+            rejectedLabel={rejectedLabel}
+            summary={t('overview.activitySummary', {
+              defaultValue:
+                '{{granted}} granted and {{rejected}} rejected scans in the last 24 hours.',
+              granted: ctx.fmt(h24.granted),
+              rejected: ctx.fmt(h24.rejected),
+            })}
+          />
+        </Panel>
 
-          if (chartId === 'scans-by-gate' && topGates.length > 0) {
-            return (
-              <Card
-                key={chartId}
-                className="border border-[var(--ds-border)] bg-background"
-              >
-                <CardHeader>
-                  <CardTitle className="text-base">
-                    {t('analytics.topGates', { defaultValue: 'Top Gates' })}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {topGates.map((gate) => (
-                      <div key={gate.name} className="space-y-1">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-medium">{gate.name}</span>
-                          <span className="text-muted-foreground">
-                            {gate.scans} scans
-                          </span>
-                        </div>
-                        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                          <div
-                            className="h-full bg-primary transition-all"
-                            style={{
-                              width: `${Math.min(100, (gate.scans / (topGates[0]?.scans || 1)) * 100)}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          }
+        <GateStatusPanel ctx={ctx} className="xl:col-span-4" />
 
-          if (chartId === 'maintenance-status' && maintenanceStats.length > 0) {
-            return (
-              <Card
-                key={chartId}
-                className="border border-[var(--ds-border)] bg-background"
-              >
-                <CardHeader>
-                  <CardTitle className="text-base">
-                    {t('maintenance.statusTitle', {
-                      defaultValue: 'Maintenance Requests',
-                    })}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    {maintenanceStats.map((stat) => (
-                      <div
-                        key={stat.status}
-                        className="rounded-lg border bg-muted/30 p-3"
-                      >
-                        <div className="text-xs font-medium text-muted-foreground uppercase">
-                          {t(`maintenance.status.${stat.status}`, {
-                            defaultValue: stat.status,
-                          })}
-                        </div>
-                        <div className="mt-1 text-2xl font-bold">
-                          {stat._count._all}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          }
+        <LiveFeed ctx={ctx} className="xl:col-span-7" empty={emptyFeed} />
 
-          // Fallback for missing charts in this phase
-          return null;
-        })}
+        <AttentionPanel
+          ctx={ctx}
+          features={features}
+          className="xl:col-span-5"
+        />
 
-        {/* If no charts defined, show recent scans as default */}
-        {features.dashboard.chartIds.length === 0 && (
-          <Card className="border border-[var(--ds-border)] bg-background">
-            <CardContent className="pt-6">
-              <DashboardEmptyState orgType={orgType} orgId={orgId} t={t} />
-            </CardContent>
-          </Card>
-        )}
+        {/* ── 14-day trend ──────────────────────────────────────────────── */}
+        <Panel
+          className="xl:col-span-8"
+          bodyClassName="flex flex-col"
+          title={t('overview.dailyTrend', { defaultValue: 'Daily trend' })}
+          meta={t('overview.last14Days', { defaultValue: 'Last 14 days' })}
+        >
+          <div className="mb-4">
+            <ChartLegend
+              items={[
+                {
+                  label: grantedLabel,
+                  className: 'bg-[var(--gf-color-info)]',
+                  value: ctx.fmt(d14.granted),
+                },
+                {
+                  label: rejectedLabel,
+                  className: 'bg-[var(--gf-color-danger)]',
+                  value: ctx.fmt(d14.rejected),
+                },
+              ]}
+            />
+          </div>
+          <StackedBars
+            buckets={data.daily}
+            labelFor={(b) => dayLabel(b.at)}
+            tickEvery={3}
+            height={140}
+            formatNumber={ctx.fmt}
+            grantedLabel={grantedLabel}
+            rejectedLabel={rejectedLabel}
+            summary={t('overview.trendSummary', {
+              defaultValue:
+                '{{granted}} granted and {{rejected}} rejected scans in the last 14 days.',
+              granted: ctx.fmt(d14.granted),
+              rejected: ctx.fmt(d14.rejected),
+            })}
+          />
+        </Panel>
+
+        <OutcomeMix ctx={ctx} className="xl:col-span-4" />
       </div>
     </div>
   );
 }
+
+const QUICK_ACTIONS: Record<
+  string,
+  {
+    id: string;
+    path: string;
+    labelKey: string;
+    fallback: string;
+    icon: typeof Plus;
+  }
+> = {
+  'create-qr': {
+    id: 'create-qr',
+    path: '/qrcodes/create',
+    labelKey: 'overview.createQr',
+    fallback: 'Create QR Code',
+    icon: Plus,
+  },
+  'add-resident': {
+    id: 'add-resident',
+    path: '/residents/contacts',
+    labelKey: 'overview.addResident',
+    fallback: 'Add resident',
+    icon: UserPlus,
+  },
+  'report-incident': {
+    id: 'report-incident',
+    path: '/team/incidents',
+    labelKey: 'overview.reportIncident',
+    fallback: 'Incidents',
+    icon: ShieldAlert,
+  },
+};
