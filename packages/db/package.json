@@ -44,7 +44,7 @@
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@faker-js/faker": "^9.9.0",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.4.0",
     "@types/pg": "^8.18.0",
     "prisma": "^6.19.3",
     "tsx": "^4.23.11",
