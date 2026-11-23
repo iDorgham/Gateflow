@@ -22,7 +22,13 @@ export default async function OrgDashboardOverviewPage(props: {
   const claims = await getSessionClaims();
   if (!claims?.sub) redirect(`/${params.locale}/login`);
 
-  const orgId = params.orgId || claims.orgId;
+  // Always scope to the session's organization. The URL segment is display
+  // only; trusting it let any signed-in user read another tenant's overview.
+  const orgId = claims.orgId;
+  if (!orgId) redirect(`/${params.locale}/dashboard/onboarding`);
+  if (params.orgId && params.orgId !== orgId) {
+    redirect(`/${params.locale}/dashboard/organizations/${orgId}`);
+  }
 
   const org = await prisma.organization.findUnique({
     where: { id: orgId },

@@ -571,7 +571,16 @@
         "activeQRs": "Across all gates",
         "scansToday": "Last 24 hours",
         "activeGates": "Currently operational",
-        "teamMembers": "In your organization"
+        "teamMembers": "In your organization",
+        "activeResidents": "With linked units",
+        "activeStudents": "Enrolled",
+        "openMaintenance": "Pending action",
+        "securityIncidents": "Requires attention",
+        "currentCapacity": "Live occupancy",
+        "noBaseline": "No 7-day baseline yet",
+        "vsAvg": "vs 7-day average",
+        "rejectRate": "{{rate}}% of today’s scans",
+        "guardsOnDuty": "Guards on duty: {{n}}"
       },
       "createQr": "Create QR Code",
       "quickActions": {
@@ -600,24 +609,79 @@
       "vipArrivals": "VIP Arrivals",
       "totalTickets": "Total Tickets",
       "checkedIn": "Checked In",
-      "sub": {
-        "activeQRs": "Across all gates",
-        "scansToday": "Last 24 hours",
-        "activeGates": "Currently operational",
-        "teamMembers": "In your organization",
-        "activeResidents": "With linked units",
-        "activeStudents": "Enrolled",
-        "openMaintenance": "Pending action",
-        "securityIncidents": "Requires attention",
-        "currentCapacity": "Live occupancy"
-      },
       "emptyState": {
         "REAL_ESTATE": "Add residents and units to start tracking compound access.",
         "SCHOOL": "Upload your student roster to issue parent pickup codes.",
         "CLUB": "Link your membership database to verify entry at the gate.",
         "NIGHTCLUB": "Import your guest list or VIP tables for tonight's event.",
         "EVENT_ORGANISER": "Synchronize your ticket sales to start scanning attendees."
-      }
+      },
+      "residents": "Residents",
+      "students": "Students",
+      "keyMetrics": "Key metrics",
+      "rejectedToday": "Rejected Today",
+      "gatesLive": "Gates Live",
+      "gateStatus": "Gate status",
+      "gateStatusMeta": "Live = a scan in the last 10 minutes",
+      "gateState": {
+        "live": "Live",
+        "idle": "Idle",
+        "quiet": "Quiet"
+      },
+      "noGates": "No active gates yet.",
+      "noGuard": "No guard on shift",
+      "noScans7d": "No scans in 7 days",
+      "rejectedCount": "{{n}} rejected",
+      "recentActivityMeta": "Latest scans across all gates",
+      "col": {
+        "status": "Status",
+        "gate": "Gate",
+        "pass": "Pass",
+        "time": "Time"
+      },
+      "qrType": {
+        "SINGLE": "Single-use",
+        "RECURRING": "Recurring",
+        "PERMANENT": "Permanent",
+        "VISITOR": "Visitor",
+        "OPEN": "Open"
+      },
+      "needsAttention": "Needs attention",
+      "needsAttentionMeta": "{{incidents}} open incidents",
+      "allClear": "All clear. No open incidents or urgent requests.",
+      "attentionStatus": {
+        "UNDER_REVIEW": "Under review",
+        "ESCALATED": "Escalated",
+        "OPEN": "Open",
+        "ASSIGNED": "Assigned",
+        "IN_PROGRESS": "In progress",
+        "PENDING_PARTS": "Pending parts"
+      },
+      "maintenancePipeline": "Maintenance pipeline",
+      "openCount": "{{n}} open",
+      "maintenanceStatus": {
+        "OPEN": "Open",
+        "ASSIGNED": "Assigned",
+        "IN_PROGRESS": "In progress",
+        "PENDING_PARTS": "Parts"
+      },
+      "outcomeMix": "Scan outcomes",
+      "last7Days": "Last 7 days",
+      "analytics": "Analytics",
+      "noScans7dShort": "No scans in the last 7 days.",
+      "grantRate": "granted of {{n}} scans",
+      "granted": "Granted",
+      "rejected": "Rejected",
+      "updatedAt": "Updated {{time}}",
+      "accessActivity": "Access activity",
+      "last24h": "Last 24 hours, by hour",
+      "peakHour": "Peak {{time}} · {{n}} scans",
+      "activitySummary": "{{granted}} granted and {{rejected}} rejected scans in the last 24 hours.",
+      "dailyTrend": "Daily trend",
+      "last14Days": "Last 14 days",
+      "trendSummary": "{{granted}} granted and {{rejected}} rejected scans in the last 14 days.",
+      "addResident": "Add resident",
+      "reportIncident": "Incidents"
     },
     "maintenance": {
       "title": "Maintenance Hub",
