@@ -1,0 +1,23 @@
+packages/db/src/lib/retention-runner.ts
+  s_73911e414108d3::t_8dc0899f5f682b 73-77
+apps/client-dashboard/src/lib/allow-list.ts
+  s_73911e414108d3::t_6bad67d98bb4a6 101-103
+apps/client-dashboard/src/lib/enforce-tenant-access.ts
+  s_73911e414108d3::t_13c52ae5c5b528 37,39,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "674efd4a6e4131109303da4a74249fa7bd006471",
+  "prompts": {},
+  "sessions": {
+    "s_73911e414108d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c108e7ef-9416-4128-8388-2e294b1ca099",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
