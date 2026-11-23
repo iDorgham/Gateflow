@@ -1,0 +1,20 @@
+apps/scanner-app/src/screens/scanner/scanner-screen.tsx
+  s_73911e414108d3::t_36179d30838235 1,11-12,17,26,35,69,71-79,93,113-131,148,165-166,170,172,175,177,231,254
+  s_73911e414108d3::t_4d92ed1516e31e 258,289,295,301,307,333-334
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a1fcc169234f5ceacb7558debe7c394c7c422dbb",
+  "prompts": {},
+  "sessions": {
+    "s_73911e414108d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c108e7ef-9416-4128-8388-2e294b1ca099",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": null
+    }
+  }
+}
