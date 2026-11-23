@@ -8,8 +8,23 @@ import {
 } from './retention-apply';
 
 const SALT = 'org-abc123';
+const SECRET = 'retention-test-secret-at-least-32-characters';
 
 describe('retention-apply redaction', () => {
+  const originalSecret = process.env.RETENTION_REDACTION_SECRET;
+
+  beforeAll(() => {
+    process.env.RETENTION_REDACTION_SECRET = SECRET;
+  });
+
+  afterAll(() => {
+    if (originalSecret === undefined) {
+      delete process.env.RETENTION_REDACTION_SECRET;
+    } else {
+      process.env.RETENTION_REDACTION_SECRET = originalSecret;
+    }
+  });
+
   it('produces deterministic, non-reversible tags', () => {
     const a = redact('Amr Hassan', SALT);
     const b = redact('Amr Hassan', SALT);
@@ -22,6 +37,14 @@ describe('retention-apply redaction', () => {
     const a = redact('same-value', 'salt-1');
     const b = redact('same-value', 'salt-2');
     expect(a).not.toBe(b);
+  });
+
+  it('requires an application-held redaction secret', () => {
+    delete process.env.RETENTION_REDACTION_SECRET;
+    expect(() => redact('same-value', SALT)).toThrow(
+      /RETENTION_REDACTION_SECRET/
+    );
+    process.env.RETENTION_REDACTION_SECRET = SECRET;
   });
 
   it('nullifies empty optional fields', () => {
