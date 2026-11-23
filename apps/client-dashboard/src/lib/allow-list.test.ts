@@ -62,6 +62,15 @@ describe('allow-list engine', () => {
     const res = normalizeAllowList(['203.0.113.5', '10.0.0.0/8']);
     expect(res.valid).toBe(true);
     expect(res.errors).toHaveLength(0);
+    expect(isIpAllowed('10.1.2.3', res.entries)).toBe(true);
+  });
+
+  it('rejects empty and whitespace-only CIDR prefixes', () => {
+    const res = normalizeAllowList(['10.0.0.0/', '10.0.0.0/   ']);
+    expect(res.valid).toBe(false);
+    expect(res.entries).toEqual([]);
+    expect(res.errors).toHaveLength(2);
+    expect(isIpAllowed('10.1.2.3', ['10.0.0.0/'])).toBe(false);
   });
 
   it('rejects non-array inputs', () => {
