@@ -54,15 +54,15 @@
     },
     {
       "requirement": "browser-flow",
-      "artifact": "docs/plan/Active/v9.0_ENHANCED_BLUEPRINT/phase_logs/PHASE_LOG_phase_06.md",
-      "artifactSha256": "fcd4e22e1f7ba4f98a39365136bfefde35a7ef85dbfd96d0e7a197635d1804e2",
+      "artifact": ".ai/workflow-v2/receipts/client-dashboard-overview-browser-2026-11-23.json",
+      "artifactSha256": "47fa8d03c78019348a28c02b5d8efee11471b5c3157a69698dce65a01d17b78a",
       "owner": "frontend-team",
-      "environment": "ci-test-suite",
+      "environment": "local-next-dev-playwright-chromium",
       "assertions": [
-        "Admin observability panels, WCAG contrast playground, and motion physics inspector verified with 47 passing tests",
-        "Client dashboard security routes and compliance UI components validated with typecheck and lint green"
+        "Dashboard home renders 6 KPI cells and 6 panels (activity, gate status, recent scans, attention, daily trend, outcomes) in en light, en dark, ar-EG RTL and 390px mobile",
+        "No page errors, no horizontal scroll, correct dir attribute per locale"
       ],
-      "capturedAt": "2026-09-02T05:15:56Z",
+      "capturedAt": "2026-11-23T21:38:34.413Z",
       "commit": "HEAD"
     },
     {
