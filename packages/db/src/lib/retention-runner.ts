@@ -43,7 +43,17 @@ export interface RetentionBatchSummary {
   };
 }
 
-/** One org's applicable paginated PII/operational sets. */
+/**
+ * Purge and anonymize an organization's expired data according to its retention policy.
+ *
+ * Applies per-org retention cutoffs by hard-deleting expired operational records
+ * (scan logs, incidents, ID artifacts) and anonymizing stale personal data (contacts
+ * and vehicle plates). Respects legal holds and skips orgs without configured windows.
+ *
+ * @param org - The organization with its retention policy settings.
+ * @param now - The current timestamp for calculating cutoff dates.
+ * @returns A summary of deleted and anonymized record counts.
+ */
 async function purgeOrg(
   org: OrgRetentionRecord,
   now: Date
@@ -63,6 +73,14 @@ async function purgeOrg(
   }
   if (!retentionBatchEnabled(cutoffs)) {
     return summary;
+  }
+  if (cutoffs.visitorHistory) {
+    const secret = process.env.RETENTION_REDACTION_SECRET;
+    if (!secret || secret.length < 32) {
+      throw new Error(
+        'RETENTION_REDACTION_SECRET must be at least 32 characters'
+      );
+    }
   }
   summary.enabled = true;
   summary.reason = 'applied';
@@ -102,62 +120,71 @@ async function purgeOrg(
   // ── Anonymize: contacts + their vehicles past the visitor-history window ──
   if (cutoffs.visitorHistory) {
     const salt = org.id;
-    const staleContacts = await prisma.contact.findMany({
-      where: {
-        organizationId: org.id,
-        updatedAt: { lt: cutoffs.visitorHistory },
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        phone: true,
-        company: true,
-        jobTitle: true,
-        companyWebsite: true,
-        notes: true,
-      },
-      take: 2000,
-    });
-
-    for (const contact of staleContacts) {
-      const scrubbed = anonymizeContactPii(contact, salt);
-      await prisma.contact.update({
-        where: { id: contact.id },
-        data: {
-          firstName: scrubbed.firstName,
-          lastName: scrubbed.lastName,
-          email: scrubbed.email,
-          phone: scrubbed.phone,
-          company: scrubbed.company,
-          jobTitle: scrubbed.jobTitle,
-          companyWebsite: scrubbed.companyWebsite,
-          notes: scrubbed.notes,
-          updatedAt: now,
+    while (true) {
+      const staleContacts = await prisma.contact.findMany({
+        where: {
+          organizationId: org.id,
+          updatedAt: { lt: cutoffs.visitorHistory },
         },
-      });
-      summary.anonymized.contacts += 1;
-
-      const plates = await prisma.vehiclePlate.findMany({
-        where: { contactId: contact.id },
+        orderBy: { id: 'asc' },
         select: {
           id: true,
-          plateNumber: true,
-          ownerName: true,
-          ownerPhone: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          phone: true,
+          company: true,
+          jobTitle: true,
+          companyWebsite: true,
+          notes: true,
         },
+        take: 2000,
       });
-      for (const plate of plates) {
-        const scrubbedPlate = anonymizeVehiclePlatePii(plate, salt);
-        await prisma.vehiclePlate.update({
-          where: { id: plate.id },
+      if (staleContacts.length === 0) break;
+
+      for (const contact of staleContacts) {
+        const scrubbed = anonymizeContactPii(contact, salt);
+        const updated = await prisma.contact.updateMany({
+          where: {
+            id: contact.id,
+            organizationId: org.id,
+            updatedAt: { lt: cutoffs.visitorHistory },
+          },
           data: {
-            ownerName: scrubbedPlate.ownerName,
-            ownerPhone: scrubbedPlate.ownerPhone,
+            firstName: scrubbed.firstName,
+            lastName: scrubbed.lastName,
+            email: scrubbed.email,
+            phone: scrubbed.phone,
+            company: scrubbed.company,
+            jobTitle: scrubbed.jobTitle,
+            companyWebsite: scrubbed.companyWebsite,
+            notes: scrubbed.notes,
+            updatedAt: now,
           },
         });
-        summary.anonymized.vehiclePlates += 1;
+        if (updated.count !== 1) continue;
+        summary.anonymized.contacts += 1;
+
+        const plates = await prisma.vehiclePlate.findMany({
+          where: { contactId: contact.id },
+          select: {
+            id: true,
+            plateNumber: true,
+            ownerName: true,
+            ownerPhone: true,
+          },
+        });
+        for (const plate of plates) {
+          const scrubbedPlate = anonymizeVehiclePlatePii(plate, salt);
+          await prisma.vehiclePlate.update({
+            where: { id: plate.id },
+            data: {
+              ownerName: scrubbedPlate.ownerName,
+              ownerPhone: scrubbedPlate.ownerPhone,
+            },
+          });
+          summary.anonymized.vehiclePlates += 1;
+        }
       }
     }
   }
@@ -165,6 +192,12 @@ async function purgeOrg(
   return summary;
 }
 
+/**
+ * Calculate the total number of records affected by a retention run.
+ *
+ * @param summary - The organization's retention run summary.
+ * @returns The sum of all deleted and anonymized records.
+ */
 function total(summary: OrgRetentionSummary): number {
   return (
     summary.deleted.scanLogs +
