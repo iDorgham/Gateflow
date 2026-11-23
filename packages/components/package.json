@@ -43,18 +43,18 @@
     "@gateflow/tokens": "workspace:*",
     "@gateflow/ui": "workspace:*",
     "clsx": "^2.1.1",
-    "framer-motion": "^13.0.0",
-    "tailwind-merge": "^3.6.0"
+    "framer-motion": "^14.14.0",
+    "tailwind-merge": "^3.7.1"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@types/react": "^19.2.18",
-    "framer-motion": "^13.1.1",
-    "lucide-react": "^1.16.0",
+    "framer-motion": "^14.14.0",
+    "lucide-react": "^1.77.0",
     "next": "^16.4.5",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "tsup": "^8.3.6",
     "typescript": "^7.0.2"
   }
