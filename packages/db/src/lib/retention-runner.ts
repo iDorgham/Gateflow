@@ -70,7 +70,11 @@ async function purgeOrg(
   // ── Hard purge: operational records past their window ─────────────────────
   if (cutoffs.scanLogs) {
     const res = await prisma.scanLog.deleteMany({
-      where: { scannedAt: { lt: cutoffs.scanLogs }, deletedAt: null },
+      where: {
+        organizationId: org.id,
+        scannedAt: { lt: cutoffs.scanLogs },
+        deletedAt: null,
+      },
     });
     summary.deleted.scanLogs = res.count;
   }
