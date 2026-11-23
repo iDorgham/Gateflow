@@ -10,7 +10,7 @@
         "ShiftLog and Gate multi-tenancy organizationId isolation verified",
         "Prisma transactions and soft-delete filters validated across live shift endpoints"
       ],
-      "capturedAt": "2026-08-29T16:02:21.123Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -23,7 +23,7 @@
         "Compliance export, retention cron, and allow-list enforcement verified with 44 passing route and supporting-logic tests",
         "Tenant-scoped enforceTenantAccess wired into qrcodes/validate, scans/bulk, and qr/bulk-create"
       ],
-      "capturedAt": "2026-09-02T05:15:56Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -36,7 +36,7 @@
         "Root dependency graph resolved cleanly with pnpm-lock.yaml after jest + ts-jest addition to design-system",
         "1652 packages checked via npm bulk advisory; 0 unacknowledged high+ vulnerabilities"
       ],
-      "capturedAt": "2026-09-02T05:15:56Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -49,7 +49,7 @@
         "Scanner duty session guard and secure PIN storage verified",
         "Offline scan queue and shift log lifecycle verified"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -62,7 +62,7 @@
         "Admin observability panels, WCAG contrast playground, and motion physics inspector verified with 47 passing tests",
         "Client dashboard security routes and compliance UI components validated with typecheck and lint green"
       ],
-      "capturedAt": "2026-09-02T05:15:56Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -75,7 +75,7 @@
         "Shared UI tokens and Framer Motion 13.1.1 animation components verified",
         "Responsive compositions and Atlassian Design System tokens validated"
       ],
-      "capturedAt": "2026-08-29T16:02:21.127Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     },
     {
@@ -88,7 +88,7 @@
         "Per-tenant/IP allow-list enforcer verifies grant (allow) and denial (403/429) outcomes for validate and bulk routes",
         "QR cryptographic payload integrity and HMAC signing verified in 30 validate-route tests"
       ],
-      "capturedAt": "2026-09-02T05:15:56Z",
+      "capturedAt": "2026-09-04T08:35:36.512Z",
       "commit": "HEAD"
     }
   ]
